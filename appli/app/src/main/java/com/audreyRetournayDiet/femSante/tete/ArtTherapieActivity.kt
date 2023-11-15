@@ -18,10 +18,10 @@ class ArtTherapieActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_art_therapie)
-        joy = findViewById(R.id.button2)
-        anger = findViewById(R.id.button)
-        fear = findViewById(R.id.button3)
-        sadness = findViewById(R.id.button4)
+        joy = findViewById(R.id.buttonJoy)
+        anger = findViewById(R.id.buttonAnger)
+        fear = findViewById(R.id.buttonFear)
+        sadness = findViewById(R.id.buttonSadness)
 
         val intentVideo = Intent(this
             , VideoActivity::class.java)

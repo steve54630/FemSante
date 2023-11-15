@@ -81,6 +81,9 @@
     <string name="register">Inscription</string>
     <string name="cgv_accept">Accepter les conditions générales de vente</string>
     <string name="test_period">Période d\'essai de 7 jours</string>
+    <string name="ressources">Ressources nutrition</string>
+    <string name="intolerence">Intolérance à l\'histamine</string>
+    <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
 
     <!--Expansion file -->
 

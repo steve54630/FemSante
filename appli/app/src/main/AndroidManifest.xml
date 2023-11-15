@@ -34,6 +34,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.audreyRetournayDiet.femSante.alim.RessourceActivity"
+            android:exported="false" />
+        <activity
             android:name="com.audreyRetournayDiet.femSante.alim.RecetteActivity"
             android:exported="false" />
         <activity

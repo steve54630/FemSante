@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fond_appli"
-    tools:context="com.audreyRetournayDiet.femSante.tete.ArtTherapieActivity">
+    tools:context="com.audreyRetournayDiet.femSante.alim.RessourceActivity">
 
     <TextView
         android:id="@+id/textView3"
@@ -15,67 +15,54 @@
         android:fontFamily="@font/nothing_you_could_do"
         android:minHeight="48dp"
         android:paddingTop="20dp"
-        android:text="@string/option_therapieart"
+        android:text="@string/ressources"
         android:textAlignment="center"
-        android:textSize="60sp"
+        android:textSize="55sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonAnger"
+        android:id="@+id/buttonGluten"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="220dp"
         android:fontFamily="@font/dinpro"
-        android:text="@string/anger"
+        android:text="@string/sensibilit_au_gluten"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/buttonJoy"
+        android:id="@+id/buttonHistamine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:fontFamily="@font/dinpro"
-        android:text="@string/joy"
+        android:text="@string/intolerence"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAnger" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonGluten" />
 
     <Button
-        android:id="@+id/buttonFear"
+        android:id="@+id/buttonEBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:fontFamily="@font/dinpro"
-        android:text="@string/fear"
+        android:text="@string/ebook"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonJoy" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonHistamine" />
 
-    <Button
-        android:id="@+id/buttonSadness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:fontFamily="@font/dinpro"
-        android:text="@string/sadness"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonFear" />
 </androidx.constraintlayout.widget.ConstraintLayout>

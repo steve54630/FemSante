@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
 import android.os.Bundle
+import android.view.WindowManager.LayoutParams
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
@@ -13,6 +14,7 @@ class PdfActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf)
+        window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
         pdfView = findViewById(R.id.pdfView)
         val pdf = intent!!.extras!!.getString("PDF")
         try {
@@ -21,5 +23,10 @@ class PdfActivity : AppCompatActivity() {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    override fun onDestroy() {
+        window.clearFlags(LayoutParams.FLAG_SECURE)
+        super.onDestroy()
     }
 }

@@ -71,7 +71,7 @@
         app:layout_constraintVertical_bias="0.096" />
 
     <Button
-        android:id="@+id/buttonDessert"
+        android:id="@+id/buttonEBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -85,17 +85,17 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonPlat" />
 
     <Button
-        android:id="@+id/buttonEbook"
+        android:id="@+id/buttonResource"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/dinpro"
         android:minHeight="48dp"
-        android:text="@string/ebook"
+        android:text="@string/ressources"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDessert" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEBook" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

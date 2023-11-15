@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
 
 class AlimActivity : AppCompatActivity() {
 
@@ -23,8 +22,8 @@ class AlimActivity : AppCompatActivity() {
         entry = findViewById(R.id.buttonEntry)
         breakfeast = findViewById(R.id.buttonBreakfirst)
         plats = findViewById(R.id.buttonPlat)
-        dessert = findViewById(R.id.buttonDessert)
-        ebook = findViewById(R.id.buttonEbook)
+        dessert = findViewById(R.id.buttonEBook)
+        ebook = findViewById(R.id.buttonResource)
 
         val intentTarget = Intent(this, RecetteActivity::class.java)
 
@@ -56,8 +55,7 @@ class AlimActivity : AppCompatActivity() {
         }
 
         ebook.setOnClickListener{
-            val intent = Intent(this, PdfActivity::class.java)
-            intent.putExtra("PDF", "ebook_nutrition.pdf")
+            val intent = Intent(this, RessourceActivity::class.java)
             startActivity(intent)
         }
     }

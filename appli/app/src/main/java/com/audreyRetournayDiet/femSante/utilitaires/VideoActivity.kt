@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaMetadataRetriever
@@ -8,8 +7,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager.LayoutParams
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
@@ -20,7 +21,7 @@ import com.audreyRetournayDiet.femSante.R
 
 class VideoActivity : AppCompatActivity() {
 
-    private lateinit var titre: TextView
+    private var titre: TextView? = null
     private var pdf: Button? = null
     private var fullScreen: Button? = null
     private lateinit var player: ExoPlayer
@@ -31,6 +32,7 @@ class VideoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
+        window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
 
         playerView = findViewById(R.id.videoView)
         player = Builder(this).build()
@@ -79,7 +81,7 @@ class VideoActivity : AppCompatActivity() {
         }
 
         if (findViewById<TextView>(R.id.textVid) != null)
-            titre.text = map["Title"].toString()
+            titre!!.text = map["Title"].toString()
 
         val height =
             Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)!!)
@@ -90,17 +92,19 @@ class VideoActivity : AppCompatActivity() {
             fullScreen!!.visibility = View.INVISIBLE
         }
 
-    }
-
-    @Deprecated("Deprecated in Java")
-    @SuppressLint("SourceLockedOrientationActivity")
-    override fun onBackPressed() {
-        if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        } else {
-            player.release()
-            super.onBackPressed()
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                } else {
+                    player.release()
+                    finish()
+                }
+            }
         }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
     }
 
     override fun onResume() {
@@ -111,6 +115,11 @@ class VideoActivity : AppCompatActivity() {
     override fun onPause() {
         player.pause()
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        window.clearFlags(LayoutParams.FLAG_SECURE)
     }
 
 

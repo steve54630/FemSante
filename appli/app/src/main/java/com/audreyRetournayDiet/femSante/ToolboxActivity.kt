@@ -24,7 +24,7 @@ class ToolboxActivity : AppCompatActivity() {
         setContentView(layout.activity_toolbox)
 
         outils1 = findViewById(id.button1)
-        outils2 = findViewById(id.button2)
+        outils2 = findViewById(id.buttonHistamine)
         outils3 = findViewById(id.button3)
         outils4 = findViewById(id.button4)
         outils5 = findViewById(id.button5)
