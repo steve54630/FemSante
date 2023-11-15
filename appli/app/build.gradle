@@ -1,0 +1,78 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.audreyRetournayDiet.femSante'
+    compileSdk 34
+    assetPacks += [":assetPack"]
+    defaultConfig {
+        applicationId "com.audreyretournaydiet.femsante"
+        minSdk 24
+        targetSdk 34
+        versionCode 3
+        versionName "1.2"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            ndk {
+                debugSymbolLevel = "symbol_table"
+            }
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    allprojects {
+        repositories {
+            google()
+            gradlePluginPortal()
+            mavenCentral()
+            // This private repository is required to resolve the Cardinal SDK transitive dependency.
+            maven {
+                url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+                credentials {
+                    // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
+                    // the private repository.
+                    username 'paypal_sgerritz'
+                    password 'AKCp8jQ8tAahqpT5JjZ4FRP2mW7GMoFZ674kGqHmupTesKeAY2G8NcmPKLuTxTGkKjDLRzDUQ'
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation "com.paypal.android:paypal-native-payments:1.0.0"
+    implementation "com.paypal.android:card-payments:1.0.0"
+    implementation "com.paypal.android:payment-buttons:1.0.0"
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'androidx.media3:media3-exoplayer:1.1.1'
+    implementation 'androidx.media3:media3-exoplayer-dash:1.1.1'
+    implementation 'androidx.media3:media3-ui:1.1.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
+    implementation 'com.android.volley:volley:1.2.1'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'com.google.android.play:asset-delivery:2.1.0'
+    implementation 'com.google.android.play:asset-delivery-ktx:2.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

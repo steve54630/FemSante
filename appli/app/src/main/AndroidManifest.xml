@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="nosensor"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FemSante"
+        tools:targetApi="31">
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.login.CreateActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.login.ForgottenActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.login.PaymentActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="com.audreyretournaydiet.femsante" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.alim.RecetteActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.alim.AlimActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.corps.YogaActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.ToolboxActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.tete.AudioSophroActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.tete.SophroActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.utilitaires.PdfActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.tete.ArtTherapieActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.utilitaires.VideoActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.SymptomJournal"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.tete.BienTeteActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.corps.BienCorpsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
