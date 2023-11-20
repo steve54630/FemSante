@@ -74,7 +74,7 @@
         android:layout_marginTop="40dp"
         android:fontFamily="@font/dinpro"
         android:minHeight="48dp"
-        android:text="@string/option_meditation"
+        android:text="@string/option_meditaion"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

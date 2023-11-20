@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    style="?android:attr/spinnerItemStyle"
+    android:singleLine="true"
+    android:ellipsize="marquee"
+    android:textSize="18sp"
+    android:textColor="#000000"
+    android:paddingTop="15dp"
+    android:text="@string/audio_choice"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginTop="56dp"
+    android:background="@color/orange_app"
+    android:spinnerMode="dialog"
+    android:textAlignment="center"
+    android:visibility="visible"/>

@@ -7,7 +7,8 @@
     <string name="option_corps">Bien dans votre corps</string>
     <string name="option_outils">Boîte à outils</string>
     <string name="option_journal">Journal de vos symptômes</string>
-    <string name="option_meditation">Relaxation</string>
+    <string name="option_relaxation">Relaxation</string>
+    <string name="option_meditaion">Méditations</string>
     <string name="option_sophrologie">Sophrologie</string>
     <string name="option_therapieart">Art-thérapie</string>
     <string name="option_yoga">Yoga</string>
@@ -22,7 +23,7 @@
     <string name="fans">Eventails</string>
     <string name="Mirror_exercice">Exercice du miroir</string>
     <string name="shoulder">Pompage des épaules</string>
-    <string name="audio_exercise">Exercices à écouter</string>
+    <string name="audio_exercise">Sophronisations</string>
     <string name="emotional_intelligence">Intelligence émotionnelle</string>
     <string name="thoracic">Soufflet thoracique</string>
     <string name="SDN">Sophronisation du déplacement du négatif</string>
@@ -41,33 +42,32 @@
     <string name="beginner">Débutant en yoga</string>
     <string name="calm">Calme intérieur</string>
     <string name="flow">SOS Douleurs</string>
-    <!-- Recettes -->
-    <string name="recipe">Recette</string>
-    <string name="breakfeast">Petit-déjeuner</string>
-    <string name="entry">Entrées</string>
-    <string name="plats">Plats</string>
-    <string name="dessert">Desserts</string>
     <string name="icone_description">Icône de l\'application</string>
-    <string name="e_mail">E-mail de l\'utilsateur</string>
-    <string name="e_mail_demand">Saisissez votre e-mail</string>
-    <string name="password">Mot de passe</string>
-    <string name="password_demand">Saissisez votre mot de passe</string>
     <string name="error_recette">Problème d\'affichage</string>
     <string name="help">Cliquez sur l\'image pour afficher la recette</string>
     <string name="ebook">Ebook Micronutrition</string>
-    <string name="register_pay">Payer l\'inscription</string>
-    <string name="register_help">Vous n\'avez pas de compte?</string>
-    <string name="connect_help">Déjà inscrit?</string>
-    <string name="password_demand_2">Confirmez le mot de passe</string>
     <string name="self_confidence">Confiance en soi</string>
-    <string name="liste_des_recettes">Cliquez ici pour sélectionnez une recette</string>
+    <string name="ressources">Ressources nutrition</string>
+    <string name="intolerence">Intolérance à l\'histamine</string>
+    <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
+
+    <!-- Connexion/Inscription -->
+
     <string name="secret_answer">Réponse à la question secrète</string>
     <string name="register_price">Cliquez pour choisir un abonnement</string>
     <string name="register_question">Cliquez pour sélectionner une question</string>
     <string name="neme_demand">Saisissez votre prénom</string>
     <string name="password_forgotten">Mot de passe oublié ?</string>
     <string name="change_password">Changer le mot de passe</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register">Inscription</string>
+    <string name="e_mail">E-mail de l\'utilsateur</string>
+    <string name="e_mail_demand">Saisissez votre e-mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="password_demand">Saissisez votre mot de passe</string>
+    <string name="register_pay">Payer l\'inscription</string>
+    <string name="register_help">Vous n\'avez pas de compte?</string>
+    <string name="connect_help">Déjà inscrit?</string>
+    <string name="password_demand_2">Confirmez le mot de passe</string>
     <string name="paiement">Paiement</string>
     <string name="card_payment">Paiement par carte</string>
     <string name="card_expiration_month">Mois</string>
@@ -78,26 +78,17 @@
     <string name="CGV_help">Veuillez accepter les conditions générales de vente</string>
     <string name="cgv_button">Conditions générales de vente</string>
     <string name="cgu">Conditions génrales d\'utilisation</string>
-    <string name="register">Inscription</string>
-    <string name="cgv_accept">Accepter les conditions générales de vente</string>
     <string name="test_period">Période d\'essai de 7 jours</string>
-    <string name="ressources">Ressources nutrition</string>
-    <string name="intolerence">Intolérance à l\'histamine</string>
-    <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
 
-    <!--Expansion file -->
+   <!-- Recettes -->
+    <string name="recipe">Recette</string>
+    <string name="breakfeast">Petit-déjeuner</string>
+    <string name="entry">Entrées</string>
+    <string name="plats">Plats</string>
+    <string name="dessert">Desserts</string>
 
-    <!-- When a download completes, a notification is displayed, and this
-            string is used to indicate that the download successfully completed.
-            Note that such a download could have been initiated by a variety of
-            applications, including (but not limited to) the browser, an email
-            application, a content marketplace. -->
-
-    <!-- When a download completes, a notification is displayed, and this
-        string is used to indicate that the download failed.
-        Note that such a download could have been initiated by a variety of
-        applications, including (but not limited to) the browser, an email
-        application, a content marketplace. -->
-
+    <string name="meditation_choice">Cliquez pour sélectionner une méditation</string>
+    <string name="audio_choice">Cliquez pour sélectionner un exercice</string>
+    <string name="liste_des_recettes">Cliquez pour sélectionnez une recette</string>
 
 </resources>

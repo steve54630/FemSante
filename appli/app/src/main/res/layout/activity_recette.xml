@@ -8,7 +8,7 @@
     tools:context="com.audreyRetournayDiet.femSante.alim.RecetteActivity">
 
     <Spinner
-        android:id="@+id/spinnerRecette"
+        android:id="@+id/spinnerMeditation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="56dp"
@@ -47,7 +47,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRecette"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerMeditation"
         app:srcCompat="@drawable/cross" />
 
     <TextView

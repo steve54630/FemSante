@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.login
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -9,6 +10,7 @@ import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
@@ -42,6 +44,7 @@ class PaymentActivity : AppCompatActivity() {
     private val mapPrice = LinkedHashMap<String, String>()
     private lateinit var registerSpinner: Spinner
     private lateinit var databaseManager: DatabaseManager
+    private lateinit var accessToken : String
     private lateinit var payPal: PayPalButton
     private lateinit var payPalCard: Button
     private lateinit var number: TextView
@@ -56,7 +59,7 @@ class PaymentActivity : AppCompatActivity() {
         intent = newIntent
     }
 
-    @Suppress("DEPRECATION")
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
@@ -88,27 +91,34 @@ class PaymentActivity : AppCompatActivity() {
             }
 
             override fun onApproveOrderFailure(error: PayPalSDKError) {
-                Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT)
+                    .show()
                 Log.e("PayPal", error.localizedMessage!!)
             }
 
             override fun onApproveOrderSuccess(result: CardResult) {
-                Toast.makeText(this@PaymentActivity, "Paiement réussi", Toast.LENGTH_SHORT).show()
+                captureOrder(result.orderId)
             }
 
             override fun onApproveOrderThreeDSecureDidFinish() {
-                Toast.makeText(this@PaymentActivity, "Authentification réussi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PaymentActivity, "Authentification réussi", Toast.LENGTH_SHORT)
+                    .show()
             }
 
             override fun onApproveOrderThreeDSecureWillLaunch() {
-                Toast.makeText(this@PaymentActivity, "Lancement de l'authentification", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@PaymentActivity,
+                    "Lancement de l'authentification",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
 
         }
 
-        parametersMap = (intent.getSerializableExtra("map") as HashMap<*, *>?)!!
+        parametersMap = intent.getSerializableExtra("map", HashMap::class.java)!!
 
+        // écouteur pour les paiements paypal
         payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
             override fun onPayPalCheckoutCanceled() {
                 Toast.makeText(
@@ -130,50 +140,10 @@ class PaymentActivity : AppCompatActivity() {
             }
 
             override fun onPayPalCheckoutSuccess(result: PayPalNativeCheckoutResult) {
-                Toast.makeText(this@PaymentActivity, "Paiement réussi", Toast.LENGTH_SHORT).show()
-
-                var search =
-                    mapPrice.filterValues { it == registerSpinner.selectedItem.toString() }
-                        .keys.toString()
-                val searchTab = search.split(";")
-                search = searchTab[0]
-                search = search.substring(0)
-
-                val parameters = JSONObject()
-                parameters.put("email", parametersMap["email"])
-                parameters.put("password", parametersMap["password"])
-                parameters.put("answer", parametersMap["answer"])
-                parameters.put("days", search)
-                parameters.put("name", parametersMap["name"])
-                parameters.put("id", parametersMap["id"])
-
-                Utilitaires.registerCreation(
-                    databaseManager,
-                    parameters,
-                    this@PaymentActivity,
-                    this@PaymentActivity
-                )
+                captureOrder(result.orderId)
             }
 
         }
-
-        mapPrice["30;7.00"] = "1 mois : 7€"
-        mapPrice["180;35.00"] = "6 mois : 35€"
-        mapPrice["365;63.00"] = "1 an : 63€"
-        mapPrice["A vie;250.00"] = "Accès à vie : 250€"
-
-        val listPrice = ArrayList<String>()
-
-        for (item in mapPrice) {
-            listPrice.add(item.value)
-        }
-
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listPrice)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        registerSpinner.prompt = "Abonnements possibles"
-        registerSpinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
 
         payPal.setOnClickListener {
             if (check.isChecked) {
@@ -199,6 +169,8 @@ class PaymentActivity : AppCompatActivity() {
                                 context = this,
                                 response = reponse
                             )
+
+                            accessToken = reponse.getString("access_token")
 
                             val payPalCheckoutRequest = PayPalNativeCheckoutRequest(
                                 orderId
@@ -228,6 +200,24 @@ class PaymentActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
+        mapPrice["30;7.00"] = "1 mois : 7€"
+        mapPrice["180;35.00"] = "6 mois : 35€"
+        mapPrice["365;63.00"] = "1 an : 63€"
+        mapPrice["A vie;250.00"] = "Accès à vie : 250€"
+
+        val listPrice = ArrayList<String>()
+
+        for (item in mapPrice) {
+            listPrice.add(item.value)
+        }
+
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listPrice)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        registerSpinner.prompt = "Abonnements possibles"
+        registerSpinner.adapter =
+            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
 
         payPalCard.setOnClickListener {
 
@@ -261,10 +251,12 @@ class PaymentActivity : AppCompatActivity() {
                                 response = reponse
                             )
 
+                            accessToken = reponse.getString("access_token")
+
                             val cardRequest = CardRequest(
                                 orderId = orderId,
                                 card = card,
-                                returnUrl = "com.audreyretournaydiet.femsante://return_url",
+                                returnUrl = "com.audreyretournaydiet.femsante.cardpaiement://return_url",
                                 sca = SCA.SCA_ALWAYS
                             )
 
@@ -295,6 +287,54 @@ class PaymentActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun captureOrder(orderId: String?) {
+
+        val params = JSONObject()
+        params.put("orderId", orderId)
+        params.put("accessToken", accessToken)
+
+        val url =
+            "https://www.audreyretournay-dieteticiennenutritionniste.fr/actions/paypalCapture.php"
+
+        val request = JsonObjectRequest(Request.Method.POST, url, params, { response ->
+
+           if (response.getBoolean("status")) {
+                Toast.makeText(this@PaymentActivity, "Paiement réussi", Toast.LENGTH_SHORT).show()
+
+                var search =
+                    mapPrice.filterValues { it == registerSpinner.selectedItem.toString() }
+                        .keys.toString()
+                val searchTab = search.split(";")
+                search = searchTab[0]
+
+                val parameters = JSONObject()
+                parameters.put("email", parametersMap["email"])
+                parameters.put("password", parametersMap["password"])
+                parameters.put("answer", parametersMap["answer"])
+                parameters.put("days", search)
+                parameters.put("name", parametersMap["name"])
+                parameters.put("id", parametersMap["id"])
+
+                Utilitaires.registerCreation(
+                    databaseManager,
+                    parameters,
+                    this@PaymentActivity,
+                    this@PaymentActivity
+                )
+            } else {
+                Toast.makeText(this, response.getString("error"), Toast.LENGTH_SHORT).show()
+            }
+        }
+        , { err ->
+            Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
+                .show()
+            Log.e("Connexion", err.localizedMessage!!)
+        })
+
+        Volley.newRequestQueue(this).add(request)
+
     }
 
 }

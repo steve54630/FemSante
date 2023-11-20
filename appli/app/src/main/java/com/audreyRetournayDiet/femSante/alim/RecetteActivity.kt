@@ -29,7 +29,7 @@ class RecetteActivity : AppCompatActivity() {
 
         recettePdf = findViewById(R.id.buttonRecette)
         title = findViewById(R.id.textViewTitre)
-        spinner = findViewById(R.id.spinnerRecette)
+        spinner = findViewById(R.id.spinnerMeditation)
         help = findViewById(R.id.textHelp)
 
         val map: HashMap<*, *>? =

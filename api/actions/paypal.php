@@ -48,10 +48,14 @@ else
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     if (curl_errno($ch)) {
-    
+        $err = curl_errno($ch);
+        $result["success"] = false;
+        $result["error"] = "cURL Error #:".$err;
+    }
+    else {
+        $result = curl_exec($ch);
     }
 
-$result = curl_exec($ch);
 curl_close($ch);
 }
 

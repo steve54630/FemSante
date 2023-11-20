@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.utilitaires.AudioActivity
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires.videoLaunch
 import com.audreyRetournayDiet.femSante.utilitaires.VideoActivity
 
@@ -26,12 +27,21 @@ class SophroActivity : AppCompatActivity() {
         sophronisation = findViewById(R.id.buttonAudio)
         thoracic = findViewById(R.id.buttonThoracic)
 
+        val intentAudio = Intent(this, AudioActivity::class.java)
+
         val intentVideo = Intent(
             this, VideoActivity::class.java
         )
 
         sophronisation.setOnClickListener {
-            startActivity(Intent(this, AudioSophroActivity::class.java))
+            val array = ArrayList<String>()
+            array.add("Base vivantielle")
+            array.add("Déplacement du négatif")
+
+            intentAudio.putExtra("map", array)
+            intentAudio.putExtra("Titre", "${sophronisation.text}")
+
+            startActivity(intentAudio)
         }
 
         shoulder.setOnClickListener {

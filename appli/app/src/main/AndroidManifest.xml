@@ -27,7 +27,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data
-                    android:scheme="com.audreyretournaydiet.femsante" />
+                    android:scheme="com.audreyretournaydiet.femsante.cardpaiement" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -49,7 +49,7 @@
             android:name="com.audreyRetournayDiet.femSante.ToolboxActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.tete.AudioSophroActivity"
+            android:name="com.audreyRetournayDiet.femSante.utilitaires.AudioActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.tete.SophroActivity"

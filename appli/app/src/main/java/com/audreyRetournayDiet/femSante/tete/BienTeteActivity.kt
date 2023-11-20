@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.utilitaires.AudioActivity
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires.videoLaunch
 import com.audreyRetournayDiet.femSante.utilitaires.VideoActivity
 
@@ -25,6 +26,8 @@ class BienTeteActivity : AppCompatActivity() {
             this, VideoActivity::class.java
         )
 
+        val intentAudio = Intent(this, AudioActivity::class.java)
+
         artTherapie = findViewById(R.id.buttonArt)
         sophro = findViewById(R.id.buttonSophro)
         emotion = findViewById(R.id.buttonEmotion)
@@ -32,9 +35,29 @@ class BienTeteActivity : AppCompatActivity() {
         hypnosis = findViewById(R.id.buttonHypno)
         self = findViewById(R.id.buttonConfience)
 
+        hypnosis.setOnClickListener {
+            val array = ArrayList<String>()
+            array.add("Auto hypnose pour le stress")
+            array.add("Hypnose")
+
+            intentAudio.putExtra("map", array)
+            intentAudio.putExtra("Titre", "${hypnosis.text}")
+
+            startActivity(intentAudio)
+        }
 
         medit.setOnClickListener {
-            videoLaunch(medit.text.toString(), "non", intentVideo, this)
+            val array = ArrayList<String>()
+
+            array.add("Calmer la colère")
+            array.add("Calmer la douleur")
+            array.add("Confiance en soi")
+            array.add("Relaxation")
+
+            intentAudio.putExtra("map", array)
+            intentAudio.putExtra("Titre", "${medit.text}")
+
+            startActivity(intentAudio)
         }
 
         sophro.setOnClickListener {
@@ -45,9 +68,6 @@ class BienTeteActivity : AppCompatActivity() {
             videoLaunch(emotion.text.toString(), "non", intentVideo, this)
         }
 
-        hypnosis.setOnClickListener {
-            videoLaunch(hypnosis.text.toString(),  "non", intentVideo, this)
-        }
 
         artTherapie.setOnClickListener {
             startActivity(Intent(this, ArtTherapieActivity::class.java))

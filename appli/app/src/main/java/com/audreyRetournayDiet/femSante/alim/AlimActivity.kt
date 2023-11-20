@@ -31,6 +31,8 @@ class AlimActivity : AppCompatActivity() {
             map["ent1"] = "Salade d’été"
             map["ent2"] = "Tartines gourmandes au thon"
             map["ent3"] = "Velouté d’épinards, amandes et noisettes"
+            map["ent4"] = "Blinis avocat saumon"
+            map["ent5"] = "Houmous de betteraves"
             recetteActivityLaunch("Entrée", map, intentTarget)
         }
 
@@ -43,6 +45,10 @@ class AlimActivity : AppCompatActivity() {
         plats.setOnClickListener {
             map["plat1"] = "Crêpes salées au houmous rose"
             map["plat2"] = "Tartelettes saumon et champignons"
+            map["plat3"] = "Cake salé"
+            map["plat4"] = "Polenta aux champignons"
+            map["plat5"] = "Tofu fumé - Purée de carottes et panais"
+            map["plat6"] = "Tarte aux épinards"
             recetteActivityLaunch("Plats", map, intentTarget)
         }
 
@@ -51,6 +57,9 @@ class AlimActivity : AppCompatActivity() {
             map["des2"] = "Crème au chocolat"
             map["des3"] = "Fondant au chocolat"
             map["des4"] = "Tartelettes à la pomme express"
+            map["des5"] = "Cake au chocolat léger et sans farines"
+            map["des6"] = "Carrés gourmands"
+            map["des7"] = "Mini cake moelleux banane et chocolat"
             recetteActivityLaunch("Desserts", map, intentTarget)
         }
 

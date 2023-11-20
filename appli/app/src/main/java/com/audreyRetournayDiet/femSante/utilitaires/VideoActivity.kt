@@ -19,6 +19,7 @@ import androidx.media3.exoplayer.ExoPlayer.*
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
 
+@Suppress("DEPRECATION")
 class VideoActivity : AppCompatActivity() {
 
     private var titre: TextView? = null
@@ -27,8 +28,7 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    @Suppress("DEPRECATION")
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
@@ -41,7 +41,7 @@ class VideoActivity : AppCompatActivity() {
         fullScreen = findViewById(R.id.buttonFS)
 
         val map: HashMap<*, *>? =
-            intent.getSerializableExtra("map") as HashMap<*, *>?
+            intent.getSerializableExtra("map", HashMap::class.java)!!
 
 
         val videoUri = Uri.parse("asset:///" + map!!["Title"].toString() + ".mp4")
