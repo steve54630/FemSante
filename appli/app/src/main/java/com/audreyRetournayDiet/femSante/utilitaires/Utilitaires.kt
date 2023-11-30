@@ -94,4 +94,15 @@ object Utilitaires {
             intent
         )
     }
+
+    fun updateAccount(databaseManager: DatabaseManager, parameters: JSONObject, packageContext: Context, activity: AppCompatActivity) {
+        val intent = Intent(packageContext, LoginActivity::class.java)
+
+        databaseManager.updateUser(
+            parameters,
+            packageContext,
+            activity,
+            intent
+        )
+    }
 }

@@ -5,7 +5,7 @@
     android:background="@drawable/fond_appli"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.audreyRetournayDiet.femSante.MainActivity">
+    tools:context=".main.MainMenuFragment">
 
     <TextView
         android:id="@+id/textViewBienvenue"
@@ -15,6 +15,7 @@
         android:fontFamily="@font/nothing_you_could_do"
         android:minHeight="48dp"
         android:text="@string/bonjour"
+        android:textAlignment="center"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

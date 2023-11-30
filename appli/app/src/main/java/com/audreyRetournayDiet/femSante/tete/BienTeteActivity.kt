@@ -16,7 +16,6 @@ class BienTeteActivity : AppCompatActivity() {
     private lateinit var sophro: Button
     private lateinit var medit: Button
     private lateinit var hypnosis: Button
-    private lateinit var self: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +32,6 @@ class BienTeteActivity : AppCompatActivity() {
         emotion = findViewById(R.id.buttonEmotion)
         medit = findViewById(R.id.buttonMedit)
         hypnosis = findViewById(R.id.buttonHypno)
-        self = findViewById(R.id.buttonConfience)
 
         hypnosis.setOnClickListener {
             val array = ArrayList<String>()
@@ -73,8 +71,5 @@ class BienTeteActivity : AppCompatActivity() {
             startActivity(Intent(this, ArtTherapieActivity::class.java))
         }
 
-        self.setOnClickListener{
-            videoLaunch(self.text.toString(),  "non", intentVideo, this)
-        }
     }
 }

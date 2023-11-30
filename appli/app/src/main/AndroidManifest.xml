@@ -12,13 +12,10 @@
         android:theme="@style/Theme.FemSante"
         tools:targetApi="31">
         <activity
-            android:name="com.audreyRetournayDiet.femSante.login.CreateActivity"
-            android:exported="false" />
-        <activity
             android:name="com.audreyRetournayDiet.femSante.login.ForgottenActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.MainActivity"
+            android:name="com.audreyRetournayDiet.femSante.main.HomeActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.login.PaymentActivity"
@@ -33,9 +30,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.audreyRetournayDiet.femSante.alim.RessourceActivity"
-            android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.alim.RecetteActivity"
             android:exported="false" />

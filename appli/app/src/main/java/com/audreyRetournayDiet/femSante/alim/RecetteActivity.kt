@@ -1,5 +1,6 @@
 package com.audreyRetournayDiet.femSante.alim
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -15,7 +16,6 @@ import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapte
 import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
 
-@Suppress("DEPRECATION")
 class RecetteActivity : AppCompatActivity() {
 
     private lateinit var recettePdf: ImageButton
@@ -23,6 +23,7 @@ class RecetteActivity : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var help: TextView
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recette)
@@ -33,7 +34,7 @@ class RecetteActivity : AppCompatActivity() {
         help = findViewById(R.id.textHelp)
 
         val map: HashMap<*, *>? =
-            intent.getSerializableExtra("map") as HashMap<*, *>?
+            intent.getSerializableExtra("map", HashMap::class.java)
 
         title.text = intent.extras!!.getString("Title")
 
@@ -53,6 +54,7 @@ class RecetteActivity : AppCompatActivity() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
+            @SuppressLint("DiscouragedApi")
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (spinner.selectedItemId < 0) {
                     help.visibility = View.INVISIBLE

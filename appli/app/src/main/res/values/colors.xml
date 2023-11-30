@@ -6,4 +6,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange_app">#ee9e3d</color>
     <color name="yellow_app">#f3bc0f</color>
+    <color name="blue_app">#0085ac</color>
 </resources>

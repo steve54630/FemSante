@@ -2,12 +2,16 @@ package com.audreyRetournayDiet.femSante.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.utilitaires.DatabaseManager
 import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
@@ -15,7 +19,7 @@ import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
 import org.json.JSONObject
 
 
-class CreateActivity : AppCompatActivity() {
+class CreateFragment : Fragment() {
 
     private lateinit var password: EditText
     private lateinit var confirm: EditText
@@ -28,18 +32,21 @@ class CreateActivity : AppCompatActivity() {
     private lateinit var name: EditText
     private val mapQuestion = LinkedHashMap<Int, String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_suscribe)
-        name = findViewById(R.id.Name)
-        answer = findViewById(R.id.textViewAnswer)
-        password = findViewById(R.id.Password)
-        confirm = findViewById(R.id.password)
-        email = findViewById(R.id.Login)
-        subscribe = findViewById(R.id.buttonConnect)
-        test = findViewById(R.id.buttonTestSubscribe)
-        databaseManager = DatabaseManager(applicationContext)
-        questionSpinner = findViewById(R.id.spinnerQuestion)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_register, container, false)
+        name = view.findViewById(R.id.Name)
+        answer = view.findViewById(R.id.textViewAnswer)
+        password = view.findViewById(R.id.Password)
+        confirm = view.findViewById(R.id.password)
+        email = view.findViewById(R.id.Login)
+        subscribe = view.findViewById(R.id.buttonConnect)
+        test = view.findViewById(R.id.buttonTestSubscribe)
+        databaseManager = DatabaseManager(requireContext())
+        questionSpinner = view.findViewById(R.id.spinnerQuestion)
 
         mapQuestion[1] = "Nom de jeune fille de votre mère"
         mapQuestion[2] = "Nom de votre 1er animal de compagnie"
@@ -51,11 +58,16 @@ class CreateActivity : AppCompatActivity() {
             listQuestion.add(item.value)
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listQuestion)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listQuestion)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         questionSpinner.prompt = "Questions secrètes"
         questionSpinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_question, this)
+            NothingSelectedSpinnerAdapter(
+                adapter,
+                R.layout.spinner_choice_question,
+                requireContext()
+            )
 
         subscribe.setOnClickListener {
 
@@ -73,13 +85,15 @@ class CreateActivity : AppCompatActivity() {
                     map["name"] = name.text.toString()
                     map["id"] = search
 
-                    val intent = Intent(this, PaymentActivity::class.java)
+                    val intent = Intent(activity, PaymentActivity::class.java)
 
                     intent.putExtra("map", map)
 
                     startActivity(intent)
+
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Aucune question sélectionnée", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Aucune question sélectionnée", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
@@ -101,30 +115,55 @@ class CreateActivity : AppCompatActivity() {
                             .keys.toString()
                     ))
 
-                    Utilitaires.registerCreation(databaseManager, parameters, this, this)
+                    Utilitaires.registerCreation(
+                        databaseManager,
+                        parameters,
+                        requireContext(),
+                        activity as AppCompatActivity
+                    )
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Aucune question sélectionnée", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Aucune question sélectionnée", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
+        return view
     }
 
     private fun verifyChamp(): Boolean {
 
         var success = false
 
-        if (email.text.toString() == "") {
-            Toast.makeText(this, "Email non renseigné", Toast.LENGTH_SHORT).show()
+        if (name.text.toString() == "") {
+            Toast.makeText(activity, "Prénom non renseigné", Toast.LENGTH_SHORT).show()
+        } else if (email.text.toString() == "") {
+            Toast.makeText(activity, "Email non renseigné", Toast.LENGTH_SHORT).show()
+        } else if (Utilitaires.isValidEmail(email.text.toString())) {
+            Toast.makeText(
+                activity,
+                "Format email incorrect : abc@example.fr",
+                Toast.LENGTH_SHORT
+            )
+                .show()
         } else if (password.text.toString() == "") {
-            Toast.makeText(this, "Mot de passe non renseigné", Toast.LENGTH_SHORT)
+            Toast.makeText(activity, "Mot de passe non renseigné", Toast.LENGTH_SHORT)
+                .show()
+        } else if (password.text.toString().length < 8) {
+            Toast.makeText(
+                activity,
+                "Format de mot de passe : minimum 8 caractères",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         } else if (password.text.toString() != confirm.text.toString()) {
-            Toast.makeText(this, "Mots de passe non identiques", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Mots de passe non identiques", Toast.LENGTH_SHORT).show()
         } else if (answer.text.toString() == "") {
-            Toast.makeText(this, "Réponse à la question secréte non renseigné", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                activity,
+                "Réponse à la question secréte non renseigné",
+                Toast.LENGTH_SHORT
+            )
                 .show()
-        } else if (name.text.toString() == "") {
-            Toast.makeText(this, "Prénom non renseigné", Toast.LENGTH_SHORT).show()
         } else {
             success = true
         }

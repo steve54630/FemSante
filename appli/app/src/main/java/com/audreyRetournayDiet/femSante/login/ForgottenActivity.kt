@@ -56,7 +56,7 @@ class ForgottenActivity : AppCompatActivity() {
         changePassword.setOnClickListener {
             if (password.text.toString() == confirm.text.toString()) {
                 if (Utilitaires.isValidEmail(email.text.toString())) {
-                    val intent = Intent(this, LoginActivity::class.java)
+                    val intent = Intent(this, LoginFragment::class.java)
                     var search =
                         mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
                             .keys.toString()
