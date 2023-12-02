@@ -9,17 +9,16 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.R.layout
-import com.audreyRetournayDiet.femSante.ToolboxActivity
 import com.audreyRetournayDiet.femSante.alim.AlimActivity
 import com.audreyRetournayDiet.femSante.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.tete.BienTeteActivity
+import com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity
 
 class MainMenuFragment : Fragment() {
 
     private lateinit var tete: Button
     private lateinit var corps: Button
     private lateinit var outils: Button
-    private lateinit var journal : Button
     private lateinit var alim : Button
 
     override fun onCreateView(
@@ -33,7 +32,6 @@ class MainMenuFragment : Fragment() {
         tete = view.findViewById(R.id.buttonTete)
         corps = view.findViewById(R.id.buttonCorps)
         outils = view.findViewById(R.id.buttonOutils)
-        journal = view.findViewById(R.id.boutonJournal)
 
         alim.setOnClickListener {
             startActivity(Intent(activity, AlimActivity::class.java))

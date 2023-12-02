@@ -14,14 +14,13 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/nothing_you_could_do"
             android:text="@string/documents"
             android:textAlignment="center"
             android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +41,7 @@
             android:id="@+id/buttonCGV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="36dp"
             android:fontFamily="@font/dinpro"
             android:text="@string/cgv_button"
             android:textColor="@color/black"

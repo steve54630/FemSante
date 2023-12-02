@@ -48,7 +48,7 @@ class RecetteActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.prompt = "Liste des recettes"
         spinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice, this)
+            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_recette, this)
         var search: String? = null
 
 

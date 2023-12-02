@@ -16,7 +16,8 @@
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.main.HomeActivity"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
             android:name="com.audreyRetournayDiet.femSante.login.PaymentActivity"
             android:exported="true"
@@ -40,7 +41,7 @@
             android:name="com.audreyRetournayDiet.femSante.corps.YogaActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.ToolboxActivity"
+            android:name="com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.utilitaires.AudioActivity"
@@ -56,9 +57,7 @@
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.utilitaires.VideoActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.audreyRetournayDiet.femSante.SymptomJournal"
+            android:screenOrientation="nosensor"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.tete.BienTeteActivity"

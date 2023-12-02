@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante
+package com.audreyRetournayDiet.femSante.utilitaires
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R.id
 import com.audreyRetournayDiet.femSante.R.layout
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
 
 class ToolboxActivity : AppCompatActivity() {
 

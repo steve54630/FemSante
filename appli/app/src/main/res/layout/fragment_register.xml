@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textViewTitleLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -42,6 +42,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="8dp"
             android:autofillHints="password"
+            android:fontFamily="@font/dinpro"
             android:ems="10"
             android:hint="@string/password_demand"
             android:inputType="textPassword"
@@ -53,14 +54,15 @@
             android:id="@+id/password"
             android:layout_width="284dp"
             android:layout_height="55dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:autofillHints="password"
             android:ems="10"
+            android:fontFamily="@font/dinpro"
             android:hint="@string/password_demand_2"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Password" />
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <EditText
             android:id="@+id/Login"
@@ -69,6 +71,7 @@
             android:autofillHints="emailAddress"
             android:ems="10"
             android:hint="@string/e_mail_demand"
+            android:fontFamily="@font/dinpro"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,18 +83,19 @@
             android:layout_height="55dp"
             android:layout_marginTop="32dp"
             android:autofillHints="name"
+            android:fontFamily="@font/dinpro"
             android:ems="10"
             android:hint="@string/neme_demand"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitleLogin" />
 
         <Button
             android:id="@+id/buttonConnect"
             android:layout_width="180dp"
             android:layout_height="60dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/dinpro"
             android:text="@string/register_pay"
             android:textColor="@color/black"
@@ -104,7 +108,7 @@
             android:id="@+id/buttonTestSubscribe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/dinpro"
             android:text="@string/test_period"
             android:textColor="@color/black"
@@ -131,11 +135,22 @@
             android:layout_height="55dp"
             android:layout_marginTop="16dp"
             android:hint="@string/secret_answer"
+            android:fontFamily="@font/dinpro"
             android:importantForAutofill="no"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerQuestion" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="284dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/password_help"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

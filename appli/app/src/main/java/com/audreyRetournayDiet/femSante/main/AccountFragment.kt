@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.audreyRetournayDiet.femSante.FACEBOOK_COMMUNITY
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.login.PaymentActivity
@@ -23,6 +25,7 @@ class AccountFragment : Fragment() {
     private lateinit var passwordChange: Button
     private lateinit var login: TextView
     private lateinit var update: Button
+    private lateinit var facebook: Button
 
     @SuppressLint("NewApi")
     override fun onCreateView(
@@ -35,6 +38,7 @@ class AccountFragment : Fragment() {
         val map: HashMap<*, *>? =
             requireActivity().intent.extras!!.getSerializable("map", HashMap::class.java)
 
+        facebook = view.findViewById(R.id.buttonFacebook)
         login = view.findViewById(R.id.textViewLogin)
         cgu = view.findViewById(R.id.buttonCGU)
         cgv = view.findViewById(R.id.buttonCGV)
@@ -90,6 +94,13 @@ class AccountFragment : Fragment() {
             intentTarget.putExtra("update", "Oui")
 
             startActivity(intentTarget)
+        }
+
+        facebook.setOnClickListener {
+            val webpage = Uri.parse(FACEBOOK_COMMUNITY)
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            val chooser = Intent.createChooser(intent, "Lien vers Facebook")
+            startActivity(chooser)
         }
 
         return view

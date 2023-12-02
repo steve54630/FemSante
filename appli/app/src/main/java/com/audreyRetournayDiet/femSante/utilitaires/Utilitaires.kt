@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.login.LoginActivity
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.regex.Pattern
 
 
 object Utilitaires {
@@ -33,8 +31,13 @@ object Utilitaires {
     }
 
     fun isValidEmail(email: String): Boolean {
-        val pattern: Pattern = Patterns.EMAIL_ADDRESS
-        return pattern.matcher(email).matches()
+        val pattern = "^[A-Za-z0-9]+[A-Za-z0-9_.-]+@[a-z0-9-.]+[.]+[a-z.-]{2,3}$"
+        return email.matches(pattern.toRegex())
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        val pattern = "^(?=.*[A-Z])(?=.*[@$!%*#?&/])(?=.*[a-z])[A-Za-z\\d@$!%*#?&/]{8,}$"
+        return password.matches(pattern.toRegex())
     }
 
     fun onPayPalApiResponse(context: Context, response: JSONObject?): String {
@@ -76,7 +79,7 @@ object Utilitaires {
         return success
     }
 
-    fun cleanKey(key : String) : String {
+    fun cleanKey(key: String): String {
 
         var keyTreated = key.substring(1)
         keyTreated = keyTreated.substring(0, keyTreated.length - 1)
@@ -84,25 +87,39 @@ object Utilitaires {
         return keyTreated
     }
 
-    fun registerCreation(databaseManager : DatabaseManager, parameters: JSONObject, packageContext: Context, activity: AppCompatActivity) {
+    fun registerCreation(
+        databaseManager: DatabaseManager,
+        parameters: JSONObject,
+        packageContext: Context,
+        activity: AppCompatActivity,
+        alert: LoadingAlert,
+    ) {
         val intent = Intent(packageContext, LoginActivity::class.java)
 
         databaseManager.createUser(
             parameters,
             packageContext,
             activity,
-            intent
+            intent,
+            alert
         )
     }
 
-    fun updateAccount(databaseManager: DatabaseManager, parameters: JSONObject, packageContext: Context, activity: AppCompatActivity) {
+    fun updateAccount(
+        databaseManager: DatabaseManager,
+        parameters: JSONObject,
+        packageContext: Context,
+        activity: AppCompatActivity,
+        alert: LoadingAlert,
+    ) {
         val intent = Intent(packageContext, LoginActivity::class.java)
 
         databaseManager.updateUser(
             parameters,
             packageContext,
             activity,
-            intent
+            intent,
+            alert
         )
     }
 }

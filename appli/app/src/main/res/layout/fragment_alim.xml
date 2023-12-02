@@ -55,7 +55,7 @@
         android:id="@+id/buttonPlat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/dinpro"
         android:minHeight="48dp"
         android:text="@string/plats"
@@ -69,17 +69,15 @@
         android:id="@+id/buttonEBook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/dinpro"
         android:minHeight="48dp"
         android:text="@string/dessert"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPlat"
-        app:layout_constraintVertical_bias="0.076" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonPlat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

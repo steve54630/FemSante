@@ -11,7 +11,6 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:fontFamily="@font/nothing_you_could_do"
         android:minHeight="48dp"
         android:paddingTop="20dp"
@@ -27,15 +26,14 @@
         android:id="@+id/buttonAnger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="48dp"
         android:fontFamily="@font/dinpro"
         android:text="@string/anger"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
         android:id="@+id/buttonJoy"
@@ -55,7 +53,7 @@
         android:id="@+id/buttonFear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         android:fontFamily="@font/dinpro"
         android:text="@string/fear"
         android:textColor="@color/black"
@@ -69,7 +67,7 @@
         android:id="@+id/buttonSadness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="48dp"
         android:fontFamily="@font/dinpro"
         android:text="@string/sadness"
         android:textColor="@color/black"

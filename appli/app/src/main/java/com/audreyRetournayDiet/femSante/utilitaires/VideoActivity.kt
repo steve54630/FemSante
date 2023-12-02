@@ -1,5 +1,6 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaMetadataRetriever
@@ -7,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
 import android.widget.Button
 import android.widget.TextView
@@ -28,6 +30,7 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +93,10 @@ class VideoActivity : AppCompatActivity() {
 
         if (height > width) {
             fullScreen!!.visibility = View.INVISIBLE
+            playerView.layoutParams =
+                ViewGroup.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)
+            titre!!.visibility = View.INVISIBLE
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {

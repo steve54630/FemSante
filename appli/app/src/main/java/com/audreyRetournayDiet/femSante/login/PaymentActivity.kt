@@ -29,6 +29,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.RETURN_URL_CARD
 import com.audreyRetournayDiet.femSante.RETURN_URL_PAYPAL
 import com.audreyRetournayDiet.femSante.utilitaires.DatabaseManager
+import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
 import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
@@ -50,6 +51,7 @@ import org.json.JSONObject
 
 class PaymentActivity : AppCompatActivity() {
 
+    private lateinit var alert: LoadingAlert
     private lateinit var orderId: String
     private lateinit var cgv: Button
     private val mapPrice = LinkedHashMap<String, String>()
@@ -101,8 +103,9 @@ class PaymentActivity : AppCompatActivity() {
         reductionValue = findViewById(R.id.editTextReduc)
         reductionButton = findViewById(R.id.buttonReduc)
         parametersMap = intent.getSerializableExtra("map", HashMap::class.java)!!
+        alert = LoadingAlert(this)
 
-        repay= intent.getBooleanExtra("repay", false)
+        repay = intent.getBooleanExtra("repay", false)
 
         //Accés aux conditions générales de vente
         cgv.setOnClickListener {
@@ -115,6 +118,8 @@ class PaymentActivity : AppCompatActivity() {
         reductionButton.setOnClickListener {
 
             try {
+                alert.startAlertDialog()
+
                 val params = JSONObject()
                 params.put("reductionCode", reductionValue.text.toString())
 
@@ -137,11 +142,14 @@ class PaymentActivity : AppCompatActivity() {
                                 applyReduction()
                                 buyout.text = "$valueSubscription €"
                             }
+                            alert.closeAlertDialog()
                         } else {
+                            alert.closeAlertDialog()
                             Toast.makeText(this, reponse.getString("error"), Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }, { err ->
+                        alert.closeAlertDialog()
                         Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
                             .show()
                         Log.e("Connexion", err.localizedMessage!!)
@@ -207,11 +215,13 @@ class PaymentActivity : AppCompatActivity() {
         //Initialisation de PayPal
         val config = CoreConfig(PAYPAL_CLIENT_ID, environment = Environment.SANDBOX)
         val cardClient = CardClient(this, config)
-        val payPalNativeClient = PayPalNativeCheckoutClient(this.application, config, RETURN_URL_PAYPAL)
+        val payPalNativeClient =
+            PayPalNativeCheckoutClient(this.application, config, RETURN_URL_PAYPAL)
 
         // écouteur pour les paiements paypal
         payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
             override fun onPayPalCheckoutCanceled() {
+                alert.closeAlertDialog()
                 Toast.makeText(
                     this@PaymentActivity,
                     "Paiement annulé par l'utilisateur",
@@ -220,14 +230,14 @@ class PaymentActivity : AppCompatActivity() {
             }
 
             override fun onPayPalCheckoutFailure(error: PayPalSDKError) {
+                alert.closeAlertDialog()
                 Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT)
                     .show()
                 Log.e("Connexion", error.message!!)
             }
 
             override fun onPayPalCheckoutStart() {
-                Toast.makeText(this@PaymentActivity, "Connexion à PayPal", Toast.LENGTH_SHORT)
-                    .show()
+                alert.closeAlertDialog()
             }
 
             override fun onPayPalCheckoutSuccess(result: PayPalNativeCheckoutResult) {
@@ -239,10 +249,12 @@ class PaymentActivity : AppCompatActivity() {
         cardClient.approveOrderListener = object : ApproveOrderListener {
 
             override fun onApproveOrderCanceled() {
+                alert.closeAlertDialog()
                 Toast.makeText(this@PaymentActivity, "Paiement annulé", Toast.LENGTH_SHORT).show()
             }
 
             override fun onApproveOrderFailure(error: PayPalSDKError) {
+                alert.closeAlertDialog()
                 Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -267,13 +279,14 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         payPal.setOnClickListener {
+            alert.startAlertDialog()
             if (check.isChecked) {
                 try {
                     val params = JSONObject()
                     params.put("clientId", PAYPAL_CLIENT_ID)
                     params.put("price", valueSubscription)
 
-                   val request =
+                    val request =
                         JsonObjectRequest(Request.Method.POST, PAYPAL_CALL_API, params, { reponse ->
                             orderId = Utilitaires.onPayPalApiResponse(
                                 context = this,
@@ -296,6 +309,7 @@ class PaymentActivity : AppCompatActivity() {
 
                     Volley.newRequestQueue(this).add(request)
                 } catch (_: UninitializedPropertyAccessException) {
+                    alert.closeAlertDialog()
                     Toast.makeText(
                         this,
                         "Veuillez sélectionnez un abonnement",
@@ -303,6 +317,7 @@ class PaymentActivity : AppCompatActivity() {
                     ).show()
                 }
             } else {
+                alert.closeAlertDialog()
                 Toast.makeText(
                     this,
                     "Veuillez accepter les conditions générales de vente.",
@@ -312,6 +327,8 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         payPalCard.setOnClickListener {
+
+            alert.startAlertDialog()
 
             if (check.isChecked) {
                 try {
@@ -385,6 +402,7 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun captureOrder(orderId: String?) {
 
+        alert.startAlertDialog()
         val params = JSONObject()
         params.put("orderId", orderId)
         params.put("accessToken", accessToken)
@@ -397,28 +415,29 @@ class PaymentActivity : AppCompatActivity() {
             if (response.getBoolean("success")) {
                 Toast.makeText(this@PaymentActivity, "Paiement réussi", Toast.LENGTH_SHORT).show()
 
-                if(!repay) {
-                var search = Utilitaires.cleanKey(
-                    mapPrice.filterValues { it == registerSpinner.selectedItem.toString() }
-                        .keys.toString())
-                val searchTab = search.split(";")
-                search = searchTab[0]
+                if (!repay) {
+                    var search = Utilitaires.cleanKey(
+                        mapPrice.filterValues { it == registerSpinner.selectedItem.toString() }
+                            .keys.toString())
+                    val searchTab = search.split(";")
+                    search = searchTab[0]
 
-                val parameters = JSONObject()
-                parameters.put("email", parametersMap["email"])
-                parameters.put("password", parametersMap["password"])
-                parameters.put("answer", parametersMap["answer"])
-                parameters.put("days", search)
-                parameters.put("name", parametersMap["name"])
-                parameters.put("id", parametersMap["id"])
+                    val parameters = JSONObject()
+                    parameters.put("email", parametersMap["email"])
+                    parameters.put("password", parametersMap["password"])
+                    parameters.put("answer", parametersMap["answer"])
+                    parameters.put("days", search)
+                    parameters.put("name", parametersMap["name"])
+                    parameters.put("id", parametersMap["id"])
 
-                Utilitaires.registerCreation(
-                    databaseManager,
-                    parameters,
-                    this@PaymentActivity,
-                    this@PaymentActivity
-                )}
-                else {
+                    Utilitaires.registerCreation(
+                        databaseManager,
+                        parameters,
+                        this@PaymentActivity,
+                        this@PaymentActivity,
+                        alert
+                    )
+                } else {
                     var search = Utilitaires.cleanKey(
                         mapPrice.filterValues { it == registerSpinner.selectedItem.toString() }
                             .keys.toString())
@@ -435,15 +454,18 @@ class PaymentActivity : AppCompatActivity() {
                         databaseManager,
                         parameters,
                         this@PaymentActivity,
-                        this@PaymentActivity
+                        this@PaymentActivity,
+                        alert
                     )
                 }
             } else {
+                alert.closeAlertDialog()
                 Toast.makeText(this, response.getString("error"), Toast.LENGTH_SHORT).show()
             }
         }, { err ->
             Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
                 .show()
+            alert.closeAlertDialog()
             Log.e("Connexion", err.localizedMessage!!)
         })
 

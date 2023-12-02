@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.utilitaires.DatabaseManager
+import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
 import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
 import org.json.JSONObject
@@ -23,6 +24,7 @@ class ForgottenActivity : AppCompatActivity() {
     private lateinit var changePassword: Button
     private lateinit var databaseManager: DatabaseManager
     private lateinit var questionSpinner: Spinner
+    private var alert = LoadingAlert(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,9 @@ class ForgottenActivity : AppCompatActivity() {
         changePassword.setOnClickListener {
             if (password.text.toString() == confirm.text.toString()) {
                 if (Utilitaires.isValidEmail(email.text.toString())) {
+
+                    alert.startAlertDialog()
+
                     val intent = Intent(this, LoginFragment::class.java)
                     var search =
                         mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
@@ -71,13 +76,16 @@ class ForgottenActivity : AppCompatActivity() {
                         parameters,
                         this,
                         this,
-                        intent
+                        intent,
+                        alert
                     )
                 } else {
+                    alert.closeAlertDialog()
                     Toast.makeText(this, "Erreur : Format e-mail incorrect", Toast.LENGTH_SHORT)
                         .show()
                 }
             } else {
+                alert.closeAlertDialog()
                 Toast.makeText(this, "Erreur : Mots de passe non identiques", Toast.LENGTH_SHORT)
                     .show()
             }

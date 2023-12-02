@@ -31,8 +31,9 @@ class DatabaseManager(context: Context) {
         context: Context,
         activity: AppCompatActivity,
         intent: Intent,
+        alert: LoadingAlert
     ) {
-        readRequest(CREATE_USER_API, context, activity, intent, "Inscription réussie", parameters)
+        readRequest(CREATE_USER_API, context, activity, intent, "Inscription réussie", parameters, alert)
     }
 
     fun connectUser(
@@ -40,32 +41,9 @@ class DatabaseManager(context: Context) {
         context: Context,
         activity: AppCompatActivity,
         intent: Intent,
+        alert: LoadingAlert
     ) {
-        readRequest(CONNECT_USER_API, context, activity, intent, "Connexion réussie", parameters)
-    }
-
-    fun updateUser(
-        parameters: JSONObject,
-        context: Context,
-        activity: AppCompatActivity,
-        intent: Intent,
-    ) {
-        val request = JsonObjectRequest(Request.Method.POST, UPDATE_USER_API, parameters, { response ->
-            val result = Utilitaires.onApiResponse(response, context)
-            if (result) {
-                Toast.makeText(context, "Mise à jour de l'abonnement effectué", Toast.LENGTH_SHORT)
-                    .show()
-                activity.finish()
-                context.startActivity(intent)
-            } else {
-                Toast.makeText(context, response.getString("error"), Toast.LENGTH_SHORT).show()
-            }
-        }, { error ->
-            Toast.makeText(context, "Erreur de connexion", Toast.LENGTH_LONG).show()
-            Log.e("Connexion", error.localizedMessage!!)
-        })
-
-        this.queue!!.add(request)
+        readRequest(CONNECT_USER_API, context, activity, intent, "Connexion réussie", parameters, alert)
     }
 
     fun changePassword(
@@ -73,10 +51,39 @@ class DatabaseManager(context: Context) {
         context: Context,
         activity: AppCompatActivity,
         intent: Intent,
+        alert: LoadingAlert,
     ) {
 
+        readRequest(FORGOTTEN_PASSWORD_API, context, activity, intent, "Mot de passe changé", parameters, alert)
+    }
 
-        readRequest(FORGOTTEN_PASSWORD_API, context, activity, intent, "Mot de passe changé", parameters)
+    fun updateUser(
+        parameters: JSONObject,
+        context: Context,
+        activity: AppCompatActivity,
+        intent: Intent,
+        alert: LoadingAlert
+    ) {
+        val request = JsonObjectRequest(Request.Method.POST, UPDATE_USER_API, parameters, { response ->
+            val result = Utilitaires.onApiResponse(response, context)
+            if (result) {
+                Toast.makeText(context, "Mise à jour de l'abonnement effectué", Toast.LENGTH_SHORT)
+                    .show()
+
+                alert.closeAlertDialog()
+                activity.finish()
+                context.startActivity(intent)
+            } else {
+                alert.closeAlertDialog()
+                Toast.makeText(context, response.getString("error"), Toast.LENGTH_SHORT).show()
+            }
+        }, { error ->
+            alert.closeAlertDialog()
+            Toast.makeText(context, "Erreur de connexion", Toast.LENGTH_LONG).show()
+            Log.e("Connexion", error.localizedMessage!!)
+        })
+
+        this.queue!!.add(request)
     }
 
     private fun readRequest(
@@ -86,11 +93,13 @@ class DatabaseManager(context: Context) {
         intent: Intent,
         message: String?,
         parameters: JSONObject?,
+        alert : LoadingAlert,
     ) {
 
         val request = JsonObjectRequest(Request.Method.POST, url, parameters, { response ->
             val result = Utilitaires.onApiResponse(response, context)
             if (result) {
+                alert.closeAlertDialog()
                 if (message != null) {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
@@ -106,7 +115,7 @@ class DatabaseManager(context: Context) {
             } else {
                 Toast.makeText(context, response.getString("error"), Toast.LENGTH_SHORT)
                     .show()
-                if (response.getBoolean("repay")) {
+                if (response.getBoolean("repay") && url == UPDATE_USER_API) {
                     val intentRepay = Intent(context, PaymentActivity::class.java)
 
                     val parametersRepay = HashMap<String, String>()
@@ -121,6 +130,7 @@ class DatabaseManager(context: Context) {
                 }
             }
         }, { error ->
+            alert.closeAlertDialog()
             Toast.makeText(context, "Erreur de connexion", Toast.LENGTH_LONG).show()
             Log.e("Connexion", error.localizedMessage!!)
         })

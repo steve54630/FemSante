@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewTitleLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -38,6 +38,7 @@
         android:layout_height="55dp"
         android:layout_marginTop="16dp"
         android:autofillHints="password"
+        android:fontFamily="@font/dinpro"
         android:ems="10"
         android:hint="@string/password_demand"
         android:inputType="textPassword"
@@ -46,11 +47,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Login" />
 
+    <EditText
+        android:id="@+id/Login"
+        android:layout_width="284dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints="emailAddress"
+        android:ems="10"
+        android:fontFamily="@font/dinpro"
+        android:hint="@string/e_mail_demand"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleLogin" />
+
     <Button
         android:id="@+id/buttonConnect"
         android:layout_width="180dp"
         android:layout_height="60dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="68dp"
         android:fontFamily="@font/dinpro"
         android:text="@string/connect"
         android:textColor="@color/black"
@@ -71,20 +87,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonConnect" />
-
-    <EditText
-        android:id="@+id/Login"
-        android:layout_width="284dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="16dp"
-        android:autofillHints="emailAddress"
-        android:ems="10"
-        android:hint="@string/e_mail_demand"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
