@@ -1,10 +1,10 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -29,7 +29,7 @@ class DatabaseManager(context: Context) {
     fun createUser(
         parameters: JSONObject,
         context: Context,
-        activity: AppCompatActivity,
+        activity: Activity,
         intent: Intent,
         alert: LoadingAlert
     ) {
@@ -39,7 +39,7 @@ class DatabaseManager(context: Context) {
     fun connectUser(
         parameters: JSONObject,
         context: Context,
-        activity: AppCompatActivity,
+        activity: Activity,
         intent: Intent,
         alert: LoadingAlert
     ) {
@@ -49,7 +49,7 @@ class DatabaseManager(context: Context) {
     fun changePassword(
         parameters: JSONObject,
         context: Context,
-        activity: AppCompatActivity,
+        activity: Activity,
         intent: Intent,
         alert: LoadingAlert,
     ) {
@@ -60,7 +60,7 @@ class DatabaseManager(context: Context) {
     fun updateUser(
         parameters: JSONObject,
         context: Context,
-        activity: AppCompatActivity,
+        activity: Activity,
         intent: Intent,
         alert: LoadingAlert
     ) {
@@ -89,7 +89,7 @@ class DatabaseManager(context: Context) {
     private fun readRequest(
         url: String,
         context: Context,
-        activity: AppCompatActivity,
+        activity: Activity,
         intent: Intent,
         message: String?,
         parameters: JSONObject?,
@@ -113,6 +113,7 @@ class DatabaseManager(context: Context) {
                 activity.finish()
                 context.startActivity(intent)
             } else {
+                alert.closeAlertDialog()
                 Toast.makeText(context, response.getString("error"), Toast.LENGTH_SHORT)
                     .show()
                 if (response.getBoolean("repay") && url == UPDATE_USER_API) {

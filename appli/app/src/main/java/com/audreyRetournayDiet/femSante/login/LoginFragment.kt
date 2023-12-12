@@ -2,7 +2,6 @@ package com.audreyRetournayDiet.femSante.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,7 @@ class LoginFragment : Fragment() {
     private lateinit var forgotPassword: Button
     private lateinit var databaseManager: DatabaseManager
     private lateinit var alert: LoadingAlert
-    private var mLastClickTime: Long = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,16 +40,13 @@ class LoginFragment : Fragment() {
         alert = LoadingAlert(requireActivity())
 
         connect.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
 
             alert.startAlertDialog()
 
             if (email.text.toString() == "" || password.text.toString() == "") {
                 Toast.makeText(view.context, "Veuillez saisir les champs demandés", Toast.LENGTH_SHORT)
                     .show()
+                alert.closeAlertDialog()
             } else {
                 val parameters = JSONObject()
                 parameters.put("email", email.text.toString())

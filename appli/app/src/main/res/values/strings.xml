@@ -1,13 +1,28 @@
 <resources>
+
+    <!-- Titre de l'application -->
     <string name="app_name">FemSanté</string>
+
+    <!-- Ecran de connexion -->
     <string name="connect">Connexion</string>
+    <string name="e_mail_demand">Saisissez votre e-mail</string>
+    <string name="password_demand">Saissisez votre mot de passe</string>
     <string name="bonjour">Menu principal</string>
+
+    <!-- Ecran d'inscription -->
+    <string name="secret_answer">Réponse à la question secrète</string>
+    <string name="register_price">Cliquez pour choisir un abonnement</string>
+    <string name="register_question">Cliquez pour choisir une question</string>
+    <string name="neme_demand">Saisissez votre prénom</string>
+    <string name="reduction_code">Code de réduction</string>
+    <string name="reduction_code_to_valid">Validez le code de réduction</string>
+
+    <!-- Option du menu -->
+
     <string name="option_alim">Nutrition</string>
     <string name="option_tete">Bien dans votre tête</string>
     <string name="option_corps">Bien dans votre corps</string>
     <string name="option_outils">Boîte à outils</string>
-    <string name="option_journal">Journal de vos symptômes</string>
-    <string name="option_relaxation">Relaxation</string>
     <string name="option_meditaion">Méditations</string>
     <string name="option_sophrologie">Sophrologie</string>
     <string name="option_therapieart">Art-thérapie</string>
@@ -15,11 +30,14 @@
     <string name="option_fitness">Fitness</string>
     <string name="option_pilates">Pilates</string>
     <string name="option_danse">Danse</string>
+    <string name="pdf">A explorer</string>
+
+    <!-- Art-thérapie -->
     <string name="joy">Joie</string>
     <string name="anger">Colère</string>
     <string name="fear">Peur</string>
     <string name="sadness">Tristesse</string>
-    <string name="pdf">A explorer</string>
+
     <string name="fans">Eventails</string>
     <string name="Mirror_exercice">Exercice du miroir</string>
     <string name="shoulder">Pompage des épaules</string>
@@ -27,44 +45,37 @@
     <string name="emotional_intelligence">Intelligence émotionnelle</string>
     <string name="thoracic">Soufflet thoracique</string>
     <string name="hypnosis">Hypnose</string>
+
     <!-- boîte à outils -->
     <string name="outils1">Automassage du ventre</string>
     <string name="outils2">Les vertus de la bouillotte</string>
-    <string name="outils3">Huiles essentielles et douleurs abdominales</string>
+    <string name="outils3">Huiles essentielles pour apaiser les douleurs abdominales</string>
     <string name="outils4">Huiles essentielles pour apaiser les tempêtes émotionelles</string>
-    <string name="outils5">Infusions pour les tempêtes émotionelles</string>
+    <string name="outils5">Infusions pour apaiser les tempêtes émotionelles</string>
     <string name="outils6">Infusions et digestion</string>
-    <string name="outils7">Infusions et menstruations</string>
+    <string name="outils7">Infusions pour apaiser les menstruations</string>
     <string name="fullscreen">Plein écran</string>
+
     <!--Yoga -->
     <string name="beginner">Débutant en yoga</string>
-    <string name="calm">Calme intérieur</string>
+    <string name="calm">Retrouver son calme intérieur</string>
     <string name="flow">SOS Douleurs</string>
     <string name="icone_description">Icône de l\'application</string>
     <string name="error_recette">Problème d\'affichage</string>
     <string name="help">Cliquez sur l\'image pour afficher la recette</string>
-    <string name="ebook">Ebook Micronutrition</string>
-    <string name="self_confidence">Confiance en soi</string>
+    <string name="ebook">Les secrets des micronutriments</string>
     <string name="ressources">Ressources nutrition</string>
     <string name="intolerence">Intolérance à l\'histamine</string>
     <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
 
     <!-- Connexion/Inscription -->
 
-    <string name="secret_answer">Réponse à la question secrète</string>
-    <string name="register_price">Cliquez pour choisir un abonnement</string>
-    <string name="register_question">Cliquez pour choisir une question</string>
-    <string name="neme_demand">Saisissez votre prénom</string>
     <string name="password_forgotten">Mot de passe oublié ?</string>
     <string name="change_password">Changer le mot de passe</string>
     <string name="register">Inscription</string>
-    <string name="e_mail">E-mail de l\'utilsateur</string>
-    <string name="e_mail_demand">Saisissez votre e-mail</string>
-    <string name="password">Mot de passe</string>
-    <string name="password_demand">Saissisez votre mot de passe</string>
+
+
     <string name="register_pay">Payer l\'inscription</string>
-    <string name="register_help">Vous n\'avez pas de compte?</string>
-    <string name="connect_help">Déjà inscrit?</string>
     <string name="password_demand_2">Confirmez le mot de passe</string>
     <string name="paiement">Paiement</string>
     <string name="card_payment">Par carte</string>
@@ -73,7 +84,7 @@
     <string name="card_expiration_year">Année</string>
     <string name="security_code">Code de sécurité</string>
     <string name="card_number">Numero de carte</string>
-    <string name="credit_card_pay">Payer avec une carte de crédit</string>
+    <string name="credit_card_pay">Payer</string>
     <string name="CGV_help">Veuillez accepter les conditions générales de vente</string>
     <string name="cgv_button">Conditions générales de vente</string>
     <string name="cgu">Conditions générales d\'utilisation</string>
@@ -88,8 +99,7 @@
 
     <string name="audio_choice">Cliquez pour choisir un exercice</string>
     <string name="liste_des_recettes">Cliquez pour choisir une recette</string>
-    <string name="reduction_code">Code de réduction</string>
-    <string name="reduction_code_to_valid">Validez le code de réduction</string>
+
     <string name="price">Prix à payer:</string>
     <string name="main_menu">Menu principal</string>
     <string name="account">Mon compte</string>

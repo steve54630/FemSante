@@ -40,14 +40,17 @@ import com.paypal.android.cardpayments.CardRequest
 import com.paypal.android.cardpayments.CardResult
 import com.paypal.android.cardpayments.threedsecure.SCA
 import com.paypal.android.corepayments.CoreConfig
-import com.paypal.android.corepayments.Environment
 import com.paypal.android.corepayments.PayPalSDKError
 import com.paypal.android.paymentbuttons.PayPalButton
 import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutClient
 import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutListener
 import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutRequest
 import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutResult
+import me.bush.translator.Language
+import me.bush.translator.Translator
 import org.json.JSONObject
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class PaymentActivity : AppCompatActivity() {
 
@@ -104,6 +107,8 @@ class PaymentActivity : AppCompatActivity() {
         reductionButton = findViewById(R.id.buttonReduc)
         parametersMap = intent.getSerializableExtra("map", HashMap::class.java)!!
         alert = LoadingAlert(this)
+
+        val translator = Translator()
 
         repay = intent.getBooleanExtra("repay", false)
 
@@ -213,29 +218,14 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         //Initialisation de PayPal
-        val config = CoreConfig(PAYPAL_CLIENT_ID, environment = Environment.SANDBOX)
+        val config = CoreConfig(PAYPAL_CLIENT_ID)
         val cardClient = CardClient(this, config)
         val payPalNativeClient =
-            PayPalNativeCheckoutClient(this.application, config, RETURN_URL_PAYPAL)
+            PayPalNativeCheckoutClient(application, config, RETURN_URL_PAYPAL)
+
 
         // écouteur pour les paiements paypal
         payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
-            override fun onPayPalCheckoutCanceled() {
-                alert.closeAlertDialog()
-                Toast.makeText(
-                    this@PaymentActivity,
-                    "Paiement annulé par l'utilisateur",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-            override fun onPayPalCheckoutFailure(error: PayPalSDKError) {
-                alert.closeAlertDialog()
-                Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT)
-                    .show()
-                Log.e("Connexion", error.message!!)
-            }
-
             override fun onPayPalCheckoutStart() {
                 alert.closeAlertDialog()
             }
@@ -244,9 +234,35 @@ class PaymentActivity : AppCompatActivity() {
                 captureOrder(result.orderId)
             }
 
+            override fun onPayPalCheckoutCanceled() {
+                Toast.makeText(
+                    this@PaymentActivity,
+                    "Opération annulé",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onPayPalCheckoutFailure(error: PayPalSDKError) {
+                val errorMessage = translator.translateBlocking(
+                    error.errorDescription,
+                    Language.FRENCH,
+                    Language.ENGLISH
+                )
+                Toast.makeText(
+                    this@PaymentActivity,
+                    errorMessage.translatedText,
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.e("Connexion", error.message!!)
+            }
+
         }
 
         cardClient.approveOrderListener = object : ApproveOrderListener {
+
+            override fun onApproveOrderSuccess(result: CardResult) {
+                captureOrder(result.orderId)
+            }
 
             override fun onApproveOrderCanceled() {
                 alert.closeAlertDialog()
@@ -255,12 +271,17 @@ class PaymentActivity : AppCompatActivity() {
 
             override fun onApproveOrderFailure(error: PayPalSDKError) {
                 alert.closeAlertDialog()
-                Toast.makeText(this@PaymentActivity, "Erreur avec le paiement", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            override fun onApproveOrderSuccess(result: CardResult) {
-                captureOrder(result.orderId)
+                val errorMessage = translator.translateBlocking(
+                    error.errorDescription,
+                    Language.FRENCH,
+                    Language.ENGLISH
+                )
+                Toast.makeText(
+                    this@PaymentActivity,
+                    errorMessage.translatedText,
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.e("Connexion", error.message!!)
             }
 
             override fun onApproveOrderThreeDSecureDidFinish() {
@@ -295,6 +316,7 @@ class PaymentActivity : AppCompatActivity() {
 
                             accessToken = reponse.getString("access_token")
 
+
                             val payPalCheckoutRequest = PayPalNativeCheckoutRequest(
                                 orderId
                             )
@@ -305,6 +327,7 @@ class PaymentActivity : AppCompatActivity() {
                             Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
                                 .show()
                             Log.e("Connexion", err.localizedMessage!!)
+                            alert.closeAlertDialog()
                         })
 
                     Volley.newRequestQueue(this).add(request)
@@ -396,7 +419,8 @@ class PaymentActivity : AppCompatActivity() {
 
         if (year == "365" || year == "A vie") {
             val price: Double = valueSubscription.toDouble()
-            valueSubscription = "${price - ((price * reduction) / 100)}"
+            val value: Double = price - ((price * reduction) / 100)
+            valueSubscription = "${BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN)}"
         }
     }
 

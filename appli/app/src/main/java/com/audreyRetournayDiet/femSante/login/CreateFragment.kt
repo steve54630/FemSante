@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -38,6 +40,7 @@ class CreateFragment : Fragment() {
     private lateinit var name: EditText
     private lateinit var alert: LoadingAlert
     private val mapQuestion = LinkedHashMap<Int, String>()
+    private lateinit var chooseQuestion: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,6 +80,23 @@ class CreateFragment : Fragment() {
                 requireContext()
             )
 
+        questionSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (questionSpinner.selectedItemId != (-1).toLong()) {
+                    val search = Utilitaires.cleanKey(
+                        mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
+                            .keys.toString()
+                    )
+
+                    chooseQuestion = search
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+        }
+
         subscribe.setOnClickListener {
 
             if (verifyChamp()) {
@@ -96,17 +116,12 @@ class CreateFragment : Fragment() {
                             val success = response.getBoolean("success")
                             if (success) {
                                 try {
-                                    val search = Utilitaires.cleanKey(
-                                        mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
-                                            .keys.toString()
-                                    )
-
                                     val map = HashMap<String, String>()
                                     map["email"] = email.text.toString()
                                     map["password"] = password.text.toString()
                                     map["answer"] = answer.text.toString()
                                     map["name"] = name.text.toString()
-                                    map["id"] = search
+                                    map["id"] = chooseQuestion
 
                                     val intent = Intent(activity, PaymentActivity::class.java)
 
@@ -114,13 +129,15 @@ class CreateFragment : Fragment() {
 
                                     startActivity(intent)
 
-                                } catch (e: Exception) {
+                                } catch (_: UninitializedPropertyAccessException) {
                                     Toast.makeText(
                                         activity,
                                         "Aucune question sélectionnée",
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
+                                } finally {
+                                    alert.closeAlertDialog()
                                 }
                             } else {
                                 Toast.makeText(
@@ -128,6 +145,7 @@ class CreateFragment : Fragment() {
                                     response.getString("error"),
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                alert.closeAlertDialog()
                             }
 
                         },
@@ -165,10 +183,7 @@ class CreateFragment : Fragment() {
                                     params.put("answer", answer.text.toString())
                                     params.put("days", "7")
                                     params.put("name", name.text.toString())
-                                    params.put("id", Utilitaires.cleanKey(
-                                        mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
-                                            .keys.toString()
-                                    ))
+                                    params.put("id", chooseQuestion)
 
                                     Utilitaires.registerCreation(
                                         databaseManager,
@@ -177,7 +192,7 @@ class CreateFragment : Fragment() {
                                         activity as AppCompatActivity,
                                         alert
                                     )
-                                } catch (e: Exception) {
+                                } catch (_: UninitializedPropertyAccessException) {
                                     Toast.makeText(
                                         activity,
                                         "Aucune question sélectionnée",

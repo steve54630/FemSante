@@ -1,5 +1,6 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -10,6 +11,7 @@ class LoadingAlert(myActivity: Activity) {
     private var activity: Activity = myActivity
     private lateinit var dialog: Dialog
 
+    @SuppressLint("InflateParams")
     fun startAlertDialog() {
         val builder = AlertDialog.Builder(activity)
 
