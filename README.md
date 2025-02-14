@@ -14,7 +14,6 @@ Je suis fier de collaborer avec **[Audrey Retournay](https://www.audreyretournay
 - 🏗️ **Architecture modulaire** – Structure flexible et extensible pour afficher différents pdf
 - ✅ **Validation automatique** – Assure que toutes les données sont correctes avant d'être insérées.
 - ⚙️ **Gestion des erreurs** – Interface simple pour gérer les erreurs de manière centralisée.
-- 📦 **Optimisation des requêtes** – Améliore les performances des requêtes SQL grâce à des techniques avancées.
 - 🎥 **Vidéos avec des intervenates** - Cours de sports et méditations pour mieux vivre ses douleurs
 - 📄 **PDF de recettes** – Recettes accompagnées de fichiers PDF pour mieux manger.
 - 🎧 **Fichiers audio de méditations** - Accompagné d'un casque, une aide pour se poser
