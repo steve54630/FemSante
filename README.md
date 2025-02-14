@@ -305,9 +305,7 @@ class PdfActivity : AppCompatActivity() {
 ```
 
 ## Arborescence du projet
-
-
-### 📌 Explication  
+ 
 - 📂 **api/** : Contient la logique métier de l'API.  
   - 📂 **actions/** : Gère les requêtes et réponses.  
   - 📂 **config/** : Définit l'accés à la BDD    
