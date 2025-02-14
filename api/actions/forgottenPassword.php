@@ -12,16 +12,16 @@ if (isset($json['email']) and isset($json['answer'])) {
         $result["error"] = "Le nouveau mot de passe et/ou la réponse n'est pas renseigné";
     }
     else {
-        $checkIfEmailExists = $bdd->prepare('SELECT id FROM USERS WHERE email = ?');
+        $checkIfEmailExists = $bdd->prepare('SELECT * FROM USERS WHERE email = ?');
         $checkIfEmailExists->execute(array($email));
 
-        if ($checkIfEmailExists->rowCount() > 0) {
+        if ($checkIfEmailExists->rowCount() < 0) {
             $result["success"] = false;
-            $result["error"] = "Cet utilisateur n'existe pas";
+            $result["error"] = $email." n'existe pas";
         }
         else {
             $user = $checkIfEmailExists->fetch();
-            if ($user['quest_id'] != $json['id']){
+            if ($user['quest_id'] != htmlspecialchars($json['id'])){
                 $result["success"] = false;
                 $result["error"] = "Utilisateur non vérifié";
             }

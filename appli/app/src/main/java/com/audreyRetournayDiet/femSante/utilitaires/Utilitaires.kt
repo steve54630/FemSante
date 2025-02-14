@@ -36,7 +36,7 @@ object Utilitaires {
     }
 
     fun isValidPassword(password: String): Boolean {
-        val pattern = "^(?=.*[A-Z])(?=.*[@$!%*#?&/])(?=.*[a-z])[A-Za-z\\d@$!%*#?&/]{8,}$"
+        val pattern = "^(?=.*[A-Z])(?=.*[@$!%*#?&/_])(?=.*[a-z])[A-Za-z\\d@$!%*#?&/]{8,}$"
         return password.matches(pattern.toRegex())
     }
 

@@ -36,7 +36,7 @@ class BienTeteActivity : AppCompatActivity() {
         hypnosis.setOnClickListener {
             val array = ArrayList<String>()
             array.add("Auto hypnose pour le stress")
-            array.add("Hypnose")
+            array.add("Auto-hypnose pour l'apaisement")
 
             intentAudio.putExtra("map", array)
             intentAudio.putExtra("Titre", "${hypnosis.text}")

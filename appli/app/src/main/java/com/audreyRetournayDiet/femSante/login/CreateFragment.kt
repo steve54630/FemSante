@@ -49,9 +49,9 @@ class CreateFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
         name = view.findViewById(R.id.Name)
-        answer = view.findViewById(R.id.textViewAnswer)
+        answer = view.findViewById(R.id.Answer)
         password = view.findViewById(R.id.Password)
-        confirm = view.findViewById(R.id.password)
+        confirm = view.findViewById(R.id.ChangePassword)
         email = view.findViewById(R.id.Login)
         subscribe = view.findViewById(R.id.buttonConnect)
         test = view.findViewById(R.id.buttonTestSubscribe)

@@ -11,7 +11,7 @@ android {
         applicationId "com.audreyretournaydiet.femsante"
         minSdk 24
         targetSdk 34
-        versionCode 3
+        versionCode 6
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,11 +57,13 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
+    implementation 'com.google.android.play:app-update:2.1.0'
     implementation 'com.github.therealbush:translator:1.0.2'
-    implementation "com.paypal.android:paypal-native-payments:1.0.0"
-    implementation "com.paypal.android:card-payments:1.0.0"
-    implementation "com.paypal.android:payment-buttons:1.0.0"
-    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+    implementation 'com.paypal.android:paypal-native-payments:1.1.0'
+    implementation 'com.paypal.android:card-payments:1.1.0'
+    implementation 'com.paypal.android:payment-buttons:1.1.0'
+    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.3'
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'

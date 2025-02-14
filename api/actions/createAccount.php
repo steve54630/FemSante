@@ -7,41 +7,51 @@ if (isset($json['email']) and isset($json['password'])) {
     $email = htmlspecialchars($json['email']);
     $password = htmlspecialchars($json['password']);
     $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
-        
-    if ($email == "" or $password == "") {
-        $result["success"] = false;
-        $result["error"] = "Le mot de passe et/ou l'email n'est pas renseigné";
+    $answer = htmlspecialchars($json['answer']);
+    $answerHashed = password_hash($answer, PASSWORD_DEFAULT);
+    $numberdays = htmlspecialchars($json['days']);
+    if ($numberdays == "A vie") {
+        $date = null;
     }
     else {
-        $checkIfEmailExists = $bdd->prepare('SELECT id FROM USERS WHERE email = ?');
-        $checkIfEmailExists->execute(array($email));
+        $today = new DateTime();
+        $date = date_add($today,date_interval_create_from_date_string($numberdays." days"));
+        $date = date_format($date,"Y-m-d");
+    }
+    $name = htmlspecialchars($json['name']); 
+    
+    if ($answer != "") {
+        $answer = password_hash($answer, PASSWORD_DEFAULT);
+    }
 
-        if ($checkIfEmailExists->rowCount() > 0) {
-            $result["success"] = false;
-            $result["error"] = "Cet utilisateur existe déjà";
-        }
-        else {
-            try{
-                $createAccount = $bdd->prepare("INSERT INTO USERS (name, email, password)"
-                ." VALUES (:name, :mail, :password)");
-                $createAccount->execute(
+    if ($email == "" or $password == "") {
+        $result["success"] = false;
+        $result["error"] = "Erreur système : Veuillez contacter le développeur";
+    }
+    else {
+        try{
+            $createAccount = $bdd->prepare("INSERT INTO USERS (name, email, password, " 
+            ."quest_id, quest_answer, valid_date) VALUES (:name, :mail, :password, :id, :answer, :date)");
+            $createAccount->execute(
                     array("name"=>$name,
                         "mail"=>$email, 
-                        "password"=>$passwordHashed
+                        "password"=>$passwordHashed,
+                        "id"=> htmlspecialchars($json['id']),
+                        "answer"=> $answer,
+                        "date"=> $date
                 ));
                 $result["success"] = true;
             }
             catch (Exception $e){
                 $result["success"] = false;
-                $result["error"] = "Erreur lié à la base de données";
+                $result["error"] = "Erreur système : Veuillez contacter le développeur";
             }
 
         }
     }
-}
 else {
         $result["success"] = false;
-        $result["error"] = "Veuillez complétez tous les champs demandés";
+        $result["error"] = "Erreur système : Veuillez contacter le développeur";
 }
 
 echo json_encode($result);

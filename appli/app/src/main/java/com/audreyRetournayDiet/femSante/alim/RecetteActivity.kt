@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.alim
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -22,6 +23,7 @@ class RecetteActivity : AppCompatActivity() {
     private lateinit var title: TextView
     private lateinit var spinner: Spinner
     private lateinit var help: TextView
+    private lateinit var map: HashMap<*, *>
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,14 +35,19 @@ class RecetteActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinnerMeditation)
         help = findViewById(R.id.textHelp)
 
-        val map: HashMap<*, *>? =
-            intent.getSerializableExtra("map", HashMap::class.java)
+        map = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+
+            intent.getSerializableExtra("map", HashMap::class.java)!!
+            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map")
+                    as HashMap<*,*>
+        }
 
         title.text = intent.extras!!.getString("Title")
 
         val list = ArrayList<String>()
 
-        for (item in map!!) {
+        for (item in map) {
             list.add(item.value.toString())
         }
 

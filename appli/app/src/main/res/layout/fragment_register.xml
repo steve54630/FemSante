@@ -12,28 +12,17 @@
         android:layout_height="wrap_content"
         tools:context="com.audreyRetournayDiet.femSante.login.LoginFragment">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="87dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/icone_description"
-            android:src="@mipmap/ic_launcher"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textViewTitleLogin"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/nothing_you_could_do"
             android:text="@string/register"
+            android:textAlignment="center"
+            android:textColor="@color/black"
             android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.542"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -46,15 +35,17 @@
             android:ems="10"
             android:hint="@string/password_demand"
             android:inputType="textPassword"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Login" />
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/ChangePassword"
             android:layout_width="284dp"
             android:layout_height="55dp"
             android:layout_marginTop="16dp"
+
             android:autofillHints="password"
             android:ems="10"
             android:fontFamily="@font/dinpro"
@@ -70,6 +61,7 @@
             android:layout_height="55dp"
             android:autofillHints="emailAddress"
             android:ems="10"
+            android:textColor="@color/black"
             android:hint="@string/e_mail_demand"
             android:fontFamily="@font/dinpro"
             android:inputType="textEmailAddress"
@@ -84,6 +76,7 @@
             android:layout_marginTop="32dp"
             android:autofillHints="name"
             android:fontFamily="@font/dinpro"
+            android:textColor="@color/black"
             android:ems="10"
             android:hint="@string/neme_demand"
             android:inputType="textPersonName"
@@ -102,7 +95,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewAnswer" />
+            app:layout_constraintTop_toBottomOf="@+id/Answer" />
 
         <Button
             android:id="@+id/buttonTestSubscribe"
@@ -127,10 +120,10 @@
             android:textAlignment="center"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintTop_toBottomOf="@+id/ChangePassword" />
 
         <EditText
-            android:id="@+id/textViewAnswer"
+            android:id="@+id/Answer"
             android:layout_width="284dp"
             android:layout_height="55dp"
             android:layout_marginTop="16dp"
@@ -138,16 +131,18 @@
             android:fontFamily="@font/dinpro"
             android:importantForAutofill="no"
             android:inputType="text"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerQuestion" />
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="284dp"
-            android:layout_height="56dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/password_help"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Password" />

@@ -2,7 +2,7 @@ package com.audreyRetournayDiet.femSante.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.audreyRetournayDiet.femSante.FACEBOOK_COMMUNITY
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.login.PaymentActivity
@@ -25,7 +24,7 @@ class AccountFragment : Fragment() {
     private lateinit var passwordChange: Button
     private lateinit var login: TextView
     private lateinit var update: Button
-    private lateinit var facebook: Button
+    private lateinit var map: HashMap<*, *>
 
     @SuppressLint("NewApi")
     override fun onCreateView(
@@ -35,10 +34,13 @@ class AccountFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_account, container, false)
 
-        val map: HashMap<*, *>? =
-            requireActivity().intent.extras!!.getSerializable("map", HashMap::class.java)
+        map = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+                    requireActivity().intent.getSerializableExtra("map", HashMap::class.java)!!
+            else -> @Suppress("DEPRECATION") requireActivity().intent.getSerializableExtra("map")
+                    as HashMap<*, *>
+        }
 
-        facebook = view.findViewById(R.id.buttonFacebook)
         login = view.findViewById(R.id.textViewLogin)
         cgu = view.findViewById(R.id.buttonCGU)
         cgv = view.findViewById(R.id.buttonCGV)
@@ -47,7 +49,7 @@ class AccountFragment : Fragment() {
         passwordChange = view.findViewById(R.id.buttonPasswordChanged)
         update = view.findViewById(R.id.buttonUpdateAbonnement)
 
-        login.text = map!!["login"].toString()
+        login.text = map["login"].toString()
 
         cgu.setOnClickListener {
             val intentTarget = Intent(activity, PdfActivity::class.java)
@@ -77,7 +79,7 @@ class AccountFragment : Fragment() {
             startActivity(Intent(activity, ForgottenActivity::class.java))
         }
 
-        when(requireActivity().intent.extras!!.getBoolean("A vie")) {
+        when (requireActivity().intent.extras!!.getBoolean("A vie")) {
             true -> update.visibility = View.GONE
             false -> update.visibility = View.VISIBLE
         }
@@ -94,13 +96,7 @@ class AccountFragment : Fragment() {
             intentTarget.putExtra("update", "Oui")
 
             startActivity(intentTarget)
-        }
 
-        facebook.setOnClickListener {
-            val webpage = Uri.parse(FACEBOOK_COMMUNITY)
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            val chooser = Intent.createChooser(intent, "Lien vers Facebook")
-            startActivity(chooser)
         }
 
         return view

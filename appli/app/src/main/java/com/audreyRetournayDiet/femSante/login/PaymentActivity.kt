@@ -40,6 +40,7 @@ import com.paypal.android.cardpayments.CardRequest
 import com.paypal.android.cardpayments.CardResult
 import com.paypal.android.cardpayments.threedsecure.SCA
 import com.paypal.android.corepayments.CoreConfig
+import com.paypal.android.corepayments.Environment
 import com.paypal.android.corepayments.PayPalSDKError
 import com.paypal.android.paymentbuttons.PayPalButton
 import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutClient
@@ -78,6 +79,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var reductionButton: Button
     private var reduction = 0
     private var repay = false
+    private var update = false
 
     override fun onNewIntent(newIntent: Intent?) {
         super.onNewIntent(intent)
@@ -89,6 +91,7 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+        alert = LoadingAlert(this)
         number = findViewById(R.id.numberCard)
         month = findViewById(R.id.editTextMonth)
         year = findViewById(R.id.editTextYear)
@@ -105,10 +108,19 @@ class PaymentActivity : AppCompatActivity() {
         buyout = findViewById(R.id.textViewBuyout)
         reductionValue = findViewById(R.id.editTextReduc)
         reductionButton = findViewById(R.id.buttonReduc)
-        parametersMap = intent.getSerializableExtra("map", HashMap::class.java)!!
-        alert = LoadingAlert(this)
+
+        update = (intent.extras!!.getString("update") == "Oui")
+
+        parametersMap = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+
+                intent.getSerializableExtra("map", HashMap::class.java)!!
+            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map")
+                    as HashMap<*,*>
+        }
 
         val translator = Translator()
+
 
         repay = intent.getBooleanExtra("repay", false)
 
@@ -218,7 +230,7 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         //Initialisation de PayPal
-        val config = CoreConfig(PAYPAL_CLIENT_ID)
+        val config = CoreConfig(PAYPAL_CLIENT_ID, Environment.LIVE)
         val cardClient = CardClient(this, config)
         val payPalNativeClient =
             PayPalNativeCheckoutClient(application, config, RETURN_URL_PAYPAL)
@@ -251,7 +263,7 @@ class PaymentActivity : AppCompatActivity() {
                 Toast.makeText(
                     this@PaymentActivity,
                     errorMessage.translatedText,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_LONG
                 ).show()
                 Log.e("Connexion", error.message!!)
             }
@@ -279,17 +291,16 @@ class PaymentActivity : AppCompatActivity() {
                 Toast.makeText(
                     this@PaymentActivity,
                     errorMessage.translatedText,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_LONG
                 ).show()
                 Log.e("Connexion", error.message!!)
             }
 
             override fun onApproveOrderThreeDSecureDidFinish() {
-                Toast.makeText(this@PaymentActivity, "Authentification réussi", Toast.LENGTH_SHORT)
-                    .show()
             }
 
             override fun onApproveOrderThreeDSecureWillLaunch() {
+                alert.closeAlertDialog()
                 Toast.makeText(
                     this@PaymentActivity,
                     "Lancement de l'authentification",
@@ -332,20 +343,20 @@ class PaymentActivity : AppCompatActivity() {
 
                     Volley.newRequestQueue(this).add(request)
                 } catch (_: UninitializedPropertyAccessException) {
-                    alert.closeAlertDialog()
                     Toast.makeText(
                         this,
                         "Veuillez sélectionnez un abonnement",
                         Toast.LENGTH_SHORT
                     ).show()
+                    alert.closeAlertDialog()
                 }
             } else {
-                alert.closeAlertDialog()
                 Toast.makeText(
                     this,
                     "Veuillez accepter les conditions générales de vente.",
                     Toast.LENGTH_SHORT
                 ).show()
+                alert.closeAlertDialog()
             }
         }
 
@@ -388,6 +399,7 @@ class PaymentActivity : AppCompatActivity() {
                             Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
                                 .show()
                             Log.e("Connexion", err.localizedMessage!!)
+                            alert.closeAlertDialog()
                         })
 
                     Volley.newRequestQueue(this).add(request)
@@ -397,6 +409,7 @@ class PaymentActivity : AppCompatActivity() {
                         "Veuillez sélectionnez un abonnement",
                         Toast.LENGTH_SHORT
                     ).show()
+                    alert.closeAlertDialog()
                 }
             } else {
                 Toast.makeText(
@@ -404,6 +417,7 @@ class PaymentActivity : AppCompatActivity() {
                     "Veuillez accepter les conditions générales de vente.",
                     Toast.LENGTH_SHORT
                 ).show()
+                alert.closeAlertDialog()
             }
 
         }
@@ -472,7 +486,7 @@ class PaymentActivity : AppCompatActivity() {
                     parameters.put("email", parametersMap["email"])
                     parameters.put("password", parametersMap["password"])
                     parameters.put("days", search)
-                    parameters.put("update", intent.extras!!.getString("update") == "Oui")
+                    parameters.put("update", update)
 
                     Utilitaires.updateAccount(
                         databaseManager,
@@ -487,9 +501,9 @@ class PaymentActivity : AppCompatActivity() {
                 Toast.makeText(this, response.getString("error"), Toast.LENGTH_SHORT).show()
             }
         }, { err ->
+            alert.closeAlertDialog()
             Toast.makeText(this, "Erreur de connexion", Toast.LENGTH_SHORT)
                 .show()
-            alert.closeAlertDialog()
             Log.e("Connexion", err.localizedMessage!!)
         })
 

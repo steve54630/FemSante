@@ -39,7 +39,12 @@ class AudioActivity : AppCompatActivity() {
 
         playerView.player = player
 
-        map = intent.getSerializableExtra("map", ArrayList::class.java)!!
+        map = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+                intent.getSerializableExtra("map", ArrayList::class.java)!!
+            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map")
+                    as ArrayList<*>
+        }
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, map)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

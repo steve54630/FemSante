@@ -13,7 +13,6 @@ import android.view.WindowManager.LayoutParams
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -29,9 +28,9 @@ class VideoActivity : AppCompatActivity() {
     private var fullScreen: Button? = null
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView
+    private lateinit var map: HashMap<*, *>
 
     @SuppressLint("SourceLockedOrientationActivity")
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
@@ -43,11 +42,17 @@ class VideoActivity : AppCompatActivity() {
         pdf = findViewById(R.id.pdfButton)
         fullScreen = findViewById(R.id.buttonFS)
 
-        val map: HashMap<*, *>? =
-            intent.getSerializableExtra("map", HashMap::class.java)!!
+
+        map = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+                intent.getSerializableExtra("map", HashMap::class.java)!!
+
+            else -> intent.getSerializableExtra("map")
+                    as HashMap<*,*>
+        }
 
 
-        val videoUri = Uri.parse("asset:///" + map!!["Title"].toString() + ".mp4")
+        val videoUri = Uri.parse("asset:///" + map["Title"].toString() + ".mp4")
         val item = MediaItem.fromUri(videoUri)
         val retriever = MediaMetadataRetriever()
         val afd = assets.openFd(map["Title"].toString() + ".mp4")

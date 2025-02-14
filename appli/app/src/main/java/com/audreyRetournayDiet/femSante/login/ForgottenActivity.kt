@@ -30,9 +30,9 @@ class ForgottenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgotten_password)
         password = findViewById(R.id.Password)
-        confirm = findViewById(R.id.password)
+        confirm = findViewById(R.id.ChangePassword)
         email = findViewById(R.id.Login)
-        answer = findViewById(R.id.textViewAnswer)
+        answer = findViewById(R.id.Answer)
         changePassword = findViewById(R.id.buttonConnect)
         databaseManager = DatabaseManager(applicationContext)
         questionSpinner = findViewById(R.id.spinnerQuestion)
@@ -42,7 +42,7 @@ class ForgottenActivity : AppCompatActivity() {
         mapQuestion[2] = "Nom de votre 1er animal de compagnie?"
         mapQuestion[3] = "Prénom de votre ami d'enfance?"
 
-       val listQuestion = ArrayList<String>()
+        val listQuestion = ArrayList<String>()
 
         for (item in mapQuestion) {
             listQuestion.add(item.value)
@@ -56,38 +56,62 @@ class ForgottenActivity : AppCompatActivity() {
 
 
         changePassword.setOnClickListener {
-            if (password.text.toString() == confirm.text.toString()) {
-                if (Utilitaires.isValidEmail(email.text.toString())) {
+            try {
+                if (questionSpinner.selectedItemId != (-1).toLong()) {
+                    if (password.text.toString() == confirm.text.toString()) {
+                        if (Utilitaires.isValidEmail(email.text.toString())) {
 
-                    alert.startAlertDialog()
+                            alert.startAlertDialog()
 
-                    val intent = Intent(this, LoginFragment::class.java)
-                    var search =
-                        mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
-                            .keys.toString()
-                    search = search.substring(1)
-                    search = search.substring(0, search.length - 1)
-                    val parameters = JSONObject()
-                    parameters.put("email", email.text.toString())
-                    parameters.put("password", password.text.toString())
-                    parameters.put("answer", answer.text.toString())
-                    parameters.put("id", search)
-                    databaseManager.changePassword(
-                        parameters,
-                        this,
-                        this,
-                        intent,
-                        alert
-                    )
+                            val intent = Intent(this, LoginFragment::class.java)
+                            var search =
+                                mapQuestion.filterValues { it == questionSpinner.selectedItem.toString() }
+                                    .keys.toString()
+                            search = search.substring(1)
+                            search = search.substring(0, search.length - 1)
+                            val parameters = JSONObject()
+                            parameters.put("email", email.text.toString())
+                            parameters.put("password", password.text.toString())
+                            parameters.put("answer", answer.text.toString())
+                            parameters.put("id", search)
+                            databaseManager.changePassword(
+                                parameters,
+                                this,
+                                this,
+                                intent,
+                                alert
+                            )
+                        } else {
+                            alert.closeAlertDialog()
+                            Toast.makeText(
+                                this,
+                                "Erreur : Format e-mail incorrect",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    } else {
+                        alert.closeAlertDialog()
+                        Toast.makeText(
+                            this,
+                            "Erreur : Mots de passe non identiques",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 } else {
-                    alert.closeAlertDialog()
-                    Toast.makeText(this, "Erreur : Format e-mail incorrect", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(
+                        this,
+                        "Veuillez sélectionner une question",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            } else {
-                alert.closeAlertDialog()
-                Toast.makeText(this, "Erreur : Mots de passe non identiques", Toast.LENGTH_SHORT)
-                    .show()
+            } catch (_: UninitializedPropertyAccessException) {
+                Toast.makeText(
+                    this,
+                    "Veuillez rensiegner tous les champs",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

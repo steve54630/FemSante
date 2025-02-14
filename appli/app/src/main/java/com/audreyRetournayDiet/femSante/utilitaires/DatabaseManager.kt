@@ -33,7 +33,7 @@ class DatabaseManager(context: Context) {
         intent: Intent,
         alert: LoadingAlert
     ) {
-        readRequest(CREATE_USER_API, context, activity, intent, "Inscription réussie", parameters, alert)
+        readRequest(CREATE_USER_API, context, activity, intent, "Inscription réussie", parameters, alert, "create")
     }
 
     fun connectUser(
@@ -43,7 +43,7 @@ class DatabaseManager(context: Context) {
         intent: Intent,
         alert: LoadingAlert
     ) {
-        readRequest(CONNECT_USER_API, context, activity, intent, "Connexion réussie", parameters, alert)
+        readRequest(CONNECT_USER_API, context, activity, intent, "Connexion réussie", parameters, alert, "connect")
     }
 
     fun changePassword(
@@ -54,7 +54,7 @@ class DatabaseManager(context: Context) {
         alert: LoadingAlert,
     ) {
 
-        readRequest(FORGOTTEN_PASSWORD_API, context, activity, intent, "Mot de passe changé", parameters, alert)
+        readRequest(FORGOTTEN_PASSWORD_API, context, activity, intent, "Mot de passe changé", parameters, alert, "change")
     }
 
     fun updateUser(
@@ -94,21 +94,25 @@ class DatabaseManager(context: Context) {
         message: String?,
         parameters: JSONObject?,
         alert : LoadingAlert,
+        type : String
     ) {
 
         val request = JsonObjectRequest(Request.Method.POST, url, parameters, { response ->
             val result = Utilitaires.onApiResponse(response, context)
+
+            val map = HashMap<String, String>()
+            map["login"] = parameters!!["email"].toString()
+            map["password"] = parameters["password"].toString()
+
             if (result) {
                 alert.closeAlertDialog()
                 if (message != null) {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
-                val map = HashMap<String, String>()
-                map["login"] = parameters!!["email"].toString()
-                map["password"] = parameters["password"].toString()
+                if (type == "connect") {
 
                 intent.putExtra("A vie", response.getBoolean("A vie"))
-                intent.putExtra("map", map)
+                intent.putExtra("map", map)}
 
                 activity.finish()
                 context.startActivity(intent)
@@ -116,15 +120,11 @@ class DatabaseManager(context: Context) {
                 alert.closeAlertDialog()
                 Toast.makeText(context, response.getString("error"), Toast.LENGTH_SHORT)
                     .show()
-                if (response.getBoolean("repay") && url == UPDATE_USER_API) {
+                if (url == UPDATE_USER_API && response.getBoolean("repay")) {
                     val intentRepay = Intent(context, PaymentActivity::class.java)
 
-                    val parametersRepay = HashMap<String, String>()
-                    parametersRepay["email"] = parameters!!["email"].toString()
-                    parametersRepay["password"] = parameters["password"].toString()
-
                     intentRepay.putExtra("repay", true)
-                    intentRepay.putExtra("map", parametersRepay)
+                    intentRepay.putExtra("map", map)
                     intentRepay.putExtra("update", "Non")
 
                     context.startActivity(intentRepay)

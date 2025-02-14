@@ -20,8 +20,8 @@
     <!-- Option du menu -->
 
     <string name="option_alim">Nutrition</string>
-    <string name="option_tete">Bien dans votre tête</string>
-    <string name="option_corps">Bien dans votre corps</string>
+    <string name="option_tete">Bien dans ta tête</string>
+    <string name="option_corps">Bien dans ton corps</string>
     <string name="option_outils">Boîte à outils</string>
     <string name="option_meditaion">Méditations</string>
     <string name="option_sophrologie">Sophrologie</string>
@@ -111,8 +111,10 @@
     <string name="welcome">Bienvenue</string>
     <string name="subscribe_update">Mise à jour de l\'abonnement</string>
     <string name="login_name">Login</string>
-    <string name="password_help">Le mot de passe est composé de au moins 8 caractères contenant au moins 1 majuscule, 1 caractère spécial et 1 minuscule</string>
+    <string name="password_help">Le mot de passe est composé d\'au moins 8 caractères contenant au moins 1 majuscule, 1 caractère spécial et 1 minuscule</string>
     <string name="facebook">Communauté Facebook</string>
     <string name="loading">En attente de la réponse Internet…</string>
+
+    <string name="facebook_app_id">24442016295389259</string>
 
 </resources>
