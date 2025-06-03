@@ -12,7 +12,7 @@ class LoadingAlert(myActivity: Activity) {
     private lateinit var dialog: Dialog
 
     @SuppressLint("InflateParams")
-    fun startAlertDialog() {
+    fun start() {
         val builder = AlertDialog.Builder(activity)
 
         builder.setView(activity.layoutInflater.inflate(R.layout.alert_internet_dialog, null))
@@ -22,7 +22,7 @@ class LoadingAlert(myActivity: Activity) {
         dialog.show()
     }
 
-    fun closeAlertDialog() {
+    fun close() {
         dialog.dismiss()
     }
 

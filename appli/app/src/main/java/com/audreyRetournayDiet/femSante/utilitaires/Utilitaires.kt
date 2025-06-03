@@ -5,13 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.audreyRetournayDiet.femSante.login.LoginActivity
 import org.json.JSONException
 import org.json.JSONObject
 
 
 object Utilitaires {
+
+    fun showToast(msg: String, context : Context): Boolean {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        return false
+    }
 
     fun videoLaunch(
         titre: String?,
@@ -87,39 +90,4 @@ object Utilitaires {
         return keyTreated
     }
 
-    fun registerCreation(
-        databaseManager: DatabaseManager,
-        parameters: JSONObject,
-        packageContext: Context,
-        activity: AppCompatActivity,
-        alert: LoadingAlert,
-    ) {
-        val intent = Intent(packageContext, LoginActivity::class.java)
-
-        databaseManager.createUser(
-            parameters,
-            packageContext,
-            activity,
-            intent,
-            alert
-        )
-    }
-
-    fun updateAccount(
-        databaseManager: DatabaseManager,
-        parameters: JSONObject,
-        packageContext: Context,
-        activity: AppCompatActivity,
-        alert: LoadingAlert,
-    ) {
-        val intent = Intent(packageContext, LoginActivity::class.java)
-
-        databaseManager.updateUser(
-            parameters,
-            packageContext,
-            activity,
-            intent,
-            alert
-        )
-    }
 }

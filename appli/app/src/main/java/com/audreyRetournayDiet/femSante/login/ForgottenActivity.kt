@@ -9,7 +9,8 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.DatabaseManager
+import com.audreyRetournayDiet.femSante.repository.ApiResult
+import com.audreyRetournayDiet.femSante.repository.UserManager
 import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
 import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
@@ -22,7 +23,7 @@ class ForgottenActivity : AppCompatActivity() {
     private lateinit var email: EditText
     private lateinit var answer: EditText
     private lateinit var changePassword: Button
-    private lateinit var databaseManager: DatabaseManager
+    private lateinit var databaseManager: UserManager
     private lateinit var questionSpinner: Spinner
     private var alert = LoadingAlert(this)
 
@@ -34,7 +35,7 @@ class ForgottenActivity : AppCompatActivity() {
         email = findViewById(R.id.Login)
         answer = findViewById(R.id.Answer)
         changePassword = findViewById(R.id.buttonConnect)
-        databaseManager = DatabaseManager(applicationContext)
+        databaseManager = UserManager(applicationContext)
         questionSpinner = findViewById(R.id.spinnerQuestion)
 
         val mapQuestion = LinkedHashMap<Int, String>()
@@ -61,7 +62,7 @@ class ForgottenActivity : AppCompatActivity() {
                     if (password.text.toString() == confirm.text.toString()) {
                         if (Utilitaires.isValidEmail(email.text.toString())) {
 
-                            alert.startAlertDialog()
+                            alert.start()
 
                             val intent = Intent(this, LoginFragment::class.java)
                             var search =
@@ -74,15 +75,28 @@ class ForgottenActivity : AppCompatActivity() {
                             parameters.put("password", password.text.toString())
                             parameters.put("answer", answer.text.toString())
                             parameters.put("id", search)
-                            databaseManager.changePassword(
-                                parameters,
-                                this,
-                                this,
-                                intent,
-                                alert
-                            )
+
+                            databaseManager.changePassword(parameters) { result ->
+
+                                when (result) {
+                                    is ApiResult.Success -> {
+                                        Toast.makeText(this, result.message, Toast.LENGTH_SHORT)
+                                            .show()
+
+                                        this.finish()
+                                        this.startActivity(intent)
+                                    }
+
+                                    is ApiResult.Failure -> {
+                                        alert.close()
+                                        Toast.makeText(this, result.message, Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                }
+
+                            }
                         } else {
-                            alert.closeAlertDialog()
+                            alert.close()
                             Toast.makeText(
                                 this,
                                 "Erreur : Format e-mail incorrect",
@@ -91,7 +105,7 @@ class ForgottenActivity : AppCompatActivity() {
                                 .show()
                         }
                     } else {
-                        alert.closeAlertDialog()
+                        alert.close()
                         Toast.makeText(
                             this,
                             "Erreur : Mots de passe non identiques",

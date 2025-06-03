@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.login.ForgottenActivity
-import com.audreyRetournayDiet.femSante.login.PaymentActivity
+import com.audreyRetournayDiet.femSante.login.payment.PaymentActivity
 import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
 
 class AccountFragment : Fragment() {

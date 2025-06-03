@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.main.HomeActivity
-import com.audreyRetournayDiet.femSante.utilitaires.DatabaseManager
+import com.audreyRetournayDiet.femSante.repository.ApiResult
+import com.audreyRetournayDiet.femSante.repository.UserManager
 import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
 import org.json.JSONObject
 
@@ -22,13 +22,13 @@ class LoginFragment : Fragment() {
     private lateinit var email: EditText
     private lateinit var connect: Button
     private lateinit var forgotPassword: Button
-    private lateinit var databaseManager: DatabaseManager
+    private lateinit var userManager: UserManager
     private lateinit var alert: LoadingAlert
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
@@ -36,27 +36,52 @@ class LoginFragment : Fragment() {
         email = view.findViewById(R.id.Login)
         connect = view.findViewById(R.id.buttonConnect)
         forgotPassword = view.findViewById(R.id.buttonForgotten)
-        databaseManager = DatabaseManager(view.context)
+        userManager = UserManager(view.context)
         alert = LoadingAlert(requireActivity())
 
         connect.setOnClickListener {
 
-            alert.startAlertDialog()
+            alert.start()
 
             if (email.text.toString() == "" || password.text.toString() == "") {
-                Toast.makeText(view.context, "Veuillez saisir les champs demandés", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    view.context,
+                    "Veuillez saisir les champs demandés",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
-                alert.closeAlertDialog()
+                alert.close()
             } else {
                 val parameters = JSONObject()
                 parameters.put("email", email.text.toString())
                 parameters.put("password", password.text.toString())
-                databaseManager.connectUser(
-                    parameters,
-                    view.context, activity as AppCompatActivity,
-                    Intent(activity, HomeActivity::class.java),
-                    alert
-                )
+                userManager.connectUser(parameters) { apiResult ->
+
+                    when (apiResult) {
+                        is ApiResult.Success -> {
+                            Toast.makeText(context, apiResult.message, Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(activity, HomeActivity::class.java)
+
+                            intent.putExtra("A vie", apiResult.data!!.getBoolean("A vie"))
+                            intent.putExtra(
+                                "map", hashMapOf(
+                                    "login" to email.text.toString(),
+                                    "password" to password.text.toString()
+                                )
+                            )
+
+                            requireActivity().finish()
+                            requireActivity().startActivity(intent)
+
+                        }
+
+                        is ApiResult.Failure -> {
+                            alert.close()
+                            Toast.makeText(context, apiResult.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
         }
 

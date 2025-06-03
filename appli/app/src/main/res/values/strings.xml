@@ -55,6 +55,8 @@
     <string name="outils6">Infusions et digestion</string>
     <string name="outils7">Infusions pour apaiser les menstruations</string>
     <string name="fullscreen">Plein écran</string>
+    <string name="play">Lecture</string>
+    <string name="pause">Pause</string>
 
     <!--Yoga -->
     <string name="beginner">Débutant en yoga</string>
