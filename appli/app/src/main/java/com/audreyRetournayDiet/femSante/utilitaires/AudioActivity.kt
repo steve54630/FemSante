@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.utilitaires
 
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -9,11 +8,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.ExoPlayer.*
+import androidx.media3.exoplayer.ExoPlayer.Builder
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
 
@@ -25,14 +24,13 @@ class AudioActivity : AppCompatActivity() {
     private lateinit var map: ArrayList<*>
     private lateinit var title: TextView
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio)
 
         spinner = findViewById(R.id.spinnerExercice)
         playerView = findViewById(R.id.audioPlayer)
-        player = Builder(this).build()
+        player = Builder(this).setMediaSourceFactory(DefaultMediaSourceFactory(this)).build()
         title = findViewById(R.id.textTitle)
 
         title.text = intent.getStringExtra("Titre")
@@ -42,6 +40,7 @@ class AudioActivity : AppCompatActivity() {
         map = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
                 intent.getSerializableExtra("map", ArrayList::class.java)!!
+
             else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map")
                     as ArrayList<*>
         }
@@ -57,12 +56,15 @@ class AudioActivity : AppCompatActivity() {
                 if (spinner.selectedItemId != "-1".toLong()) {
                     playerView.visibility = View.VISIBLE
 
-                    val videoUri = Uri.parse("asset:///${spinner.selectedItem}.mp4")
+                    val uri = Uri.Builder()
+                        .scheme("https")
+                        .authority("audreyretournay-dieteticiennenutritionniste.fr")
+                        .appendPath("assets")
+                        .appendPath("Calmer la colère")
+                        .appendPath("master.m3u8")
+                        .build()
 
-                    val item = MediaItem.fromUri(videoUri)
-                    val retriever = MediaMetadataRetriever()
-                    val afd = assets.openFd( "${spinner.selectedItem}.mp4")
-                    retriever.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                    val item = MediaItem.fromUri(uri)
 
                     player.setMediaItem(item)
                     player.prepare()

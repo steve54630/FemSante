@@ -71,6 +71,8 @@ class LoginFragment : Fragment() {
                                 )
                             )
 
+                            alert.close()
+
                             requireActivity().finish()
                             requireActivity().startActivity(intent)
 

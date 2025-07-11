@@ -1,0 +1,8 @@
+./ffmpeg -hwaccel cuda -i Cours de Fitness.mp4 -map 0:v -map 0:a -c:v h264_nvenc -preset slow -b:v 3.5M -maxrate 3.5M -bufsize 7M -s 1280x720 -c:a aac -b:a 128k -f hls -hls_time 10 -hls_playlist_type vod -hls_segment_filename Cours de Fitness/720p/720p_%03d.ts Cours de Fitness/720p/720p.m3u8
+
+mkdir "Peur/720p"
+./ffmpeg -hwaccel cuda -i "fear.mp4" -map 0:v -map 0:a -vf format=yuv420p -c:v h264_nvenc -preset slow -b:v 3.5M -maxrate 3.5M -bufsize 7M -s 1280x720 -c:a aac -b:a 128k -f hls -hls_time 10 -hls_playlist_type vod -hls_segment_filename "Peur/720p/720p_%03d.ts" "Peur/720p/720p.m3u8"
+mkdir "Peur/480p"
+./ffmpeg -hwaccel cuda -i "fear.mp4" -map 0:v -map 0:a -vf format=yuv420p -c:v h264_nvenc -preset slow -b:v 1.5M -maxrate 1.5M -bufsize 3M -s 854x480 -c:a aac -b:a 96k -f hls -hls_time 10 -hls_playlist_type vod -hls_segment_filename "Peur/480p/480p_%03d.ts" "Peur/480p/480p.m3u8"
+
+./ffmpeg -i "self_confidence.m4a" -map 0:a -c:a aac -b:a 128k -f hls -hls_time 10 -hls_playlist_type vod -hls_segment_filename "Confiance en soi/480p/audio_%03d.ts" "Confiance en soi/480p/audio.m3u8"

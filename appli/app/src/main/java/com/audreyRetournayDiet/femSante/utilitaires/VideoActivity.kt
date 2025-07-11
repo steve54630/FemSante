@@ -3,8 +3,6 @@ package com.audreyRetournayDiet.femSante.utilitaires
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -15,17 +13,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.ExoPlayer.Builder
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Suppress("DEPRECATION")
 class VideoActivity : AppCompatActivity() {
 
     private var isPortraitVideo = false
-    private var isFullScreen  = false
+    private var isFullScreen = false
     private var titre: TextView? = null
     private var pdf: Button? = null
     private lateinit var fullScreen: ImageButton
@@ -54,24 +55,27 @@ class VideoActivity : AppCompatActivity() {
                     as HashMap<*, *>
         }
 
+        val encodedTitle = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            URLEncoder.encode(map["Title"].toString(), StandardCharsets.UTF_8)
+        } else {
+            URLEncoder.encode(map["Title"].toString(), StandardCharsets.UTF_8.toString())
+        }
 
-        val videoUri = Uri.parse("asset:///${map["Title"].toString()}.mp4")
+        val videoUri =
+            "https://audreyretournay-dieteticiennenutritionniste.fr/assets/${encodedTitle}/master.m3u8".toUri()
         val item = MediaItem.fromUri(videoUri)
 
-        val retriever = MediaMetadataRetriever()
-        val afd = assets.openFd(map["Title"].toString() + ".mp4")
-        retriever.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
 
         playerView.player = player
         player.setMediaItem(item)
         player.prepare()
 
         if (map["PDF"].toString() == "oui") {
-                pdf?.visibility = View.VISIBLE
-                pdf?.setOnClickListener {
-                    val intentTarget = Intent(this, PdfActivity::class.java)
-                    intentTarget.putExtra("PDF", map["Title"].toString() + ".pdf")
-                    startActivity(intentTarget)
+            pdf?.visibility = View.VISIBLE
+            pdf?.setOnClickListener {
+                val intentTarget = Intent(this, PdfActivity::class.java)
+                intentTarget.putExtra("PDF", map["Title"].toString() + ".pdf")
+                startActivity(intentTarget)
             }
         }
 
@@ -89,15 +93,7 @@ class VideoActivity : AppCompatActivity() {
 
         titre?.text = map["Title"].toString()
 
-        val height =
-            Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)!!)
-        val width =
-            Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)!!)
-
-        isPortraitVideo = height > width
-
         if (isPortraitVideo) {
-            fullScreen.visibility = View.INVISIBLE
             playerView.layoutParams =
                 ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             titre!!.visibility = View.INVISIBLE
