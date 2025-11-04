@@ -12,7 +12,7 @@
     android:background="@drawable/fond_appli"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".main.MainMenuFragment">
+    tools:context=".domain.main.MainMenuFragment">
 
     <TextView
         android:id="@+id/textViewBienvenue"

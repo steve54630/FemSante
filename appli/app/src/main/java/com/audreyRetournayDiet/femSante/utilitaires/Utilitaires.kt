@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.audreyRetournayDiet.femSante.repository.ApiResult
+import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -22,15 +24,34 @@ object Utilitaires {
         intent: Intent,
         context: Context,
     ) {
-        val extrasVideo = Bundle()
-        val map = HashMap<String, String>()
-        map["Title"] = titre!!
-        map["PDF"] = pdf!!
-        extrasVideo.putSerializable("map", map)
 
-        intent.putExtras(extrasVideo)
+        val api = VideoManager(context)
 
-        context.startActivity(intent)
+        api.getVideoUrl(titre!!) { apiResult ->
+
+            when (apiResult) {
+                is ApiResult.Success -> {
+
+                    val extrasVideo = Bundle()
+                    val map = HashMap<String, String>()
+                    map["Title"]=titre
+                    map["URL"] = apiResult.data!!.getString("url")
+                    Log.e("url", map["URL"]!!)
+                    map["PDF"] = pdf!!
+                    extrasVideo.putSerializable("map", map)
+
+                    intent.putExtras(extrasVideo)
+
+                    context.startActivity(intent)
+
+                }
+                is ApiResult.Failure -> {
+                    Toast.makeText(context, apiResult.message, Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
+
     }
 
     fun isValidEmail(email: String): Boolean {

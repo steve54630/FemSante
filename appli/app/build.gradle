@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
 }
 
 afterEvaluate {
@@ -19,7 +20,6 @@ afterEvaluate {
 }
 
 android {
-    buildFeatures.buildConfig = true
     namespace 'com.audreyRetournayDiet.femSante'
     compileSdk 34
     defaultConfig {
@@ -52,27 +52,45 @@ android {
         viewBinding true
         buildConfig true
     }
-    allprojects {
-        repositories {
-            google()
-            gradlePluginPortal()
-            mavenCentral()
-            maven { url 'https://jitpack.io' }
-            // This private repository is required to resolve the Cardinal SDK transitive dependency.
-            maven {
-                {url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+}
+
+allprojects {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        // This private repository is required to resolve the Cardinal SDK transitive dependency.
+        maven {
+            {url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
                 credentials {
                     // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
                     // the private repository.
                     username 'paypal_sgerritz'
                     password 'AKCp8jQ8tAahqpT5JjZ4FRP2mW7GMoFZ674kGqHmupTesKeAY2G8NcmPKLuTxTGkKjDLRzDUQ'}
-                }
             }
         }
     }
 }
 
 dependencies {
+
+    /* Implémentation Room */
+
+    implementation "androidx.room:room-runtime:2.6.0"
+    implementation "androidx.room:room-ktx:2.6.0"
+    ksp("androidx.room:room-compiler:2.6.0")
+    testImplementation "androidx.room:room-testing:2.6.0"
+
+    /* Implémentation exo-player */
+
+    implementation 'androidx.media3:media3-exoplayer:1.2.0'
+    implementation 'androidx.media3:media3-exoplayer-dash:1.2.0'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.2.0'
+    implementation 'androidx.media3:media3-ui:1.2.0'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     implementation 'com.google.android.play:app-update-ktx:2.1.0'
     implementation 'com.github.therealbush:translator:1.0.2'
     implementation 'com.paypal.android:paypal-native-payments:1.1.0'
@@ -84,10 +102,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    implementation 'androidx.media3:media3-exoplayer:1.2.0'
-    implementation 'androidx.media3:media3-exoplayer-dash:1.2.0'
-    implementation 'androidx.media3:media3-exoplayer-hls:1.2.0'
-    implementation 'androidx.media3:media3-ui:1.2.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
     implementation 'com.android.volley:volley:1.2.1'
     testImplementation 'junit:junit:4.13.2'
