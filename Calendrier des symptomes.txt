@@ -1,0 +1,34 @@
+1. État général
+
+Énergie (fatiguée ↔ en forme) => forme de smiley lié à un bouléen en bdd
+
+Douleur (aucune ↔ très forte) => jauge colorée pour une échelle de douleur (0 -> 10)
+
+{ échelle des couleurs : blanc -> bleu → vert → jaune → orange → rouge }
+
+2. Etat psychologique
+
+Qualité de la journée (bonne, moyenne, mauvaise)
+
+Cause d'une journée difficile (apparait si bonne n'est pas choisi) => colère, stress, tristesse, autre
+
+Détails (zone optionnel pour préciser les soucis)
+
+2. Symptômes spécifiques
+
+Douleurs localisées (ventre, tête, dos, etc.) => liste de case à cocher
+
+Nausées / vertiges => interrupteur à activer
+
+Autres symptômes libres (zone de texte ou tags prédéfinis)
+
+
+4. Contexte
+
+Activité physique (repos, marche, sport) 
+
+Prise de médicaments (oui/non) => booléen en bdd
+
+Médicaments pris (zone de texte optionnel) => préciser les médicaments pris si nécessaire 
+
+Alimentation de la journée (zone de texte optionnel)
