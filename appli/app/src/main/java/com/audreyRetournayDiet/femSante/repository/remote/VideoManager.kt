@@ -12,7 +12,7 @@ class VideoManager(private val context: Context) {
 
     private val volley = Volley.newRequestQueue(this.context)
 
-    fun getVideoUrl(title: String, onComplete: (ApiResult) -> Unit) {
+    fun getVideoUrl(title: String, onComplete: (ApiResult<JSONObject>) -> Unit) {
 
         val urlBase =
             "${API_URL}/video/generate-url?video="

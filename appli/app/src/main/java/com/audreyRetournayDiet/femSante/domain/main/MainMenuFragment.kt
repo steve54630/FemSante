@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.R.layout
 import com.audreyRetournayDiet.femSante.domain.alim.AlimActivity
+import com.audreyRetournayDiet.femSante.domain.calendar.CalendarActivity
 import com.audreyRetournayDiet.femSante.domain.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.domain.tete.BienTeteActivity
 import com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity
@@ -20,6 +21,7 @@ class MainMenuFragment : Fragment() {
     private lateinit var corps: Button
     private lateinit var outils: Button
     private lateinit var alim : Button
+    private lateinit var calendarActivity: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +34,8 @@ class MainMenuFragment : Fragment() {
         tete = view.findViewById(R.id.buttonTete)
         corps = view.findViewById(R.id.buttonCorps)
         outils = view.findViewById(R.id.buttonOutils)
+        calendarActivity = view.findViewById(R.id.buttonCalendar)
+
 
         alim.setOnClickListener {
             startActivity(Intent(activity, AlimActivity::class.java))
@@ -47,6 +51,10 @@ class MainMenuFragment : Fragment() {
 
         outils.setOnClickListener {
             startActivity(Intent(activity, ToolboxActivity::class.java))
+        }
+
+        calendarActivity.setOnClickListener {
+            startActivity(Intent(activity, CalendarActivity::class.java))
         }
 
         return view

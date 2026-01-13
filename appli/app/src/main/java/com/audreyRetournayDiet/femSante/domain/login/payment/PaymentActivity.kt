@@ -133,7 +133,7 @@ class PaymentActivity : AppCompatActivity() {
 
                 PaymentManager(this).applyReduction(params) { result ->
                     when (result) {
-                        is ApiResult.Success -> {
+                        is ApiResult.Success<JSONObject> -> {
                             Toast.makeText(
                                 this,
                                 result.data!!.getString("message"),

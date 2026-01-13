@@ -15,7 +15,7 @@ class PaymentManager(private val context: AppCompatActivity) {
 
     fun applyReduction(
         params: JSONObject,
-        onComplete: (ApiResult) -> Unit,
+        onComplete: (ApiResult<JSONObject>) -> Unit,
     ) {
         val url =
             "${API_URL}/paypal/reduction"
@@ -51,7 +51,7 @@ class PaymentManager(private val context: AppCompatActivity) {
 
     fun payPalCall(
         params: JSONObject,
-        onComplete: (ApiResult) -> Unit,
+        onComplete: (ApiResult<JSONObject>) -> Unit,
     ) {
         val request =
             JsonObjectRequest(Request.Method.POST, "${API_URL}/paypal/create-order", params, { reponse ->
@@ -70,7 +70,7 @@ class PaymentManager(private val context: AppCompatActivity) {
 
     fun captureOrder(
         params: JSONObject,
-        onComplete: (ApiResult) -> Unit,
+        onComplete: (ApiResult<JSONObject>) -> Unit,
     ) {
 
         val request = JsonObjectRequest(Request.Method.POST, "${API_URL}/paypal/capture-order" , params, { response ->

@@ -231,7 +231,7 @@ class PaymentUtils(
     }
 
 
-    private fun handleUserManagerResult(apiResult: ApiResult) {
+    private fun handleUserManagerResult(apiResult: ApiResult<JSONObject>) {
         if (apiResult is ApiResult.Success) {
             Toast.makeText(context, apiResult.message, Toast.LENGTH_SHORT).show()
             val intent = Intent(context, LoginActivity::class.java)

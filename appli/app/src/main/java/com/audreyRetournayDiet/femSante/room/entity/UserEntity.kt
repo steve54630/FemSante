@@ -15,5 +15,4 @@ data class UserEntity(
     @ColumnInfo(name = "login")
     val login : String = ""
 
-
 )

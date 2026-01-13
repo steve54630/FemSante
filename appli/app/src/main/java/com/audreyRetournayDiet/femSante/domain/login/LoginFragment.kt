@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.domain.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.AppUser
+import com.audreyRetournayDiet.femSante.data.UserStore
 import com.audreyRetournayDiet.femSante.domain.main.HomeActivity
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.UserRepository
@@ -76,7 +79,7 @@ class LoginFragment : Fragment() {
                 }
 
                 when (val apiResult = userManager.connectUser(parameters)) {
-                    is ApiResult.Success -> handleLoginSuccess(apiResult, emailText, passwordText)
+                    is ApiResult.Success<JSONObject> -> handleLoginSuccess(apiResult, emailText, passwordText)
                     is ApiResult.Failure -> showError(apiResult.message)
                 }
             } finally {
@@ -86,30 +89,63 @@ class LoginFragment : Fragment() {
     }
 
     private suspend fun handleLoginSuccess(
-        apiResult: ApiResult.Success,
+        apiResult: ApiResult.Success<JSONObject>,
         emailText: String,
         passwordText: String
     ) {
         Toast.makeText(requireContext(), apiResult.message, Toast.LENGTH_SHORT).show()
 
-        val intent = Intent(requireActivity(), HomeActivity::class.java).apply {
-            putExtra("A vie", apiResult.data?.getBoolean("A vie") == true)
-            putExtra("map", hashMapOf("login" to emailText, "password" to passwordText))
+        val isAVie = apiResult.data?.getBoolean("A vie") == true
+
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
+
+        // 1️⃣ Vérifier si l'utilisateur existe déjà
+        val userId: String? = when (val userResult = userRepository.getUser(emailText)) {
+
+            is ApiResult.Success -> {
+                userResult.data?.getString("id")
+            }
+
+            is ApiResult.Failure -> {
+                // 2️⃣ Ajouter l’utilisateur s’il n’existe pas
+                when (val addResult = userRepository.addUser(UserEntity(login = emailText))) {
+                    is ApiResult.Success -> addResult.data?.getString("id")
+                    is ApiResult.Failure -> {
+                        showError(addResult.message)
+                        return
+                    }
+                }
+            }
         }
 
-        val userResult = userRepository.getUser(emailText)
-        if (userResult is ApiResult.Failure) {
-            val addResult = userRepository.addUser(UserEntity(login = emailText))
-            if (addResult is ApiResult.Failure) showError(addResult.message)
+        if (userId == null) {
+            showError("Impossible de récupérer l'identifiant utilisateur")
+            return
         }
 
+        // 3️⃣ Construire l’utilisateur pour le store
+        val newUser = AppUser(
+            id = userId,
+            aVie = isAVie,
+            email = emailText,
+            password = passwordText
+        )
+
+        val userStore = UserStore(requireContext())
+
+        // 4️⃣ Mise à jour du store (global pour toute l'app)
+        userStore.saveUser(newUser)
+
+        Log.d("Login", "User stocké : ${userStore.getUser()?.id}")
+
+        // 5️⃣ Navigation
         navigateToHome(intent)
     }
 
 
     private fun navigateToHome(intent: Intent) {
-        requireActivity().finish()
         requireActivity().startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun showError(message: String) {

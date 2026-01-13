@@ -23,7 +23,7 @@ class UserManager(private val context: Context) {
         endpoint: String,
         parameters: JSONObject,
         successMessage: String? = null
-    ): ApiResult = suspendCancellableCoroutine { cont ->
+    ): ApiResult<JSONObject> = suspendCancellableCoroutine { cont ->
 
         val request = JsonObjectRequest(
             Request.Method.POST,
@@ -54,18 +54,18 @@ class UserManager(private val context: Context) {
     }
 
     // 🔽 Fonctions lisibles et simples
-    suspend fun verifyEmail(parameters: JSONObject): ApiResult =
+    suspend fun verifyEmail(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/check-email", parameters)
 
-    suspend fun createUser(parameters: JSONObject): ApiResult =
+    suspend fun createUser(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/register", parameters, "Inscription réussie")
 
-    suspend fun connectUser(parameters: JSONObject): ApiResult =
+    suspend fun connectUser(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/connect", parameters, "Connexion réussie")
 
-    suspend fun changePassword(parameters: JSONObject): ApiResult =
+    suspend fun changePassword(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/forgotten-password", parameters, "Mot de passe changé")
 
-    suspend fun updateUser(parameters: JSONObject): ApiResult =
+    suspend fun updateUser(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/update", parameters, "Mise à jour de l'abonnement effectuée")
 }

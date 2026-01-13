@@ -128,7 +128,7 @@ class ForgottenActivity : AppCompatActivity() {
         val result = databaseManager.changePassword(parameters)
 
         when (result) {
-            is ApiResult.Success -> {
+            is ApiResult.Success<JSONObject> -> {
                 Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginFragment::class.java))
                 finish()

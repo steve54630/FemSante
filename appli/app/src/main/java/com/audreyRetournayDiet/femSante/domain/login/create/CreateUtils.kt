@@ -26,7 +26,7 @@ class CreateUtils(
             is ApiResult.Success -> {
                 // Créer l'utilisateur
                 val apiResult = userManager.createUser(params)
-                if (apiResult is ApiResult.Success) {
+                if (apiResult is ApiResult.Success<JSONObject>) {
                     val intent = Intent(context, LoginActivity::class.java)
                     context.startActivity(intent)
                 }

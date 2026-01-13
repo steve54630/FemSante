@@ -8,17 +8,19 @@ import org.json.JSONObject
 
 class UserRepository(private val userDao: UserDao) {
 
-    suspend fun addUser(user: UserEntity) : ApiResult {
+    suspend fun addUser(user: UserEntity) : ApiResult<JSONObject> {
         try {
             userDao.getByLogin(user.login)
-            userDao.insert(user)
-            return ApiResult.Success(null, "Utilisateur ajouté avec succès")
+            val userId = userDao.insert(user)
+            val json = JSONObject()
+            json.put("id" , userId)
+            return ApiResult.Success(json, "Utilisateur ajouté avec succès")
         } catch (e: Exception) {
             return ApiResult.Failure("Erreur lors de l'ajout de l'utilisateur : ${e.localizedMessage}")
         }
     }
 
-    suspend fun getUser(login: String): ApiResult {
+    suspend fun getUser(login: String): ApiResult<JSONObject> {
         return try {
             val user = userDao.getByLogin(login).firstOrNull()
             if (user != null) {
