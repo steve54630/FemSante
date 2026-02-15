@@ -23,10 +23,10 @@ android {
     namespace 'com.audreyRetournayDiet.femSante'
     compileSdk 36
     defaultConfig {
-        applicationId "com.audreyretournaydiet.femsante"
+        applicationId "com.audreyretournaydiet.femsanteapp"
         minSdk 26
-        targetSdk 34
-        versionCode 6
+        targetSdk 35
+        versionCode 7
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -16,7 +16,7 @@ data class PsychologicalStateEntity(
     val dayQuality : DayQuality = DayQuality.BONNE,
 
     @ColumnInfo(name = "causes")
-    val difficultyCauses : DifficultyCause?,
+    val difficultyCauses : DifficultyCause? = null,
 
     @ColumnInfo(name = "autres")
     val autres : String? = null

@@ -140,5 +140,9 @@
     <string name="date">13 Janvier 2026</string>
     <string name="sample_empty_daily">Aucune donnée enregistrée pour cette journée.</string>
     <string name="daily_add">Ajouter un suivi</string>
+    <string name="quality_day">Qualité de la journée</string>
+    <string name="causes_quality_day">Quelles sont les causes ?</string>
+    <string name="other_details">Autres précisions...</string>
+    <string name="quality_day_causes">Raisons de la mauvaise journée</string>
 
 </resources>
