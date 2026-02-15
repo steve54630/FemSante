@@ -12,7 +12,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/fond_appli"
-    tools:context="com.audreyRetournayDiet.femSante.alim.AlimFragment">
+    tools:context=".domain.alim.AlimFragment">
 
     <TextView
         android:id="@+id/textViewTitre"

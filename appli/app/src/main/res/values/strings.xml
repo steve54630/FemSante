@@ -19,6 +19,7 @@
 
     <!-- Option du menu -->
 
+    <string name="option_calendar">Calendrier des symptômes</string>
     <string name="option_alim">Nutrition</string>
     <string name="option_tete">Bien dans ta tête</string>
     <string name="option_corps">Bien dans ton corps</string>
@@ -46,6 +47,21 @@
     <string name="thoracic">Soufflet thoracique</string>
     <string name="hypnosis">Hypnose</string>
 
+    <!-- Exo Player -->
+
+    <string name="exo_prev">Précédent</string>
+    <string name="exo_rewind">Reculer</string>
+    <string name="exo_shuffle">Aléatoire</string>
+    <string name="exo_repeat_toggle">Répéter</string>
+    <string name="exo_play">Lire</string>
+    <string name="exo_pause">Pause</string>
+    <string name="exo_fastforward">Avancer</string>
+    <string name="exo_next">Suivant</string>
+    <string name="exo_vr">VR</string>
+    <string name="exo_position">Position</string>
+    <string name="exo_duration">Durée</string>
+    <string name="exo_fullscreen">Plein écran</string>
+
     <!-- boîte à outils -->
     <string name="outils1">Automassage du ventre</string>
     <string name="outils2">Les vertus de la bouillotte</string>
@@ -54,9 +70,6 @@
     <string name="outils5">Infusions pour apaiser les tempêtes émotionelles</string>
     <string name="outils6">Infusions et digestion</string>
     <string name="outils7">Infusions pour apaiser les menstruations</string>
-    <string name="fullscreen">Plein écran</string>
-    <string name="play">Lecture</string>
-    <string name="pause">Pause</string>
 
     <!--Yoga -->
     <string name="beginner">Débutant en yoga</string>
@@ -118,5 +131,18 @@
     <string name="loading">En attente de la réponse Internet…</string>
 
     <string name="facebook_app_id">24442016295389259</string>
+    <string name="exo_settings">Paramètres exo</string>
+    <string name="exo_menuOn">Menu Exo on</string>
+    <string name="exo_menuOff">Exo Menu off</string>
+    <string name="exo_fullscreen_off">Plein écran arrêt</string>
+    <string name="previous_month">Mois précédent</string>
+    <string name="next_month">Mois suivant</string>
+    <string name="date">13 Janvier 2026</string>
+    <string name="sample_empty_daily">Aucune donnée enregistrée pour cette journée.</string>
+    <string name="daily_add">Ajouter un suivi</string>
+    <string name="quality_day">Qualité de la journée</string>
+    <string name="causes_quality_day">Quelles sont les causes ?</string>
+    <string name="other_details">Autres précisions...</string>
+    <string name="quality_day_causes">Raisons de la mauvaise journée</string>
 
 </resources>

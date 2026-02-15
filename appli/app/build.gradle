@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
 }
 
 afterEvaluate {
@@ -19,14 +20,13 @@ afterEvaluate {
 }
 
 android {
-    buildFeatures.buildConfig = true
     namespace 'com.audreyRetournayDiet.femSante'
-    compileSdk 34
+    compileSdk 36
     defaultConfig {
-        applicationId "com.audreyretournaydiet.femsante"
-        minSdk 24
-        targetSdk 34
-        versionCode 6
+        applicationId "com.audreyretournaydiet.femsanteapp"
+        minSdk 26
+        targetSdk 35
+        versionCode 7
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,54 +42,80 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
         buildConfig true
     }
-    allprojects {
-        repositories {
-            google()
-            gradlePluginPortal()
-            mavenCentral()
-            maven { url 'https://jitpack.io' }
-            // This private repository is required to resolve the Cardinal SDK transitive dependency.
-            maven {
-                {url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+}
+
+allprojects {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        // This private repository is required to resolve the Cardinal SDK transitive dependency.
+        maven {
+            {url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
                 credentials {
                     // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
                     // the private repository.
                     username 'paypal_sgerritz'
                     password 'AKCp8jQ8tAahqpT5JjZ4FRP2mW7GMoFZ674kGqHmupTesKeAY2G8NcmPKLuTxTGkKjDLRzDUQ'}
-                }
             }
         }
     }
 }
 
 dependencies {
-    implementation 'com.google.android.play:app-update-ktx:2.1.0'
-    implementation 'com.github.therealbush:translator:1.0.2'
-    implementation 'com.paypal.android:paypal-native-payments:1.1.0'
-    implementation 'com.paypal.android:card-payments:1.1.0'
-    implementation 'com.paypal.android:payment-buttons:1.1.0'
-    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.3'
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+
+    /* Implémentation Room */
+
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
+    ksp("androidx.room:room-compiler:2.6.1")
+    testImplementation "androidx.room:room-testing:2.6.0"
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    implementation "androidx.fragment:fragment-ktx:1.8.5"
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
+
+    /* Implémentation exo-player */
     implementation 'androidx.media3:media3-exoplayer:1.2.0'
     implementation 'androidx.media3:media3-exoplayer-dash:1.2.0'
     implementation 'androidx.media3:media3-exoplayer-hls:1.2.0'
     implementation 'androidx.media3:media3-ui:1.2.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
+
+    /*Implémentation Calendrier*/
+    implementation 'com.kizitonwose.calendar:view:2.9.0'
+
+    // Nécessaire pour la gestion des dates LocalDate/YearMonth
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation "androidx.datastore:datastore-preferences:1.1.1"
+
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
+    implementation 'com.github.therealbush:translator:1.0.2'
+    implementation 'com.paypal.android:paypal-native-payments:1.1.0'
+
+    implementation 'com.paypal.android:card-payments:1.1.0'
+    implementation 'com.paypal.android:payment-buttons:1.1.0'
+    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.3'
+
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.android.volley:volley:1.2.1'
+    
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
