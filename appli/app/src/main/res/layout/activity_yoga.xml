@@ -5,7 +5,7 @@
     android:background="@drawable/fond_appli"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.audreyRetournayDiet.femSante.corps.YogaActivity">
+    tools:context=".domain.corps.YogaActivity">
 
     <TextView
         android:id="@+id/textView"

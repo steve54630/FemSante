@@ -12,7 +12,7 @@
     android:background="@drawable/fond_appli"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".main.MainMenuFragment">
+    tools:context=".domain.main.MainMenuFragment">
 
     <TextView
         android:id="@+id/textViewBienvenue"
@@ -54,6 +54,21 @@
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAlim" />
+
+    <Button
+        android:id="@+id/buttonCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/dinpro"
+        android:minHeight="48dp"
+        android:text="@string/option_calendar"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonOutils" />
 
     <Button
         android:id="@+id/buttonCorps"

@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/fond_appli"
-    tools:context="com.audreyRetournayDiet.femSante.login.LoginFragment">
+    tools:context=".domain.login.LoginFragment">
 
     <TextView
         android:id="@+id/textViewTitleLogin"

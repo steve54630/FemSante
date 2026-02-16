@@ -12,7 +12,7 @@
     android:background="@drawable/fond_appli"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.audreyRetournayDiet.femSante.corps.BienCorpsActivity">
+    tools:context=".domain.corps.BienCorpsActivity">
 
     <TextView
         android:id="@+id/textViewCorps"

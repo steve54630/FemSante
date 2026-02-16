@@ -1,8 +1,6 @@
 package com.audreyRetournayDiet.femSante.repository
 
-import org.json.JSONObject
-
-sealed class ApiResult {
-    data class Success(val data : JSONObject?, val message: String) : ApiResult()
-    data class Failure(val message: String) : ApiResult()
+sealed class ApiResult<out T> {
+    data class Success<T>(val data : T?, val message: String) : ApiResult<T>()
+    data class Failure(val message: String) : ApiResult<Nothing>()
 }
