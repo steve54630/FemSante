@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <ViewSwitcher
+        android:id="@+id/dailyViewSwitcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/view_daily_empty" />
+        <include layout="@layout/view_daily_data" />
+
+    </ViewSwitcher>
+</androidx.core.widget.NestedScrollView>
