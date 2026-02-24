@@ -86,31 +86,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="26e3f4b4-66ed-46b0-9304-b950651d8824" name="Changes" comment="11:25 - 24/02 - refactorisation des layouts">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/ContextFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/EntryAddActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/GeneralFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/PsychologicalFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/SymptomsFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/converter/PainZoneConverter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/type/PainZone.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/baseline_accessibility_new_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/baseline_contextual_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/baseline_medication_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/baseline_psychology_24.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/activity_calendar_add.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_context.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_general.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_symptom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_calendar_add.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
+    <list default="true" id="26e3f4b4-66ed-46b0-9304-b950651d8824" name="Changes" comment="15:00 - 24/02 - création de la page de la création d'entrée du calendrier">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/database/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/database/AppDatabase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/SymptomStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/SymptomStateEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/EntryViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/EntryViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_psychological_state.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_psychological_state.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -293,12 +270,29 @@
       <option name="project" value="LOCAL" />
       <updated>1771928827083</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="15:00 - 24/02 - création de la page de la création d'entrée du calendrier">
+      <option name="closed" value="true" />
+      <created>1771942241340</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1771942241340</updated>
+    </task>
+    <task id="LOCAL-00004" summary="15:00 - 24/02 - création de la page de la création d'entrée du calendrier">
+      <option name="closed" value="true" />
+      <created>1771942249017</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1771942249017</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="11:25 - 24/02 - refactorisation des layouts" />
-    <option name="LAST_COMMIT_MESSAGE" value="11:25 - 24/02 - refactorisation des layouts" />
+    <MESSAGE value="15:00 - 24/02 - création de la page de la création d'entrée du calendrier" />
+    <option name="LAST_COMMIT_MESSAGE" value="15:00 - 24/02 - création de la page de la création d'entrée du calendrier" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
