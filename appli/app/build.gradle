@@ -30,7 +30,18 @@ android {
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    sourceSets {
+        main {
+            def resDir = 'src/main/res'
+            def layoutsDir = new File(projectDir, "src/main/res/layouts")
 
+            def layoutSets = layoutsDir.listFiles().findAll { it.isDirectory() }.collect {
+                "src/main/res/layouts/${it.name}"
+            }
+
+            res.srcDirs = [resDir, *layoutSets]
+        }
+    }
     buildTypes {
         release {
             ndk {

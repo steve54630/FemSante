@@ -14,4 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "FemSante"
 include ':app'
-include ':assetPack'
