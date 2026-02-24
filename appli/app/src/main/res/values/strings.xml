@@ -144,5 +144,19 @@
     <string name="causes_quality_day">Quelles sont les causes ?</string>
     <string name="other_details">Autres précisions...</string>
     <string name="quality_day_causes">Raisons de la mauvaise journée</string>
+    <string name="calendar_general">Général</string>
+    <string name="calendar_moral">Moral</string>
+    <string name="calendar_symptom">Symptômes</string>
+    <string name="calendar_context">Contexte</string>
+    <string name="dolor_symptom">Zones de douleur</string>
+    <string name="zone_pelvis">Bassin</string>
+    <string name="zone_back">Lombaires</string>
+    <string name="zone_breasts">Seins</string>
+    <string name="zone_head">Tête</string>
+    <string name="symptom_nausea">Nausées</string>
+    <string name="others_symptoms">Autres observations</string>
+    <string name="others_symptom_hint">Décrivez d\'autres symptômes...</string>
+    <string name="action_save_entry">Enregistrer les choix</string>
+    <string name="msg_save_success">Entrée enregistré avec succés</string>
 
 </resources>

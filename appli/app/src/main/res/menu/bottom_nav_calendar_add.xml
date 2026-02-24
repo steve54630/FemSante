@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_general"
+        android:icon="@drawable/baseline_accessibility_new_24"
+        android:title="@string/calendar_general" />
+
+    <item
+        android:id="@+id/nav_psychological"
+        android:icon="@drawable/baseline_psychology_24"
+        android:title="@string/calendar_moral" />
+
+    <item
+        android:id="@+id/nav_symptoms"
+        android:icon="@drawable/baseline_medication_24"
+        android:title="@string/calendar_symptom" />
+
+    <item
+        android:id="@+id/nav_context"
+        android:icon="@drawable/baseline_contextual_24"
+        android:title="@string/calendar_context" />
+
+</menu>

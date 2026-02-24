@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
@@ -10,6 +11,7 @@ import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
 import com.audreyRetournayDiet.femSante.room.type.DayQuality
 import com.audreyRetournayDiet.femSante.room.type.DifficultyCause
+import com.audreyRetournayDiet.femSante.room.type.PainZone
 import com.audreyRetournayDiet.femSante.room.type.PhysicalActivity
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +55,7 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
         )
     }
 
-    fun updateSymptomState(pains: List<String>, nausea: Boolean, notes: String?) {
+    fun updateSymptomState(pains: List<PainZone>, nausea: Boolean, notes: String?) {
         symptomState.value = symptomState.value.copy(
             localizedPains = pains, hasNausea = nausea, others = notes
         )
@@ -91,18 +93,26 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
 
     fun loadExistingData(userId: String, date: Long) {
         viewModelScope.launch {
-            // On récupère l'entrée complète via ta fonction getFullEntry
             val existingEntry =
                 repository.getDailyEntry(userId, LocalDate.ofEpochDay(date / 86400000))
 
             if (existingEntry is ApiResult.Success && existingEntry.data != null) {
                 val data = existingEntry.data
-                // On met à jour nos StateFlow. L'UI (Fragments) va se mettre à jour toute seule !
                 generalState.value = data.generalState
                 psychologicalState.value = data.psychologicalState
                 symptomState.value = data.symptomsState
                 contextState.value = data.contextState
             }
+        }
+    }
+
+    class Factory(private val repository: DailyRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(EntryViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return EntryViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 

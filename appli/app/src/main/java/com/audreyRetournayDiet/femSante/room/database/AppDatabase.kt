@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.audreyRetournayDiet.femSante.room.converter.ActivityConverter
 import com.audreyRetournayDiet.femSante.room.converter.CausesConverters
 import com.audreyRetournayDiet.femSante.room.converter.ListConverter
+import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
 import com.audreyRetournayDiet.femSante.room.converter.QualityConverter
 import com.audreyRetournayDiet.femSante.room.dao.ContextStateDao
 import com.audreyRetournayDiet.femSante.room.dao.DailyEntryDao
@@ -36,7 +37,8 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
     ActivityConverter::class,
     CausesConverters::class,
     ListConverter::class,
-    QualityConverter::class
+    QualityConverter::class,
+    PainZoneConverter::class
 ])
 abstract class AppDatabase : RoomDatabase() {
 
