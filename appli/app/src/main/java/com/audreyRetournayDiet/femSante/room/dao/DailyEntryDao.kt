@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
@@ -17,44 +18,37 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DailyEntryDao {
 
-    @Query("SELECT * FROM daily_entry WHERE id = :id")
-    fun getById(id: Long): Flow<DailyEntryEntity?>
+    // --- REQUÊTES DE LECTURE ---
 
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :date LIMIT 1")
     suspend fun getFullEntry(userId: String, date: Long): DailyEntryFull?
 
+    // Correction de la jointure : On joint maintenant via gs.entry_id
     @Query("""
-    SELECT daily_entry.date as date, general_state.pain_level as painLevel
-    FROM daily_entry 
-    JOIN general_state ON daily_entry.general_state_id = general_state.id 
-    WHERE daily_entry.user_id = :userId
-""")
+        SELECT de.date as date, gs.pain_level as painLevel
+        FROM daily_entry de
+        JOIN general_state gs ON de.id = gs.entry_id 
+        WHERE de.user_id = :userId
+    """)
     suspend fun getCalendarStatus(userId: String): List<DatePainStatus>
 
-    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :date")
-    fun getByUserAndDate(userId: String, date: Long): Flow<DailyEntryEntity?>
+    // --- INSERTIONS ---
 
-    @Query("""SELECT de.date, gs.pain_level
-    FROM daily_entry de
-    INNER JOIN general_state gs ON de.general_state_id = gs.id
-    WHERE de.user_id = :userId""")
-    fun getPainLevelsByDate(userId: String): Flow<List<DatePainResult>>
-
-    @Insert
-    suspend fun insertGeneral(general: GeneralStateEntity): Long
-
-    @Insert
-    suspend fun insertPsychological(psy: PsychologicalStateEntity): Long
-
-    @Insert
-    suspend fun insertSymptom(symptom: SymptomStateEntity): Long
-
-    @Insert
-    suspend fun insertContext(context: ContextStateEntity): Long
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyEntry(entry: DailyEntryEntity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGeneral(general: GeneralStateEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPsychological(psy: PsychologicalStateEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSymptom(symptom: SymptomStateEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertContext(context: ContextStateEntity)
 
     @Transaction
     suspend fun insertFullDailyEntry(
@@ -65,22 +59,18 @@ interface DailyEntryDao {
         symptom: SymptomStateEntity,
         context: ContextStateEntity
     ) {
-        val genId = insertGeneral(general)
-        val psyId = insertPsychological(psy)
-        val symId = insertSymptom(symptom)
-        val conId = insertContext(context)
+        // 1. On insère le parent et on récupère son ID généré
+        val newId = insertDailyEntry(DailyEntryEntity(userId = userId, date = date))
 
-        val fullEntry = DailyEntryEntity(
-            userId = userId,
-            date = date,
-            generalStateId = genId,
-            psychologicalStateId = psyId,
-            symptomsStateId = symId,
-            contextStateId = conId
-        )
-
-        // 3. On insère le pivot
-        insertDailyEntry(fullEntry)
+        // 2. On injecte cet ID dans chaque enfant avant de les insérer
+        insertGeneral(general.copy(entryId = newId))
+        insertPsychological(psy.copy(entryId = newId))
+        insertSymptom(symptom.copy(entryId = newId))
+        insertContext(context.copy(entryId = newId))
     }
 
+    // --- SUPPRESSION (Magie de la cascade) ---
+
+    @Query("DELETE FROM daily_entry WHERE user_id = :userId AND id = :id")
+    suspend fun deleteFullEntry(userId: String, id: Long)
 }

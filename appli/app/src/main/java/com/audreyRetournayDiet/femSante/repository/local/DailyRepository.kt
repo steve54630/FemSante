@@ -22,6 +22,16 @@ class DailyRepository(private val dao: DailyEntryDao) {
         }
     }
 
+    suspend fun deleteEntry(userId: String, date: Long): ApiResult<String> {
+        return try {
+            // On appelle la méthode du DAO qu'on a définie plus tôt
+            dao.deleteFullEntry(userId, date)
+            ApiResult.Success(message = "Suppression réussie", data = null)
+        } catch (e: Exception) {
+            ApiResult.Failure(e.message ?: "Erreur lors de la suppression")
+        }
+    }
+
     suspend fun getDailyEntry(userId: String, date: LocalDate): ApiResult<DailyEntryFull?> {
         try {
             val timestamp = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()

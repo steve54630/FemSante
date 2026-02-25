@@ -13,26 +13,26 @@ data class DailyEntryFull(
     val dailyEntry: DailyEntryEntity,
 
     @Relation(
-        parentColumn = "general_state_id",
-        entityColumn = "id"
+        parentColumn = "id",      // L'ID de DailyEntryEntity
+        entityColumn = "entry_id" // Le champ entry_id dans GeneralStateEntity
     )
-    val generalState: GeneralStateEntity,
+    val generalState: GeneralStateEntity?,
 
     @Relation(
-        parentColumn = "psychological_state_id",
-        entityColumn = "id"
+        parentColumn = "id",
+        entityColumn = "entry_id"
     )
-    val psychologicalState: PsychologicalStateEntity,
+    val psychologicalState: PsychologicalStateEntity?,
 
     @Relation(
-        parentColumn = "symptoms_state_id",
-        entityColumn = "id"
+        parentColumn = "id",
+        entityColumn = "entry_id"
     )
-    val symptomsState: SymptomStateEntity,
+    val symptomsState: SymptomStateEntity?,
 
     @Relation(
-        parentColumn = "context_state_id",
-        entityColumn = "id"
+        parentColumn = "id",
+        entityColumn = "entry_id"
     )
-    val contextState: ContextStateEntity
+    val contextState: ContextStateEntity?
 )

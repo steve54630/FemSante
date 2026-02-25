@@ -5,7 +5,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.audreyRetournayDiet.femSante.room.converter.ActivityConverter
 import com.audreyRetournayDiet.femSante.room.converter.CausesConverters
-import com.audreyRetournayDiet.femSante.room.converter.ListConverter
 import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
 import com.audreyRetournayDiet.femSante.room.converter.QualityConverter
 import com.audreyRetournayDiet.femSante.room.dao.ContextStateDao
@@ -36,7 +35,6 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
 @TypeConverters(value = [
     ActivityConverter::class,
     CausesConverters::class,
-    ListConverter::class,
     QualityConverter::class,
     PainZoneConverter::class
 ])

@@ -19,6 +19,6 @@ interface ContextStateDao {
     @Delete
     suspend fun delete(state: ContextStateEntity)
 
-    @Query("SELECT * FROM context WHERE id = :id")
-    fun getById(id: Long): Flow<ContextStateEntity?>
+    @Query("SELECT * FROM context_state WHERE entry_id = :entryId")
+    fun getByEntryId(entryId: Long): Flow<ContextStateEntity?>
 }
