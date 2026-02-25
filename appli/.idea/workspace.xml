@@ -5,6 +5,86 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/alim/layout/activity_alim.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/alim/layout/activity_recette.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/alim/layout/fragment_alim.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/alim/layout/fragment_ressource.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/activity_calendar_add.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/activity_symptom_calendar.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/calendar_day_layout.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/fragment_context.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/fragment_general.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/fragment_psychological_state.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/fragment_symptom.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/layout_symptom_daily.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/view_daily_data.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/calendar/layout/view_daily_empty.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/corps/layout/activity_bien_corps.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/corps/layout/activity_yoga.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/baseline_accessibility_new_24.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
@@ -30,42 +110,57 @@
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/activity_calendar_add.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_delete.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/activity_symptom_calendar.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_edit.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/calendar_day_layout.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_summary_section.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_context.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/login/layout/activity_forgotten_password.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_general.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/login/layout/activity_login.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_psychological_state.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/login/layout/fragment_doc.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_symptom.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/login/layout/fragment_login.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layouts/main/layout/activity_home.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/login/layout/fragment_register.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/main/layout/activity_home.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/main/layout/fragment_account.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/main/layout/fragment_main.xml">
         <config>
           <theme>@style/Theme.FemSante</theme>
         </config>
@@ -80,14 +175,192 @@
           <theme>@style/Theme.FemSante</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/payment/layout/activity_payment.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/spinner/layout/spinner_choice_exo.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/spinner/layout/spinner_choice_paiement.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/spinner/layout/spinner_choice_question.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/spinner/layout/spinner_choice_recette.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/tete/layout/activity_art_therapie.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/tete/layout/activity_bien_tete.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/tete/layout/activity_sophro.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/activity_audio.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/activity_pdf.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/activity_toolbox.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/activity_video.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/alert_internet_dialog.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/utils/layout/custom_playback_control_view.xml">
+        <config>
+          <theme>@style/Theme.FemSante</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="26e3f4b4-66ed-46b0-9304-b950651d8824" name="Changes" comment="15:00 - 24/02 - création de la page de la création d'entrée du calendrier">
+    <list default="true" id="26e3f4b4-66ed-46b0-9304-b950651d8824" name="Changes" comment="14:10 - 24/02 - refactorisation des pages pour le DRY">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/view/CalendarActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/view/CalendarUtils.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/view/DailyExtensions.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_delete.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_summary_section.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/data/FemSanteApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/data/FemSanteApp.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/alim/AlimFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/alim/AlimFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/alim/RecetteActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/alim/RecetteActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/CalendarActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/ContextFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/add/ContextFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/EntryAddActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/add/EntryAddActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/GeneralFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/add/GeneralFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/PsychologicalFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/add/PsychologicalFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/SymptomsFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/calendar/add/SymptomsFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/main/MainMenuFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/domain/main/MainMenuFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/repository/local/DailyRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/repository/local/DailyRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/converter/CausesConverters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/converter/CausesConverters.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/converter/ListConverter.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dao/ContextStateDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dao/ContextStateDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dao/DailyEntryDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dao/DailyEntryDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/database/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/database/AppDatabase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dto/DailyEntryFull.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/dto/DailyEntryFull.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/ContextStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/ContextStateEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/DailyEntryEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/DailyEntryEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/GeneralStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/GeneralStateEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/PsychologicalStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/PsychologicalStateEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/SymptomStateEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/room/entity/SymptomStateEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/CalendarViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/CalendarViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/EntryViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/audreyRetournayDiet/femSante/viewModels/EntryViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/bf1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/bf2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/des7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ent1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ent2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ent3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ent4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ent5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/plat6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/alim/layout/activity_alim.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/alim/layout/activity_recette.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/alim/layout/fragment_alim.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/alim/layout/fragment_ressource.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/activity_calendar_add.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/activity_symptom_calendar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/calendar_day_layout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_context.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_general.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_psychological_state.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/fragment_symptom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/layout_symptom_daily.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/view_daily_data.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/calendar/layout/view_daily_empty.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/corps/layout/activity_bien_corps.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/corps/layout/activity_yoga.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/login/layout/activity_forgotten_password.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/login/layout/activity_login.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/login/layout/fragment_doc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/login/layout/fragment_login.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/login/layout/fragment_register.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/main/layout/activity_home.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/main/layout/fragment_account.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/main/layout/fragment_main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/payment/layout/activity_payment.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/spinner/layout/spinner_choice_exo.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/spinner/layout/spinner_choice_paiement.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/spinner/layout/spinner_choice_question.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/spinner/layout/spinner_choice_recette.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/tete/layout/activity_art_therapie.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/tete/layout/activity_bien_tete.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/tete/layout/activity_sophro.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/activity_audio.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/activity_pdf.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/activity_toolbox.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/activity_video.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/alert_internet_dialog.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layouts/utils/layout/custom_playback_control_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_calendar_add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_calendar_add.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-night/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +370,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\stagiaire\.android\avd\Medium_Phone.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=A5CS024221009585]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -123,10 +396,12 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="resourceFile" />
-        <option value="layoutResourceFile" />
         <option value="Kotlin Enum" />
+        <option value="valueResourceFile" />
+        <option value="layoutResourceFile" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
@@ -145,6 +420,9 @@
     &quot;accountId&quot;: &quot;1399347b-4bde-49a1-8c33-1019409276ab&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -155,6 +433,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
     &quot;ResourceManagerPrefKey.ResourceType&quot;: &quot;LAYOUT&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
@@ -164,12 +443,20 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/stagiaire/StudioProjects/FemSante/appli/app/src/main/res/values&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CreateKotlinClassDialog.RecentsKey">
       <recent name="com.audreyRetournayDiet.femSante.domain.calendar" />
+    </key>
+    <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.audreyRetournayDiet.femSante.domain.calendar.view" />
+      <recent name="com.audreyRetournayDiet.femSante.domain.calendar.add" />
     </key>
   </component>
   <component name="RunManager">
@@ -286,25 +573,34 @@
       <option name="project" value="LOCAL" />
       <updated>1771942249017</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="15:00 - 24/02 - création de la page de la création d'entrée du calendrier">
+      <option name="closed" value="true" />
+      <created>1771944278749</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1771944278749</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="11:25 - 24/02 - refactorisation des layouts" />
     <MESSAGE value="15:00 - 24/02 - création de la page de la création d'entrée du calendrier" />
-    <option name="LAST_COMMIT_MESSAGE" value="15:00 - 24/02 - création de la page de la création d'entrée du calendrier" />
+    <MESSAGE value="14:10 - 24/02 - refactorisation des pages pour le DRY" />
+    <option name="LAST_COMMIT_MESSAGE" value="14:10 - 24/02 - refactorisation des pages pour le DRY" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
       <map>
         <entry key="com.audreyretournaydiet.femsanteapp">
           <value>
-            <CheckInfo lastCheckTimestamp="1771927659950" />
+            <CheckInfo lastCheckTimestamp="1772014303802" />
           </value>
         </entry>
         <entry key="com.audreyretournaydiet.femsanteapp.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1771927659950" />
+            <CheckInfo lastCheckTimestamp="1772014303801" />
           </value>
         </entry>
       </map>

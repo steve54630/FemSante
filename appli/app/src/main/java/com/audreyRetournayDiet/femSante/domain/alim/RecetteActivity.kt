@@ -24,6 +24,7 @@ class RecetteActivity : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var help: TextView
     private lateinit var map: HashMap<*, *>
+    private var folderPath: String? = null
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,16 +38,14 @@ class RecetteActivity : AppCompatActivity() {
 
         map = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
-
-            intent.getSerializableExtra("map", HashMap::class.java)!!
-            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map")
-                    as HashMap<*,*>
+                intent.getSerializableExtra("map", HashMap::class.java)!!
+            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map") as HashMap<*,*>
         }
 
         title.text = intent.extras!!.getString("Title")
+        folderPath = intent.getStringExtra("FOLDER_PATH")
 
         val list = ArrayList<String>()
-
         for (item in map) {
             list.add(item.value.toString())
         }
@@ -54,13 +53,11 @@ class RecetteActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.prompt = "Liste des recettes"
-        spinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_recette, this)
+        spinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_recette, this)
+
         var search: String? = null
 
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
             @SuppressLint("DiscouragedApi")
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 if (spinner.selectedItemId < 0) {
@@ -68,25 +65,27 @@ class RecetteActivity : AppCompatActivity() {
                 } else {
                     recettePdf.visibility = View.VISIBLE
                     help.visibility = View.VISIBLE
+
                     search = Utilitaires.cleanKey(map.filterValues { it == spinner.selectedItem.toString() }.keys.toString())
 
                     val resId = resources.getIdentifier(search, "drawable", packageName)
-                    val drawable = ResourcesCompat.getDrawable(resources, resId, null)
-                    recettePdf.setImageDrawable(drawable)
+                    if (resId != 0) {
+                        val drawable = ResourcesCompat.getDrawable(resources, resId, null)
+                        recettePdf.setImageDrawable(drawable)
+                    }
                     recettePdf.contentDescription = spinner.selectedItem.toString()
                 }
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
         recettePdf.setOnClickListener {
-            val intentTarget = Intent(this, PdfActivity::class.java)
-            intentTarget.putExtra("PDF", "$search.pdf")
-            startActivity(intentTarget)
+            if (search != null && folderPath != null) {
+                val intentTarget = Intent(this, PdfActivity::class.java)
+                val fullPath = "$folderPath/$search.pdf"
+                intentTarget.putExtra("PDF", fullPath)
+                startActivity(intentTarget)
+            }
         }
-
     }
-
-
 }

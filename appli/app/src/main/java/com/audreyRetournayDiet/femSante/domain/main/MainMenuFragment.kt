@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.R.layout
 import com.audreyRetournayDiet.femSante.domain.alim.AlimActivity
-import com.audreyRetournayDiet.femSante.domain.calendar.CalendarActivity
+import com.audreyRetournayDiet.femSante.domain.calendar.view.CalendarActivity
 import com.audreyRetournayDiet.femSante.domain.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.domain.tete.BienTeteActivity
 import com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity

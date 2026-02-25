@@ -158,5 +158,8 @@
     <string name="others_symptom_hint">Décrivez d\'autres symptômes...</string>
     <string name="action_save_entry">Enregistrer les choix</string>
     <string name="msg_save_success">Entrée enregistré avec succés</string>
+    <string name="placeholder">Titre Section</string>
+    <string name="entry_remove">Supprimer l\'entrée</string>
+    <string name="entry_modify">Modifier l\'entrée</string>
 
 </resources>

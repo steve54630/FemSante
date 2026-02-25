@@ -2,38 +2,41 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission   android:name="android.permission.INTERNET" />
-    <uses-permission   android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
+        android:name=".data.FemSanteApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".data.FemSanteApp"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.FemSante"
-        tools:targetApi="31"
-        tools:ignore="DiscouragedApi">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        tools:ignore="DiscouragedApi"
+        tools:targetApi="31">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.audreyRetournayDiet.femSante.domain.login.ForgottenActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.domain.main.HomeActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
-            android:name=".domain.calendar.CalendarActivity"
-            android:exported="false">
-        </activity>
+            android:name=".domain.calendar.view.CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.domain.calendar.add.EntryAddActivity"
+            android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.domain.login.payment.PaymentActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data
-                    android:scheme="com.audreyretournaydiet.femsante.cardpaiement" />
+                <data android:scheme="com.audreyretournaydiet.femsante.cardpaiement" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

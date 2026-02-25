@@ -7,7 +7,7 @@
         android:title="@string/calendar_general" />
 
     <item
-        android:id="@+id/nav_psychological"
+        android:id="@+id/nav_psych"
         android:icon="@drawable/baseline_psychology_24"
         android:title="@string/calendar_moral" />
 

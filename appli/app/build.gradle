@@ -33,10 +33,10 @@ android {
     sourceSets {
         main {
             def resDir = 'src/main/res'
-            def layoutsDir = new File(projectDir, "src/main/res/layouts")
+            def layoutsDir = new File(projectDir, "src/main/res")
 
             def layoutSets = layoutsDir.listFiles().findAll { it.isDirectory() }.collect {
-                "src/main/res/layouts/${it.name}"
+                "src/main/res/${it.name}"
             }
 
             res.srcDirs = [resDir, *layoutSets]
