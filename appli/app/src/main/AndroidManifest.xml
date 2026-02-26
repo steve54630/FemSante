@@ -30,7 +30,7 @@
             android:name="com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.features.login.payment.PaymentActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.login.PaymentActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>

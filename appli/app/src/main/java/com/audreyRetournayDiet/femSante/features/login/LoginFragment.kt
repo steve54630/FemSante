@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.shared.AppUser
+import com.audreyRetournayDiet.femSante.data.entities.AppUser
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.features.main.HomeActivity
 import com.audreyRetournayDiet.femSante.repository.ApiResult
