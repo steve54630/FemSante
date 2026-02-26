@@ -1,16 +1,11 @@
 package com.audreyRetournayDiet.femSante.features.login.create
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
@@ -18,187 +13,122 @@ import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
+import com.audreyRetournayDiet.femSante.viewModels.login.CreateViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-
 class CreateFragment : Fragment() {
 
+    private lateinit var name: EditText
+    private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var confirm: EditText
-    private lateinit var email: EditText
     private lateinit var answer: EditText
-    private lateinit var subscribe: Button
-    private lateinit var test: Button
-    private lateinit var userManager: UserManager
     private lateinit var questionSpinner: Spinner
-    private lateinit var name: EditText
     private lateinit var alert: LoadingAlert
+    private lateinit var createViewModel: CreateViewModel
+
+    private var chooseQuestion: String = ""
+
     private val mapQuestion = linkedMapOf(
         1 to "Nom de jeune fille de votre mère",
         2 to "Nom de votre 1er animal de compagnie",
         3 to "Prénom de votre meilleur(e) ami(e) d'enfance"
     )
-    private lateinit var chooseQuestion: String
-    private lateinit var createUtils: CreateUtils
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_register, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews(view)
+        setupSpinner()
+        setupViewModel()
+        setupListeners(view)
+    }
 
     private fun initViews(view: View) {
-
         name = view.findViewById(R.id.Name)
-        answer = view.findViewById(R.id.Answer)
+        email = view.findViewById(R.id.Login)
         password = view.findViewById(R.id.Password)
         confirm = view.findViewById(R.id.ChangePassword)
-        email = view.findViewById(R.id.Login)
-        subscribe = view.findViewById(R.id.buttonConnect)
-        test = view.findViewById(R.id.buttonTestSubscribe)
-        userManager = UserManager(requireContext())
+        answer = view.findViewById(R.id.Answer)
         questionSpinner = view.findViewById(R.id.spinnerQuestion)
         alert = LoadingAlert(requireActivity())
-        createUtils = CreateUtils(requireActivity(), userManager)
+    }
 
+    private fun setupViewModel() {
+        createViewModel = CreateViewModel(
+            userManager = UserManager(requireContext()),
+            onLoading = { isLoading -> if (isLoading) alert.start() else alert.close() },
+            onError = { msg -> Utilitaires.showToast(msg, requireContext()) },
+            onSuccess = { cls, extras -> navigateTo(cls, extras) }
+        )
     }
 
     private fun setupSpinner() {
-
-        val listQuestion = mapQuestion.values.toList()
-
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listQuestion)
-
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, mapQuestion.values.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        questionSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_question, requireContext())
 
-        questionSpinner.prompt = "Questions secrètes"
-        questionSpinner.adapter = NothingSelectedSpinnerAdapter(
-            adapter, R.layout.spinner_choice_question, requireContext()
-        )
-
-        questionSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+        questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (questionSpinner.selectedItemId != (-1).toLong()) {
-                    val search =
-                        Utilitaires.cleanKey(
-                            mapQuestion.filterValues
-                        { it == questionSpinner.selectedItem.toString() }.keys.toString()
-                        )
-
-                    chooseQuestion = search
+                if (p2 > 0) {
+                    val selectedText = questionSpinner.selectedItem.toString()
+                    chooseQuestion = mapQuestion.entries.find { it.value == selectedText }?.key?.toString() ?: ""
                 }
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-        }
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_register, container, false)
-
-        initViews(view)
-
-        setupSpinner()
-
-        subscribe.setOnClickListener {
-
-            if (questionSpinner.selectedItemId == (-1).toLong()) {
-                Toast.makeText(activity, "Aucune question sélectionnée", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (verifyChamp()) {
-
-                alert.start()
-
-                val parameters = JSONObject()
-                parameters.put("email", email.text.toString())
-
-                val map = HashMap<String, String>()
-                map["email"] = email.text.toString()
-                map["password"] = password.text.toString()
-                map["answer"] = answer.text.toString()
-                map["name"] = name.text.toString()
-                map["id"] = chooseQuestion
-
-                lifecycleScope.launch {
-                    createUtils.subscribe(parameters, map)
-
-                    alert.close()
-                }
-
-            }
-        }
-
-        test.setOnClickListener {
-
-            if (questionSpinner.selectedItemId == (-1).toLong()) {
-                Toast.makeText(activity, "Aucune question sélectionnée", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (verifyChamp()) {
-
-                alert.start()
-
-                val params = buildUserParams()
-
-                lifecycleScope.launch {
-                    createUtils.test(params)
-
-                    alert.close()
-                }
-
-            }
-        }
-        return view
-    }
-
-    private fun buildUserParams(): JSONObject {
-        return JSONObject().apply {
-            put("email", email.text.toString())
-            put("password", password.text.toString())
-            put("answer", answer.text.toString())
-            put("name", name.text.toString())
-            put("id", chooseQuestion)
         }
     }
 
-    private fun verifyChamp(): Boolean {
+    private fun setupListeners(view: View) {
+        view.findViewById<Button>(R.id.buttonConnect).setOnClickListener {
+            if (validateFields()) {
+                val map = buildUserMap()
+                lifecycleScope.launch { createViewModel.subscribe(JSONObject(map as Map<*, *>), map) }
+            }
+        }
 
-        val context = activity ?: return false
-
-        return when {
-            name.text.isNullOrBlank() -> Utilitaires.showToast("Prénom non renseigné", context)
-            email.text.isNullOrBlank() -> Utilitaires.showToast("Email non renseigné", context)
-            !Utilitaires.isValidEmail(email.text.toString()) -> Utilitaires.showToast(
-                "Format email incorrect : abc@example.fr", context
-            )
-
-            password.text.isNullOrBlank() -> Utilitaires.showToast(
-                "Mot de passe non renseigné", context
-            )
-
-            !Utilitaires.isValidPassword(password.text.toString()) -> Utilitaires.showToast(
-                "Format de mot de passe : règle non respectée", context
-            )
-
-            password.text.toString() != confirm.text.toString() -> Utilitaires.showToast(
-                "Mots de passe non identiques", context
-            )
-
-            answer.text.isNullOrBlank() -> Utilitaires.showToast(
-                "Réponse à la question secrète non renseignée", context
-            )
-
-            chooseQuestion.isBlank() -> Utilitaires.showToast(
-                "Veuillez sélectionner une question secrète", context
-            )
-
-            else -> true
+        view.findViewById<Button>(R.id.buttonTestSubscribe).setOnClickListener {
+            if (validateFields()) {
+                val map = buildUserMap()
+                lifecycleScope.launch { createViewModel.test(JSONObject(map as Map<*, *>)) }
+            }
         }
     }
 
+    private fun navigateTo(cls: Class<*>, extras: HashMap<String, String>?) {
+        val intent = Intent(requireContext(), cls).apply {
+            extras?.let { putExtra("map", it) }
+        }
+        startActivity(intent)
+    }
+
+    private fun buildUserMap() = hashMapOf(
+        "email" to email.text.toString(),
+        "password" to password.text.toString(),
+        "name" to name.text.toString(),
+        "answer" to answer.text.toString(),
+        "id" to chooseQuestion
+    )
+
+    private fun validateFields(): Boolean {
+        if (chooseQuestion.isEmpty()) {
+            Utilitaires.showToast("Aucune question sélectionnée", requireContext())
+            return false
+        }
+        val errorMsg = when {
+            name.text.isBlank() -> "Prénom non renseigné"
+            email.text.isBlank() -> "Email non renseigné"
+            !Utilitaires.isValidEmail(email.text.toString()) -> "Format email incorrect"
+            password.text.isBlank() -> "Mot de passe non renseigné"
+            !Utilitaires.isValidPassword(password.text.toString()) -> "Format mot de passe non respecté"
+            password.text.toString() != confirm.text.toString() -> "Mots de passe non identiques"
+            answer.text.isBlank() -> "Réponse non renseignée"
+            else -> null
+        }
+        return errorMsg?.let { Utilitaires.showToast(it, requireContext()); false } ?: true
+    }
 }

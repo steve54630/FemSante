@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.features.login.ForgottenActivity
-import com.audreyRetournayDiet.femSante.features.login.payment.PaymentActivity
+import com.audreyRetournayDiet.femSante.features.login.PaymentActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 
 class AccountFragment : Fragment() {
