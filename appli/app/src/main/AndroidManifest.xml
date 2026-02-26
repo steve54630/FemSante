@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
         android:name=".data.FemSanteApp"
@@ -19,19 +18,19 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.login.ForgottenActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.login.ForgottenActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.main.HomeActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.main.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".domain.calendar.view.CalendarActivity"
+            android:name=".features.calendar.view.CalendarActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.calendar.add.EntryAddActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.login.payment.PaymentActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.login.payment.PaymentActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
@@ -43,41 +42,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.alim.RecetteActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.alim.RecetteActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.alim.AlimActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.alim.AlimActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.corps.YogaActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.corps.YogaActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.ToolboxActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.ToolboxActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.tete.SophroActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.tete.SophroActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.tete.ArtTherapieActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.tete.ArtTherapieActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.tete.BienTeteActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.tete.BienTeteActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.corps.BienCorpsActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.corps.BienCorpsActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.domain.login.LoginActivity"
+            android:name="com.audreyRetournayDiet.femSante.features.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

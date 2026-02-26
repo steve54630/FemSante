@@ -10,7 +10,6 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun addUser(user: UserEntity) : ApiResult<JSONObject> {
         try {
-            userDao.getByLogin(user.login)
             val userId = userDao.insert(user)
             val json = JSONObject()
             json.put("id" , userId)
