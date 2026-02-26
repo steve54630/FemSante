@@ -58,10 +58,36 @@ Système professionnel de gestion des abonnements :
 
 ### Android (Structure Modulaire)
 
-- `domain/` : Modèles de données, Enums (Douleurs, Zones) et logique métier pure.
-- `viewModels/` : Gestion de l'état de l'interface et communication avec les repositories.
-- `repository/` : Abstraction de la donnée (Local via Room vs Remote via API Laravel).
-- `ui/` : Activités et Fragments organisés par pôles (Alim, Corps, Tête, Login).
+```text
+app/src/main/java/com/audreyRetournayDiet/femSante/
+├── data/                    # Modèles de données et entités (UiState)
+│   └── entities/            # Objets de données (VideoUiState, AppUser, etc.)
+│
+├── features/                # Logique métier organisée par modules (Domain)
+│   ├── alim/                # Module Nutrition / Recettes
+│   ├── calendar/            # Module Suivi de cycle et symptômes
+│   ├── corps/               # Module Yoga et exercices physiques
+│   ├── login/               # Gestion de l'authentification et paiement
+│   ├── main/                # Accueil et menus principaux
+│   └── tete/                # Module Sophrologie et Art-thérapie
+│
+├── repository/              # Gestion des sources de données (API & Local)
+│   ├── local/               # Accès Room / SharedPreferences
+│   └── remote/              # Appels API (VideoManager, etc.)
+│
+├── room/                    # Configuration de la base de données SQLite (Room)
+│   ├── dao/                 # Data Access Objects
+│   └── type/                # Convertisseurs et types personnalisés
+│
+├── shared/                  # Composants réutilisables par toute l'app
+│   ├── adapters/            # Adaptateurs génériques (ex: NothingSelectedSpinnerAdapter)
+│   ├── ui/                  # Composants graphiques communs (ex: LoadingAlert)
+│   ├── viewers/             # Lecteurs de médias (AudioActivity, VideoActivity, PdfActivity)
+│   └── utils/               # Classes utilitaires (Utilitaires, UserStore)
+│
+└── viewModels/              # ViewModels pilotant les vues (UiState)
+    └── viewers/             # ViewModels spécifiques aux lecteurs de médias
+```
 
 ### Backend (Laravel)
 
