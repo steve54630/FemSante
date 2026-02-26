@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.utilitaires
+package com.audreyRetournayDiet.femSante.shared.viewers
 
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams

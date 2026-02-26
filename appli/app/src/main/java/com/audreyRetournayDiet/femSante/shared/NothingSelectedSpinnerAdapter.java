@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.utilitaires;
+package com.audreyRetournayDiet.femSante.shared;
 
 import android.content.Context;
 import android.database.DataSetObserver;

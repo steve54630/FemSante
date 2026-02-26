@@ -7,61 +7,50 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
+import com.audreyRetournayDiet.femSante.viewModels.alim.AlimViewModel
+import kotlinx.coroutines.launch
 
 class AlimFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_alim, container, false)
+    private val viewModel: AlimViewModel by viewModels {
+        AlimViewModel.AlimViewModelFactory(RecipeRepository())
+    }
 
-        // Configuration des boutons
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_alim, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setupButton(view, R.id.buttonBreakfirst, "breakfast", "Petit-déjeuner")
         setupButton(view, R.id.buttonEntry, "starters", "Entrées")
         setupButton(view, R.id.buttonPlat, "main_courses", "Plats")
         setupButton(view, R.id.buttonEBook, "desserts", "Desserts")
 
-        return view
+        observeNavigation()
     }
 
-    private fun setupButton(view: View, buttonId: Int, folderName: String, displayTitle: String) {
+    private fun setupButton(view: View, buttonId: Int, folder: String, title: String) {
         view.findViewById<Button>(buttonId).setOnClickListener {
-            // 1. On scanne le dossier correspondant dans les assets
-            val recipesMap = scanAssetsFolder(folderName)
-
-            // 2. On lance l'activité avec les données dynamiques
-            val intent = Intent(activity, RecetteActivity::class.java).apply {
-                putExtra("Title", displayTitle)
-                putExtra("map", recipesMap) // Envoi de la HashMap générée
-                putExtra("FOLDER_PATH", folderName) // Utile pour charger le PDF plus tard
-            }
-            startActivity(intent)
+            viewModel.onCategorySelected(folder, title, requireContext())
         }
     }
 
-    private fun scanAssetsFolder(path: String): HashMap<String, String> {
-        val map = HashMap<String, String>()
-        try {
-            val files = requireContext().assets.list(path) ?: emptyArray()
-
-            for (fileName in files) {
-                if (fileName.endsWith(".pdf")) {
-                    // Clé : nom_du_fichier (ex: salade_ete)
-                    val key = fileName.substringBeforeLast(".")
-
-                    // Valeur : Nom propre (ex: Salade ete)
-                    val value = key.replace("_", " ")
-                        .replaceFirstChar { it.uppercase() }
-
-                    map[key] = value
+    private fun observeNavigation() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.navigationEvent.collect { event ->
+                val intent = Intent(activity, RecetteActivity::class.java).apply {
+                    putExtra("Title", event.title)
+                    putExtra("map", event.recipeMap)
+                    putExtra("FOLDER_PATH", event.folderPath)
                 }
+                startActivity(intent)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
-        return map
     }
 }

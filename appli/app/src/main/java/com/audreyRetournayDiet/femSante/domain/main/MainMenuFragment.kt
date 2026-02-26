@@ -13,7 +13,7 @@ import com.audreyRetournayDiet.femSante.domain.alim.AlimActivity
 import com.audreyRetournayDiet.femSante.domain.calendar.view.CalendarActivity
 import com.audreyRetournayDiet.femSante.domain.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.domain.tete.BienTeteActivity
-import com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity
+import com.audreyRetournayDiet.femSante.domain.ToolboxActivity
 
 class MainMenuFragment : Fragment() {
 

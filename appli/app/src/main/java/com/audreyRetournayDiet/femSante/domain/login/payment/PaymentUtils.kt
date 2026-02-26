@@ -13,8 +13,8 @@ import com.audreyRetournayDiet.femSante.domain.login.LoginActivity
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.PaymentManager
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
-import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.paypal.android.cardpayments.ApproveOrderListener
 import com.paypal.android.cardpayments.Card
 import com.paypal.android.cardpayments.CardClient

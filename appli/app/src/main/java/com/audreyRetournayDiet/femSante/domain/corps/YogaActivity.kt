@@ -3,39 +3,51 @@ package com.audreyRetournayDiet.femSante.domain.corps
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
-import com.audreyRetournayDiet.femSante.utilitaires.VideoActivity
+import com.audreyRetournayDiet.femSante.data.entities.BodyNavigationEvent
+import com.audreyRetournayDiet.femSante.shared.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
+import com.audreyRetournayDiet.femSante.viewModels.body.YogaViewModel
+import kotlinx.coroutines.launch
 
 class YogaActivity : AppCompatActivity() {
 
-    private lateinit var flow : Button
-    private lateinit var calm : Button
-    private lateinit var beginner : Button
+    private val viewModel: YogaViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_yoga)
 
-        flow = findViewById(R.id.buttonFlow)
-        calm = findViewById(R.id.buttonCalm)
-        beginner = findViewById(R.id.buttonBeginner)
+        setupButtons()
+        observeViewModel()
+    }
 
-        val intentVideo = Intent(this
-            , VideoActivity::class.java)
+    private fun setupButtons() {
+        findViewById<Button>(R.id.buttonFlow).setOnClickListener { viewModel.onFlowClicked() }
+        findViewById<Button>(R.id.buttonCalm).setOnClickListener { viewModel.onCalmClicked() }
+        findViewById<Button>(R.id.buttonBeginner).setOnClickListener { viewModel.onBeginnerClicked() }
+    }
 
-        flow.setOnClickListener {
-            Utilitaires.videoLaunch("SOS Douleur", "non", intentVideo, this)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.navigationEvent.collect { event ->
+                when (event) {
+                    is BodyNavigationEvent.LaunchVideo -> {
+                        val intentVideo = Intent(this@YogaActivity, VideoActivity::class.java)
+                        Utilitaires.videoLaunch(
+                            event.category,
+                            event.isPremium,
+                            intentVideo,
+                            this@YogaActivity
+                        )
+                    }
+                    // On gère les autres cas de BodyNavigationEvent si nécessaire
+                    else -> Unit
+                }
+            }
         }
-
-        calm.setOnClickListener {
-            Utilitaires.videoLaunch("Calme intérieur",  "non", intentVideo, this)
-        }
-
-        beginner.setOnClickListener {
-            Utilitaires.videoLaunch("Débutant au Yoga",  "non", intentVideo, this)
-        }
-
     }
 }

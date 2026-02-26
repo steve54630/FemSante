@@ -8,7 +8,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.audreyRetournayDiet.femSante.API_URL
 import com.audreyRetournayDiet.femSante.repository.ApiResult
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONObject

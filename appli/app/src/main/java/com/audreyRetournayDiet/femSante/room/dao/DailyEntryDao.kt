@@ -21,8 +21,8 @@ interface DailyEntryDao {
     // --- REQUÊTES DE LECTURE ---
 
     @Transaction
-    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :date LIMIT 1")
-    suspend fun getFullEntry(userId: String, date: Long): DailyEntryFull?
+    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND id = :id LIMIT 1")
+    suspend fun getFullEntry(userId: String, id: Long): DailyEntryFull?
 
     // Correction de la jointure : On joint maintenant via gs.entry_id
     @Query("""
@@ -73,4 +73,7 @@ interface DailyEntryDao {
 
     @Query("DELETE FROM daily_entry WHERE user_id = :userId AND id = :id")
     suspend fun deleteFullEntry(userId: String, id: Long)
+    @Transaction
+    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
+    suspend fun getFullEntryByDate(userId: String, timestamp: Long) : DailyEntryFull?
 }

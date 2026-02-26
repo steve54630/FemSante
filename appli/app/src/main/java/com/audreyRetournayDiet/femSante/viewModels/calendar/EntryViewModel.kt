@@ -1,6 +1,5 @@
-package com.audreyRetournayDiet.femSante.viewModels
+package com.audreyRetournayDiet.femSante.viewModels.calendar
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -118,10 +117,10 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
         }
     }
 
-    fun loadExistingData(userId: String, date: LocalDate) {
+    fun loadExistingData(userId: String, id: Long) {
         viewModelScope.launch {
             _isLoading.value = true
-            val result = repository.getDailyEntry(userId, date)
+            val result = repository.getDailyEntrybyID(userId, id)
 
             if (result is ApiResult.Success && result.data != null) {
                 val data = result.data

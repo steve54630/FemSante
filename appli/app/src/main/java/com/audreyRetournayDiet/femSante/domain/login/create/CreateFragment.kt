@@ -15,9 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
-import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
-import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
+import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 

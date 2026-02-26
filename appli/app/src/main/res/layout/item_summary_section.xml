@@ -9,5 +9,4 @@
     android:textAllCaps="true"
     android:textColor="@color/black"
     android:textSize="14sp"
-    android:textStyle="bold"
-    android:text="@string/placeholder" />
+    android:textStyle="bold" />

@@ -11,23 +11,23 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RelativeLayout
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.PaymentManager
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
-import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
-import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
+import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
+import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.paypal.android.cardpayments.Card
 import com.paypal.android.paymentbuttons.PayPalButton
 import kotlinx.coroutines.launch
@@ -47,8 +47,8 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var month: EditText
     private lateinit var year: EditText
     private lateinit var codeSecurity: EditText
-    private lateinit var cardLayout: ConstraintLayout
-    private lateinit var paypalLayout: RelativeLayout
+    private lateinit var cardLayout: LinearLayout
+    private lateinit var paypalLayout: FrameLayout
     private lateinit var parametersMap: HashMap<*, *>
     private lateinit var check: CheckBox
     private lateinit var switchPay: SwitchCompat

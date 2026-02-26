@@ -21,8 +21,9 @@ import com.audreyRetournayDiet.femSante.domain.calendar.add.EntryAddActivity
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
-import com.audreyRetournayDiet.femSante.viewModels.CalendarViewModel
+import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -36,10 +37,12 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import androidx.core.view.isNotEmpty
 
 @SuppressLint("SetTextI18n")
 class CalendarActivity : AppCompatActivity() {
 
+    private lateinit var oldSelectedDate: LocalDate
     private lateinit var calendarView: CalendarView
     private lateinit var monthText: TextView
     private lateinit var prevMonth: ImageButton
@@ -66,12 +69,13 @@ class CalendarActivity : AppCompatActivity() {
         dailyViewSection = findViewById(R.id.dailyView)
         bottomSheetBehavior = BottomSheetBehavior.from(dailyViewSection)
 
+        oldSelectedDate = LocalDate.now()
+
         userStore = UserStore(this)
         val userId = userStore.getUser()?.id ?: return
 
         // Init Data
         viewModel.initData(userId)
-        viewModel.loadData(userId, LocalDate.now())
 
         updateMonthTitle(YearMonth.now())
         setupDaysOfWeek()
@@ -79,7 +83,13 @@ class CalendarActivity : AppCompatActivity() {
         // Observations Flow
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.date.collect { calendarView.notifyCalendarChanged() } }
+                launch {
+                    viewModel.date.collect {
+                        calendarView.notifyCalendarChanged(); updateUiState(
+                        viewModel.entryResult.value
+                    )
+                    }
+                }
                 launch { viewModel.entryResult.collect { updateUiState(it) } }
                 launch { viewModel.dailyStatus.collect { calendarView.notifyCalendarChanged() } }
             }
@@ -115,19 +125,32 @@ class CalendarActivity : AppCompatActivity() {
                     container.view.alpha = 1f
                     val isSelected = date == viewModel.date.value
                     container.textView.setTextColor(if (isSelected) Color.RED else Color.BLACK)
-                    container.textView.setTypeface(null, if (isSelected) Typeface.BOLD else Typeface.NORMAL)
+                    container.textView.setTypeface(
+                        null,
+                        if (isSelected) Typeface.BOLD else Typeface.NORMAL
+                    )
                 } else {
                     container.view.alpha = 0.3f
                 }
             }
         }
 
-        calendarView.setup(YearMonth.now().minusMonths(12), YearMonth.now().plusMonths(12), DayOfWeek.MONDAY)
+        calendarView.setup(
+            YearMonth.now().minusMonths(12),
+            YearMonth.now().plusMonths(12),
+            DayOfWeek.MONDAY
+        )
         calendarView.scrollToMonth(YearMonth.now())
         calendarView.monthScrollListener = { updateMonthTitle(it.yearMonth) }
 
-        prevMonth.setOnClickListener { calendarView.findFirstVisibleMonth()?.let { calendarView.scrollToMonth(it.yearMonth.minusMonths(1)) } }
-        nextMonth.setOnClickListener { calendarView.findFirstVisibleMonth()?.let { calendarView.scrollToMonth(it.yearMonth.plusMonths(1)) } }
+        prevMonth.setOnClickListener {
+            calendarView.findFirstVisibleMonth()
+                ?.let { calendarView.scrollToMonth(it.yearMonth.minusMonths(1)) }
+        }
+        nextMonth.setOnClickListener {
+            calendarView.findFirstVisibleMonth()
+                ?.let { calendarView.scrollToMonth(it.yearMonth.plusMonths(1)) }
+        }
     }
 
     private fun onDateSelected(date: LocalDate) {
@@ -146,15 +169,15 @@ class CalendarActivity : AppCompatActivity() {
             CalendarUtils.updateDailyView(switcher.currentView, entry)
 
             // Bouton Modifier
-            switcher.currentView.findViewById<ImageButton>(R.id.btnEdit)?.setOnClickListener {
+            switcher.currentView.findViewById<MaterialButton>(R.id.btnEdit)?.setOnClickListener {
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {
-                    putExtra("selectedDate", viewModel.date.value.toString())
+                    putExtra("ID", viewModel.entryResult.value!!.dailyEntry.id)
                     putExtra("isEditMode", true)
                 })
             }
 
             // Bouton Supprimer
-            switcher.currentView.findViewById<ImageButton>(R.id.btnDelete)?.setOnClickListener {
+            switcher.currentView.findViewById<MaterialButton>(R.id.btnDelete)?.setOnClickListener {
                 showDeleteConfirmation()
             }
 
@@ -163,7 +186,8 @@ class CalendarActivity : AppCompatActivity() {
             switcher.displayedChild = 0
             val date = viewModel.date.value
             val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE)
-            dailyViewSection.findViewById<TextView>(R.id.tvEmptyDate)?.text = "Pas de suivi le ${date.format(formatter)}"
+            dailyViewSection.findViewById<TextView>(R.id.tvEmptyDate)?.text =
+                "Pas de suivi le ${date.format(formatter)}"
 
             dailyViewSection.findViewById<Button>(R.id.btnCreateEntry)?.setOnClickListener {
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {
@@ -174,7 +198,6 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun showDeleteConfirmation() {
-        // On récupère l'entrée actuelle depuis le StateFlow du ViewModel
         val currentEntry = viewModel.entryResult.value ?: return
 
         AlertDialog.Builder(this)
@@ -202,10 +225,11 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun setupDaysOfWeek() {
         val titlesContainer = findViewById<LinearLayout>(R.id.titlesContainer)
-        if (titlesContainer.childCount > 0) titlesContainer.removeAllViews()
+        if (titlesContainer.isNotEmpty()) titlesContainer.removeAllViews()
         daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY).forEach { dayOfWeek ->
             val textView = TextView(this).apply {
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                layoutParams =
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.FRANCE).uppercase()
             }
@@ -214,14 +238,17 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun updateMonthTitle(yearMonth: YearMonth) {
-        monthText.text = "${yearMonth.month.getDisplayName(TextStyle.FULL, Locale.FRANCE)
-            .replaceFirstChar { it.uppercase() }} ${yearMonth.year}"
+        monthText.text = "${
+            yearMonth.month.getDisplayName(TextStyle.FULL, Locale.FRANCE)
+                .replaceFirstChar { it.uppercase() }
+        } ${yearMonth.year}"
     }
 
     inner class DayViewContainer(view: View) : ViewContainer(view) {
         val textView: TextView = view.findViewById(R.id.calendarDayText)
         val dotView: View = view.findViewById(R.id.priorityDot)
         lateinit var day: CalendarDay
+
         init {
             view.setOnClickListener {
                 if (day.position != DayPosition.MonthDate) {

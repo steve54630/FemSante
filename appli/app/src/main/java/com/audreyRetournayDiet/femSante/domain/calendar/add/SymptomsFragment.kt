@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.type.PainZone
-import com.audreyRetournayDiet.femSante.viewModels.EntryViewModel
+import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText

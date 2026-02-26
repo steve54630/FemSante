@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
+import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 
 class DocFragment : Fragment() {
 

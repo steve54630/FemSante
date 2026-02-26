@@ -21,7 +21,7 @@ import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.room.database.AppDatabase
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.room.entity.UserEntity
-import com.audreyRetournayDiet.femSante.utilitaires.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -95,7 +95,7 @@ class LoginFragment : Fragment() {
     ) {
         Toast.makeText(requireContext(), apiResult.message, Toast.LENGTH_SHORT).show()
 
-        val isAVie = apiResult.data?.getBoolean("A vie") == true
+        val lifetimeAccess = apiResult.data?.getBoolean("lifetimeAccess") == true
 
         val intent = Intent(requireActivity(), HomeActivity::class.java)
 
@@ -126,7 +126,7 @@ class LoginFragment : Fragment() {
         // 3️⃣ Construire l’utilisateur pour le store
         val newUser = AppUser(
             id = userId,
-            aVie = isAVie,
+            lifetimeAccess = lifetimeAccess,
             email = emailText,
             password = passwordText
         )

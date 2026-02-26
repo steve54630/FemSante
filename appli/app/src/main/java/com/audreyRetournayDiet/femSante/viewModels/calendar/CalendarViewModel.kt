@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels
+package com.audreyRetournayDiet.femSante.viewModels.calendar
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -35,6 +35,7 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
                             .toLocalDate() to it.painLevel
                     } ?: emptyMap()
                 }
+
                 is ApiResult.Failure -> Log.e("CalendarVM", result.message)
             }
         }
@@ -43,7 +44,7 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
     fun loadData(userId: String, selectedDate: LocalDate) {
         viewModelScope.launch {
             date.value = selectedDate
-            when (val result = repository.getDailyEntry(userId, selectedDate)) {
+            when (val result = repository.getDailyEntrybyDate(userId, selectedDate)) {
                 is ApiResult.Success -> entryResult.value = result.data
                 is ApiResult.Failure -> {
                     Log.e("CalendarVM", result.message)
@@ -76,6 +77,7 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
                         // 3. On informe la vue
                         _events.emit(CalendarEvent.DeleteSuccess)
                     }
+
                     is ApiResult.Failure -> {
                         _events.emit(CalendarEvent.Error(result.message))
                     }

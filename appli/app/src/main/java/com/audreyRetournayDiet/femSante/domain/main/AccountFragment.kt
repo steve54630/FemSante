@@ -12,7 +12,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.UserStore
 import com.audreyRetournayDiet.femSante.domain.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.domain.login.payment.PaymentActivity
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
+import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 
 class AccountFragment : Fragment() {
 
@@ -42,7 +42,7 @@ class AccountFragment : Fragment() {
 
         val userStore = UserStore(requireContext())
         login.text = userStore.getUser()?.email
-        update.visibility = if (userStore.getUser()?.aVie == true) View.VISIBLE else View.INVISIBLE
+        update.visibility = if (userStore.getUser()?.lifetimeAccess == false) View.VISIBLE else View.INVISIBLE
 
         // Observer l'utilisateur
 

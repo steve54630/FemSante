@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.utilitaires
+package com.audreyRetournayDiet.femSante.shared
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,6 @@ import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import org.json.JSONException
 import org.json.JSONObject
-
 
 object Utilitaires {
 

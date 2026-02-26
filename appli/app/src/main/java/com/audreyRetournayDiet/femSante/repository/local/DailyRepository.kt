@@ -32,13 +32,22 @@ class DailyRepository(private val dao: DailyEntryDao) {
         }
     }
 
-    suspend fun getDailyEntry(userId: String, date: LocalDate): ApiResult<DailyEntryFull?> {
+    suspend fun getDailyEntrybyID(userId: String, id: Long): ApiResult<DailyEntryFull?> {
         try {
-            val timestamp = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-            val data = dao.getFullEntry(userId, timestamp)
+            val data = dao.getFullEntry(userId, id)
             return ApiResult.Success(data, "")
         } catch (e: Exception) {
-            return ApiResult.Failure("Erreur lors de la récupération des données du jour $date : ${e.localizedMessage}")
+            return ApiResult.Failure("Erreur lors de la récupération des données de l'ID $id : ${e.localizedMessage}")
+        }
+    }
+
+    suspend fun getDailyEntrybyDate(userId: String, date: LocalDate): ApiResult<DailyEntryFull?> {
+        try {
+            val timestamp = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val data = dao.getFullEntryByDate(userId, timestamp)
+            return ApiResult.Success(data, "")
+        } catch (e: Exception) {
+            return ApiResult.Failure("Erreur lors de la récupération des données pour la date $date: ${e.localizedMessage}")
         }
     }
 

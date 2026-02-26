@@ -52,22 +52,22 @@
             android:name="com.audreyRetournayDiet.femSante.domain.corps.YogaActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.utilitaires.ToolboxActivity"
+            android:name="com.audreyRetournayDiet.femSante.domain.ToolboxActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.utilitaires.AudioActivity"
+            android:name="com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.domain.tete.SophroActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.utilitaires.PdfActivity"
+            android:name="com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.domain.tete.ArtTherapieActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.utilitaires.VideoActivity"
+            android:name="com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:exported="false" />
         <activity

@@ -13,8 +13,8 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.UserStore
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
-import com.audreyRetournayDiet.femSante.viewModels.EntryEvent
-import com.audreyRetournayDiet.femSante.viewModels.EntryViewModel
+import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryEvent
+import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -53,6 +53,16 @@ class EntryAddActivity : AppCompatActivity() {
 
         val dateString = intent.getStringExtra("selectedDate")
         val selectedDate = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
+
+        val isEdit = intent.getBooleanExtra("isEditMode", false);
+
+        if(isEdit) {
+            val store = UserStore(this)
+            val userId = store.getUser()?.id
+            val id = intent.getLongExtra("ID", 0)
+
+            if (userId != null) viewModel.loadExistingData(userId, id)
+        }
 
         viewModel.setDate(selectedDate)
 

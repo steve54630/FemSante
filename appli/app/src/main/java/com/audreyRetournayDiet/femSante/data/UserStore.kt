@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKey
 
 data class AppUser(
     val id: String,
-    val aVie: Boolean,
+    val lifetimeAccess: Boolean,
     val email: String,
     val password: String,
 )
@@ -31,7 +31,7 @@ class UserStore(context: Context) {
             putString("user_id", user.id)
             putString("user_email", user.email)
             putString("user_password", user.password)
-            putBoolean("user_avie", user.aVie)
+            putBoolean("user_avie", user.lifetimeAccess)
             apply()
         }
     }

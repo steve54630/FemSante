@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.domain.alim
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,82 +9,85 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.NothingSelectedSpinnerAdapter
-import com.audreyRetournayDiet.femSante.utilitaires.PdfActivity
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires
+import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
+import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecetteViewModel
+import kotlinx.coroutines.launch
 
 class RecetteActivity : AppCompatActivity() {
 
-    private lateinit var recettePdf: ImageButton
-    private lateinit var title: TextView
-    private lateinit var spinner: Spinner
-    private lateinit var help: TextView
-    private lateinit var map: HashMap<*, *>
-    private var folderPath: String? = null
+    @Suppress("UNCHECKED_CAST")
+    private val viewModel: RecetteViewModel by viewModels {
+        val bundle = intent.extras!!
+        val recipeMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("map", HashMap::class.java)
+        } else {
+            @Suppress("DEPRECATION") intent.getSerializableExtra("map")
+        }
+        RecetteViewModel.Factory(
+            title = bundle.getString("Title") ?: "",
+            map = recipeMap as HashMap<String, String>,
+            path = intent.getStringExtra("FOLDER_PATH") ?: "",
+            context = this
+        )
+    }
 
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recette)
 
-        recettePdf = findViewById(R.id.buttonRecette)
-        title = findViewById(R.id.textViewTitre)
-        spinner = findViewById(R.id.spinnerMeditation)
-        help = findViewById(R.id.textHelp)
+        val recettePdf = findViewById<ImageButton>(R.id.buttonRecette)
+        val titleView = findViewById<TextView>(R.id.textViewTitre)
+        val spinner = findViewById<Spinner>(R.id.spinnerMeditation)
+        val helpView = findViewById<TextView>(R.id.textHelp)
 
-        map = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
-                intent.getSerializableExtra("map", HashMap::class.java)!!
-            else -> @Suppress("DEPRECATION") intent.getSerializableExtra("map") as HashMap<*,*>
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                titleView.text = state.title
+                helpView.visibility = if (state.isRecipeSelected) View.VISIBLE else View.INVISIBLE
+                recettePdf.visibility = if (state.isRecipeSelected) View.VISIBLE else View.GONE
+
+                if (spinner.adapter == null) {
+                    setupSpinner(spinner, state.recipeNames)
+                }
+
+                val resId = state.imageResourceId
+                if (resId != 0) {
+                    val drawable = ResourcesCompat.getDrawable(resources, resId, null)
+                    recettePdf.setImageDrawable(drawable)
+                }
+            }
         }
 
-        title.text = intent.extras!!.getString("Title")
-        folderPath = intent.getStringExtra("FOLDER_PATH")
-
-        val list = ArrayList<String>()
-        for (item in map) {
-            list.add(item.value.toString())
+        // Navigation
+        lifecycleScope.launch {
+            viewModel.navigationEvent.collect { fullPath ->
+                val intentTarget = Intent(this@RecetteActivity, PdfActivity::class.java)
+                intentTarget.putExtra("PDF", fullPath)
+                startActivity(intentTarget)
+            }
         }
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.prompt = "Liste des recettes"
-        spinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_recette, this)
-
-        var search: String? = null
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            @SuppressLint("DiscouragedApi")
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (spinner.selectedItemId < 0) {
-                    help.visibility = View.INVISIBLE
-                } else {
-                    recettePdf.visibility = View.VISIBLE
-                    help.visibility = View.VISIBLE
-
-                    search = Utilitaires.cleanKey(map.filterValues { it == spinner.selectedItem.toString() }.keys.toString())
-
-                    val resId = resources.getIdentifier(search, "drawable", packageName)
-                    if (resId != 0) {
-                        val drawable = ResourcesCompat.getDrawable(resources, resId, null)
-                        recettePdf.setImageDrawable(drawable)
-                    }
-                    recettePdf.contentDescription = spinner.selectedItem.toString()
+                if (spinner.selectedItemId >= 0) {
+                    viewModel.onRecipeSelected(spinner.selectedItem.toString())
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
-        recettePdf.setOnClickListener {
-            if (search != null && folderPath != null) {
-                val intentTarget = Intent(this, PdfActivity::class.java)
-                val fullPath = "$folderPath/$search.pdf"
-                intentTarget.putExtra("PDF", fullPath)
-                startActivity(intentTarget)
-            }
-        }
+        recettePdf.setOnClickListener { viewModel.onOpenPdfClicked() }
+    }
+
+    private fun setupSpinner(spinner: Spinner, items: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_recette, this)
     }
 }

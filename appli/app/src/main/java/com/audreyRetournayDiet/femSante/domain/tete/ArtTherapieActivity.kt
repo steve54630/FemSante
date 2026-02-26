@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.utilitaires.Utilitaires.videoLaunch
-import com.audreyRetournayDiet.femSante.utilitaires.VideoActivity
+import com.audreyRetournayDiet.femSante.shared.Utilitaires.videoLaunch
+import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
 
 class ArtTherapieActivity : AppCompatActivity() {
 
