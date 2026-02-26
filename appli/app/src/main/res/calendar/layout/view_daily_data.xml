@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond_appli"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/tvSummaryTitle"
+                style="@style/AppTextAppearance.TitleFancy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/containerActions"
+                android:text="@string/daily_resume"
+                android:textSize="26sp" />
+
+            <LinearLayout
+                android:id="@+id/containerActions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:icon="@drawable/ic_delete"
+                    android:contentDescription="@string/entry_remove" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEdit"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:icon="@drawable/ic_edit"
+                    android:contentDescription="@string/entry_modify" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/cardGeneral"
+            android:text="@string/general"
+            layout="@layout/item_summary_section" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/tvIsTired"
+                style="@style/SummaryDetailStyle"
+                tools:text="Fatigue : En forme" />
+
+            <TextView
+                android:id="@+id/tvPainLevel"
+                style="@style/SummaryDetailStyle"
+                tools:text="Niveau de douleur : 2/10" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/cardPsychological"
+            android:text="@string/psychological"
+            layout="@layout/item_summary_section" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/tvDayQuality"
+                style="@style/SummaryDetailStyle"
+                tools:text="Qualité : Bonne" />
+
+            <TextView
+                android:id="@+id/tvDifficultyCauses"
+                style="@style/SummaryDetailStyle"
+                tools:text="Causes : Stress" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/cardSymptoms"
+            android:text="@string/symptom"
+            layout="@layout/item_summary_section" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/tvLocalizedPains"
+                style="@style/SummaryDetailStyle"
+                tools:text="Zones : Ventre, Tête" />
+
+            <TextView
+                android:id="@+id/tvHasNausea"
+                style="@style/SummaryDetailStyle"
+                tools:text="Nausées : Non" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/cardContext"
+            android:text="@string/context"
+            layout="@layout/item_summary_section" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/tvPhysicalActivity"
+                style="@style/SummaryDetailStyle"
+                tools:text="Activité : Repos" />
+
+            <TextView
+                android:id="@+id/tvTookMedication"
+                style="@style/SummaryDetailStyle"
+                tools:text="Traitement : Oui (Paracétamol)" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

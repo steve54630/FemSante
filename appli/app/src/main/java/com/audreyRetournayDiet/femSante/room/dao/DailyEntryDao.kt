@@ -12,8 +12,6 @@ import com.audreyRetournayDiet.femSante.room.entity.DatePainStatus
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
-import com.audreyRetournayDiet.femSante.room.type.DatePainResult
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DailyEntryDao {

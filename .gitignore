@@ -1,0 +1,21 @@
+# IDE & System
+.idea/
+.gradle/
+*.iml
+local.properties
+.DS_Store
+
+# Android Build (Le plus important)
+**/build/
+**/app/build/
+intermediates/
+outputs/
+generated/
+
+# Dossiers spécifiques que tu voulais ignorer
+**/release/
+**/debug/
+**/captures/
+
+# Sécurité (Variables d'environnement)
+**/env_variables.kt

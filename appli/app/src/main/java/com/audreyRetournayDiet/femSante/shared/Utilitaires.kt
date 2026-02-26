@@ -12,9 +12,8 @@ import org.json.JSONObject
 
 object Utilitaires {
 
-    fun showToast(msg: String, context : Context): Boolean {
+    fun showToast(msg: String, context : Context) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-        return false
     }
 
     fun videoLaunch(

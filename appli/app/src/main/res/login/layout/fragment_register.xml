@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp"
+        tools:context=".features.login.LoginFragment">
+
+        <TextView
+            android:id="@+id/textViewTitleLogin"
+            style="@style/AppTextAppearance.TitleFancy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/register"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/Name"
+            android:layout_width="284dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="32dp"
+            android:autofillHints="name"
+            android:ems="10"
+            android:hint="@string/neme_demand"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTitleLogin" />
+
+        <EditText
+            android:id="@+id/Login"
+            android:layout_width="284dp"
+            android:layout_height="55dp"
+            android:autofillHints="emailAddress"
+            android:ems="10"
+            android:hint="@string/e_mail_demand"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Name" />
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="284dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:autofillHints="password"
+            android:ems="10"
+            android:hint="@string/password_demand"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Login" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/password_help"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Password" />
+
+        <EditText
+            android:id="@+id/ChangePassword"
+            android:layout_width="284dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints="password"
+            android:ems="10"
+            android:hint="@string/password_demand_2"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <Spinner
+            android:id="@+id/spinnerQuestion"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/orange_app"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ChangePassword" />
+
+        <EditText
+            android:id="@+id/Answer"
+            android:layout_width="284dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="16dp"
+            android:hint="@string/secret_answer"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerQuestion" />
+
+        <Button
+            android:id="@+id/buttonConnect"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/register_pay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Answer" />
+
+        <Button
+            android:id="@+id/buttonTestSubscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/test_period"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonConnect" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

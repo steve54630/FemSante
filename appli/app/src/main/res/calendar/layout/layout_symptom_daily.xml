@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <ViewSwitcher
+        android:id="@+id/dailyViewSwitcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        android:measureAllChildren="false">
+
+        <include
+            android:id="@+id/viewDailyEmpty"
+            layout="@layout/view_daily_empty" />
+
+        <include
+            android:id="@+id/viewDailyData"
+            layout="@layout/view_daily_data" />
+
+    </ViewSwitcher>
+</androidx.core.widget.NestedScrollView>
