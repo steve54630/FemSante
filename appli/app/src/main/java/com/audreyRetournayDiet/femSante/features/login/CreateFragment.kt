@@ -1,11 +1,15 @@
-package com.audreyRetournayDiet.femSante.features.login.create
+package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
@@ -68,9 +72,17 @@ class CreateFragment : Fragment() {
     }
 
     private fun setupSpinner() {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, mapQuestion.values.toList())
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            mapQuestion.values.toList()
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        questionSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_question, requireContext())
+        questionSpinner.adapter = NothingSelectedSpinnerAdapter(
+            adapter,
+            R.layout.spinner_choice_question,
+            requireContext()
+        )
 
         questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
