@@ -19,3 +19,5 @@ generated/
 
 # Sécurité (Variables d'environnement)
 **/env_variables.kt
+
+/KeyStore
