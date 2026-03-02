@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.viewModels.login
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.PAYPAL_CLIENT_ID
@@ -18,9 +17,17 @@ import com.paypal.android.corepayments.PayPalSDKError
 import com.paypal.android.paypalnativepayments.*
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+/**
+ * ViewModel orchestrant le tunnel d'achat sécurisé.
+ * * ### Architecture :
+ * - **Calcul Métier** : Gère les règles de prix et promotions.
+ * - **SDK Intégration** : Pilote les flux Native PayPal et Cartes Bancaires.
+ * - **Callback System** : Communique l'état (Loading, Error, Navigation) à l'UI sans couplage fort.
+ */
 class PaymentViewModel(
     private val context: AppCompatActivity,
     private val userManager: UserManager,
@@ -28,19 +35,20 @@ class PaymentViewModel(
     private val repay: Boolean,
     private val update: Boolean,
     private val mapPrice: LinkedHashMap<String, String>,
-    // On retire le Spinner d'ici ! La vue passera l'info via une fonction.
     private val onLoading: (Boolean) -> Unit,
     private val onError: (String) -> Unit,
-    private val onPriceCalculated: (String) -> Unit, // Callback pour mettre à jour le TextView
+    private val onPriceCalculated: (String) -> Unit,
     private val onNavigationRequired: (Boolean, JSONObject?) -> Unit
 ) {
-    private val tag = "VM_PAYMENT"
     private lateinit var accessToken: String
 
     private var currentReduction: Int = 0
     private var currentSelectedKey: String? = null
 
+    // Configuration du SDK Core (Environnement LIVE pour la mise en production)
     private val config = CoreConfig(PAYPAL_CLIENT_ID, Environment.LIVE)
+
+    // Clients spécifiques pour les deux modes de paiement
     private val cardClient = CardClient(context, config)
     private val payPalNativeClient = PayPalNativeCheckoutClient(context.application, config, RETURN_URL_PAYPAL)
 
@@ -48,62 +56,74 @@ class PaymentViewModel(
         setupPayPalListeners()
     }
 
-    // --- LOGIQUE MÉTIER DES PRIX (Anciennement dans l'Activity) ---
+    // --- LOGIQUE MÉTIER DES PRIX ---
 
+    /**
+     * Met à jour la sélection de l'utilisatrice depuis le Spinner/UI.
+     */
     fun updateSelection(selectedLabel: String) {
         currentSelectedKey = mapPrice.entries.find { it.value == selectedLabel }?.key
         calculateFinalPrice()
     }
 
+    /**
+     * Applique un code promo ou une réduction automatique.
+     */
     fun applyReduction(reductionPercent: Int) {
         currentReduction = reductionPercent
         calculateFinalPrice()
     }
 
+    /**
+     * Calcule le prix final.
+     * Règle métier : la réduction ne s'applique que sur les forfaits 1 an (365) ou A vie.
+     */
     private fun calculateFinalPrice() {
         val key = currentSelectedKey ?: return
         val split = key.split(";")
         val days = split[0]
         val basePrice = split[1].toDouble()
 
-        // Règle métier : réduction seulement sur 1 an ou A vie
         val finalPrice = if (currentReduction > 0 && (days == "365" || days == "A vie")) {
             basePrice * (1 - currentReduction / 100.0)
         } else {
             basePrice
         }
 
+        // Formatage monétaire strict (2 décimales, arrondi bancaire)
         val formattedPrice = BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_EVEN).toString()
-        Log.d(tag, "Prix calculé : $formattedPrice € (Base: $basePrice, Reduc: $currentReduction%)")
+        Timber.d("Prix calculé : $formattedPrice € (Réduc: $currentReduction%)")
         onPriceCalculated(formattedPrice)
     }
 
-    // --- LOGIQUE DE PAIEMENT ---
+    // --- LOGIQUE DE PAIEMENT (FLUX SDK) ---
 
     private fun setupPayPalListeners() {
+        // Listener pour le bouton "PayPal" (Application Native)
         payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
             override fun onPayPalCheckoutStart() {
                 onLoading(false)
-                Log.d(tag, "PayPal Native: Start")
+                Timber.d("PayPal Native: Démarrage du flux")
             }
             override fun onPayPalCheckoutSuccess(result: PayPalNativeCheckoutResult) {
                 validateOrder(result.orderId)
             }
             override fun onPayPalCheckoutCanceled() {
-                onError("Opération annulée")
+                onError("Opération annulée par l'utilisatrice")
             }
             override fun onPayPalCheckoutFailure(error: PayPalSDKError) {
                 handleError(error)
             }
         }
 
+        // Listener pour le formulaire de Carte Bancaire
         cardClient.approveOrderListener = object : ApproveOrderListener {
             override fun onApproveOrderSuccess(result: CardResult) {
                 validateOrder(result.orderId)
             }
             override fun onApproveOrderCanceled() {
                 onLoading(false)
-                onError("Paiement annulé")
+                onError("Paiement par carte annulé")
             }
             override fun onApproveOrderFailure(error: PayPalSDKError) {
                 handleError(error)
@@ -113,12 +133,14 @@ class PaymentViewModel(
         }
     }
 
+    /** Lancement du paiement via l'App PayPal */
     fun startPayPalPayment(price: String) {
         initiatePayment(price) { orderId ->
             payPalNativeClient.startCheckout(PayPalNativeCheckoutRequest(orderId))
         }
     }
 
+    /** Lancement du paiement par saisie de Carte Bancaire */
     fun startCardPayment(card: Card, price: String) {
         initiatePayment(price) { orderId ->
             val request = CardRequest(orderId, card, RETURN_URL_CARD, SCA.SCA_ALWAYS)
@@ -126,6 +148,7 @@ class PaymentViewModel(
         }
     }
 
+    /** Étape 1 : Création de l'ordre côté serveur */
     private fun initiatePayment(price: String, onOrderIdReady: (String) -> Unit) {
         onLoading(true)
         val params = JSONObject().put("clientId", PAYPAL_CLIENT_ID).put("price", price)
@@ -145,6 +168,7 @@ class PaymentViewModel(
         }
     }
 
+    /** Étape 2 : Capture finale de l'argent après approbation utilisateur */
     private fun validateOrder(orderId: String?) {
         onLoading(true)
         val params = JSONObject().put("orderId", orderId).put("accessToken", accessToken)
@@ -154,14 +178,14 @@ class PaymentViewModel(
                 finalizeUserRegistration()
             } else if (result is ApiResult.Failure) {
                 onLoading(false)
-                onError("Échec de la validation finale")
+                onError("Paiement non capturé par le serveur.")
             }
         }
     }
 
+    /** Étape 3 : Validation du compte utilisatrice en BDD après succès financier */
     private fun finalizeUserRegistration() {
         context.lifecycleScope.launch {
-            // On récupère les jours depuis la clé sélectionnée stockée dans le VM
             val days = currentSelectedKey?.split(";")?.get(0) ?: "30"
 
             val userParams = JSONObject().apply {
@@ -182,14 +206,14 @@ class PaymentViewModel(
             onLoading(false)
             when (result) {
                 is ApiResult.Success -> onNavigationRequired(repay, result.data)
-                is ApiResult.Failure -> onError("Paiement validé mais erreur profil : ${result.message}")
+                is ApiResult.Failure -> onError("Erreur profil : ${result.message}")
             }
         }
     }
 
     private fun handleError(error: PayPalSDKError) {
         onLoading(false)
-        Log.e(tag, "SDK Error: ${error.errorDescription}")
-        onError("Erreur: ${error.errorDescription}")
+        Timber.e("Erreur SDK PayPal : ${error.errorDescription}")
+        onError("Erreur technique PayPal : ${error.errorDescription}")
     }
 }

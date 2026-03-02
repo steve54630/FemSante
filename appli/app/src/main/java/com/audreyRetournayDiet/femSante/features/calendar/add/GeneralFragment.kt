@@ -1,7 +1,6 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,56 +12,73 @@ import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * Fragment gérant les indicateurs généraux de santé quotidienne.
+ * * Il permet à l'utilisatrice de renseigner :
+ * - Son niveau de douleur via un [Slider].
+ * - Son état de fatigue via un [MaterialSwitch].
+ * * Ce fragment utilise le [EntryViewModel] partagé par l'activité pour maintenir la cohérence
+ * des données durant le processus de création ou d'édition d'une entrée.
+ */
 class GeneralFragment : Fragment(R.layout.fragment_general) {
 
-    private val tag = "FRAG_GENERAL"
     private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated : Initialisation de l'état général")
 
         val sliderPain = view.findViewById<Slider>(R.id.sliderPain)
         val switchTired = view.findViewById<MaterialSwitch>(R.id.switchTired)
 
-        // --- 1. OBSERVATION (UI <- ViewModel) ---
+        observeGeneralState(sliderPain, switchTired)
+        setupInputListeners(sliderPain, switchTired)
+    }
+
+    /**
+     * Observe les changements d'état du ViewModel pour mettre à jour les composants UI.
+     * Les vérifications d'égalité évitent de redéclencher des animations inutiles.
+     */
+    private fun observeGeneralState(slider: Slider, switch: MaterialSwitch) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.generalState.collect { state ->
-                    Log.v(tag, "Sync UI : Douleur=${state.painLevel}, Fatigue=${state.isTired}")
+                    Timber.v("Sync UI : Douleur=${state.painLevel}, Fatigue=${state.isTired}")
 
-                    // Mise à jour du slider si la valeur diffère
-                    if (sliderPain.value != state.painLevel.toFloat()) {
-                        sliderPain.value = state.painLevel.toFloat()
+                    if (slider.value != state.painLevel.toFloat()) {
+                        slider.value = state.painLevel.toFloat()
                     }
 
-                    // Mise à jour du switch si la valeur diffère
-                    if (switchTired.isChecked != state.isTired) {
-                        switchTired.isChecked = state.isTired
+                    if (switch.isChecked != state.isTired) {
+                        switch.isChecked = state.isTired
                     }
                 }
             }
         }
+    }
 
-        // --- 2. ACTIONS (UI -> ViewModel) ---
-
-        sliderPain.addOnChangeListener { _, value, fromUser ->
+    /**
+     * Configure les écouteurs d'événements pour transmettre les saisies utilisateur au ViewModel.
+     * Utilise des gardes (fromUser, isPressed) pour s'assurer que seules les actions
+     * manuelles déclenchent une mise à jour.
+     */
+    private fun setupInputListeners(slider: Slider, switch: MaterialSwitch) {
+        slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                Log.d(tag, "Action Utilisateur : Changement douleur -> $value")
+                Timber.d("Action : Niveau de douleur réglé sur $value")
                 viewModel.updateGeneralState(
                     pain = value.toInt(),
-                    tired = switchTired.isChecked
+                    tired = switch.isChecked
                 )
             }
         }
 
-        switchTired.setOnCheckedChangeListener { buttonView, isChecked ->
-            // On ne met à jour le VM que si c'est une action réelle (clic/swipe)
+        switch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (buttonView.isPressed) {
-                Log.d(tag, "Action Utilisateur : Switch fatigue -> $isChecked")
+                Timber.d("Action : État de fatigue modifié -> $isChecked")
                 viewModel.updateGeneralState(
-                    pain = sliderPain.value.toInt(),
+                    pain = slider.value.toInt(),
                     tired = isChecked
                 )
             }

@@ -2,7 +2,6 @@ package com.audreyRetournayDiet.femSante.features.alim
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +15,16 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RessourceViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * Fragment gérant la bibliothèque de ressources documentaires (PDF).
+ * * Il permet d'accéder à des guides spécifiques (Histamine, Gluten, E-book) via des boutons.
+ * La logique de sélection du fichier est gérée par le [RessourceViewModel], et l'affichage
+ * est délégué à la [PdfActivity].
+ */
 class RessourceFragment : Fragment() {
 
-    private val tag = "FRAG_RESSOURCE"
     private val viewModel: RessourceViewModel by viewModels()
 
     override fun onCreateView(
@@ -27,48 +32,54 @@ class RessourceFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(tag, "onCreateView : Initialisation de la vue")
         return inflater.inflate(R.layout.fragment_ressource, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val buttonHistamine = view.findViewById<Button>(R.id.buttonHistamine)
-        val buttonGluten = view.findViewById<Button>(R.id.buttonGluten)
-        val buttonEBook = view.findViewById<Button>(R.id.buttonEBook)
-
-        // Configuration des clics avec logging de l'action
-        buttonHistamine.setOnClickListener {
-            Log.d(tag, "Clic bouton : Histamine")
-            viewModel.onRessourceClicked("histamine")
-        }
-        buttonGluten.setOnClickListener {
-            Log.d(tag, "Clic bouton : Gluten")
-            viewModel.onRessourceClicked("gluten")
-        }
-        buttonEBook.setOnClickListener {
-            Log.d(tag, "Clic bouton : EBook")
-            viewModel.onRessourceClicked("ebook")
-        }
-
+        setupRessourceButtons(view)
         collectNavigationEvents()
     }
 
+    /**
+     * Initialise les listeners des boutons de ressources.
+     * @param view La vue racine du fragment.
+     */
+    private fun setupRessourceButtons(view: View) {
+        val buttons = mapOf(
+            R.id.buttonHistamine to "histamine",
+            R.id.buttonGluten to "gluten",
+            R.id.buttonEBook to "ebook"
+        )
+
+        buttons.forEach { (resId, key) ->
+            view.findViewById<Button>(resId).setOnClickListener {
+                Timber.d("Action : Sélection de la ressource '$key'")
+                viewModel.onRessourceClicked(key)
+            }
+        }
+    }
+
+    /**
+     * Écoute le flux de navigation du ViewModel pour ouvrir les documents PDF.
+     * Utilise [repeatOnLifecycle] pour garantir que la collecte ne se produit
+     * que lorsque l'UI est visible.
+     */
     private fun collectNavigationEvents() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // Utilisation de repeatOnLifecycle pour éviter les collectes en arrière-plan
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.navigationEvent.collect { pdfName ->
-                    Log.i(tag, "Événement de navigation reçu : Ouverture de $pdfName")
+                    Timber.i("Navigation : Lancement du lecteur PDF pour $pdfName")
 
-                    val intentTarget = Intent(requireActivity(), PdfActivity::class.java)
-                    intentTarget.putExtra("PDF", pdfName)
+                    val intentTarget = Intent(requireActivity(), PdfActivity::class.java).apply {
+                        putExtra("PDF", pdfName)
+                    }
 
                     try {
                         startActivity(intentTarget)
                     } catch (e: Exception) {
-                        Log.e(tag, "Erreur lors du lancement de PdfActivity pour $pdfName", e)
+                        Timber.e(e, "Erreur critique : Impossible d'ouvrir le PDF $pdfName")
                     }
                 }
             }

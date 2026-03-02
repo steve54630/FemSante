@@ -1,52 +1,66 @@
 package com.audreyRetournayDiet.femSante.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 
+/**
+ * ViewModel gérant les informations du compte et la fin de session.
+ *
+ * ### Rôle :
+ * 1. Extraire les informations de l'utilisatrice depuis le stockage local ([UserStore]).
+ * 2. Gérer la déconnexion sécurisée en nettoyant les préférences.
+ * 3. Notifier l'UI pour rediriger vers l'écran de Login si aucune session n'est active.
+ */
 class AccountViewModel(
     private val userStore: UserStore
 ) : ViewModel() {
 
-    private val tag = "VM_ACCOUNT"
-
-    // État de l'écran : contient l'utilisateur ou un signal de déconnexion
+    /**
+     * Représente les différents états possibles de l'écran Mon Compte.
+     */
     sealed class AccountState {
-        object Idle : AccountState()
-        data class Success(val user: AppUser) : AccountState()
-        object LoggedOut : AccountState()
+        object Idle : AccountState() // État initial au chargement
+        data class Success(val user: AppUser) : AccountState() // Profil prêt à l'affichage
+        object LoggedOut : AccountState() // Signal pour quitter l'écran
     }
 
     private val _state = MutableStateFlow<AccountState>(AccountState.Idle)
     val state: StateFlow<AccountState> = _state
 
-    // Charger les infos au démarrage
+    /**
+     * Charge les données de l'utilisatrice.
+     * Si aucune donnée n'est trouvée, déclenche l'état [com.audreyRetournayDiet.femSante.viewModels.AccountViewModel.AccountState.LoggedOut].
+     */
     fun loadUserProfile() {
-        Log.d(tag, "Tentative de chargement du profil utilisateur depuis le UserStore")
+        Timber.d("Tentative de chargement du profil utilisateur depuis le UserStore")
 
         val user = userStore.getUser()
         if (user != null) {
-            Log.i(tag, "Profil chargé avec succès pour l'utilisateur ID: ${user.id}")
+            Timber.i("Profil chargé avec succès pour l'utilisateur ID: ${user.id}")
             _state.value = AccountState.Success(user)
         } else {
-            Log.w(tag, "Aucune session active trouvée dans le UserStore. Redirection vers LoggedOut.")
+            Timber.w("Aucune session active trouvée. Redirection vers LoggedOut.")
             _state.value = AccountState.LoggedOut
         }
     }
 
-    // Action de déconnexion
+    /**
+     * Supprime les jetons d'accès et les infos utilisateur du téléphone.
+     * Effectue un audit de sécurité pour confirmer l'effacement.
+     */
     fun logout() {
-        Log.i(tag, "Action de déconnexion déclenchée par l'utilisateur.")
+        Timber.i("Action de déconnexion déclenchée par l'utilisateur.")
         userStore.clearSession()
 
-        // On vérifie que le clear a bien fonctionné (Audit de sécurité)
+        // Vérification de sécurité pour s'assurer qu'aucune donnée résiduelle ne persiste
         if (userStore.getUser() == null) {
-            Log.d(tag, "Session effacée avec succès du stockage local.")
+            Timber.d("Session effacée avec succès du stockage local.")
         } else {
-            Log.e(tag, "Erreur critique : La session n'a pas pu être effacée du UserStore !")
+            Timber.e("Erreur critique : La session n'a pas pu être effacée !")
         }
 
         _state.value = AccountState.LoggedOut

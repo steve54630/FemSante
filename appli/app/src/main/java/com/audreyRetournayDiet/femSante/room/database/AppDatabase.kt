@@ -20,9 +20,16 @@ import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.UserEntity
 
+/**
+ * Point d'accès principal à la base de données SQLite de l'application.
+ * * Cette classe orchestre la structure globale :
+ * 1. **Entities** : Définit les tables de la base (Utilisatrices, Symptômes, Journal, etc.).
+ * 2. **TypeConverters** : Fournit les traducteurs pour les types complexes (Enums, Listes).
+ * 3. **DAOs** : Expose les méthodes d'accès aux données pour les Repositories.
+ */
 @Database(
     version = 1,
-    exportSchema = false,
+    exportSchema = false, // Désactivé pour simplifier le développement initial
     entities = [
         UserEntity::class,
         GeneralStateEntity::class,
@@ -39,6 +46,9 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
     PainZoneConverter::class
 ])
 abstract class AppDatabase : RoomDatabase() {
+
+    // --- ACCÈS AUX DAOs ---
+    // Ces fonctions permettent d'obtenir les instances nécessaires pour interagir avec chaque table.
 
     abstract fun userDao() : UserDao
     abstract fun generalDao() : GeneralStateDao

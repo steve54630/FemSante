@@ -3,7 +3,6 @@ package com.audreyRetournayDiet.femSante.features.alim
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -21,24 +20,33 @@ import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * Activité gérant l'affichage détaillé d'une catégorie de recettes.
+ *
+ * Elle permet à l'utilisatrice de sélectionner une recette via un [Spinner] et de visualiser
+ * le PDF correspondant. La logique d'affichage est pilotée par le [RecipeViewModel] via un flux d'état.
+ *
+ * ### Données attendues en Extra :
+ * - `Title` (String) : Titre de la catégorie.
+ * - `map` (Serializable) : Mapping entre les noms de recettes et les noms de fichiers.
+ * - `FOLDER_PATH` (String) : Chemin vers le dossier des ressources.
+ */
 class RecetteActivity : AppCompatActivity() {
-
-    private val tag = "ACT_RECETTE"
 
     @Suppress("UNCHECKED_CAST")
     private val viewModel: RecipeViewModel by viewModels {
-        Log.d(tag, "Récupération des extras pour l'initialisation du ViewModel")
         val bundle = intent.extras ?: Bundle()
 
-        // Gestion de la compatibilité pour la récupération de la Map
+        // Gestion de la compatibilité Android Tiramisu+ pour la désérialisation
         val recipeMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("map", HashMap::class.java)
         } else {
             @Suppress("DEPRECATION") intent.getSerializableExtra("map")
         } as? HashMap<String, String> ?: hashMapOf()
 
-        if (recipeMap.isEmpty()) Log.w(tag, "Attention : La map des recettes reçue est vide.")
+        if (recipeMap.isEmpty()) Timber.w("Init : La map des recettes est vide.")
 
         RecipeViewModel.Factory(
             title = bundle.getString("Title") ?: "Recettes",
@@ -57,60 +65,79 @@ class RecetteActivity : AppCompatActivity() {
         val spinner = findViewById<Spinner>(R.id.spinnerMeditation)
         val helpView = findViewById<TextView>(R.id.textHelp)
 
-        // Observation de l'état UI
+        observeUiState(titleView, helpView, recettePdf, spinner)
+        observeNavigation()
+        setupListeners(spinner, recettePdf)
+    }
+
+    /**
+     * Observe et applique l'état de l'UI (titre, visibilité des boutons, chargement d'image).
+     */
+    private fun observeUiState(title: TextView, help: TextView, button: ImageButton, spinner: Spinner) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    Log.v(tag, "Mise à jour UI : Recette sélectionnée = ${state.isRecipeSelected}")
-
-                    titleView.text = state.title
-                    helpView.visibility = if (state.isRecipeSelected) View.VISIBLE else View.INVISIBLE
-                    recettePdf.visibility = if (state.isRecipeSelected) View.VISIBLE else View.GONE
+                    title.text = state.title
+                    help.visibility = if (state.isRecipeSelected) View.VISIBLE else View.INVISIBLE
+                    button.visibility = if (state.isRecipeSelected) View.VISIBLE else View.GONE
 
                     if (spinner.adapter == null && state.recipeNames.isNotEmpty()) {
-                        Log.d(tag, "Initialisation du Spinner avec ${state.recipeNames.size} recettes")
                         setupSpinner(spinner, state.recipeNames)
                     }
 
-                    val resId = state.imageResourceId
-                    if (resId != 0) {
-                        try {
-                            val drawable = ResourcesCompat.getDrawable(resources, resId, null)
-                            recettePdf.setImageDrawable(drawable)
-                        } catch (e: Exception) {
-                            Log.e(tag, "Erreur lors du chargement du drawable (ID: $resId)", e)
-                        }
+                    if (state.imageResourceId != 0) {
+                        updateRecipeImage(button, state.imageResourceId)
                     }
                 }
             }
         }
+    }
 
-        // Observation de la Navigation vers le PDF
+    /**
+     * Gère la navigation vers le lecteur PDF suite à une action du ViewModel.
+     */
+    private fun observeNavigation() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.navigationEvent.collect { fullPath ->
-                    Log.i(tag, "Navigation : Ouverture du PDF -> $fullPath")
-                    val intentTarget = Intent(this@RecetteActivity, PdfActivity::class.java)
-                    intentTarget.putExtra("PDF", fullPath)
+                    Timber.i("Navigation : Ouverture du PDF -> $fullPath")
+                    val intentTarget = Intent(this@RecetteActivity, PdfActivity::class.java).apply {
+                        putExtra("PDF", fullPath)
+                    }
                     startActivity(intentTarget)
                 }
             }
         }
+    }
 
+    /**
+     * Initialise les interactions avec le Spinner et le bouton d'ouverture PDF.
+     */
+    private fun setupListeners(spinner: Spinner, recettePdf: ImageButton) {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (spinner.selectedItemId >= 0) {
                     val selectedName = spinner.selectedItem.toString()
-                    Log.d(tag, "Spinner : Sélection de '$selectedName'")
                     viewModel.onRecipeSelected(selectedName)
                 }
             }
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         recettePdf.setOnClickListener {
-            Log.d(tag, "Clic sur l'image de la recette pour ouvrir le PDF")
             viewModel.onOpenPdfClicked()
+        }
+    }
+
+    /**
+     * Charge le drawable de la recette de manière sécurisée.
+     */
+    private fun updateRecipeImage(button: ImageButton, resId: Int) {
+        try {
+            val drawable = ResourcesCompat.getDrawable(resources, resId, null)
+            button.setImageDrawable(drawable)
+        } catch (e: Exception) {
+            Timber.e(e, "Échec du chargement du drawable ID: $resId")
         }
     }
 

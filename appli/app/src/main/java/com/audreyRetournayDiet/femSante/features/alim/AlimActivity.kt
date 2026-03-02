@@ -1,17 +1,22 @@
 package com.audreyRetournayDiet.femSante.features.alim
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import timber.log.Timber
 
+/**
+ * Activité principale du module "Bien dans son Assiette".
+ * * Cette activité gère la navigation entre les conseils nutritionnels (AlimFragment)
+ * et la bibliothèque de ressources PDF (RessourceFragment) via une barre de navigation basse.
+ * * @property alimFragment Instance persistante pour la vue des conseils nutritionnels.
+ * @property docFragment Instance persistante pour la consultation des documents PDF.
+ */
 class AlimActivity : AppCompatActivity() {
 
-    private val tag = "ACT_ALIM"
     private lateinit var menu: BottomNavigationView
 
-    // On conserve les instances pour éviter de recréer les fragments à chaque clic
     private var alimFragment = AlimFragment()
     private var docFragment = RessourceFragment()
 
@@ -19,36 +24,43 @@ class AlimActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alim)
 
-        Log.d(tag, "Lancement de AlimActivity")
+        Timber.d("Lancement de AlimActivity")
 
         menu = findViewById(R.id.bottom_navigation_menu)
 
-        // Affichage du fragment par défaut au démarrage
         if (savedInstanceState == null) {
-            Log.i(tag, "Premier lancement : affichage du fragment Alim")
+            Timber.i("Initialisation : affichage du fragment Alim par défaut")
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, alimFragment)
                 .commit()
         }
 
+        setupNavigation()
+    }
+
+    /**
+     * Configure le listener de la [BottomNavigationView].
+     * Assure la permutation entre les fragments du module Alimentation.
+     */
+    private fun setupNavigation() {
         menu.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.alim -> {
-                    Log.d(tag, "Navigation : Onglet Alimentation sélectionné")
+                    Timber.d("Navigation : Onglet Alimentation")
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.container, alimFragment)
                         .commit()
                     true
                 }
                 R.id.pdf -> {
-                    Log.d(tag, "Navigation : Onglet Ressources PDF sélectionné")
+                    Timber.d("Navigation : Onglet Ressources PDF")
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.container, docFragment)
                         .commit()
                     true
                 }
                 else -> {
-                    Log.w(tag, "Navigation : Item de menu inconnu cliqué (ID: ${item.itemId})")
+                    Timber.w("Navigation : ID inconnu cliqué -> ${item.itemId}")
                     false
                 }
             }

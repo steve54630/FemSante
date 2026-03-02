@@ -1,7 +1,6 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
@@ -19,105 +18,143 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import androidx.core.view.isVisible
+import timber.log.Timber
 
+/**
+ * Fragment gérant l'état psychologique et émotionnel de l'utilisatrice.
+ *
+ * Ce composant permet de :
+ * - Évaluer la qualité globale de la journée ([DayQuality]).
+ * - Identifier les causes potentielles de difficultés ([DifficultyCause]) via une sélection multiple.
+ * - Saisir des précisions textuelles si la cause "AUTRE" est sélectionnée.
+ *
+ * Les options sont générées dynamiquement à partir des Enums pour garantir la cohérence
+ * avec la base de données Room.
+ */
 @Suppress("UNCHECKED_CAST")
 class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
 
-    private val tag = "FRAG_PSYCH"
     private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated : Initialisation de l'état psychologique")
+        Timber.d("onViewCreated : Initialisation de l'état psychologique")
 
         val chipGroupQuality = view.findViewById<ChipGroup>(R.id.chipGroupDayQuality)
         val chipGroupCauses = view.findViewById<ChipGroup>(R.id.chipGroupDifficultyCauses)
         val layoutAutres = view.findViewById<View>(R.id.layoutAutres)
         val etAutres = view.findViewById<TextInputEditText>(R.id.etAutresPsychological)
 
-        // 1. Initialisation dynamique des Chips
+        // Génération dynamique des options pour éviter la maintenance manuelle du XML
         if (chipGroupQuality.isEmpty()) {
-            Log.d(tag, "Génération des Chips pour Qualité et Causes")
+            Timber.d("Génération des Chips pour Qualité et Causes")
             setupChips(chipGroupQuality, DayQuality.entries)
             setupChips(chipGroupCauses, DifficultyCause.entries)
         }
 
-        // --- 2. OBSERVATION (VM -> UI) ---
+        observePsychologicalState(chipGroupQuality, chipGroupCauses, layoutAutres, etAutres)
+        setupInteractionListeners(chipGroupQuality, chipGroupCauses, etAutres)
+    }
+
+    /**
+     * Observe le StateFlow du ViewModel pour synchroniser l'interface utilisateur.
+     * Gère la sélection des chips, la visibilité du champ "Autre" et le contenu textuel.
+     */
+    private fun observePsychologicalState(
+        groupQuality: ChipGroup,
+        groupCauses: ChipGroup,
+        layoutAutres: View,
+        etAutres: TextInputEditText
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.psychologicalState.collect { state ->
-                    Log.v(tag, "Sync UI : Qualité=${state.dayQuality}, Nb Causes=${state.difficultyCauses.size}")
+                    Timber.v("Sync UI : Qualité=${state.dayQuality}, Nb Causes=${state.difficultyCauses.size}")
 
-                    // Qualité (Single Selection)
-                    selectChipByTag(chipGroupQuality, state.dayQuality)
+                    // Synchronisation des sélections (VM -> UI)
+                    selectChipByTag(groupQuality, state.dayQuality)
+                    selectChipsByTags(groupCauses, state.difficultyCauses)
 
-                    // Causes (Multi Selection)
-                    selectChipsByTags(chipGroupCauses, state.difficultyCauses)
-
-                    // Visibilité du champ "Autre"
+                    // Gestion de la visibilité du champ "Autre"
                     val hasOther = state.difficultyCauses.contains(DifficultyCause.AUTRE)
                     if (layoutAutres.isVisible != hasOther) {
-                        Log.d(tag, "Visibilité 'Autre' modifiée : $hasOther")
-                        layoutAutres.visibility = if (hasOther) View.VISIBLE else View.GONE
+                        layoutAutres.isVisible = hasOther
                     }
 
-                    // Texte "Autres"
+                    // Mise à jour du texte (Anti-boucle pour préserver le curseur)
                     if (etAutres.text?.toString() != state.autres) {
                         etAutres.setText(state.autres)
                     }
                 }
             }
         }
+    }
 
-        // --- 3. ACTIONS (UI -> VM) ---
-
+    /**
+     * Configure les listeners de changement d'état pour les composants de saisie.
+     * Transmet les modifications au ViewModel via une fonction de mise à jour locale.
+     */
+    private fun setupInteractionListeners(
+        groupQuality: ChipGroup,
+        groupCauses: ChipGroup,
+        etAutres: TextInputEditText
+    ) {
+        /** Envoie l'état actuel des vues vers le ViewModel */
         fun pushUpdate() {
-            val quality = getSelectedTag<DayQuality>(chipGroupQuality) ?: DayQuality.MOYENNE
-            val causes = getSelectedTags<DifficultyCause>(chipGroupCauses)
+            val quality = getSelectedTag<DayQuality>(groupQuality) ?: DayQuality.MOYENNE
+            val causes = getSelectedTags<DifficultyCause>(groupCauses)
             val notes = etAutres.text?.toString()
 
-            Log.d(tag, "Action : pushUpdate -> Qualité: $quality, Causes: $causes")
+            Timber.d("Action : pushUpdate -> Qualité: $quality, Causes: $causes")
             viewModel.updatePsychologicalState(quality, causes, notes)
         }
 
-        chipGroupQuality.setOnCheckedStateChangeListener { _, _ ->
-            Log.v(tag, "UI Change : Qualité modifiée")
-            pushUpdate()
-        }
+        groupQuality.setOnCheckedStateChangeListener { _, _ -> pushUpdate() }
+        groupCauses.setOnCheckedStateChangeListener { _, _ -> pushUpdate() }
 
-        chipGroupCauses.setOnCheckedStateChangeListener { _, _ ->
-            Log.v(tag, "UI Change : Sélection des causes modifiée")
-            pushUpdate()
-        }
-
+        // On n'écoute la saisie que si l'utilisateur a le focus (évite les rebonds VM->UI)
         etAutres.addTextChangedListener {
             if (etAutres.hasFocus()) {
-                Log.v(tag, "UI Change : Saisie texte 'Autre'")
                 pushUpdate()
             }
         }
     }
 
-    // --- Helpers Utilitaires ---
+    // --- HELPERS UTILITAIRES ---
 
+    /**
+     * Génère dynamiquement des [Chip] à partir d'une liste d'Enum.
+     *
+     * Chaque Chip reçoit l'objet Enum dans sa propriété `tag` pour faciliter
+     * la récupération de la valeur sélectionnée sans conversion de String.
+     *
+     * @param T Le type de l'Enum (ex: [DayQuality] ou [DifficultyCause]).
+     * @param group Le [ChipGroup] où injecter les vues.
+     * @param entries La liste des valeurs possibles.
+     */
     private fun <T : Enum<T>> setupChips(group: ChipGroup, entries: List<T>) {
         entries.forEach { entry ->
             val chip = Chip(requireContext()).apply {
                 text = entry.name
                 isCheckable = true
-                this.tag = entry // On stocke l'objet Enum dans le tag de la vue
+                this.tag = entry
                 id = View.generateViewId()
             }
             group.addView(chip)
         }
     }
 
+    /**
+     * Coche un [Chip] unique au sein d'un groupe en fonction de son Tag (Enum).
+     *
+     * @param group Le groupe contenant les Chips.
+     * @param tagToSelect L'objet (Enum) correspondant à la sélection actuelle.
+     */
     private fun selectChipByTag(group: ChipGroup, tagToSelect: Any?) {
         for (i in 0 until group.childCount) {
             val chip = group.getChildAt(i) as Chip
             if (chip.tag == tagToSelect) {
                 if (!chip.isChecked) {
-                    Log.v(tag, "Sync UI : Sélection Qualité -> $tagToSelect")
                     chip.isChecked = true
                 }
                 return
@@ -125,21 +162,40 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         }
     }
 
+    /**
+     * Met à jour l'état de sélection multiple des Chips pour les causes de difficulté.
+     *
+     * @param group Le groupe de sélection multiple.
+     * @param tagsToSelect La liste des causes actuellement enregistrées dans le ViewModel.
+     */
     private fun selectChipsByTags(group: ChipGroup, tagsToSelect: List<DifficultyCause>) {
         for (i in 0 until group.childCount) {
             val chip = group.getChildAt(i) as Chip
             val shouldBeChecked = tagsToSelect.contains(chip.tag)
+            // On ne change l'état que si nécessaire pour éviter des triggers inutiles
             if (chip.isChecked != shouldBeChecked) {
                 chip.isChecked = shouldBeChecked
             }
         }
     }
 
+    /**
+     * Récupère la valeur Enum du Chip actuellement sélectionné (Sélection Unique).
+     *
+     * @param group Le [ChipGroup] concerné.
+     * @return La valeur de l'Enum castée au type [T], ou null si rien n'est coché.
+     */
     private fun <T> getSelectedTag(group: ChipGroup): T? {
         val selectedId = group.checkedChipId
-        return group.findViewById<Chip>(selectedId)?.tag as T?
+        return group.findViewById<Chip>(selectedId)?.tag as? T
     }
 
+    /**
+     * Récupère la liste des valeurs Enum des Chips cochés (Sélection Multiple).
+     *
+     * @param group Le [ChipGroup] concerné.
+     * @return Une liste d'objets [T] correspondant aux tags des Chips sélectionnés.
+     */
     private fun <T> getSelectedTags(group: ChipGroup): List<T> {
         return group.checkedChipIds.mapNotNull { id ->
             group.findViewById<Chip>(id)?.tag as? T

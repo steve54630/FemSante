@@ -2,17 +2,24 @@ package com.audreyRetournayDiet.femSante.features.tete
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity
 import com.audreyRetournayDiet.femSante.shared.Utilitaires.videoLaunch
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
+import timber.log.Timber
 
+/**
+ * Menu principal du module "Bien dans sa tête" (Santé Mentale).
+ * * Cette activité centralise l'accès aux différentes thérapies brèves et outils
+ * de relaxation. Elle gère trois types de flux :
+ * 1. **Navigation indirecte** : Vers des menus spécialisés ([ArtTherapieActivity], [SophroActivity]).
+ * 2. **Flux Audio Dynamique** : Prépare des listes de pistes pour [AudioActivity] (Hypnose, Méditation).
+ * 3. **Flux Vidéo Direct** : Lance un contenu vidéo unique via [videoLaunch].
+ */
 class BienTeteActivity : AppCompatActivity() {
 
-    private val tag = "ACT_BIEN_TETE"
     private lateinit var artTherapie: Button
     private lateinit var emotion: Button
     private lateinit var sophro: Button
@@ -22,12 +29,15 @@ class BienTeteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bien_tete)
-        Log.d(tag, "onCreate: Chargement du menu Bien-être Mental")
+        Timber.d("onCreate: Chargement du menu Bien-être Mental")
 
         initViews()
         setupListeners()
     }
 
+    /**
+     * Initialise les composants de l'interface utilisateur.
+     */
     private fun initViews() {
         artTherapie = findViewById(R.id.buttonArt)
         sophro = findViewById(R.id.buttonSophro)
@@ -36,18 +46,22 @@ class BienTeteActivity : AppCompatActivity() {
         hypnosis = findViewById(R.id.buttonHypno)
     }
 
+    /**
+     * Configure la logique de navigation et le passage de données entre activités.
+     */
     private fun setupListeners() {
         val intentVideo = Intent(this, VideoActivity::class.java)
         val intentAudio = Intent(this, AudioActivity::class.java)
 
         // --- SECTION AUDIO : HYPNOSE ---
+        // On définit dynamiquement la liste des pistes disponibles pour ce mode
         hypnosis.setOnClickListener {
             val title = hypnosis.text.toString()
             val tracks = arrayListOf(
                 "Auto hypnose pour le stress",
                 "Auto-hypnose pour l'apaisement"
             )
-            Log.i(tag, "Navigation: Vers AudioActivity (Mode: $title, Tracks: ${tracks.size})")
+            Timber.i("Navigation: Vers AudioActivity (Mode: $title, Tracks: ${tracks.size})")
 
             intentAudio.putExtra("map", tracks)
             intentAudio.putExtra("Titre", title)
@@ -55,6 +69,7 @@ class BienTeteActivity : AppCompatActivity() {
         }
 
         // --- SECTION AUDIO : MÉDITATION ---
+        // Structure identique à l'hypnose mais avec des contenus spécifiques
         medit.setOnClickListener {
             val title = medit.text.toString()
             val tracks = arrayListOf(
@@ -63,7 +78,7 @@ class BienTeteActivity : AppCompatActivity() {
                 "Confiance en soi",
                 "Relaxation"
             )
-            Log.i(tag, "Navigation: Vers AudioActivity (Mode: $title, Tracks: ${tracks.size})")
+            Timber.i("Navigation: Vers AudioActivity (Mode: $title, Tracks: ${tracks.size})")
 
             intentAudio.putExtra("map", tracks)
             intentAudio.putExtra("Titre", title)
@@ -71,20 +86,22 @@ class BienTeteActivity : AppCompatActivity() {
         }
 
         // --- SECTION NAVIGATION DIRECTE ---
+        // Redirection vers des activités ayant leur propre logique complexe
         sophro.setOnClickListener {
-            Log.d(tag, "Navigation: Vers SophroActivity")
+            Timber.d("Navigation: Vers SophroActivity")
             startActivity(Intent(this, SophroActivity::class.java))
         }
 
         artTherapie.setOnClickListener {
-            Log.d(tag, "Navigation: Vers ArtTherapieActivity")
+            Timber.d("Navigation: Vers ArtTherapieActivity")
             startActivity(Intent(this, ArtTherapieActivity::class.java))
         }
 
         // --- SECTION VIDÉO DIRECTE ---
+        // Utilise l'utilitaire de lancement pour une vidéo liée à la gestion des émotions
         emotion.setOnClickListener {
             val videoTitle = emotion.text.toString()
-            Log.i(tag, "Navigation: Lancement vidéo directe -> $videoTitle")
+            Timber.i("Navigation: Lancement vidéo directe -> $videoTitle")
             videoLaunch(videoTitle, "non", intentVideo, this)
         }
     }

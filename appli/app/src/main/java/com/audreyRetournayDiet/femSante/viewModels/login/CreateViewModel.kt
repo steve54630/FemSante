@@ -1,12 +1,18 @@
 package com.audreyRetournayDiet.femSante.viewModels.login
 
-import android.util.Log
 import com.audreyRetournayDiet.femSante.features.login.LoginActivity
 import com.audreyRetournayDiet.femSante.features.login.PaymentActivity
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import org.json.JSONObject
+import timber.log.Timber
 
+/**
+ * Gère la logique de création de compte et le tunnel d'abonnement.
+ * * Ce composant utilise des callbacks (`onLoading`, `onError`, `onSuccess`) pour
+ * communiquer avec l'UI, ce qui le rend très flexible pour être utilisé
+ * dans des Fragments ou des Activities.
+ */
 class CreateViewModel(
     private val userManager: UserManager,
     private val onLoading: (Boolean) -> Unit,
@@ -14,59 +20,66 @@ class CreateViewModel(
     private val onSuccess: (Class<*>, HashMap<String, String>?) -> Unit
 ) {
 
-    private val tag = "VM_CREATE_USER"
-
+    /**
+     * Processus d'inscription standard (Gratuit).
+     * Effectue une double vérification : disponibilité de l'email PUIS création.
+     */
     suspend fun test(params: JSONObject) {
-        Log.d(tag, "Début du processus de test (inscription gratuite)")
+        Timber.d("Début du processus d'inscription gratuite")
         onLoading(true)
 
         val email = params.optString("email")
         val emailJson = JSONObject().apply { put("email", email) }
 
-        // 1. Vérification de l'email
-        Log.d(tag, "Vérification disponibilité email : $email")
+        // 1. Vérification de la disponibilité de l'email
+        Timber.d("Vérification disponibilité email : $email")
         when (val emailCheck = userManager.verifyEmail(emailJson)) {
             is ApiResult.Success -> {
-                Log.i(tag, "Email disponible. Tentative de création de compte...")
+                Timber.i("Email disponible. Tentative de création...")
 
-                // 2. Création de l'utilisateur
+                // 2. Création effective de l'utilisateur
                 when (val createCheck = userManager.createUser(params)) {
                     is ApiResult.Success -> {
-                        Log.i(tag, "Compte créé avec succès pour : $email")
+                        Timber.i("Compte créé avec succès pour : $email")
                         onLoading(false)
                         onSuccess(LoginActivity::class.java, null)
                     }
                     is ApiResult.Failure -> {
-                        Log.e(tag, "Échec création compte : ${createCheck.message}")
+                        Timber.e("Échec création compte : ${createCheck.message}")
                         onLoading(false)
                         onError(createCheck.message)
                     }
                 }
             }
             is ApiResult.Failure -> {
-                Log.w(tag, "Email déjà utilisé ou invalide ($email) : ${emailCheck.message}")
+                Timber.w("Email indisponible ou invalide : $email")
                 onLoading(false)
                 onError(emailCheck.message)
             }
         }
     }
 
+    /**
+     * Processus d'abonnement payant.
+     * Vérifie l'email avant de rediriger l'utilisatrice vers la plateforme de paiement.
+     */
     suspend fun subscribe(params: JSONObject, map: HashMap<String, String>) {
-        Log.d(tag, "Début du processus d'abonnement (paiement)")
+        Timber.d("Début du processus d'abonnement (paiement)")
         onLoading(true)
 
         val email = params.optString("email")
         val emailJson = JSONObject().apply { put("email", email) }
 
-        Log.d(tag, "Vérification email avant paiement : $email")
+        Timber.d("Vérification email avant redirection paiement : $email")
         when (val result = userManager.verifyEmail(emailJson)) {
             is ApiResult.Success -> {
-                Log.i(tag, "Email validé. Redirection vers l'écran de paiement.")
+                Timber.i("Email validé. Redirection vers PaymentActivity.")
                 onLoading(false)
+                // On passe la Map contenant les détails de l'offre choisie
                 onSuccess(PaymentActivity::class.java, map)
             }
             is ApiResult.Failure -> {
-                Log.w(tag, "Interruption abonnement : Email non valide ou déjà pris ($email)")
+                Timber.w("Interruption : Email déjà pris ou invalide.")
                 onLoading(false)
                 onError(result.message)
             }

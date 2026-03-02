@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.room.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,22 +13,37 @@ import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
 
+/**
+ * DAO Maître pour la gestion des entrées quotidiennes du journal de bord.
+ * * Cette classe orchestre la persistance multi-tables. Une "entrée" n'est pas une simple ligne,
+ * mais un assemblage de 5 entités distinctes reliées par l'ID de l'entrée (`entry_id`).
+ * * L'utilisation d'une classe `abstract` permet de définir des fonctions `open` avec
+ * une logique personnalisée tout en laissant Room générer le code SQL de base.
+ */
 @Dao
 abstract class DailyEntryDao {
 
     // --- LECTURE ---
 
+    /**
+     * Récupère l'intégralité des données d'une journée via son ID.
+     * @return Un [DailyEntryFull] (DTO) qui contient l'objet parent et ses 4 enfants.
+     */
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND id = :id LIMIT 1")
     abstract suspend fun getFullEntry(userId: String, id: Long): DailyEntryFull?
 
+    /**
+     * Récupère les données d'une journée via un timestamp (utile pour le calendrier).
+     */
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
     abstract suspend fun getFullEntryByDate(userId: String, timestamp: Long): DailyEntryFull?
 
-    @Query("SELECT id FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
-    abstract suspend fun getIdByDate(userId: String, timestamp: Long): Long?
-
+    /**
+     * Extrait les informations minimales pour l'affichage visuel du calendrier.
+     * Effectue une jointure SQL pour corréler la date et le niveau de douleur.
+     */
     @Query("""
         SELECT de.date as date, gs.pain_level as painLevel
         FROM daily_entry de
@@ -39,6 +53,7 @@ abstract class DailyEntryDao {
     abstract suspend fun getCalendarStatus(userId: String): List<DatePainStatus>
 
     // --- INSERTIONS DE BASE ---
+    // On utilise REPLACE pour écraser automatiquement les données si un ID identique existe.
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertDailyEntry(entry: DailyEntryEntity): Long
@@ -57,6 +72,10 @@ abstract class DailyEntryDao {
 
     // --- LOGIQUE MÉTIER (TRANSACTIONS) ---
 
+    /**
+     * Insère une journée complète de manière atomique.
+     * Si une seule des insertions échoue, toute la transaction est annulée.
+     */
     @Transaction
     open suspend fun insertFullDailyEntry(
         userId: String,
@@ -66,12 +85,17 @@ abstract class DailyEntryDao {
         symptom: SymptomStateEntity,
         context: ContextStateEntity
     ) {
-        // Crée le parent et récupère l'ID
+        // 1. On crée le parent (DailyEntryEntity) et on récupère son ID auto-généré
         val newId = insertDailyEntry(DailyEntryEntity(userId = userId, date = date))
-        // Insère tous les détails
+
+        // 2. On injecte cet ID dans tous les sous-états avant de les sauvegarder
         saveSubStates(newId, general, psy, symptom, context)
     }
 
+    /**
+     * Met à jour une journée existante.
+     * Utilise `let` pour s'assurer que l'ID existe avant de tenter la mise à jour.
+     */
     @Transaction
     open suspend fun editFullDailyEntry(
         userId: String,
@@ -81,15 +105,14 @@ abstract class DailyEntryDao {
         symptom: SymptomStateEntity,
         context: ContextStateEntity
     ) {
-        Log.i("ID", "${general.id} $id ${getFullEntry(userId, id)}")
-        // Récupère l'ID existant de manière sécurisée (sans !!)
         getFullEntry(userId, id)?.let { existing ->
             saveSubStates(existing.dailyEntry.id, general, psy, symptom, context)
         }
     }
 
     /**
-     * Fonction utilitaire privée pour injecter l'ID dans les entités enfants
+     * Méthode utilitaire pour factoriser l'assignation de l'ID parent aux enfants.
+     * Utilise `.copy()` pour garder l'immuabilité des entités.
      */
     private suspend fun saveSubStates(
         entryId: Long,
@@ -106,6 +129,11 @@ abstract class DailyEntryDao {
 
     // --- SUPPRESSION ---
 
+    /**
+     * Supprime l'entrée parente.
+     * Note : Si tes Foreign Keys sont configurées avec ON DELETE CASCADE,
+     * cela supprimera automatiquement tous les sous-états associés.
+     */
     @Query("DELETE FROM daily_entry WHERE user_id = :userId AND id = :id")
     abstract suspend fun deleteFullEntry(userId: String, id: Long)
 }

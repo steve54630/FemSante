@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
@@ -39,11 +38,20 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 import androidx.core.view.isNotEmpty
+import timber.log.Timber
 
+/**
+ * Activité principale du calendrier de suivi des symptômes.
+ * * Cette activité affiche un calendrier mensuel interactif permettant de :
+ * - Visualiser l'historique des douleurs via des pastilles de couleur (Vert/Jaune/Rouge).
+ * - Consulter le détail d'une journée via un BottomSheet coulissant.
+ * - Naviguer vers la création ou l'édition d'une entrée quotidienne.
+ * * Elle utilise la bibliothèque `kizitonwose/CalendarView` et communique avec le [CalendarViewModel]
+ * pour la récupération des données en base locale.
+ */
 @SuppressLint("SetTextI18n")
 class CalendarActivity : AppCompatActivity() {
 
-    private val tag = "ACT_CALENDAR"
     private lateinit var calendarView: CalendarView
     private lateinit var monthText: TextView
     private lateinit var prevMonth: ImageButton
@@ -61,8 +69,16 @@ class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_calendar)
-        Log.d(tag, "onCreate : Initialisation du calendrier")
 
+        setupViews()
+        initCalendar()
+        collectStateFlows()
+    }
+
+    /**
+     * Initialise les composants de la vue et le BottomSheet.
+     */
+    private fun setupViews() {
         calendarView = findViewById(R.id.calendarView)
         monthText = findViewById(R.id.monthText)
         prevMonth = findViewById(R.id.btnPrevMonth)
@@ -71,73 +87,81 @@ class CalendarActivity : AppCompatActivity() {
         bottomSheetBehavior = BottomSheetBehavior.from(dailyViewSection)
 
         userStore = UserStore(this)
-        val userId = userStore.getUser()?.id
 
-        if (userId == null) {
-            Log.e(tag, "Utilisateur non connecté, impossible de charger le calendrier")
-            finish()
-            return
+        prevMonth.setOnClickListener {
+            calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.minusMonths(1))
         }
+        nextMonth.setOnClickListener {
+            calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.plusMonths(1))
+        }
+    }
 
-        // Init Data
+    /**
+     * Configure les collecteurs de données réactifs (StateFlow).
+     * Gère la mise à jour des pastilles de couleur et de l'affichage détaillé.
+     */
+    private fun collectStateFlows() {
+        val userId = userStore.getUser()?.id ?: return Timber.e("UserID null")
         viewModel.initData(userId)
-        updateMonthTitle(YearMonth.now())
-        setupDaysOfWeek()
 
-        // Observations Flow
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Changement de date sélectionnée
+                // Déclenche le re-rendu du calendrier lors d'un changement de sélection
                 launch {
-                    viewModel.date.collect { date ->
-                        Log.v(tag, "Date sélectionnée modifiée : $date")
+                    viewModel.date.collect {
                         calendarView.notifyCalendarChanged()
-                        updateUiState(viewModel.entryResult.value)
                     }
                 }
-                // Mise à jour du contenu du jour
+                // Met à jour la section détaillée (BottomSheet) quand une entrée est chargée
                 launch {
                     viewModel.entryResult.collect { entry ->
-                        Log.d(tag, "Observation : Détail du jour chargé (${if(entry != null) "Données" else "Vide"})")
                         updateUiState(entry)
                     }
                 }
-                // Mise à jour des pastilles (douleur)
+                // Actualise les indicateurs de douleur (points de couleur)
                 launch {
-                    viewModel.dailyStatus.collect { status ->
-                        Log.i(tag, "Mise à jour des pastilles : ${status.size} jours suivis trouvés")
+                    viewModel.dailyStatus.collect {
                         calendarView.notifyCalendarChanged()
                     }
                 }
             }
         }
+    }
 
-        // Binder du calendrier
+    /**
+     * Configure le comportement et l'apparence des cellules du calendrier.
+     */
+    private fun initCalendar() {
+        setupDaysOfWeek()
+
         calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data
                 val date = data.date
                 val painLevel = viewModel.dailyStatus.value[date]
+
                 container.textView.text = date.dayOfMonth.toString()
 
-                // Point aujourd'hui (Cyan) ou Douleur (RGB)
-                if (date == LocalDate.now()) {
-                    container.dotView.isVisible = true
-                    container.dotView.backgroundTintList = ColorStateList.valueOf(Color.CYAN)
-                } else if (painLevel != null) {
-                    container.dotView.isVisible = true
-                    val color = when {
-                        painLevel >= 7 -> Color.RED
-                        painLevel >= 4 -> Color.YELLOW
-                        else -> Color.GREEN
+                // Logique d'affichage de la pastille (Point)
+                when {
+                    date == LocalDate.now() -> {
+                        container.dotView.isVisible = true
+                        container.dotView.backgroundTintList = ColorStateList.valueOf(Color.CYAN)
                     }
-                    container.dotView.backgroundTintList = ColorStateList.valueOf(color)
-                } else {
-                    container.dotView.isVisible = false
+                    painLevel != null -> {
+                        container.dotView.isVisible = true
+                        val color = when {
+                            painLevel >= 7 -> Color.RED
+                            painLevel >= 4 -> Color.YELLOW
+                            else -> Color.GREEN
+                        }
+                        container.dotView.backgroundTintList = ColorStateList.valueOf(color)
+                    }
+                    else -> container.dotView.isVisible = false
                 }
 
-                // Style de sélection
+                // Gestion du style visuel (Mois courant vs Hors mois / Sélection)
                 if (data.position == DayPosition.MonthDate) {
                     container.view.alpha = 1f
                     val isSelected = date == viewModel.date.value
@@ -151,21 +175,14 @@ class CalendarActivity : AppCompatActivity() {
 
         calendarView.setup(YearMonth.now().minusMonths(12), YearMonth.now().plusMonths(12), DayOfWeek.MONDAY)
         calendarView.scrollToMonth(YearMonth.now())
-        calendarView.monthScrollListener = {
-            Log.v(tag, "Mois affiché : ${it.yearMonth}")
-            updateMonthTitle(it.yearMonth)
-        }
-
-        prevMonth.setOnClickListener { calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.minusMonths(1)) }
-        nextMonth.setOnClickListener { calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.plusMonths(1)) }
+        calendarView.monthScrollListener = { updateMonthTitle(it.yearMonth) }
     }
 
-    private fun onDateSelected(date: LocalDate) {
-        val userId = userStore.getUser()?.id ?: return
-        Log.i(tag, "Clic utilisateur sur la date : $date")
-        viewModel.loadData(userId, date)
-    }
-
+    /**
+     * Gère la transition entre l'affichage "Vide" et l'affichage "Détail" du jour.
+     * Utilise un [ViewSwitcher] pour basculer entre les deux états.
+     * @param entry L'entrée complète récupérée en base, ou null si aucune donnée n'existe.
+     */
     private fun updateUiState(entry: DailyEntryFull?) {
         val switcher = dailyViewSection.findViewById<ViewSwitcher>(R.id.dailyViewSwitcher)
 
@@ -174,12 +191,12 @@ class CalendarActivity : AppCompatActivity() {
             CalendarUtils.updateDailyView(switcher.currentView, entry)
 
             switcher.currentView.findViewById<MaterialButton>(R.id.btnEdit)?.setOnClickListener {
-                Log.d(tag, "Navigation : Modifier l'entrée ID ${entry.dailyEntry.id}")
-                startActivity(Intent(this, EntryAddActivity::class.java).apply {
+                val intent = Intent(this, EntryAddActivity::class.java).apply {
                     putExtra("ID", entry.dailyEntry.id)
                     putExtra("isEditMode", true)
                     putExtra("selectedDate", entry.dailyEntry.date.toString())
-                })
+                }
+                startActivity(intent)
             }
 
             switcher.currentView.findViewById<MaterialButton>(R.id.btnDelete)?.setOnClickListener {
@@ -192,7 +209,6 @@ class CalendarActivity : AppCompatActivity() {
             dailyViewSection.findViewById<TextView>(R.id.tvEmptyDate)?.text = "Pas de suivi le ${date.format(formatter)}"
 
             dailyViewSection.findViewById<Button>(R.id.btnCreateEntry)?.setOnClickListener {
-                Log.d(tag, "Navigation : Créer une entrée pour le $date")
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {
                     putExtra("selectedDate", date.toString())
                     putExtra("isEditMode", false)
@@ -201,29 +217,33 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Affiche une boîte de dialogue pour confirmer la suppression d'un suivi.
+     */
     private fun showDeleteConfirmation() {
         val currentEntry = viewModel.entryResult.value ?: return
         AlertDialog.Builder(this)
             .setTitle("Supprimer le suivi ?")
             .setMessage("Cette action est irréversible.")
             .setPositiveButton("Supprimer") { _, _ ->
-                Log.w(tag, "Action : Suppression de l'entrée du ${currentEntry.dailyEntry.date}")
                 viewModel.deleteData(currentEntry)
             }
-            .setNegativeButton("Annuler", null)
+            .setNegativeButton("Anuler", null)
             .show()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(tag, "onResume : Rafraîchissement des données du calendrier")
-        val userId = userStore.getUser()?.id
-        if (userId != null) {
-            viewModel.initData(userId)
-            viewModel.loadData(userId, viewModel.date.value)
+        // Rafraîchissement automatique au retour d'EntryAddActivity
+        userStore.getUser()?.id?.let {
+            viewModel.initData(it)
+            viewModel.loadData(it, viewModel.date.value)
         }
     }
 
+    /**
+     * Génère dynamiquement les titres des jours de la semaine (LUN, MAR, etc.).
+     */
     private fun setupDaysOfWeek() {
         val titlesContainer = findViewById<LinearLayout>(R.id.titlesContainer)
         if (titlesContainer.isNotEmpty()) titlesContainer.removeAllViews()
@@ -241,16 +261,25 @@ class CalendarActivity : AppCompatActivity() {
         monthText.text = "${yearMonth.month.getDisplayName(TextStyle.FULL, Locale.FRANCE).replaceFirstChar { it.uppercase() }} ${yearMonth.year}"
     }
 
+    /**
+     * Conteneur de vue pour une cellule de jour du calendrier.
+     * Gère le clic sur une date pour charger les détails correspondants.
+     */
     inner class DayViewContainer(view: View) : ViewContainer(view) {
         val textView: TextView = view.findViewById(R.id.calendarDayText)
         val dotView: View = view.findViewById(R.id.priorityDot)
         lateinit var day: CalendarDay
+
         init {
             view.setOnClickListener {
                 if (day.position != DayPosition.MonthDate) {
                     calendarView.scrollToMonth(YearMonth.from(day.date))
                 }
-                if (viewModel.date.value != day.date) onDateSelected(day.date)
+                if (viewModel.date.value != day.date) {
+                    userStore.getUser()?.id?.let { userId ->
+                        viewModel.loadData(userId, day.date)
+                    }
+                }
             }
         }
     }

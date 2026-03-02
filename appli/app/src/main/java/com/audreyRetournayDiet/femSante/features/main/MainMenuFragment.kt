@@ -2,7 +2,6 @@ package com.audreyRetournayDiet.femSante.features.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,21 @@ import com.audreyRetournayDiet.femSante.features.calendar.view.CalendarActivity
 import com.audreyRetournayDiet.femSante.features.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.features.tete.BienTeteActivity
 import com.audreyRetournayDiet.femSante.features.ToolboxActivity
+import timber.log.Timber
 
+/**
+ * Fragment faisant office de menu principal (Hub) de l'application.
+ * * Ce composant présente les différentes catégories de contenu à l'utilisatrice :
+ * - **Alimentation** : Conseils et suivis diététiques.
+ * - **Bien-être Mental** : Exercices et ressources "Bien dans sa tête".
+ * - **Bien-être Physique** : Activités et conseils "Bien dans son corps".
+ * - **Boîte à outils** : Calculateurs et ressources pratiques.
+ * - **Calendrier** : Suivi des cycles et des rendez-vous.
+ *
+ * Il assure la navigation vers les activités spécialisées de chaque module.
+ */
 class MainMenuFragment : Fragment() {
 
-    private val tag = "FRAG_MAIN_MENU"
     private lateinit var tete: Button
     private lateinit var corps: Button
     private lateinit var outils: Button
@@ -29,7 +39,7 @@ class MainMenuFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(tag, "onCreateView: Affichage du menu principal")
+        Timber.d("onCreateView: Affichage du menu principal")
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         initViews(view)
@@ -38,6 +48,9 @@ class MainMenuFragment : Fragment() {
         return view
     }
 
+    /**
+     * Initialise les références des boutons de navigation à partir du layout.
+     */
     private fun initViews(view: View) {
         alim = view.findViewById(R.id.buttonAlim)
         tete = view.findViewById(R.id.buttonTete)
@@ -46,34 +59,38 @@ class MainMenuFragment : Fragment() {
         calendarActivity = view.findViewById(R.id.buttonCalendar)
     }
 
+    /**
+     * Configure les écouteurs de clics pour chaque section du menu.
+     * Chaque bouton lance l'activité correspondante au module choisi.
+     */
     private fun setupListeners() {
-        // Alimentation
+        // --- Section Alimentation ---
         alim.setOnClickListener {
-            Log.i(tag, "Navigation: Vers Alimentation (AlimActivity)")
+            Timber.i("Navigation: Vers Alimentation (AlimActivity)")
             startActivity(Intent(activity, AlimActivity::class.java))
         }
 
-        // Bien dans sa tête
+        // --- Section Bien-être Mental ---
         tete.setOnClickListener {
-            Log.i(tag, "Navigation: Vers Bien-être Mental (BienTeteActivity)")
+            Timber.i("Navigation: Vers Bien-être Mental (BienTeteActivity)")
             startActivity(Intent(activity, BienTeteActivity::class.java))
         }
 
-        // Bien dans son corps
+        // --- Section Bien-être Physique ---
         corps.setOnClickListener {
-            Log.i(tag, "Navigation: Vers Bien-être Physique (BienCorpsActivity)")
+            Timber.i("Navigation: Vers Bien-être Physique (BienCorpsActivity)")
             startActivity(Intent(activity, BienCorpsActivity::class.java))
         }
 
-        // Boîte à outils
+        // --- Section Boîte à Outils ---
         outils.setOnClickListener {
-            Log.i(tag, "Navigation: Vers Boîte à Outils (ToolboxActivity)")
+            Timber.i("Navigation: Vers Boîte à Outils (ToolboxActivity)")
             startActivity(Intent(activity, ToolboxActivity::class.java))
         }
 
-        // Calendrier / Suivi
+        // --- Section Calendrier / Suivi ---
         calendarActivity.setOnClickListener {
-            Log.i(tag, "Navigation: Vers Calendrier (CalendarActivity)")
+            Timber.i("Navigation: Vers Calendrier (CalendarActivity)")
             startActivity(Intent(activity, CalendarActivity::class.java))
         }
     }

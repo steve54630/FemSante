@@ -2,7 +2,6 @@ package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,59 +14,76 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import timber.log.Timber
 
+/**
+ * Activité d'entrée principale de l'application (Launcher).
+ * * ### Responsabilités :
+ * 1. **Auto-Login** : Vérifie si une session utilisateur existe via [UserStore].
+ * 2. **Navigation** : Gère le basculement entre [LoginFragment], [CreateFragment] et [DocFragment].
+ * 3. **In-App Updates** : Force la mise à jour immédiate si une version critique est disponible sur le Play Store.
+ */
 class LoginActivity : AppCompatActivity() {
 
-    private val tag = "ACT_LOGIN"
     private lateinit var menu: BottomNavigationView
-    private val login = LoginFragment()
-    private val doc = DocFragment()
-    private val register = CreateFragment()
+    private val loginFragment = LoginFragment()
+    private val docFragment = DocFragment()
+    private val registerFragment = CreateFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(tag, "onCreate : Démarrage de l'application")
+        Timber.d("onCreate : Démarrage de l'application")
 
-        // 1. Initialiser le store et vérifier la session
+        // --- 1. GESTION DE LA SESSION ---
         val userStore = UserStore(this)
         val savedUser = userStore.getUser()
 
         if (savedUser != null) {
-            Log.i(tag, "Session détectée : Redirection auto vers Home pour ${savedUser.email}")
+            Timber.i("Session détectée : Redirection auto vers Home pour ${savedUser.email}")
             val intent = Intent(this, HomeActivity::class.java).apply {
                 putExtra("SHOW_WELCOME_MESSAGE", true)
                 putExtra("USER_EMAIL", savedUser.email)
             }
             startActivity(intent)
-            finish()
+            finish() // On ferme LoginActivity pour ne pas revenir en arrière
             return
         }
 
-        Log.d(tag, "Aucune session active : Affichage de l'interface de connexion")
-
-        // Vérification des mises à jour Play Store
+        // --- 2. VÉRIFICATION DES MISES À JOUR ---
         checkInAppUpdate()
 
+        // --- 3. INITIALISATION DE L'INTERFACE ---
         setContentView(R.layout.activity_login)
-
         menu = findViewById(R.id.bottom_navigation_menu)
 
-        // Fragment par défaut
-        supportFragmentManager.beginTransaction().replace(R.id.container, login).commit()
+        // Affichage du fragment par défaut au lancement
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, loginFragment)
+                .commit()
+        }
 
+        setupNavigation()
+    }
+
+    /**
+     * Configure la navigation via la BottomNavigationView.
+     * Remplace dynamiquement le fragment affiché dans le conteneur principal.
+     */
+    private fun setupNavigation() {
         menu.setOnItemSelectedListener { item ->
             val fragment = when (item.itemId) {
                 R.id.login -> {
-                    Log.v(tag, "Navigation : Onglet Connexion")
-                    login
+                    Timber.v("Navigation : Onglet Connexion")
+                    loginFragment
                 }
                 R.id.pdf -> {
-                    Log.v(tag, "Navigation : Onglet Documents")
-                    doc
+                    Timber.v("Navigation : Onglet Documents")
+                    docFragment
                 }
                 R.id.register -> {
-                    Log.v(tag, "Navigation : Onglet Inscription")
-                    register
+                    Timber.v("Navigation : Onglet Inscription")
+                    registerFragment
                 }
                 else -> null
             }
@@ -81,8 +97,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Utilise l'API Google Play Core pour vérifier si une mise à jour est disponible.
+     * En cas de mise à jour "IMMEDIATE", l'utilisateur ne peut pas utiliser l'app sans l'installer.
+     */
     private fun checkInAppUpdate() {
-        Log.d(tag, "Vérification de la disponibilité d'une mise à jour...")
+        Timber.d("Vérification de la disponibilité d'une mise à jour...")
         val appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
@@ -90,23 +110,25 @@ class LoginActivity : AppCompatActivity() {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                 && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
-                Log.i(tag, "Mise à jour immédiate disponible")
+                Timber.i("Mise à jour immédiate disponible")
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo,
+                        // Nouveau contrat ActivityResult pour remplacer startActivityForResult (obsolète)
                         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
                             if (result.resultCode != RESULT_OK) {
-                                Log.e(tag, "Échec ou annulation de la mise à jour obligatoire")
+                                Timber.e("Échec ou annulation de la mise à jour obligatoire")
                                 Toast.makeText(applicationContext, "Mise à jour nécessaire pour continuer", Toast.LENGTH_SHORT).show()
+                                // Optionnel : finish() si la mise à jour est réellement bloquante
                             }
                         },
                         AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
                     )
                 } catch (e: Exception) {
-                    Log.e(tag, "Erreur lors du lancement du flux de mise à jour", e)
+                    Timber.e(e, "Erreur lors du lancement du flux de mise à jour")
                 }
             } else {
-                Log.d(tag, "L'application est à jour")
+                Timber.d("L'application est à jour")
             }
         }
     }

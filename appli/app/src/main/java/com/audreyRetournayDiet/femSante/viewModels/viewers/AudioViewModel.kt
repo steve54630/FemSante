@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.viewModels.viewers
 
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,34 +11,47 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * ViewModel pilotant le lecteur audio pour les exercices de relaxation/méditation.
+ * * ### Rôle :
+ * 1. Maintenir la liste des exercices disponibles pour une catégorie donnée.
+ * 2. Récupérer dynamiquement l'URL de streaming depuis le serveur.
+ * 3. Gérer les états visuels (ProgressBar, Lecteur, Messages d'erreur).
+ */
 class AudioViewModel(
     private val api: VideoManager,
     initialTitle: String,
     exerciseMap: ArrayList<*>
 ) : ViewModel() {
 
-    private val tag = "VM_AUDIO_PLAYER"
-
+    // État unique de l'interface (Source de vérité)
     private val internalUiState = MutableStateFlow(
         AudioUiState(mainTitle = initialTitle, exercises = exerciseMap)
     )
     val uiState: StateFlow<AudioUiState> = internalUiState.asStateFlow()
 
+    /**
+     * Appelé quand l'utilisatrice clique sur un exercice de la liste.
+     * Déclenche l'appel réseau pour obtenir le lien de streaming.
+     */
     fun onExerciseSelected(exerciseName: String) {
-        Log.d(tag, "Exercice sélectionné : $exerciseName. Requête URL en cours...")
+        Timber.d("Exercice sélectionné : $exerciseName. Requête URL en cours...")
 
         viewModelScope.launch {
-            // 1. On affiche le chargement
+            // 1. Activation de l'indicateur de chargement
             internalUiState.value = internalUiState.value.copy(isLoading = true)
 
+            // 2. Appel au VideoManager (qui gère aussi les flux audio)
             api.getVideoUrl(exerciseName) { result ->
                 when (result) {
                     is ApiResult.Success -> {
                         val url = result.data?.optString("url")
 
                         if (!url.isNullOrBlank()) {
-                            Log.i(tag, "URL récupérée avec succès pour '$exerciseName'. Préparation du lecteur.")
+                            Timber.i("Lien de lecture obtenu pour '$exerciseName'.")
+                            // 3. Mise à jour de l'état avec l'URI de lecture
                             internalUiState.value = internalUiState.value.copy(
                                 currentAudioUri = url.toUri(),
                                 isPlayerVisible = true,
@@ -47,7 +59,7 @@ class AudioViewModel(
                                 errorMessage = null
                             )
                         } else {
-                            Log.e(tag, "Succès API mais URL vide ou manquante dans la réponse JSON")
+                            Timber.e("Erreur : Réponse API vide pour $exerciseName")
                             internalUiState.value = internalUiState.value.copy(
                                 isLoading = false,
                                 errorMessage = "Lien de lecture invalide"
@@ -55,7 +67,7 @@ class AudioViewModel(
                         }
                     }
                     is ApiResult.Failure -> {
-                        Log.e(tag, "Échec récupération URL pour '$exerciseName' : ${result.message}")
+                        Timber.e("Échec API : ${result.message}")
                         internalUiState.value = internalUiState.value.copy(
                             isLoading = false,
                             errorMessage = result.message
@@ -66,14 +78,20 @@ class AudioViewModel(
         }
     }
 
+    /**
+     * Réinitialise le lecteur et cache l'interface de lecture.
+     */
     fun onNothingSelected() {
-        Log.d(tag, "Réinitialisation du lecteur (fermeture/arrêt)")
+        Timber.d("Réinitialisation du lecteur (fermeture/arrêt)")
         internalUiState.value = internalUiState.value.copy(
             isPlayerVisible = false,
             currentAudioUri = null
         )
     }
 
+    /**
+     * Factory pour instancier le ViewModel avec ses paramètres dynamiques.
+     */
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val api: VideoManager,
@@ -81,7 +99,7 @@ class AudioViewModel(
         private val map: ArrayList<*>
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            Log.d("VM_FACTORY", "Création AudioViewModel - Catégorie: $title")
+            Timber.d("Création AudioViewModel - Catégorie: $title")
             return AudioViewModel(api, title, map) as T
         }
     }

@@ -2,7 +2,6 @@ package com.audreyRetournayDiet.femSante.features.alim
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,14 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
 import com.audreyRetournayDiet.femSante.viewModels.alim.AlimViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * Fragment gérant la sélection des catégories de recettes (Petit-déjeuner, Entrées, etc.).
+ * * Ce fragment délègue la logique de chargement des données au [AlimViewModel]
+ * et observe les événements de navigation pour lancer la [RecetteActivity].
+ */
 class AlimFragment : Fragment() {
-
-    private val tag = "FRAG_ALIM"
 
     private val viewModel: AlimViewModel by viewModels {
         AlimViewModel.AlimViewModelFactory(RecipeRepository())
@@ -29,14 +32,13 @@ class AlimFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        Log.d(tag, "onCreateView : Création de la vue du fragment")
         return inflater.inflate(R.layout.fragment_alim, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(tag, "onViewCreated : Initialisation des composants")
 
+        // Initialisation des catégories de recettes
         setupButton(view, R.id.buttonBreakfirst, "breakfast", "Petit-déjeuner")
         setupButton(view, R.id.buttonEntry, "entries", "Entrées")
         setupButton(view, R.id.buttonPlat, "main_courses", "Plats")
@@ -45,22 +47,32 @@ class AlimFragment : Fragment() {
         observeViewModel()
     }
 
+    /**
+     * Configure un bouton de catégorie et lie son clic au ViewModel.
+     * * @param view Vue parente contenant le bouton.
+     * @param buttonId ID de la ressource du bouton.
+     * @param folder Nom du dossier technique contenant les recettes.
+     * @param title Titre affiché à l'utilisateur dans l'écran suivant.
+     */
     private fun setupButton(view: View, buttonId: Int, folder: String, title: String) {
         view.findViewById<Button>(buttonId).setOnClickListener {
-            Log.d(tag, "Bouton cliqué : $title (Dossier: $folder)")
+            Timber.d("Sélection catégorie : $title")
             viewModel.onCategorySelected(folder, title, requireContext())
         }
     }
 
+    /**
+     * Observe les flux (Flows) du ViewModel pour la navigation et la gestion des erreurs.
+     * Utilise [repeatOnLifecycle] pour garantir une collecte sécurisée durant le cycle de vie.
+     */
     private fun observeViewModel() {
-        // Utilisation de repeatOnLifecycle pour une collecte sécurisée des Flow
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                // Collecte de la navigation
+                // Collecte des événements de navigation vers le détail des recettes
                 launch {
                     viewModel.navigationEvent.collect { event ->
-                        Log.i(tag, "Navigation reçue vers RecetteActivity : ${event.title}")
+                        Timber.i("Navigation : Ouverture de la catégorie ${event.title}")
                         val intent = Intent(activity, RecetteActivity::class.java).apply {
                             putExtra("Title", event.title)
                             putExtra("map", event.recipeMap)
@@ -70,10 +82,10 @@ class AlimFragment : Fragment() {
                     }
                 }
 
-                // Collecte des erreurs
+                // Collecte et affichage des messages d'erreur via Toast
                 launch {
                     viewModel.errorEvent.collect { errorMessage ->
-                        Log.e(tag, "Erreur reçue du ViewModel : $errorMessage")
+                        Timber.e("Erreur ViewModel : $errorMessage")
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
