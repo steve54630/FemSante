@@ -1,7 +1,9 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,23 +18,26 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
-import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
 
 @Suppress("UNCHECKED_CAST")
 class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
 
+    private val tag = "FRAG_PSYCH"
     private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(tag, "onViewCreated : Initialisation de l'état psychologique")
 
         val chipGroupQuality = view.findViewById<ChipGroup>(R.id.chipGroupDayQuality)
         val chipGroupCauses = view.findViewById<ChipGroup>(R.id.chipGroupDifficultyCauses)
-        val layoutAutres = view.findViewById<View>(R.id.layoutAutres) // Le TextInputLayout
+        val layoutAutres = view.findViewById<View>(R.id.layoutAutres)
         val etAutres = view.findViewById<TextInputEditText>(R.id.etAutresPsychological)
 
-        // 1. Initialisation
+        // 1. Initialisation dynamique des Chips
         if (chipGroupQuality.isEmpty()) {
+            Log.d(tag, "Génération des Chips pour Qualité et Causes")
             setupChips(chipGroupQuality, DayQuality.entries)
             setupChips(chipGroupCauses, DifficultyCause.entries)
         }
@@ -41,6 +46,8 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.psychologicalState.collect { state ->
+                    Log.v(tag, "Sync UI : Qualité=${state.dayQuality}, Nb Causes=${state.difficultyCauses.size}")
+
                     // Qualité (Single Selection)
                     selectChipByTag(chipGroupQuality, state.dayQuality)
 
@@ -49,7 +56,10 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
 
                     // Visibilité du champ "Autre"
                     val hasOther = state.difficultyCauses.contains(DifficultyCause.AUTRE)
-                    layoutAutres.visibility = if (hasOther) View.VISIBLE else View.GONE
+                    if (layoutAutres.isVisible != hasOther) {
+                        Log.d(tag, "Visibilité 'Autre' modifiée : $hasOther")
+                        layoutAutres.visibility = if (hasOther) View.VISIBLE else View.GONE
+                    }
 
                     // Texte "Autres"
                     if (etAutres.text?.toString() != state.autres) {
@@ -64,54 +74,57 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         fun pushUpdate() {
             val quality = getSelectedTag<DayQuality>(chipGroupQuality) ?: DayQuality.MOYENNE
             val causes = getSelectedTags<DifficultyCause>(chipGroupCauses)
+            val notes = etAutres.text?.toString()
 
-            // Logique métier : si "AUTRE" n'est pas sélectionné, on envoie null pour le texte
-            val notes = if (causes.contains(DifficultyCause.AUTRE)) {
-                etAutres.text?.toString()
-            } else {
-                null
-            }
-
+            Log.d(tag, "Action : pushUpdate -> Qualité: $quality, Causes: $causes")
             viewModel.updatePsychologicalState(quality, causes, notes)
         }
 
-        chipGroupQuality.setOnCheckedStateChangeListener { _, _ -> pushUpdate() }
+        chipGroupQuality.setOnCheckedStateChangeListener { _, _ ->
+            Log.v(tag, "UI Change : Qualité modifiée")
+            pushUpdate()
+        }
 
         chipGroupCauses.setOnCheckedStateChangeListener { _, _ ->
+            Log.v(tag, "UI Change : Sélection des causes modifiée")
             pushUpdate()
         }
 
         etAutres.addTextChangedListener {
-            if (etAutres.hasFocus()) pushUpdate()
+            if (etAutres.hasFocus()) {
+                Log.v(tag, "UI Change : Saisie texte 'Autre'")
+                pushUpdate()
+            }
         }
     }
 
-    // --- Helpers Utilitaires adaptés ---
+    // --- Helpers Utilitaires ---
 
     private fun <T : Enum<T>> setupChips(group: ChipGroup, entries: List<T>) {
         entries.forEach { entry ->
             val chip = Chip(requireContext()).apply {
                 text = entry.name
                 isCheckable = true
-                tag = entry
+                this.tag = entry // On stocke l'objet Enum dans le tag de la vue
                 id = View.generateViewId()
             }
             group.addView(chip)
         }
     }
 
-    // Pour la Single Selection (Qualité)
     private fun selectChipByTag(group: ChipGroup, tagToSelect: Any?) {
         for (i in 0 until group.childCount) {
             val chip = group.getChildAt(i) as Chip
             if (chip.tag == tagToSelect) {
-                if (!chip.isChecked) chip.isChecked = true
+                if (!chip.isChecked) {
+                    Log.v(tag, "Sync UI : Sélection Qualité -> $tagToSelect")
+                    chip.isChecked = true
+                }
                 return
             }
         }
     }
 
-    // Pour la Multi Selection (Causes)
     private fun selectChipsByTags(group: ChipGroup, tagsToSelect: List<DifficultyCause>) {
         for (i in 0 until group.childCount) {
             val chip = group.getChildAt(i) as Chip

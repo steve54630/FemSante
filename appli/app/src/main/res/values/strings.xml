@@ -166,5 +166,6 @@
     <string name="psychological">Psychologique</string>
     <string name="symptom">Symptômes</string>
     <string name="context">Contexte</string>
+    <string name="logout">Se déconnecter</string>
 
 </resources>

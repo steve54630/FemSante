@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
@@ -42,7 +43,7 @@ import androidx.core.view.isNotEmpty
 @SuppressLint("SetTextI18n")
 class CalendarActivity : AppCompatActivity() {
 
-    private lateinit var oldSelectedDate: LocalDate
+    private val tag = "ACT_CALENDAR"
     private lateinit var calendarView: CalendarView
     private lateinit var monthText: TextView
     private lateinit var prevMonth: ImageButton
@@ -60,8 +61,8 @@ class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_calendar)
+        Log.d(tag, "onCreate : Initialisation du calendrier")
 
-        // Initialisation des vues
         calendarView = findViewById(R.id.calendarView)
         monthText = findViewById(R.id.monthText)
         prevMonth = findViewById(R.id.btnPrevMonth)
@@ -69,29 +70,45 @@ class CalendarActivity : AppCompatActivity() {
         dailyViewSection = findViewById(R.id.dailyView)
         bottomSheetBehavior = BottomSheetBehavior.from(dailyViewSection)
 
-        oldSelectedDate = LocalDate.now()
-
         userStore = UserStore(this)
-        val userId = userStore.getUser()?.id ?: return
+        val userId = userStore.getUser()?.id
+
+        if (userId == null) {
+            Log.e(tag, "Utilisateur non connecté, impossible de charger le calendrier")
+            finish()
+            return
+        }
 
         // Init Data
         viewModel.initData(userId)
-
         updateMonthTitle(YearMonth.now())
         setupDaysOfWeek()
 
         // Observations Flow
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Changement de date sélectionnée
                 launch {
-                    viewModel.date.collect {
-                        calendarView.notifyCalendarChanged(); updateUiState(
-                        viewModel.entryResult.value
-                    )
+                    viewModel.date.collect { date ->
+                        Log.v(tag, "Date sélectionnée modifiée : $date")
+                        calendarView.notifyCalendarChanged()
+                        updateUiState(viewModel.entryResult.value)
                     }
                 }
-                launch { viewModel.entryResult.collect { updateUiState(it) } }
-                launch { viewModel.dailyStatus.collect { calendarView.notifyCalendarChanged() } }
+                // Mise à jour du contenu du jour
+                launch {
+                    viewModel.entryResult.collect { entry ->
+                        Log.d(tag, "Observation : Détail du jour chargé (${if(entry != null) "Données" else "Vide"})")
+                        updateUiState(entry)
+                    }
+                }
+                // Mise à jour des pastilles (douleur)
+                launch {
+                    viewModel.dailyStatus.collect { status ->
+                        Log.i(tag, "Mise à jour des pastilles : ${status.size} jours suivis trouvés")
+                        calendarView.notifyCalendarChanged()
+                    }
+                }
             }
         }
 
@@ -125,36 +142,27 @@ class CalendarActivity : AppCompatActivity() {
                     container.view.alpha = 1f
                     val isSelected = date == viewModel.date.value
                     container.textView.setTextColor(if (isSelected) Color.RED else Color.BLACK)
-                    container.textView.setTypeface(
-                        null,
-                        if (isSelected) Typeface.BOLD else Typeface.NORMAL
-                    )
+                    container.textView.setTypeface(null, if (isSelected) Typeface.BOLD else Typeface.NORMAL)
                 } else {
                     container.view.alpha = 0.3f
                 }
             }
         }
 
-        calendarView.setup(
-            YearMonth.now().minusMonths(12),
-            YearMonth.now().plusMonths(12),
-            DayOfWeek.MONDAY
-        )
+        calendarView.setup(YearMonth.now().minusMonths(12), YearMonth.now().plusMonths(12), DayOfWeek.MONDAY)
         calendarView.scrollToMonth(YearMonth.now())
-        calendarView.monthScrollListener = { updateMonthTitle(it.yearMonth) }
+        calendarView.monthScrollListener = {
+            Log.v(tag, "Mois affiché : ${it.yearMonth}")
+            updateMonthTitle(it.yearMonth)
+        }
 
-        prevMonth.setOnClickListener {
-            calendarView.findFirstVisibleMonth()
-                ?.let { calendarView.scrollToMonth(it.yearMonth.minusMonths(1)) }
-        }
-        nextMonth.setOnClickListener {
-            calendarView.findFirstVisibleMonth()
-                ?.let { calendarView.scrollToMonth(it.yearMonth.plusMonths(1)) }
-        }
+        prevMonth.setOnClickListener { calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.minusMonths(1)) }
+        nextMonth.setOnClickListener { calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.plusMonths(1)) }
     }
 
     private fun onDateSelected(date: LocalDate) {
         val userId = userStore.getUser()?.id ?: return
+        Log.i(tag, "Clic utilisateur sur la date : $date")
         viewModel.loadData(userId, date)
     }
 
@@ -162,36 +170,32 @@ class CalendarActivity : AppCompatActivity() {
         val switcher = dailyViewSection.findViewById<ViewSwitcher>(R.id.dailyViewSwitcher)
 
         if (entry != null) {
-            // MODE RÉSUMÉ (Affichage des données)
-            if (switcher.displayedChild != 1) {
-                switcher.displayedChild = 1
-            }
+            if (switcher.displayedChild != 1) switcher.displayedChild = 1
             CalendarUtils.updateDailyView(switcher.currentView, entry)
 
-            // Bouton Modifier
             switcher.currentView.findViewById<MaterialButton>(R.id.btnEdit)?.setOnClickListener {
+                Log.d(tag, "Navigation : Modifier l'entrée ID ${entry.dailyEntry.id}")
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {
-                    putExtra("ID", viewModel.entryResult.value!!.dailyEntry.id)
+                    putExtra("ID", entry.dailyEntry.id)
                     putExtra("isEditMode", true)
+                    putExtra("selectedDate", entry.dailyEntry.date.toString())
                 })
             }
 
-            // Bouton Supprimer
             switcher.currentView.findViewById<MaterialButton>(R.id.btnDelete)?.setOnClickListener {
                 showDeleteConfirmation()
             }
-
         } else {
-            // MODE VIDE (Création)
             switcher.displayedChild = 0
             val date = viewModel.date.value
             val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE)
-            dailyViewSection.findViewById<TextView>(R.id.tvEmptyDate)?.text =
-                "Pas de suivi le ${date.format(formatter)}"
+            dailyViewSection.findViewById<TextView>(R.id.tvEmptyDate)?.text = "Pas de suivi le ${date.format(formatter)}"
 
             dailyViewSection.findViewById<Button>(R.id.btnCreateEntry)?.setOnClickListener {
+                Log.d(tag, "Navigation : Créer une entrée pour le $date")
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {
                     putExtra("selectedDate", date.toString())
+                    putExtra("isEditMode", false)
                 })
             }
         }
@@ -199,12 +203,11 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun showDeleteConfirmation() {
         val currentEntry = viewModel.entryResult.value ?: return
-
         AlertDialog.Builder(this)
             .setTitle("Supprimer le suivi ?")
             .setMessage("Cette action est irréversible.")
             .setPositiveButton("Supprimer") { _, _ ->
-                // On envoie l'objet complet au ViewModel pour qu'il récupère l'ID
+                Log.w(tag, "Action : Suppression de l'entrée du ${currentEntry.dailyEntry.date}")
                 viewModel.deleteData(currentEntry)
             }
             .setNegativeButton("Annuler", null)
@@ -213,23 +216,20 @@ class CalendarActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Rafraîchissement forcé au retour d'une activité ou switch d'app
+        Log.d(tag, "onResume : Rafraîchissement des données du calendrier")
         val userId = userStore.getUser()?.id
         if (userId != null) {
-            viewModel.initData(userId) // Recharge les pastilles
-            viewModel.loadData(userId, viewModel.date.value) // Recharge le détail
+            viewModel.initData(userId)
+            viewModel.loadData(userId, viewModel.date.value)
         }
     }
-
-    // --- Helpers UI ---
 
     private fun setupDaysOfWeek() {
         val titlesContainer = findViewById<LinearLayout>(R.id.titlesContainer)
         if (titlesContainer.isNotEmpty()) titlesContainer.removeAllViews()
         daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY).forEach { dayOfWeek ->
             val textView = TextView(this).apply {
-                layoutParams =
-                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.FRANCE).uppercase()
             }
@@ -238,17 +238,13 @@ class CalendarActivity : AppCompatActivity() {
     }
 
     private fun updateMonthTitle(yearMonth: YearMonth) {
-        monthText.text = "${
-            yearMonth.month.getDisplayName(TextStyle.FULL, Locale.FRANCE)
-                .replaceFirstChar { it.uppercase() }
-        } ${yearMonth.year}"
+        monthText.text = "${yearMonth.month.getDisplayName(TextStyle.FULL, Locale.FRANCE).replaceFirstChar { it.uppercase() }} ${yearMonth.year}"
     }
 
     inner class DayViewContainer(view: View) : ViewContainer(view) {
         val textView: TextView = view.findViewById(R.id.calendarDayText)
         val dotView: View = view.findViewById(R.id.priorityDot)
         lateinit var day: CalendarDay
-
         init {
             view.setOnClickListener {
                 if (day.position != DayPosition.MonthDate) {

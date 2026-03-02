@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.type.PainZone
 import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
+import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
@@ -18,10 +20,12 @@ import kotlinx.coroutines.launch
 
 class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
 
+    private val tag = "FRAG_SYMPTOMS"
     private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(tag, "onViewCreated : Initialisation des symptômes localisés")
 
         val chipGroupPainZones = view.findViewById<ChipGroup>(R.id.chipGroupPainZones)
         val switchNausea = view.findViewById<MaterialSwitch>(R.id.switchNausea)
@@ -31,8 +35,10 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.symptomState.collect { state ->
+                    Log.v(tag, "Sync UI : Nausée=${state.hasNausea}, Zones=${state.localizedPains}")
+
                     // Synchronisation des Chips (Multiple Selection)
-                    // On décoche tout avant de recocher les zones présentes dans l'état
+                    // On décoche tout avant de recocher pour garantir la cohérence
                     chipGroupPainZones.clearCheck()
                     state.localizedPains.forEach { zone ->
                         val chipId = when (zone) {
@@ -40,9 +46,14 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
                             PainZone.LOMBAIRES -> R.id.chipLowerBack
                             PainZone.SEINS -> R.id.chipBreasts
                             PainZone.TETE -> R.id.chipHead
-                            PainZone.AUTRE -> -1 // Gérer si nécessaire
+                            PainZone.AUTRE -> -1
                         }
-                        if (chipId != -1) chipGroupPainZones.check(chipId)
+                        if (chipId != -1) {
+                            val chip = view.findViewById<Chip>(chipId)
+                            if (chip != null && !chip.isChecked) {
+                                chip.isChecked = true
+                            }
+                        }
                     }
 
                     // Synchronisation Switch
@@ -67,9 +78,14 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
                     R.id.chipLowerBack -> PainZone.LOMBAIRES
                     R.id.chipBreasts -> PainZone.SEINS
                     R.id.chipHead -> PainZone.TETE
-                    else -> null
+                    else -> {
+                        Log.w(tag, "Action : Chip ID inconnu détecté ($id)")
+                        null
+                    }
                 }
             }
+
+            Log.d(tag, "Action : Mise à jour Symptômes -> Zones: $selectedEnums, Nausée: ${switchNausea.isChecked}")
 
             viewModel.updateSymptomState(
                 pains = selectedEnums,
@@ -79,16 +95,22 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
         }
 
         chipGroupPainZones.setOnCheckedStateChangeListener { _, _ ->
-            // On vérifie le focus ou l'action pour éviter les boucles infinies
+            Log.v(tag, "UI Change : Sélection des zones de douleur modifiée")
             syncWithViewModel()
         }
 
-        switchNausea.setOnCheckedChangeListener { buttonView, _ ->
-            if (buttonView.isPressed) syncWithViewModel()
+        switchNausea.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                Log.v(tag, "UI Change : Switch nausée basculé à $isChecked")
+                syncWithViewModel()
+            }
         }
 
         etOthers.addTextChangedListener {
-            if (etOthers.hasFocus()) syncWithViewModel()
+            if (etOthers.hasFocus()) {
+                Log.v(tag, "UI Change : Saisie autres symptômes")
+                syncWithViewModel()
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -18,13 +19,16 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
+import androidx.core.view.isEmpty
 
 class ContextFragment : Fragment(R.layout.fragment_context) {
 
+    private val tag = "FRAG_CONTEXT"
     private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(tag, "onViewCreated : Initialisation du fragment contexte")
 
         val chipGroupActivity = view.findViewById<ChipGroup>(R.id.chipGroupActivity)
         val switchMedication = view.findViewById<MaterialSwitch>(R.id.switchMedication)
@@ -33,12 +37,13 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         val etDietNotes = view.findViewById<TextInputEditText>(R.id.etDietNotes)
 
         // 1. Initialisation des Chips (Une seule fois)
-        if (chipGroupActivity.childCount == 0) {
+        if (chipGroupActivity.isEmpty()) {
+            Log.d(tag, "Génération dynamique des Chips d'activité physique")
             PhysicalActivity.entries.forEach { activity ->
                 val chip = Chip(requireContext()).apply {
                     text = activity.name
                     isCheckable = true
-                    tag = activity
+                    this.tag = activity // Note: C'est le tag de la vue Android ici
                     id = View.generateViewId()
                 }
                 chipGroupActivity.addView(chip)
@@ -49,8 +54,10 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contextState.collect { state ->
+                    Log.v(tag, "Observation : Mise à jour de l'UI depuis le StateFlow")
+
                     // Synchronisation de l'activité (Chip)
-                    selectChipByTag(chipGroupActivity, state.physicalActivity!!)
+                    selectChipByTag(chipGroupActivity, state.physicalActivity ?: PhysicalActivity.REPOS)
 
                     // Gestion du switch et de la visibilité du champ
                     if (switchMedication.isChecked != state.medecineTaken) {
@@ -77,27 +84,41 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
             val activity = chipGroupActivity.findViewById<Chip>(selectedChipId)?.tag as? PhysicalActivity
                 ?: PhysicalActivity.REPOS
 
+            Log.d(tag, "Action : Envoi des données au ViewModel (Activité: $activity, Médicaments: ${switchMedication.isChecked})")
+
             viewModel.updateContextState(
                 activity = activity,
                 medicine = switchMedication.isChecked,
-                medications = etMedicationList.text?.toString() ?: "", // C'est une String maintenant
+                medications = etMedicationList.text?.toString() ?: "",
                 diet = etDietNotes.text?.toString()
             )
         }
 
-        chipGroupActivity.setOnCheckedStateChangeListener { _, _ -> pushUpdate() }
+        chipGroupActivity.setOnCheckedStateChangeListener { _, _ ->
+            Log.v(tag, "UI Change : Sélection activité physique modifiée")
+            pushUpdate()
+        }
 
         switchMedication.setOnCheckedChangeListener { button, isChecked ->
             layoutMedicationList.isVisible = isChecked
-            if (button.isPressed) pushUpdate()
+            if (button.isPressed) {
+                Log.v(tag, "UI Change : Switch médicaments basculé à $isChecked")
+                pushUpdate()
+            }
         }
 
         etMedicationList.addTextChangedListener {
-            if (etMedicationList.hasFocus()) pushUpdate()
+            if (etMedicationList.hasFocus()) {
+                Log.v(tag, "UI Change : Saisie médicaments en cours")
+                pushUpdate()
+            }
         }
 
         etDietNotes.addTextChangedListener {
-            if (etDietNotes.hasFocus()) pushUpdate()
+            if (etDietNotes.hasFocus()) {
+                Log.v(tag, "UI Change : Saisie notes alimentation en cours")
+                pushUpdate()
+            }
         }
     }
 
@@ -105,7 +126,10 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         for (i in 0 until group.childCount) {
             val chip = group.getChildAt(i) as Chip
             if (chip.tag == targetTag) {
-                if (!chip.isChecked) chip.isChecked = true
+                if (!chip.isChecked) {
+                    Log.v(tag, "Sync UI : Coquage automatique du chip $targetTag")
+                    chip.isChecked = true
+                }
                 break
             }
         }

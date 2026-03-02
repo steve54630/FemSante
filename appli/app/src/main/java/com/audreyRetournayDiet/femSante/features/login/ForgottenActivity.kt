@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import org.json.JSONObject
 
 class ForgottenActivity : AppCompatActivity() {
 
+    private val tag = "ACT_FORGOTTEN_PWD"
     private lateinit var password: EditText
     private lateinit var confirm: EditText
     private lateinit var email: EditText
@@ -34,6 +36,7 @@ class ForgottenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgotten_password)
+        Log.d(tag, "onCreate : Initialisation de la récupération de mot de passe")
 
         initViews()
         setupSpinner()
@@ -54,9 +57,16 @@ class ForgottenActivity : AppCompatActivity() {
     private fun setupViewModel() {
         forgottenViewModel = ForgottenViewModel(
             userManager = UserManager(applicationContext),
-            onLoading = { isLoading -> if (isLoading) alert.start() else alert.close() },
-            onError = { msg -> Utilitaires.showToast(msg, this) },
+            onLoading = { isLoading ->
+                Log.v(tag, "État de chargement : $isLoading")
+                if (isLoading) alert.start() else alert.close()
+            },
+            onError = { msg ->
+                Log.e(tag, "Erreur lors du changement de MDP : $msg")
+                Utilitaires.showToast(msg, this)
+            },
             onSuccess = { msg ->
+                Log.i(tag, "Succès : Mot de passe réinitialisé pour l'utilisateur")
                 Utilitaires.showToast(msg, this)
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
@@ -65,20 +75,21 @@ class ForgottenActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, questionsMap.values.toList())
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, questionsMap.values.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        questionSpinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_question, this)
+        questionSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_question, this)
     }
 
     private fun setupListeners() {
         changePasswordBtn.setOnClickListener {
+            Log.d(tag, "Clic : Bouton de réinitialisation")
             if (validateFields()) {
                 val selectedKey = questionsMap.entries.find {
                     it.value == questionSpinner.selectedItem?.toString()
                 }?.key?.toString() ?: ""
+
+                Log.d(tag, "Tentative de réinitialisation avec question ID : $selectedKey")
 
                 val params = JSONObject().apply {
                     put("email", email.text.toString().trim())
@@ -110,6 +121,7 @@ class ForgottenActivity : AppCompatActivity() {
         }
 
         return error?.let {
+            Log.w(tag, "Validation échouée : $it")
             Utilitaires.showToast(it, this)
             false
         } ?: true

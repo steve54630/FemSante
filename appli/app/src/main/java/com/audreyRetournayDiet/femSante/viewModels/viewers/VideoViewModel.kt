@@ -1,5 +1,6 @@
 package com.audreyRetournayDiet.femSante.viewModels.viewers
 
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,12 +10,13 @@ import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.collections.get
 
 class VideoViewModel(
-    private val videoManager: VideoManager, // On injecte le manager
+    private val videoManager: VideoManager,
     private val videoData: HashMap<*, *>
 ) : ViewModel() {
+
+    private val tag = "VM_VIDEO_PLAYER"
 
     private val internalUiState = MutableStateFlow(VideoUiState())
     val uiState: StateFlow<VideoUiState> = internalUiState.asStateFlow()
@@ -24,10 +26,13 @@ class VideoViewModel(
     }
 
     private fun loadVideoData() {
-        val title = videoData["Title"]?.toString() ?: ""
-        val pdfParam = videoData["PDF"]?.toString() ?: ""
+        val title = videoData["Title"]?.toString() ?: "Vidéo inconnue"
+        val pdfParam = videoData["PDF"]?.toString() ?: "non"
+        val existingUrl = videoData["URL"]?.toString()
 
-        // On initialise avec le titre mais en mode "Loading"
+        Log.d(tag, "Initialisation vidéo : '$title' | PDF requis : $pdfParam")
+
+        // État initial
         internalUiState.value = VideoUiState(
             title = title,
             isLoading = true,
@@ -35,28 +40,32 @@ class VideoViewModel(
             pdfFileName = "$title.pdf"
         )
 
-        // Si l'URL est déjà dans la map, on l'utilise, sinon on appelle l'API
-        val existingUrl = videoData["URL"]?.toString()
-
         if (!existingUrl.isNullOrEmpty()) {
+            Log.i(tag, "Utilisation de l'URL directe fournie dans les paramètres")
             internalUiState.value = internalUiState.value.copy(
                 videoUri = existingUrl.toUri(),
                 isLoading = false
             )
         } else {
-            // C'est ici que le chargement devient utile !
+            Log.d(tag, "Aucune URL directe. Appel au VideoManager pour : $title")
             videoManager.getVideoUrl(title) { result ->
                 when (result) {
                     is ApiResult.Success -> {
-                        internalUiState.value = internalUiState.value.copy(
-                            videoUri = result.data?.getString("url")?.toUri(),
-                            isLoading = false
-                        )
+                        val url = result.data?.optString("url")
+                        if (!url.isNullOrBlank()) {
+                            Log.i(tag, "URL récupérée avec succès pour la vidéo : $title")
+                            internalUiState.value = internalUiState.value.copy(
+                                videoUri = url.toUri(),
+                                isLoading = false
+                            )
+                        } else {
+                            Log.e(tag, "Réponse API succès mais URL vide pour : $title")
+                            internalUiState.value = internalUiState.value.copy(isLoading = false)
+                        }
                     }
                     is ApiResult.Failure -> {
-                        internalUiState.value = internalUiState.value.copy(
-                            isLoading = false
-                        )
+                        Log.e(tag, "Erreur API lors de la récupération vidéo : ${result.message}")
+                        internalUiState.value = internalUiState.value.copy(isLoading = false)
                     }
                 }
             }
@@ -64,15 +73,14 @@ class VideoViewModel(
     }
 
     fun toggleFullScreen() {
-        internalUiState.value = internalUiState.value.copy(
-            isFullScreen = !internalUiState.value.isFullScreen
-        )
+        val newState = !internalUiState.value.isFullScreen
+        Log.v(tag, "Mode plein écran : $newState")
+        internalUiState.value = internalUiState.value.copy(isFullScreen = newState)
     }
 
     fun setPortraitMode(isPortrait: Boolean) {
-        internalUiState.value = internalUiState.value.copy(
-            isPortraitVideo = isPortrait
-        )
+        Log.v(tag, "Orientation portrait forcée : $isPortrait")
+        internalUiState.value = internalUiState.value.copy(isPortraitVideo = isPortrait)
     }
 
     class Factory(

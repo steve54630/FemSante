@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 
 class DocFragment : Fragment() {
 
+    private val tag = "FRAG_DOC_LEGAL"
     private lateinit var cgu : Button
     private lateinit var cgv : Button
     private lateinit var legal: Button
@@ -21,7 +23,7 @@ class DocFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
+        Log.d(tag, "onCreateView : Affichage de l'écran des documents légaux")
         val view = inflater.inflate(R.layout.fragment_doc, container, false)
 
         cgu = view.findViewById(R.id.buttonCGU)
@@ -29,31 +31,28 @@ class DocFragment : Fragment() {
         legal = view.findViewById(R.id.buttonLegalMentions)
         confidentiality = view.findViewById(R.id.buttonConfidentiality)
 
-        cgu.setOnClickListener {
-            val intentTarget = Intent(activity, PdfActivity::class.java)
-            intentTarget.putExtra("PDF", "${cgu.text}.pdf")
-            startActivity(intentTarget)
-        }
-
-        cgv.setOnClickListener {
-            val intentTarget = Intent(activity, PdfActivity::class.java)
-            intentTarget.putExtra("PDF", "${cgv.text}.pdf")
-            startActivity(intentTarget)
-        }
-
-        legal.setOnClickListener {
-            val intentTarget = Intent(activity, PdfActivity::class.java)
-            intentTarget.putExtra("PDF", "${legal.text}.pdf")
-            startActivity(intentTarget)
-        }
-
-        confidentiality.setOnClickListener {
-            val intentTarget = Intent(activity, PdfActivity::class.java)
-            intentTarget.putExtra("PDF", "${confidentiality.text}.pdf")
-            startActivity(intentTarget)
-        }
+        setupListeners()
 
         return view
     }
 
+    private fun setupListeners() {
+        cgu.setOnClickListener { launchPdf(cgu.text.toString()) }
+        cgv.setOnClickListener { launchPdf(cgv.text.toString()) }
+        legal.setOnClickListener { launchPdf(legal.text.toString()) }
+        confidentiality.setOnClickListener { launchPdf(confidentiality.text.toString()) }
+    }
+
+    private fun launchPdf(fileName: String) {
+        val pdfName = "$fileName.pdf"
+        Log.i(tag, "Action : Demande d'ouverture du PDF -> $pdfName")
+
+        try {
+            val intentTarget = Intent(activity, PdfActivity::class.java)
+            intentTarget.putExtra("PDF", pdfName)
+            startActivity(intentTarget)
+        } catch (e: Exception) {
+            Log.e(tag, "Erreur lors du lancement de PdfActivity pour le fichier $pdfName", e)
+        }
+    }
 }

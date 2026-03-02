@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import org.json.JSONObject
 
 class CreateFragment : Fragment() {
 
+    private val tag = "FRAG_CREATE_ACCOUNT"
     private lateinit var name: EditText
     private lateinit var email: EditText
     private lateinit var password: EditText
@@ -42,7 +44,10 @@ class CreateFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_register, container, false)
+    ): View? {
+        Log.d(tag, "onCreateView : Création de la vue inscription")
+        return inflater.inflate(R.layout.fragment_register, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,9 +70,18 @@ class CreateFragment : Fragment() {
     private fun setupViewModel() {
         createViewModel = CreateViewModel(
             userManager = UserManager(requireContext()),
-            onLoading = { isLoading -> if (isLoading) alert.start() else alert.close() },
-            onError = { msg -> Utilitaires.showToast(msg, requireContext()) },
-            onSuccess = { cls, extras -> navigateTo(cls, extras) }
+            onLoading = { isLoading ->
+                Log.v(tag, "Loading state: $isLoading")
+                if (isLoading) alert.start() else alert.close()
+            },
+            onError = { msg ->
+                Log.e(tag, "Erreur Inscription : $msg")
+                Utilitaires.showToast(msg, requireContext())
+            },
+            onSuccess = { cls, extras ->
+                Log.i(tag, "Inscription réussie ! Navigation vers ${cls.simpleName}")
+                navigateTo(cls, extras)
+            }
         )
     }
 
@@ -89,6 +103,7 @@ class CreateFragment : Fragment() {
                 if (p2 > 0) {
                     val selectedText = questionSpinner.selectedItem.toString()
                     chooseQuestion = mapQuestion.entries.find { it.value == selectedText }?.key?.toString() ?: ""
+                    Log.v(tag, "Question sélectionnée : ID $chooseQuestion")
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -97,13 +112,16 @@ class CreateFragment : Fragment() {
 
     private fun setupListeners(view: View) {
         view.findViewById<Button>(R.id.buttonConnect).setOnClickListener {
+            Log.d(tag, "Clic : Bouton Inscription")
             if (validateFields()) {
                 val map = buildUserMap()
+                Log.i(tag, "Envoi de la requête d'inscription pour : ${email.text}")
                 lifecycleScope.launch { createViewModel.subscribe(JSONObject(map as Map<*, *>), map) }
             }
         }
 
         view.findViewById<Button>(R.id.buttonTestSubscribe).setOnClickListener {
+            Log.d(tag, "Clic : Bouton Test Validation")
             if (validateFields()) {
                 val map = buildUserMap()
                 lifecycleScope.launch { createViewModel.test(JSONObject(map as Map<*, *>)) }
@@ -128,6 +146,7 @@ class CreateFragment : Fragment() {
 
     private fun validateFields(): Boolean {
         if (chooseQuestion.isEmpty()) {
+            Log.w(tag, "Validation échouée : Question non sélectionnée")
             Utilitaires.showToast("Aucune question sélectionnée", requireContext())
             return false
         }
@@ -141,6 +160,11 @@ class CreateFragment : Fragment() {
             answer.text.isBlank() -> "Réponse non renseignée"
             else -> null
         }
-        return errorMsg?.let { Utilitaires.showToast(it, requireContext()); false } ?: true
+
+        return errorMsg?.let {
+            Log.w(tag, "Validation échouée : $it")
+            Utilitaires.showToast(it, requireContext())
+            false
+        } ?: true
     }
 }

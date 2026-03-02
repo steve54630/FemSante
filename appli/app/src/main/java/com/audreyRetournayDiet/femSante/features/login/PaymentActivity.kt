@@ -1,9 +1,9 @@
 package com.audreyRetournayDiet.femSante.features.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -30,12 +30,10 @@ import com.paypal.android.cardpayments.Card
 import com.paypal.android.paymentbuttons.PayPalButton
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.math.BigDecimal
-import java.math.RoundingMode
-import kotlin.collections.get
 
 class PaymentActivity : AppCompatActivity() {
 
+    private val tag = "ACT_PAYMENT" // Tag unique pour le Logcat
     private lateinit var alert: LoadingAlert
     private lateinit var registerSpinner: Spinner
     private lateinit var userManager: UserManager
@@ -53,11 +51,10 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var reductionValue: EditText
     private lateinit var reductionButton: Button
 
-    private lateinit var paymentViewModel: PaymentViewModel // Notre "ViewModel"
+    private lateinit var paymentViewModel: PaymentViewModel
     private lateinit var parametersMap: HashMap<*, *>
 
     private var valueSubscription: String = ""
-    private var reduction: Int = 0
     private var update: Boolean = false
     private var repay: Boolean = false
 
@@ -71,24 +68,11 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+        Log.d(tag, "onCreate: Initialisation de l'écran de paiement")
 
         initViews()
         setupSpinner()
-
-        // Initialisation de notre "ViewModel" avec ses callbacks
-        paymentViewModel = PaymentViewModel(
-            context = this,
-            userManager = userManager,
-            parametersMap = parametersMap,
-            repay = repay,
-            update = update,
-            mapPrice = mapPrice,
-            registerSpinner = { registerSpinner },
-            onLoading = { isLoading -> if (isLoading) alert.start() else alert.close() },
-            onError = { msg -> Utilitaires.showToast(msg, this) },
-            onNavigationRequired = { isRepay, data -> navigateToLogin(isRepay, data) }
-        )
-
+        setupViewModel()
         setupListeners()
     }
 
@@ -96,6 +80,7 @@ class PaymentActivity : AppCompatActivity() {
         alert = LoadingAlert(this)
         userManager = UserManager(this)
 
+        // Binding classique
         number = findViewById(R.id.numberCard)
         month = findViewById(R.id.editTextMonth)
         year = findViewById(R.id.editTextYear)
@@ -114,6 +99,8 @@ class PaymentActivity : AppCompatActivity() {
         repay = intent.getBooleanExtra("repay", false)
         update = intent.getStringExtra("update") == "Oui"
 
+        Log.i(tag, "Contexte: Repay=$repay, Update=$update")
+
         parametersMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("map", HashMap::class.java)!!
         } else {
@@ -121,16 +108,46 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupViewModel() {
+        paymentViewModel = PaymentViewModel(
+            context = this,
+            userManager = userManager,
+            parametersMap = parametersMap,
+            repay = repay,
+            update = update,
+            mapPrice = mapPrice,
+            onLoading = { isLoading ->
+                Log.v(tag, "Loading: $isLoading")
+                if (isLoading) alert.start() else alert.close()
+            },
+            onError = { msg ->
+                Log.e(tag, "Erreur ViewModel: $msg")
+                Utilitaires.showToast(msg, this)
+            },
+            onPriceCalculated = { price ->
+                valueSubscription = price
+                buyout.text = "$price €"
+                Log.d(tag, "UI mise à jour: Nouveau prix total = $price €")
+            },
+            onNavigationRequired = { isRepay, data ->
+                Log.i(tag, "Succès transaction: Navigation vers Login (isRepay=$isRepay)")
+                navigateToLogin(isRepay, data)
+            }
+        )
+    }
+
     private fun setupSpinner() {
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, mapPrice.values.toList())
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mapPrice.values.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        registerSpinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
+        registerSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
 
         registerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 > 0) refreshPriceDisplay()
+                if (p2 > 0) {
+                    val label = registerSpinner.selectedItem.toString()
+                    Log.v(tag, "Spinner: Sélection de l'offre '$label'")
+                    paymentViewModel.updateSelection(label)
+                }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
@@ -138,24 +155,36 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         switchPay.setOnCheckedChangeListener { _, isChecked ->
+            val mode = if (isChecked) "CARTE" else "PAYPAL"
+            Log.d(tag, "Mode de paiement switché vers: $mode")
             cardLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
             paypalLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
         }
 
         reductionButton.setOnClickListener {
+            val code = reductionValue.text.toString().trim()
+            Log.i(tag, "Action: Tentative d'application du code promo '$code'")
             if (registerSpinner.selectedItemId == -1L) {
+                Log.w(tag, "Annulation: Aucun abonnement sélectionné pour la réduction")
                 Utilitaires.showToast("Veuillez sélectionner un abonnement", this)
                 return@setOnClickListener
             }
-            applyReductionFromApi()
+            applyReductionFromApi(code)
         }
 
         payPal.setOnClickListener {
-            if (validateForm()) paymentViewModel.startPayPalPayment(valueSubscription)
+            Log.d(tag, "Clic: Bouton PayPal")
+            if (validateForm()) {
+                Log.i(tag, "Lancement du flux PayPal Native pour $valueSubscription €")
+                paymentViewModel.startPayPalPayment(valueSubscription)
+            }
         }
 
         payPalCard.setOnClickListener {
+            Log.d(tag, "Clic: Bouton Carte Bancaire")
             if (validateForm()) {
+                Log.i(tag, "Lancement du flux Carte (SCA) pour $valueSubscription €")
+                // On ne logue JAMAIS le contenu de l'objet Card pour des raisons de sécurité (PCI DSS)
                 val card = Card(
                     number.text.toString(),
                     month.text.toString(),
@@ -167,42 +196,33 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.buttonCGV).setOnClickListener {
-            val intent = Intent(this, PdfActivity::class.java).apply { putExtra("PDF", "Conditions Générales de Vente.pdf") }
-            startActivity(intent)
+            Log.d(tag, "Navigation: Consultation des CGV")
+            startActivity(Intent(this, PdfActivity::class.java).apply {
+                putExtra("PDF", "Conditions Générales de Vente.pdf")
+            })
         }
     }
 
-    private fun applyReductionFromApi() {
+    private fun applyReductionFromApi(code: String) {
+        if (code.isEmpty()) return
         alert.start()
-        val params = JSONObject().put("reductionCode", reductionValue.text.toString())
+        val params = JSONObject().put("reductionCode", code)
+
         PaymentManager(this).applyReduction(params) { result ->
             alert.close()
-            if (result is ApiResult.Success) {
-                reduction = result.data?.optInt("reduction") ?: 0
-                refreshPriceDisplay()
-                Utilitaires.showToast(result.data?.optString("message") ?: "Code appliqué", this)
-            } else if (result is ApiResult.Failure) {
-                Utilitaires.showToast(result.message, this)
+            when (result) {
+                is ApiResult.Success -> {
+                    val percent = result.data?.optInt("reduction") ?: 0
+                    Log.i(tag, "Succès API Réduction: -$percent% appliqué via le code '$code'")
+                    paymentViewModel.applyReduction(percent)
+                    Utilitaires.showToast(result.data?.optString("message") ?: "Code appliqué", this)
+                }
+                is ApiResult.Failure -> {
+                    Log.w(tag, "Échec API Réduction: ${result.message} pour le code '$code'")
+                    Utilitaires.showToast(result.message, this)
+                }
             }
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun refreshPriceDisplay() {
-        val selectedLabel = registerSpinner.selectedItem.toString()
-        val technicalKey = mapPrice.entries.find { it.value == selectedLabel }?.key ?: return
-
-        val (days, basePrice) = technicalKey.split(";")
-        val originalPrice = basePrice.toDouble()
-
-        val finalPrice = if (reduction > 0 && (days == "365" || days == "A vie")) {
-            originalPrice * (1 - reduction / 100.0)
-        } else {
-            originalPrice
-        }
-
-        valueSubscription = BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_EVEN).toString()
-        buyout.text = "$valueSubscription €"
     }
 
     private fun navigateToLogin(isRepay: Boolean, data: JSONObject?) {
@@ -221,14 +241,21 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun validateForm(): Boolean {
-        if (registerSpinner.selectedItemId == -1L) {
-            Utilitaires.showToast("Choisissez un abonnement", this)
-            return false
+        return when {
+            registerSpinner.selectedItemId == -1L -> {
+                Log.w(tag, "Validation: Aucun abonnement choisi")
+                Utilitaires.showToast("Choisissez un abonnement", this)
+                false
+            }
+            !check.isChecked -> {
+                Log.w(tag, "Validation: CGV non acceptées")
+                Utilitaires.showToast("Veuillez accepter les CGV", this)
+                false
+            }
+            else -> {
+                Log.v(tag, "Validation: OK")
+                true
+            }
         }
-        if (!check.isChecked) {
-            Utilitaires.showToast("Veuillez accepter les CGV", this)
-            return false
-        }
-        return true
     }
 }

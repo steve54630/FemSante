@@ -21,7 +21,7 @@ afterEvaluate {
 
 android {
     namespace 'com.audreyRetournayDiet.femSante'
-    compileSdk 36
+    compileSdkVersion 36
     defaultConfig {
         applicationId "com.audreyretournaydiet.femsanteapp"
         minSdk 26

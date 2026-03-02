@@ -1,9 +1,11 @@
 package com.audreyRetournayDiet.femSante.viewModels.alim
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.audreyRetournayDiet.femSante.data.entities.RecipeNavigationEvent
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,6 +15,8 @@ import kotlinx.coroutines.launch
 
 class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
 
+    private val tag = "VM_ALIM"
+
     private val navigationSharedFlow = MutableSharedFlow<RecipeNavigationEvent>()
     val navigationEvent: SharedFlow<RecipeNavigationEvent> = navigationSharedFlow.asSharedFlow()
 
@@ -21,15 +25,20 @@ class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     fun onCategorySelected(folderName: String, displayTitle: String, context: Context) {
         viewModelScope.launch {
-            // Le Repository doit déjà avoir le context via son constructeur, pas ici
+            Log.d(tag, "Catégorie sélectionnée : $folderName ($displayTitle)")
+
             when (val result = repository.getRecipesFromAssets(folderName, context)) {
                 is ApiResult.Success -> {
-                    val formattedMap = result.data?.associate { fileName ->
+                    val rawFiles = result.data ?: emptyList()
+
+                    val formattedMap = rawFiles.associate { fileName ->
                         val key = fileName.substringBeforeLast(".")
                         val value = key.replace("_", " ")
                             .replaceFirstChar { it.uppercase() }
                         key to value
-                    } ?: emptyMap()
+                    }
+
+                    Log.i(tag, "Mapping réussi : ${formattedMap.size} recettes prêtes pour l'affichage")
 
                     navigationSharedFlow.emit(
                         RecipeNavigationEvent(
@@ -40,6 +49,7 @@ class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
                     )
                 }
                 is ApiResult.Failure -> {
+                    Log.e(tag, "Échec du chargement des recettes pour le dossier : $folderName | Erreur : ${result.message}")
                     errorSharedFlow.emit(result.message)
                 }
             }
@@ -54,13 +64,8 @@ class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
                 @Suppress("UNCHECKED_CAST")
                 return AlimViewModel(repository) as T
             }
+            Log.e("VM_FACTORY", "Impossible de créer AlimViewModel : Classe inconnue")
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
-
-data class RecipeNavigationEvent(
-    val title: String,
-    val recipeMap: HashMap<String, String>,
-    val folderPath: String
-)

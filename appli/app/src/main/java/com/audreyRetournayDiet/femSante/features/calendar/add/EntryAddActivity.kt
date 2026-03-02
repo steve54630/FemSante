@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
-import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryEvent
+import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
 import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -21,12 +23,13 @@ import java.time.LocalDate
 
 class EntryAddActivity : AppCompatActivity() {
 
+    private val tag = "ACT_ENTRY_ADD"
     private lateinit var navBar: BottomNavigationView
     private lateinit var container: FrameLayout
     private lateinit var btnSaveEntry: Button
 
-    // Typage explicite de la Map pour éviter le "Argument type mismatch"
     private lateinit var fragments: Map<Int, Fragment>
+    private var id : Long? = null
 
     private val viewModel: EntryViewModel by viewModels {
         val database = DatabaseProvider.getDatabase(this)
@@ -37,34 +40,49 @@ class EntryAddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_add)
+        Log.d(tag, "onCreate : Initialisation de l'écran d'ajout/édition")
 
-        // 1. Initialisation de la Map de fragments (typage forcé à Fragment)
-        val map = HashMap<Int, Fragment>()
-        map[R.id.nav_general] = GeneralFragment() as Fragment
-        map[R.id.nav_symptoms] = SymptomsFragment() as Fragment
-        map[R.id.nav_psych] = PsychologicalFragment() as Fragment
-        map[R.id.nav_context] = ContextFragment() as Fragment
-        fragments = map
+        // 1. Initialisation de la Map de fragments
+        fragments = mapOf(
+            R.id.nav_general to GeneralFragment(),
+            R.id.nav_symptoms to SymptomsFragment(),
+            R.id.nav_psych to PsychologicalFragment(),
+            R.id.nav_context to ContextFragment()
+        )
 
-        // 2. Récupération des vues (Vérifie que l'ID est bien bottomNavigation)
+        // 2. Récupération des vues
         navBar = findViewById(R.id.tabLayout)
         container = findViewById(R.id.container)
         btnSaveEntry = findViewById(R.id.btnSaveEntry)
 
+        // 3. Traitement des données entrantes (Intent)
         val dateString = intent.getStringExtra("selectedDate")
-        val selectedDate = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
+        val selectedDate = if (dateString != null) {
+            LocalDate.parse(dateString)
+        } else {
+            Log.w(tag, "Aucune date reçue, utilisation de la date du jour par défaut")
+            LocalDate.now()
+        }
 
         val isEdit = intent.getBooleanExtra("isEditMode", false)
+        viewModel.setEdit(isEdit)
+        viewModel.setDate(selectedDate)
 
         if(isEdit) {
             val store = UserStore(this)
-            val userId = store.getUser()?.id
-            val id = intent.getLongExtra("ID", 0)
+            val user = store.getUser()
+            id = intent.getLongExtra("ID", 0)
 
-            if (userId != null) viewModel.loadExistingData(userId, id)
+            Log.i(tag, "Mode ÉDITION activé pour l'ID : $id (Utilisateur : ${user?.id})")
+
+            if (user?.id != null) {
+                viewModel.loadExistingData(user.id, id!!)
+            } else {
+                Log.e(tag, "Impossible de charger les données : UserID introuvable")
+            }
+        } else {
+            Log.i(tag, "Mode CRÉATION activé pour la date : $selectedDate")
         }
-
-        viewModel.setDate(selectedDate)
 
         setupNavigation()
         observeEvents()
@@ -73,9 +91,10 @@ class EntryAddActivity : AppCompatActivity() {
             val store = UserStore(this)
             val userId = store.getUser()?.id
             if (userId != null) {
-                viewModel.saveAllData(userId)
+                Log.d(tag, "Action : Clic sur Sauvegarder (Mode: ${if(isEdit) "Update" else "Insert"})")
+                viewModel.saveAllData(userId, id)
             } else {
-                Log.e("EntryAdd", "Impossible de sauvegarder : UserID est null")
+                Log.e(tag, "Échec de sauvegarde : UserID est null")
                 Toast.makeText(this, "Erreur d'authentification", Toast.LENGTH_SHORT).show()
             }
         }
@@ -85,16 +104,19 @@ class EntryAddActivity : AppCompatActivity() {
         navBar.setOnItemSelectedListener { item ->
             val fragment = fragments[item.itemId]
             if (fragment != null) {
+                Log.v(tag, "Navigation : Changement vers l'onglet ${item.title}")
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.container, fragment)
                     .commit()
                 true
             } else {
+                Log.w(tag, "Navigation : Aucun fragment associé à l'ID ${item.itemId}")
                 false
             }
         }
 
+        // Chargement du premier fragment si vide
         if (supportFragmentManager.findFragmentById(R.id.container) == null) {
             navBar.selectedItemId = R.id.nav_general
         }
@@ -102,14 +124,18 @@ class EntryAddActivity : AppCompatActivity() {
 
     private fun observeEvents() {
         lifecycleScope.launch {
-            viewModel.events.collect { event ->
-                when (event) {
-                    is EntryEvent.Success -> {
-                        Toast.makeText(this@EntryAddActivity, getString(R.string.msg_save_success), Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    is EntryEvent.Error -> {
-                        Toast.makeText(this@EntryAddActivity, event.message, Toast.LENGTH_LONG).show()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event ->
+                    when (event) {
+                        is EntryEvent.Success -> {
+                            Log.i(tag, "Événement : Sauvegarde réussie. Fermeture de l'activité.")
+                            Toast.makeText(this@EntryAddActivity, getString(R.string.msg_save_success), Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        is EntryEvent.Error -> {
+                            Log.e(tag, "Événement : Erreur lors de la sauvegarde - ${event.message}")
+                            Toast.makeText(this@EntryAddActivity, event.message, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }

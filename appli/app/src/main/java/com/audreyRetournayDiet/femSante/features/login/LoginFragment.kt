@@ -27,6 +27,7 @@ import org.json.JSONObject
 
 class LoginFragment : Fragment() {
 
+    private val tag = "FRAG_LOGIN"
     private lateinit var password: EditText
     private lateinit var email: EditText
     private lateinit var connect: Button
@@ -41,8 +42,10 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        Log.d(tag, "onCreateView : Initialisation du formulaire de connexion")
         val view = inflater.inflate(R.layout.fragment_login, container, false)
-        db = DatabaseProvider.getDatabase(requireContext())
+
+        db = DatabaseProvider.getDatabase(view.context)
         password = view.findViewById(R.id.Password)
         email = view.findViewById(R.id.Login)
         connect = view.findViewById(R.id.buttonConnect)
@@ -51,9 +54,13 @@ class LoginFragment : Fragment() {
         alert = LoadingAlert(requireActivity())
         userRepository = UserRepository(db.userDao())
 
-        connect.setOnClickListener { onConnectClicked() }
+        connect.setOnClickListener {
+            Log.v(tag, "Clic : Tentative de connexion")
+            onConnectClicked()
+        }
 
         forgotPassword.setOnClickListener {
+            Log.d(tag, "Navigation : Mot de passe oublié")
             startActivity(Intent(activity, ForgottenActivity::class.java))
         }
 
@@ -65,6 +72,7 @@ class LoginFragment : Fragment() {
         val passwordText = password.text.toString().trim()
 
         if (emailText.isEmpty() || passwordText.isEmpty()) {
+            Log.w(tag, "Validation échouée : champs vides")
             Toast.makeText(requireContext(), "Veuillez saisir les champs demandés", Toast.LENGTH_SHORT).show()
             return
         }
@@ -78,10 +86,20 @@ class LoginFragment : Fragment() {
                     put("password", passwordText)
                 }
 
+                Log.i(tag, "Requête API : Connexion pour $emailText")
                 when (val apiResult = userManager.connectUser(parameters)) {
-                    is ApiResult.Success<JSONObject> -> handleLoginSuccess(apiResult, emailText, passwordText)
-                    is ApiResult.Failure -> showError(apiResult.message)
+                    is ApiResult.Success<JSONObject> -> {
+                        Log.d(tag, "API Success : Utilisateur authentifié")
+                        handleLoginSuccess(apiResult, emailText, passwordText)
+                    }
+                    is ApiResult.Failure -> {
+                        Log.e(tag, "API Failure : ${apiResult.message}")
+                        showError(apiResult.message)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e(tag, "Exception lors de la connexion", e)
+                showError("Une erreur inattendue est survenue")
             } finally {
                 alert.close()
             }
@@ -93,37 +111,41 @@ class LoginFragment : Fragment() {
         emailText: String,
         passwordText: String
     ) {
-        Toast.makeText(requireContext(), apiResult.message, Toast.LENGTH_SHORT).show()
+        val lifetimeAccess = apiResult.data?.optBoolean("lifetimeAccess", false) ?: false
+        Log.v(tag, "Droits d'accès : Premium=$lifetimeAccess")
 
-        val lifetimeAccess = apiResult.data?.getBoolean("lifetimeAccess") == true
-
-        val intent = Intent(requireActivity(), HomeActivity::class.java)
-
-        // 1️⃣ Vérifier si l'utilisateur existe déjà
+        // 1️⃣ Synchronisation Locale (Room)
+        Log.d(tag, "Room : Recherche de l'utilisateur en local")
         val userId: String? = when (val userResult = userRepository.getUser(emailText)) {
-
             is ApiResult.Success -> {
-                userResult.data?.getString("id")
+                val id = userResult.data?.getString("id")
+                Log.d(tag, "Room : Utilisateur trouvé (ID: $id)")
+                id
             }
-
             is ApiResult.Failure -> {
-                // 2️⃣ Ajouter l’utilisateur s’il n’existe pas
+                Log.i(tag, "Room : Nouvel utilisateur, création du profil local")
                 when (val addResult = userRepository.addUser(UserEntity(login = emailText))) {
-                    is ApiResult.Success -> addResult.data?.getString("id")
+                    is ApiResult.Success -> {
+                        val newId = addResult.data?.getString("id")
+                        Log.d(tag, "Room : Profil créé avec succès (ID: $newId)")
+                        newId
+                    }
                     is ApiResult.Failure -> {
+                        Log.e(tag, "Room Error : Impossible d'ajouter l'utilisateur")
                         showError(addResult.message)
-                        return
+                        null
                     }
                 }
             }
         }
 
         if (userId == null) {
-            showError("Impossible de récupérer l'identifiant utilisateur")
+            Log.e(tag, "Critique : Aucun ID utilisateur disponible pour finaliser la session")
+            showError("Erreur d'initialisation du profil")
             return
         }
 
-        // 3️⃣ Construire l’utilisateur pour le store
+        // 2️⃣ Mise à jour du UserStore (SharedPreferences)
         val newUser = AppUser(
             id = userId,
             lifetimeAccess = lifetimeAccess,
@@ -132,18 +154,16 @@ class LoginFragment : Fragment() {
         )
 
         val userStore = UserStore(requireContext())
-
-        // 4️⃣ Mise à jour du store (global pour toute l'app)
         userStore.saveUser(newUser)
+        Log.i(tag, "Session : Utilisateur $emailText sauvegardé dans le Store")
 
-        Log.d("Login", "User stocké : ${userStore.getUser()?.id}")
-
-        // 5️⃣ Navigation
-        navigateToHome(intent)
+        // 3️⃣ Navigation
+        navigateToHome()
     }
 
-
-    private fun navigateToHome(intent: Intent) {
+    private fun navigateToHome() {
+        Log.d(tag, "Navigation -> HomeActivity")
+        val intent = Intent(requireActivity(), HomeActivity::class.java)
         requireActivity().startActivity(intent)
         requireActivity().finish()
     }

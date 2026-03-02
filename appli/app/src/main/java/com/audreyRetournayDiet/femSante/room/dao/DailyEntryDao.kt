@@ -1,5 +1,6 @@
 package com.audreyRetournayDiet.femSante.room.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,42 +15,50 @@ import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
 
 @Dao
-interface DailyEntryDao {
+abstract class DailyEntryDao {
 
-    // --- REQUÊTES DE LECTURE ---
+    // --- LECTURE ---
 
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND id = :id LIMIT 1")
-    suspend fun getFullEntry(userId: String, id: Long): DailyEntryFull?
+    abstract suspend fun getFullEntry(userId: String, id: Long): DailyEntryFull?
 
-    // Correction de la jointure : On joint maintenant via gs.entry_id
+    @Transaction
+    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
+    abstract suspend fun getFullEntryByDate(userId: String, timestamp: Long): DailyEntryFull?
+
+    @Query("SELECT id FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
+    abstract suspend fun getIdByDate(userId: String, timestamp: Long): Long?
+
     @Query("""
         SELECT de.date as date, gs.pain_level as painLevel
         FROM daily_entry de
         JOIN general_state gs ON de.id = gs.entry_id 
         WHERE de.user_id = :userId
     """)
-    suspend fun getCalendarStatus(userId: String): List<DatePainStatus>
+    abstract suspend fun getCalendarStatus(userId: String): List<DatePainStatus>
 
-    // --- INSERTIONS ---
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDailyEntry(entry: DailyEntryEntity): Long
+    // --- INSERTIONS DE BASE ---
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGeneral(general: GeneralStateEntity)
+    abstract suspend fun insertDailyEntry(entry: DailyEntryEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPsychological(psy: PsychologicalStateEntity)
+    abstract suspend fun insertGeneral(general: GeneralStateEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSymptom(symptom: SymptomStateEntity)
+    abstract suspend fun insertPsychological(psy: PsychologicalStateEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertContext(context: ContextStateEntity)
+    abstract suspend fun insertSymptom(symptom: SymptomStateEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertContext(context: ContextStateEntity)
+
+    // --- LOGIQUE MÉTIER (TRANSACTIONS) ---
 
     @Transaction
-    suspend fun insertFullDailyEntry(
+    open suspend fun insertFullDailyEntry(
         userId: String,
         date: Long,
         general: GeneralStateEntity,
@@ -57,21 +66,46 @@ interface DailyEntryDao {
         symptom: SymptomStateEntity,
         context: ContextStateEntity
     ) {
-        // 1. On insère le parent et on récupère son ID généré
+        // Crée le parent et récupère l'ID
         val newId = insertDailyEntry(DailyEntryEntity(userId = userId, date = date))
-
-        // 2. On injecte cet ID dans chaque enfant avant de les insérer
-        insertGeneral(general.copy(entryId = newId))
-        insertPsychological(psy.copy(entryId = newId))
-        insertSymptom(symptom.copy(entryId = newId))
-        insertContext(context.copy(entryId = newId))
+        // Insère tous les détails
+        saveSubStates(newId, general, psy, symptom, context)
     }
 
-    // --- SUPPRESSION (Magie de la cascade) ---
+    @Transaction
+    open suspend fun editFullDailyEntry(
+        userId: String,
+        id: Long,
+        general: GeneralStateEntity,
+        psy: PsychologicalStateEntity,
+        symptom: SymptomStateEntity,
+        context: ContextStateEntity
+    ) {
+        Log.i("ID", "${general.id} $id ${getFullEntry(userId, id)}")
+        // Récupère l'ID existant de manière sécurisée (sans !!)
+        getFullEntry(userId, id)?.let { existing ->
+            saveSubStates(existing.dailyEntry.id, general, psy, symptom, context)
+        }
+    }
+
+    /**
+     * Fonction utilitaire privée pour injecter l'ID dans les entités enfants
+     */
+    private suspend fun saveSubStates(
+        entryId: Long,
+        general: GeneralStateEntity,
+        psy: PsychologicalStateEntity,
+        symptom: SymptomStateEntity,
+        context: ContextStateEntity
+    ) {
+        insertGeneral(general.copy(entryId = entryId))
+        insertPsychological(psy.copy(entryId = entryId))
+        insertSymptom(symptom.copy(entryId = entryId))
+        insertContext(context.copy(entryId = entryId))
+    }
+
+    // --- SUPPRESSION ---
 
     @Query("DELETE FROM daily_entry WHERE user_id = :userId AND id = :id")
-    suspend fun deleteFullEntry(userId: String, id: Long)
-    @Transaction
-    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
-    suspend fun getFullEntryByDate(userId: String, timestamp: Long) : DailyEntryFull?
+    abstract suspend fun deleteFullEntry(userId: String, id: Long)
 }

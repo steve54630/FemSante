@@ -1,40 +1,57 @@
 package com.audreyRetournayDiet.femSante.features.alim
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AlimActivity : AppCompatActivity() {
 
+    private val tag = "ACT_ALIM"
     private lateinit var menu: BottomNavigationView
-    private var alim = AlimFragment()
-    private var doc = RessourceFragment()
+
+    // On conserve les instances pour éviter de recréer les fragments à chaque clic
+    private var alimFragment = AlimFragment()
+    private var docFragment = RessourceFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alim)
 
+        Log.d(tag, "Lancement de AlimActivity")
+
         menu = findViewById(R.id.bottom_navigation_menu)
 
-        supportFragmentManager.beginTransaction().replace(R.id.container, alim).commit()
+        // Affichage du fragment par défaut au démarrage
+        if (savedInstanceState == null) {
+            Log.i(tag, "Premier lancement : affichage du fragment Alim")
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, alimFragment)
+                .commit()
+        }
 
         menu.setOnItemSelectedListener { item ->
-
             when (item.itemId) {
-                R.id.alim ->{ supportFragmentManager.beginTransaction().replace(R.id.container, alim)
-                    .commit()
-                    return@setOnItemSelectedListener true
+                R.id.alim -> {
+                    Log.d(tag, "Navigation : Onglet Alimentation sélectionné")
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, alimFragment)
+                        .commit()
+                    true
                 }
                 R.id.pdf -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.container, doc)
+                    Log.d(tag, "Navigation : Onglet Ressources PDF sélectionné")
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, docFragment)
                         .commit()
-                    return@setOnItemSelectedListener true
+                    true
+                }
+                else -> {
+                    Log.w(tag, "Navigation : Item de menu inconnu cliqué (ID: ${item.itemId})")
+                    false
                 }
             }
-
-            return@setOnItemSelectedListener false
         }
     }
-
 }
