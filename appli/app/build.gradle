@@ -22,7 +22,7 @@ afterEvaluate {
 
 // Secrets locaux (non versionnés) lus depuis local.properties, avec repli sur les
 // variables d'environnement (utile en CI). Ne jamais committer les valeurs réelles.
-def secretProps = new java.util.Properties()
+def secretProps = new Properties()
 def secretPropsFile = rootProject.file("local.properties")
 if (secretPropsFile.exists()) {
     secretPropsFile.withInputStream { secretProps.load(it) }
