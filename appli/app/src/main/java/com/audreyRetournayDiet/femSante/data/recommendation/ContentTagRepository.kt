@@ -76,7 +76,7 @@ object ContentTagRepository {
         pdf("desserts") to setOf(Digestif),
 
         // --- Vidéo - Yoga ---
-        video("SOS Douleur") to setOf(
+        video("SOS Douleurs") to setOf(
             zone(PainZone.BASSIN), zone(PainZone.LOMBAIRES), zone(PainZone.ABDOMEN),
             EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
         ),

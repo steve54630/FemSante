@@ -31,7 +31,7 @@ class YogaViewModel @Inject constructor() : ViewModel() {
     fun onFlowClicked() {
         Timber.i("Action : Sélection séance SOS Douleur")
         viewModelScope.launch {
-            navigationSharedFlow.emit(BodyNavigationEvent.LaunchVideo("SOS Douleur", "non"))
+            navigationSharedFlow.emit(BodyNavigationEvent.LaunchVideo("SOS Douleurs", "non"))
         }
     }
 
