@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
@@ -13,6 +14,7 @@ import timber.log.Timber
  * * @property alimFragment Instance persistante pour la vue des conseils nutritionnels.
  * @property docFragment Instance persistante pour la consultation des documents PDF.
  */
+@AndroidEntryPoint
 class AlimActivity : AppCompatActivity() {
 
     private lateinit var menu: BottomNavigationView

@@ -1,0 +1,18 @@
+# Modèle de configuration locale — COPIER vers `local.properties` (non versionné)
+# et renseigner les valeurs réelles. Ne jamais committer `local.properties`.
+
+# Chemin du SDK Android (généralement renseigné automatiquement par Android Studio).
+sdk.dir=/chemin/vers/Android/Sdk
+
+# Identifiants du dépôt privé Cardinal/jFrog (SDK PayPal / Cardinal).
+# Fournis par le responsable du projet. Peuvent aussi être passés via les
+# variables d'environnement JFROG_USER / JFROG_PASSWORD (ex. en CI).
+JFROG_USER=
+JFROG_PASSWORD=
+
+# Configuration runtime exposée à l'app via BuildConfig.
+API_URL=
+PAYPAL_CLIENT_ID=
+RETURN_URL_CARD=
+RETURN_URL_PAYPAL=
+AUTHORIZATION_HEADERS=

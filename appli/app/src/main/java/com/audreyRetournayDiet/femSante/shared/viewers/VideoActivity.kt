@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -30,27 +29,18 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.viewModels.viewers.VideoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 @OptIn(UnstableApi::class)
+@AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
-    private val viewModel: VideoViewModel by viewModels {
-        val map = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra("map", HashMap::class.java)!!
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getSerializableExtra("map") as HashMap<*, *>
-        }
-        VideoViewModel.Factory(
-            VideoManager(this),
-            data = map
-        )
-    }
+    // Hilt injecte le ViewModel ; l'extra "map" est lu via SavedStateHandle.
+    private val viewModel: VideoViewModel by viewModels()
 
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView

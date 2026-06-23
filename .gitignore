@@ -17,8 +17,9 @@ generated/
 **/debug/
 **/captures/
 
-# Sécurité (Variables d'environnement)
-**/env_variables.kt
+# Sécurité : les secrets vivent dans local.properties (déjà ignoré ci-dessus),
+# exposés au code via BuildConfig. env_variables.kt n'est plus qu'une façade sans
+# valeur et peut donc être versionné.
 
 /KeyStore
 

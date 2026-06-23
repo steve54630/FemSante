@@ -6,8 +6,10 @@ import com.android.volley.toolbox.Volley
 import com.audreyRetournayDiet.femSante.API_URL
 import com.audreyRetournayDiet.femSante.AUTHORIZATION_HEADERS
 import com.audreyRetournayDiet.femSante.repository.ApiResult
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONObject
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Gestionnaire de récupération des flux vidéo sécurisés.
@@ -21,7 +23,9 @@ import timber.log.Timber
  * 2. Le serveur valide les droits d'accès (abonnement actif).
  * 3. Le serveur renvoie une URL JSON que le [com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity] pourra charger.
  */
-class VideoManager(private val context: Context) {
+class VideoManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     // Initialisation de la file de requêtes Volley pour le réseau
     private val volley = Volley.newRequestQueue(this.context)

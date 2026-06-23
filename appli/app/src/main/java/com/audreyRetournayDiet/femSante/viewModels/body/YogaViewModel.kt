@@ -3,11 +3,13 @@ package com.audreyRetournayDiet.femSante.viewModels.body
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.BodyNavigationEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel dédié à la sélection des séances de Yoga.
@@ -15,7 +17,8 @@ import timber.log.Timber
  * Proposer des parcours de Yoga ciblés selon l'état de l'utilisatrice (douleur, stress, niveau).
  * Il réutilise le canal de navigation [BodyNavigationEvent] pour lancer le lecteur vidéo.
  */
-class YogaViewModel : ViewModel() {
+@HiltViewModel
+class YogaViewModel @Inject constructor() : ViewModel() {
 
     // Flux d'événements partagé pour déclencher les actions de l'interface
     private val navigationSharedFlow = MutableSharedFlow<BodyNavigationEvent>()
@@ -28,7 +31,7 @@ class YogaViewModel : ViewModel() {
     fun onFlowClicked() {
         Timber.i("Action : Sélection séance SOS Douleur")
         viewModelScope.launch {
-            navigationSharedFlow.emit(BodyNavigationEvent.LaunchVideo("SOS Douleur", "non"))
+            navigationSharedFlow.emit(BodyNavigationEvent.LaunchVideo("SOS Douleurs", "non"))
         }
     }
 

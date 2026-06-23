@@ -16,6 +16,7 @@ import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.core.view.isVisible
 import timber.log.Timber
@@ -32,6 +33,7 @@ import timber.log.Timber
  * avec la base de données Room.
  */
 @Suppress("UNCHECKED_CAST")
+@AndroidEntryPoint
 class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
 
     private val viewModel: EntryViewModel by activityViewModels()

@@ -2,16 +2,17 @@ package com.audreyRetournayDiet.femSante.viewModels.alim
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.RecipeNavigationEvent
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel gérant la logique métier de la section Alimentation / Recettes.
@@ -20,7 +21,10 @@ import timber.log.Timber
  * 2. Formater les noms de fichiers techniques en titres affichables.
  * 3. Émettre des événements de navigation via [SharedFlow] pour l'UI.
  */
-class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
+@HiltViewModel
+class AlimViewModel @Inject constructor(
+    private val repository: RecipeRepository
+) : ViewModel() {
 
     // Événements de navigation (utilisés pour passer à l'écran de liste des recettes)
     private val navigationSharedFlow = MutableSharedFlow<RecipeNavigationEvent>()
@@ -71,18 +75,4 @@ class AlimViewModel(private val repository: RecipeRepository) : ViewModel() {
         }
     }
 
-    /**
-     * Factory pour instancier le ViewModel avec ses dépendances (Repository).
-     */
-    class AlimViewModelFactory(
-        private val repository: RecipeRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(AlimViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return AlimViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
 }

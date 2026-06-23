@@ -8,16 +8,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.AccountViewModel
 import com.audreyRetournayDiet.femSante.features.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.features.login.PaymentActivity
 import com.audreyRetournayDiet.femSante.features.login.LoginActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -30,9 +31,11 @@ import timber.log.Timber
  * - Modifier le mot de passe via [ForgottenActivity].
  * - Se déconnecter proprement de l'application.
  */
+@AndroidEntryPoint
 class AccountFragment : Fragment() {
 
-    private lateinit var viewModel: AccountViewModel
+    // Hilt fournit AccountViewModel et son UserStore.
+    private val viewModel: AccountViewModel by viewModels()
     private lateinit var cgu: Button
     private lateinit var cgv: Button
     private lateinit var legal: Button
@@ -48,10 +51,6 @@ class AccountFragment : Fragment() {
     ): View? {
         Timber.d("onCreateView: Initialisation du profil utilisateur")
         val view = inflater.inflate(R.layout.fragment_account, container, false)
-
-        // Initialisation du ViewModel avec injection manuelle du UserStore
-        val userStore = UserStore(requireContext())
-        viewModel = AccountViewModel(userStore)
 
         initViews(view)
         setupObservers()

@@ -3,11 +3,13 @@ package com.audreyRetournayDiet.femSante.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.PdfNavigationEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel gérant la "Boîte à Outils" (Fiches conseils PDF).
@@ -15,7 +17,8 @@ import timber.log.Timber
  * 1. Faire la correspondance (mapping) entre un clic sur l'UI (ID) et un fichier physique.
  * 2. Émettre un événement de navigation vers le lecteur PDF de l'application.
  */
-class ToolboxViewModel : ViewModel() {
+@HiltViewModel
+class ToolboxViewModel @Inject constructor() : ViewModel() {
 
     // Flux d'événements pour la navigation vers le PDF sélectionné
     private val navigationSharedFlow = MutableSharedFlow<PdfNavigationEvent>()

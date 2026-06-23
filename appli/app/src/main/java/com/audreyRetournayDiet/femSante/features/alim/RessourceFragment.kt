@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RessourceViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -23,6 +24,7 @@ import timber.log.Timber
  * La logique de sélection du fichier est gérée par le [RessourceViewModel], et l'affichage
  * est délégué à la [PdfActivity].
  */
+@AndroidEntryPoint
 class RessourceFragment : Fragment() {
 
     private val viewModel: RessourceViewModel by viewModels()

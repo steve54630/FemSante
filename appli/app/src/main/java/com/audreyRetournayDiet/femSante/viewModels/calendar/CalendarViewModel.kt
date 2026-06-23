@@ -1,7 +1,6 @@
 package com.audreyRetournayDiet.femSante.viewModels.calendar
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
@@ -10,6 +9,8 @@ import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.FlowLevel
 import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +26,8 @@ import java.time.ZoneId
  * - **StateFlow (`entryResult`)** : Contient l'objet complet [DailyEntryFull] de la journée sélectionnée.
  * - **SharedFlow (`_events`)** : Notifie l'UI des succès ou échecs de suppression.
  */
-class CalendarViewModel(
+@HiltViewModel
+class CalendarViewModel @Inject constructor(
     private val repository: DailyRepository,
     private val cycleRepository: CycleRepository
 ) : ViewModel() {
@@ -169,13 +171,4 @@ class CalendarViewModel(
         }
     }
 
-    class Factory(
-        private val repository: DailyRepository,
-        private val cycleRepository: CycleRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return CalendarViewModel(repository, cycleRepository) as T
-        }
-    }
 }

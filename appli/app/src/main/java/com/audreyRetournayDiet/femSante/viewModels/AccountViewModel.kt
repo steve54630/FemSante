@@ -3,9 +3,11 @@ package com.audreyRetournayDiet.femSante.viewModels
 import androidx.lifecycle.ViewModel
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
 import com.audreyRetournayDiet.femSante.shared.UserStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel gérant les informations du compte et la fin de session.
@@ -15,7 +17,8 @@ import timber.log.Timber
  * 2. Gérer la déconnexion sécurisée en nettoyant les préférences.
  * 3. Notifier l'UI pour rediriger vers l'écran de Login si aucune session n'est active.
  */
-class AccountViewModel(
+@HiltViewModel
+class AccountViewModel @Inject constructor(
     private val userStore: UserStore
 ) : ViewModel() {
 

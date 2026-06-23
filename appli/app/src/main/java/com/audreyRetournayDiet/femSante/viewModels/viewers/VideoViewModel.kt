@@ -1,15 +1,17 @@
 package com.audreyRetournayDiet.femSante.viewModels.viewers
 
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.audreyRetournayDiet.femSante.data.entities.VideoUiState
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel pilotant le lecteur vidéo interactif.
@@ -19,10 +21,16 @@ import timber.log.Timber
  * 2. **Gestion d'état (UI State)** : Gère le plein écran, l'orientation et le chargement.
  * 3. **Support PDF** : Détecte si un document d'accompagnement doit être proposé à l'utilisatrice.
  */
-class VideoViewModel(
+@HiltViewModel
+class VideoViewModel @Inject constructor(
     private val videoManager: VideoManager,
-    private val videoData: HashMap<*, *>
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    // Métadonnées vidéo (Title/URL/PDF) issues de l'extra "map" de l'Intent, exposé par
+    // le SavedStateHandle.
+    private val videoData: HashMap<*, *> =
+        savedStateHandle.get<HashMap<*, *>>("map") ?: hashMapOf<String, String>()
 
     // État réactif de l'écran vidéo
     private val internalUiState = MutableStateFlow(VideoUiState())
@@ -102,12 +110,4 @@ class VideoViewModel(
         internalUiState.value = internalUiState.value.copy(isPortraitVideo = isPortrait)
     }
 
-    class Factory(
-        private val videoManager: VideoManager,
-        private val data: HashMap<*, *>
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return VideoViewModel(videoManager, data) as T
-        }
-    }
 }

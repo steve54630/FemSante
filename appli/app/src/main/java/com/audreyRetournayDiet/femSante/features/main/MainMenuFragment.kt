@@ -20,11 +20,9 @@ import com.audreyRetournayDiet.femSante.features.calendar.view.CalendarActivity
 import com.audreyRetournayDiet.femSante.features.corps.BienCorpsActivity
 import com.audreyRetournayDiet.femSante.features.tete.BienTeteActivity
 import com.audreyRetournayDiet.femSante.features.ToolboxActivity
-import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
-import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.shared.RecommendationLauncher
-import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.main.PourToiViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -39,6 +37,7 @@ import timber.log.Timber
  *
  * Il assure la navigation vers les activités spécialisées de chaque module.
  */
+@AndroidEntryPoint
 class MainMenuFragment : Fragment() {
 
     companion object {
@@ -54,12 +53,8 @@ class MainMenuFragment : Fragment() {
     private lateinit var bannerPourToi: TextView
     private lateinit var containerRecommendations: ViewGroup
 
-    private val pourToiViewModel: PourToiViewModel by viewModels {
-        val database = DatabaseProvider.getDatabase(requireContext())
-        val repository = DailyRepository(database.dailyDao())
-        val userId = UserStore(requireContext()).getUser()?.id ?: ""
-        PourToiViewModel.Factory(repository, userId)
-    }
+    // Hilt fournit la Factory : plus de plomberie manuelle (DatabaseProvider, Repository, UserStore).
+    private val pourToiViewModel: PourToiViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

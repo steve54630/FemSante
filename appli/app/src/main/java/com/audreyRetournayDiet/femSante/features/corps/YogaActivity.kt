@@ -13,6 +13,7 @@ import com.audreyRetournayDiet.femSante.data.entities.BodyNavigationEvent
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
 import com.audreyRetournayDiet.femSante.viewModels.body.YogaViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,6 +27,7 @@ import timber.log.Timber
  * L'activité réagit aux [BodyNavigationEvent] pour déclencher l'ouverture du lecteur vidéo
  * via la classe utilitaire [Utilitaires].
  */
+@AndroidEntryPoint
 class YogaActivity : AppCompatActivity() {
 
     private val viewModel: YogaViewModel by viewModels()

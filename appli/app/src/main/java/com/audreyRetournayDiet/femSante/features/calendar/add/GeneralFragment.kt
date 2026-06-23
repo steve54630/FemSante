@@ -11,6 +11,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -22,6 +23,7 @@ import timber.log.Timber
  * * Ce fragment utilise le [EntryViewModel] partagé par l'activité pour maintenir la cohérence
  * des données durant le processus de création ou d'édition d'une entrée.
  */
+@AndroidEntryPoint
 class GeneralFragment : Fragment(R.layout.fragment_general) {
 
     private val viewModel: EntryViewModel by activityViewModels()
