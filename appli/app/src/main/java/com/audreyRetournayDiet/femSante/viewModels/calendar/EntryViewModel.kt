@@ -7,27 +7,40 @@ import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.entity.*
 import com.audreyRetournayDiet.femSante.room.type.*
+import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZoneId
 
+/**
+ * ViewModel gérant le formulaire de saisie quotidienne (Entry).
+ * * ### Architecture et Rôles :
+ * 1. **Gestion d'États Granulaires** : Utilise un StateFlow par entité [General, Context, Psy, Symptom]
+ * pour optimiser les recompositions UI.
+ * 2. **Mode Hybride** : Gère nativement l'insertion (nouveau jour) et l'édition (mise à jour via ID).
+ * 3. **Validation et Persistance** : Coordonne la sauvegarde multi-tables via le [DailyRepository].
+ */
 class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
 
+    // Canal d'événements à usage unique (Succès/Erreur de navigation)
     private val eventChannel = MutableSharedFlow<EntryEvent>()
     val events = eventChannel.asSharedFlow()
+
+    // Indicateur du mode (true = édition d'une entrée existante)
+    private val _editChannel = MutableStateFlow(value = false)
+    val edit = _editChannel.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
-    val selectedDate = _selectedDate.asStateFlow()
 
-    // --- INITIALISATION DES ÉTATS (PROPRE) ---
-    // On passe entryId = 0L car il sera généré par la DB lors du save.
+    // --- États du Formulaire (Un StateFlow par section de l'entité DailyEntryFull) ---
 
     private val _generalState = MutableStateFlow(GeneralStateEntity(entryId = 0L))
     val generalState = _generalState.asStateFlow()
@@ -50,11 +63,19 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
     private val _symptomState = MutableStateFlow(SymptomStateEntity(entryId = 0L))
     val symptomState = _symptomState.asStateFlow()
 
-    // --- LOGIQUE MÉTIER ---
+    // --- setters de configuration ---
 
     fun setDate(date: LocalDate) {
+        Timber.d("Date du formulaire fixée sur : $date")
         _selectedDate.value = date
     }
+
+    fun setEdit(edit: Boolean) {
+        Timber.d("Mode édition activé : $edit")
+        _editChannel.value = edit
+    }
+
+    // --- Fonctions de mise à jour des états (Appelées par l'UI via Listeners/Binding) ---
 
     fun updateGeneralState(pain: Int, tired: Boolean) {
         _generalState.value = _generalState.value.copy(painLevel = pain, isTired = tired)
@@ -73,7 +94,7 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
             physicalActivity = activity,
             medecineTaken = medicine,
             medicationList = medications,
-            diet = diet ?: "" // On s'assure que ce n'est pas null pour l'entité
+            diet = diet ?: ""
         )
     }
 
@@ -85,59 +106,92 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
         )
     }
 
-    fun saveAllData(userID: String) {
+    /**
+     * Sauvegarde l'ensemble des données en base.
+     * Bascule automatiquement entre 'save' (INSERT) et 'update' (UPDATE) selon l'état de [_editChannel].
+     */
+    fun saveAllData(userID: String, id : Long?) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                // Conversion de la date locale en timestamp pour Room
                 val dateMillis = _selectedDate.value
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()
                     .toEpochMilli()
 
-                // On envoie les entités telles quelles au repository
-                val result = repository.saveCompleteEntry(
-                    userId = userID,
-                    date = dateMillis,
-                    general = _generalState.value,
-                    context = _contextState.value,
-                    psy = _psychologicalState.value,
-                    symptom = _symptomState.value
-                )
+                Timber.i("Lancement sauvegarde - Mode: ${if (edit.value) "UPDATE (ID: $id)" else "INSERT"} | Date: ${_selectedDate.value}")
+
+                val result = if (!edit.value) {
+                    repository.saveCompleteEntry(
+                        userId = userID,
+                        date = dateMillis,
+                        general = _generalState.value,
+                        context = _contextState.value,
+                        psy = _psychologicalState.value,
+                        symptom = _symptomState.value
+                    )
+                } else {
+                    repository.updateCompleteEntry(
+                        userId = userID,
+                        id = id!!,
+                        general = _generalState.value,
+                        context = _contextState.value,
+                        psy = _psychologicalState.value,
+                        symptom = _symptomState.value
+                    )
+                }
 
                 _isLoading.value = false
                 when (result) {
-                    is ApiResult.Success -> eventChannel.emit(EntryEvent.Success)
-                    is ApiResult.Failure -> eventChannel.emit(EntryEvent.Error(result.message))
+                    is ApiResult.Success -> {
+                        Timber.i("Données enregistrées avec succès en BDD")
+                        eventChannel.emit(EntryEvent.Success)
+                    }
+                    is ApiResult.Failure -> {
+                        Timber.e("Échec de sauvegarde : ${result.message}")
+                        eventChannel.emit(EntryEvent.Error(result.message))
+                    }
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
-                e.printStackTrace()
+                Timber.e(e, "Exception critique lors de la sauvegarde")
                 eventChannel.emit(EntryEvent.Error(e.localizedMessage ?: "Erreur de sauvegarde"))
             }
         }
     }
 
+    /**
+     * Charge les données d'une journée existante pour pré-remplir le formulaire.
+     */
     fun loadExistingData(userId: String, id: Long) {
         viewModelScope.launch {
             _isLoading.value = true
-            val result = repository.getDailyEntrybyID(userId, id)
+            Timber.d("Chargement des données existantes pour ID technique : $id")
+
+            val result = repository.getDailyEntryByID(userId, id)
 
             if (result is ApiResult.Success && result.data != null) {
                 val data = result.data
-                // Si les données existent, on peuple les StateFlow
-                // Note: On utilise le Elvis operator pour parer à toute nullité du DTO
+                // Mapping des données récupérées vers les StateFlow locaux
                 _generalState.value = data.generalState ?: GeneralStateEntity(entryId = 0L)
                 _psychologicalState.value = data.psychologicalState ?: PsychologicalStateEntity(entryId = 0L)
                 _symptomState.value = data.symptomsState ?: SymptomStateEntity(entryId = 0L)
                 _contextState.value = data.contextState ?: ContextStateEntity(entryId = 0L)
+                Timber.i("Formulaire pré-rempli avec les données de l'ID : $id")
             } else {
+                Timber.w("Aucune donnée trouvée pour l'ID $id, remise à zéro des états")
                 resetStates()
             }
             _isLoading.value = false
         }
     }
 
+    /**
+     * Réinitialise tous les champs du formulaire aux valeurs par défaut.
+     */
     private fun resetStates() {
+        Timber.d("Reset complet des états du formulaire")
         _generalState.value = GeneralStateEntity(entryId = 0L)
         _psychologicalState.value = PsychologicalStateEntity(entryId = 0L, dayQuality = DayQuality.MOYENNE)
         _symptomState.value = SymptomStateEntity(entryId = 0L)
@@ -158,9 +212,4 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-}
-
-sealed class EntryEvent {
-    object Success : EntryEvent()
-    data class Error(val message: String) : EntryEvent()
 }

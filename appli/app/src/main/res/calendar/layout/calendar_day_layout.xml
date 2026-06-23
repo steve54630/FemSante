@@ -19,4 +19,15 @@
         android:background="@android:color/holo_blue_light"
         android:visibility="invisible" />
 
+    <!-- Marqueur de règles (suivi de cycle), distinct de la pastille de douleur -->
+    <View
+        android:id="@+id/periodMarker"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_period_marker"
+        android:visibility="invisible" />
+
 </FrameLayout>

@@ -8,4 +8,23 @@
         <item name="android:paddingBottom">4dp</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
+    <!-- Titre d'une carte de section dans le résumé du jour -->
+    <style name="SummarySectionTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blue_app</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Séparateur fin sous le titre de section -->
+    <style name="SummaryDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">#E0E0E0</item>
+    </style>
 </resources>

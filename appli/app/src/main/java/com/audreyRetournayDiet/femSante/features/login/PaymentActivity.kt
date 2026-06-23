@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.features.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -30,10 +29,21 @@ import com.paypal.android.cardpayments.Card
 import com.paypal.android.paymentbuttons.PayPalButton
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.math.BigDecimal
-import java.math.RoundingMode
-import kotlin.collections.get
+import timber.log.Timber
 
+/**
+ * Activité gérant le tunnel de paiement de l'application.
+ *
+ * Cette interface permet à l'utilisatrice de souscrire à un abonnement (1, 6, 12 mois ou accès à vie).
+ * Elle supporte deux modes de paiement principaux :
+ * 1. **PayPal** : Via le bouton SDK natif.
+ * 2. **Carte Bancaire** : Saisie sécurisée des informations de carte.
+ *
+ * ### Fonctionnalités clés :
+ * - Calcul dynamique des prix selon l'abonnement choisi.
+ * - Application de codes de réduction via l'API.
+ * - Gestion des contextes de paiement : premier achat, mise à jour (`update`) ou régularisation (`repay`).
+ */
 class PaymentActivity : AppCompatActivity() {
 
     private lateinit var alert: LoadingAlert
@@ -53,14 +63,17 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var reductionValue: EditText
     private lateinit var reductionButton: Button
 
-    private lateinit var paymentViewModel: PaymentViewModel // Notre "ViewModel"
+    private lateinit var paymentViewModel: PaymentViewModel
     private lateinit var parametersMap: HashMap<*, *>
 
     private var valueSubscription: String = ""
-    private var reduction: Int = 0
     private var update: Boolean = false
     private var repay: Boolean = false
 
+    /**
+     * Map de correspondance entre les IDs techniques d'abonnement et les libellés UI.
+     * Format clé : "durée_jours;prix_facial"
+     */
     private val mapPrice = linkedMapOf(
         "30;7.00" to "1 mois : 7€",
         "180;35.00" to "6 mois : 35€",
@@ -71,27 +84,18 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+        Timber.d("onCreate: Initialisation de l'écran de paiement")
 
         initViews()
         setupSpinner()
-
-        // Initialisation de notre "ViewModel" avec ses callbacks
-        paymentViewModel = PaymentViewModel(
-            context = this,
-            userManager = userManager,
-            parametersMap = parametersMap,
-            repay = repay,
-            update = update,
-            mapPrice = mapPrice,
-            registerSpinner = { registerSpinner },
-            onLoading = { isLoading -> if (isLoading) alert.start() else alert.close() },
-            onError = { msg -> Utilitaires.showToast(msg, this) },
-            onNavigationRequired = { isRepay, data -> navigateToLogin(isRepay, data) }
-        )
-
+        setupViewModel()
         setupListeners()
     }
 
+    /**
+     * Lie les composants XML et récupère les données transmises par l'Intent.
+     * Gère la compatibilité pour la récupération de la HashMap selon la version d'Android.
+     */
     private fun initViews() {
         alert = LoadingAlert(this)
         userManager = UserManager(this)
@@ -114,6 +118,9 @@ class PaymentActivity : AppCompatActivity() {
         repay = intent.getBooleanExtra("repay", false)
         update = intent.getStringExtra("update") == "Oui"
 
+        Timber.i("Contexte de paiement: Repay=$repay, Update=$update")
+
+        // Récupération sécurisée des paramètres d'inscription
         parametersMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("map", HashMap::class.java)!!
         } else {
@@ -121,41 +128,94 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialise le ViewModel avec les callbacks de mise à jour d'interface et de navigation.
+     */
+    private fun setupViewModel() {
+        paymentViewModel = PaymentViewModel(
+            context = this,
+            userManager = userManager,
+            parametersMap = parametersMap,
+            repay = repay,
+            update = update,
+            mapPrice = mapPrice,
+            onLoading = { isLoading ->
+                Timber.v("Loading state: $isLoading")
+                if (isLoading) alert.start() else alert.close()
+            },
+            onError = { msg ->
+                Timber.e("Erreur de paiement détectée: $msg")
+                Utilitaires.showToast(msg, this)
+            },
+            onPriceCalculated = { price ->
+                // Mise à jour du prix final affiché (après réduction éventuelle)
+                valueSubscription = price
+                buyout.text = "$price €"
+                Timber.d("UI: Prix mis à jour = $price €")
+            },
+            onNavigationRequired = { isRepay, data ->
+                Timber.i("Succès transaction: Redirection utilisateur")
+                navigateToLogin(isRepay, data)
+            }
+        )
+    }
+
+    /**
+     * Configure le Spinner de sélection des offres.
+     * Utilise un adaptateur spécial pour forcer l'utilisatrice à faire un choix explicite.
+     */
     private fun setupSpinner() {
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, mapPrice.values.toList())
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mapPrice.values.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        registerSpinner.adapter =
-            NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
+        registerSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
 
         registerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 > 0) refreshPriceDisplay()
+                if (p2 > 0) { // Index 0 réservé au placeholder
+                    val label = registerSpinner.selectedItem.toString()
+                    Timber.v("Offre choisie : $label")
+                    paymentViewModel.updateSelection(label)
+                }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
     }
 
+    /**
+     * Définit les listeners pour le switch de mode de paiement et les validations de formulaire.
+     */
     private fun setupListeners() {
+        // Bascule entre l'interface PayPal et l'interface Carte Bancaire
         switchPay.setOnCheckedChangeListener { _, isChecked ->
+            val mode = if (isChecked) "CARTE" else "PAYPAL"
+            Timber.d("Changement de mode : $mode")
             cardLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
             paypalLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
         }
 
+        // Gestion du code promo
         reductionButton.setOnClickListener {
+            val code = reductionValue.text.toString().trim()
             if (registerSpinner.selectedItemId == -1L) {
-                Utilitaires.showToast("Veuillez sélectionner un abonnement", this)
+                Utilitaires.showToast("Veuillez d'abord sélectionner un abonnement", this)
                 return@setOnClickListener
             }
-            applyReductionFromApi()
+            applyReductionFromApi(code)
         }
 
+        // Paiement PayPal Native
         payPal.setOnClickListener {
-            if (validateForm()) paymentViewModel.startPayPalPayment(valueSubscription)
+            if (validateForm()) {
+                Timber.i("Lancement PayPal : $valueSubscription €")
+                paymentViewModel.startPayPalPayment(valueSubscription)
+            }
         }
 
+        // Paiement Carte Bancaire
         payPalCard.setOnClickListener {
             if (validateForm()) {
+                Timber.i("Lancement Paiement Carte : $valueSubscription €")
+                // Création sécurisée de l'objet Card (PCI-DSS compliant : pas de log des données)
                 val card = Card(
                     number.text.toString(),
                     month.text.toString(),
@@ -166,45 +226,44 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
+        // Consultation des CGV (obligatoire pour le paiement)
         findViewById<Button>(R.id.buttonCGV).setOnClickListener {
-            val intent = Intent(this, PdfActivity::class.java).apply { putExtra("PDF", "Conditions Générales de Vente.pdf") }
-            startActivity(intent)
+            startActivity(Intent(this, PdfActivity::class.java).apply {
+                putExtra("PDF", "Conditions Générales de Vente.pdf")
+            })
         }
     }
 
-    private fun applyReductionFromApi() {
+    /**
+     * Interroge l'API pour vérifier la validité d'un code de réduction.
+     * En cas de succès, demande au ViewModel de recalculer le prix final.
+     */
+    private fun applyReductionFromApi(code: String) {
+        if (code.isEmpty()) return
         alert.start()
-        val params = JSONObject().put("reductionCode", reductionValue.text.toString())
+        val params = JSONObject().put("reductionCode", code)
+
         PaymentManager(this).applyReduction(params) { result ->
             alert.close()
-            if (result is ApiResult.Success) {
-                reduction = result.data?.optInt("reduction") ?: 0
-                refreshPriceDisplay()
-                Utilitaires.showToast(result.data?.optString("message") ?: "Code appliqué", this)
-            } else if (result is ApiResult.Failure) {
-                Utilitaires.showToast(result.message, this)
+            when (result) {
+                is ApiResult.Success -> {
+                    val percent = result.data?.optInt("reduction") ?: 0
+                    Timber.i("Code promo valide: -$percent%")
+                    paymentViewModel.applyReduction(percent)
+                    Utilitaires.showToast(result.data?.optString("message") ?: "Réduction appliquée", this)
+                }
+                is ApiResult.Failure -> {
+                    Timber.w("Code promo invalide: ${result.message}")
+                    Utilitaires.showToast(result.message, this)
+                }
             }
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun refreshPriceDisplay() {
-        val selectedLabel = registerSpinner.selectedItem.toString()
-        val technicalKey = mapPrice.entries.find { it.value == selectedLabel }?.key ?: return
-
-        val (days, basePrice) = technicalKey.split(";")
-        val originalPrice = basePrice.toDouble()
-
-        val finalPrice = if (reduction > 0 && (days == "365" || days == "A vie")) {
-            originalPrice * (1 - reduction / 100.0)
-        } else {
-            originalPrice
-        }
-
-        valueSubscription = BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_EVEN).toString()
-        buyout.text = "$valueSubscription €"
-    }
-
+    /**
+     * Redirige vers l'écran de connexion après un paiement réussi.
+     * Transmet les identifiants pour faciliter la première connexion.
+     */
     private fun navigateToLogin(isRepay: Boolean, data: JSONObject?) {
         val intent = Intent(this, LoginActivity::class.java).apply {
             if (!isRepay) {
@@ -220,15 +279,20 @@ class PaymentActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Vérifie les pré-requis métier avant de déclencher une transaction.
+     */
     private fun validateForm(): Boolean {
-        if (registerSpinner.selectedItemId == -1L) {
-            Utilitaires.showToast("Choisissez un abonnement", this)
-            return false
+        return when {
+            registerSpinner.selectedItemId == -1L -> {
+                Utilitaires.showToast("Veuillez choisir une offre d'abonnement", this)
+                false
+            }
+            !check.isChecked -> {
+                Utilitaires.showToast("Vous devez accepter les conditions de vente (CGV)", this)
+                false
+            }
+            else -> true
         }
-        if (!check.isChecked) {
-            Utilitaires.showToast("Veuillez accepter les CGV", this)
-            return false
-        }
-        return true
     }
 }

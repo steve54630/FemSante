@@ -4,9 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/fond_appli"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:background="@drawable/fond_appli">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,10 +13,11 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- En-tête : titre + actions -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/tvSummaryTitle"
@@ -43,110 +43,146 @@
                     style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    app:icon="@drawable/ic_delete"
-                    android:contentDescription="@string/entry_remove" />
+                    android:contentDescription="@string/entry_remove"
+                    app:icon="@drawable/ic_delete" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnEdit"
                     style="@style/Widget.Material3.Button.IconButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    app:icon="@drawable/ic_edit"
-                    android:contentDescription="@string/entry_modify" />
+                    android:contentDescription="@string/entry_modify"
+                    app:icon="@drawable/ic_edit" />
             </LinearLayout>
         </RelativeLayout>
 
-        <include
-            android:id="@+id/cardGeneral"
-            android:text="@string/general"
-            layout="@layout/item_summary_section" />
-
-        <LinearLayout
+        <!-- Carte : État général -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="14dp">
 
-            <TextView
-                android:id="@+id/tvIsTired"
-                style="@style/SummaryDetailStyle"
-                tools:text="Fatigue : En forme" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvPainLevel"
-                style="@style/SummaryDetailStyle"
-                tools:text="Niveau de douleur : 2/10" />
-        </LinearLayout>
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/general" />
 
-        <include
-            android:id="@+id/cardPsychological"
-            android:text="@string/psychological"
-            layout="@layout/item_summary_section" />
+                <View style="@style/SummaryDivider" />
 
-        <LinearLayout
+                <TextView
+                    android:id="@+id/tvIsTired"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Fatigue : En forme" />
+
+                <TextView
+                    android:id="@+id/tvPainLevel"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Douleur : 2/10" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Carte : État psychologique -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="14dp">
 
-            <TextView
-                android:id="@+id/tvDayQuality"
-                style="@style/SummaryDetailStyle"
-                tools:text="Qualité : Bonne" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvDifficultyCauses"
-                style="@style/SummaryDetailStyle"
-                tools:text="Causes : Stress" />
-        </LinearLayout>
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/psychological" />
 
-        <include
-            android:id="@+id/cardSymptoms"
-            android:text="@string/symptom"
-            layout="@layout/item_summary_section" />
+                <View style="@style/SummaryDivider" />
 
-        <LinearLayout
+                <TextView
+                    android:id="@+id/tvDayQuality"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Qualité du jour : Bonne" />
+
+                <TextView
+                    android:id="@+id/tvDifficultyCauses"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Causes : Stress" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Carte : Symptômes -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="14dp">
 
-            <TextView
-                android:id="@+id/tvLocalizedPains"
-                style="@style/SummaryDetailStyle"
-                tools:text="Zones : Ventre, Tête" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvHasNausea"
-                style="@style/SummaryDetailStyle"
-                tools:text="Nausées : Non" />
-        </LinearLayout>
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/symptom" />
 
-        <include
-            android:id="@+id/cardContext"
-            android:text="@string/context"
-            layout="@layout/item_summary_section" />
+                <View style="@style/SummaryDivider" />
 
-        <LinearLayout
+                <TextView
+                    android:id="@+id/tvLocalizedPains"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Zones : Ventre, Tête" />
+
+                <TextView
+                    android:id="@+id/tvHasNausea"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Nausées : Non" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Carte : Contexte -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:layout_marginBottom="4dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="14dp">
 
-            <TextView
-                android:id="@+id/tvPhysicalActivity"
-                style="@style/SummaryDetailStyle"
-                tools:text="Activité : Repos" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvTookMedication"
-                style="@style/SummaryDetailStyle"
-                tools:text="Traitement : Oui (Paracétamol)" />
-        </LinearLayout>
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/context" />
+
+                <View style="@style/SummaryDivider" />
+
+                <TextView
+                    android:id="@+id/tvPhysicalActivity"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Activité : Repos" />
+
+                <TextView
+                    android:id="@+id/tvTookMedication"
+                    style="@style/SummaryDetailStyle"
+                    tools:text="Traitement : Oui (Paracétamol)" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

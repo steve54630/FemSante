@@ -12,7 +12,16 @@ import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+/**
+ * Fragment gérant les indicateurs généraux de santé quotidienne.
+ * * Il permet à l'utilisatrice de renseigner :
+ * - Son niveau de douleur via un [Slider].
+ * - Son état de fatigue via un [MaterialSwitch].
+ * * Ce fragment utilise le [EntryViewModel] partagé par l'activité pour maintenir la cohérence
+ * des données durant le processus de création ou d'édition d'une entrée.
+ */
 class GeneralFragment : Fragment(R.layout.fragment_general) {
 
     private val viewModel: EntryViewModel by activityViewModels()
@@ -23,39 +32,53 @@ class GeneralFragment : Fragment(R.layout.fragment_general) {
         val sliderPain = view.findViewById<Slider>(R.id.sliderPain)
         val switchTired = view.findViewById<MaterialSwitch>(R.id.switchTired)
 
-        // --- 1. OBSERVATION (UI <- ViewModel) ---
-        // On écoute les changements d'état pour mettre à jour les composants
+        observeGeneralState(sliderPain, switchTired)
+        setupInputListeners(sliderPain, switchTired)
+    }
+
+    /**
+     * Observe les changements d'état du ViewModel pour mettre à jour les composants UI.
+     * Les vérifications d'égalité évitent de redéclencher des animations inutiles.
+     */
+    private fun observeGeneralState(slider: Slider, switch: MaterialSwitch) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.generalState.collect { state ->
-                    // On met à jour sans déclencher les listeners récursivement
-                    if (sliderPain.value != state.painLevel.toFloat()) {
-                        sliderPain.value = state.painLevel.toFloat()
+                    Timber.v("Sync UI : Douleur=${state.painLevel}, Fatigue=${state.isTired}")
+
+                    if (slider.value != state.painLevel.toFloat()) {
+                        slider.value = state.painLevel.toFloat()
                     }
-                    if (switchTired.isChecked != state.isTired) {
-                        switchTired.isChecked = state.isTired
+
+                    if (switch.isChecked != state.isTired) {
+                        switch.isChecked = state.isTired
                     }
                 }
             }
         }
+    }
 
-        // --- 2. ACTIONS (UI -> ViewModel) ---
-
-        sliderPain.addOnChangeListener { _, value, fromUser ->
-            // "fromUser" évite de boucler si la mise à jour vient du collect
+    /**
+     * Configure les écouteurs d'événements pour transmettre les saisies utilisateur au ViewModel.
+     * Utilise des gardes (fromUser, isPressed) pour s'assurer que seules les actions
+     * manuelles déclenchent une mise à jour.
+     */
+    private fun setupInputListeners(slider: Slider, switch: MaterialSwitch) {
+        slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
+                Timber.d("Action : Niveau de douleur réglé sur $value")
                 viewModel.updateGeneralState(
                     pain = value.toInt(),
-                    tired = switchTired.isChecked
+                    tired = switch.isChecked
                 )
             }
         }
 
-        switchTired.setOnCheckedChangeListener { buttonView, isChecked ->
-            // On ne met à jour le VM que si c'est une action réelle (clic/swipe)
+        switch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (buttonView.isPressed) {
+                Timber.d("Action : État de fatigue modifié -> $isChecked")
                 viewModel.updateGeneralState(
-                    pain = sliderPain.value.toInt(),
+                    pain = slider.value.toInt(),
                     tired = isChecked
                 )
             }

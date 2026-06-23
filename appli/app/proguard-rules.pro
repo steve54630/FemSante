@@ -36,3 +36,8 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 -dontwarn org.slf4j.impl.StaticLoggerBinder
+
+# SQLCipher (chiffrement de la base Room) - conserver les classes natives/JNI
+-keep class net.zetetic.database.** { *; }
+-keep class net.sqlcipher.** { *; }
+-dontwarn net.zetetic.database.**

@@ -153,6 +153,7 @@
     <string name="zone_back">Lombaires</string>
     <string name="zone_breasts">Seins</string>
     <string name="zone_head">Tête</string>
+    <string name="zone_abdomen">Abdomen</string>
     <string name="symptom_nausea">Nausées</string>
     <string name="others_symptoms">Autres observations</string>
     <string name="others_symptom_hint">Décrivez d\'autres symptômes…</string>
@@ -166,5 +167,33 @@
     <string name="psychological">Psychologique</string>
     <string name="symptom">Symptômes</string>
     <string name="context">Contexte</string>
+    <string name="logout">Se déconnecter</string>
+
+    <!-- Section "Pour toi aujourd'hui" -->
+    <string name="pour_toi_title">Pour toi aujourd\'hui</string>
+    <string name="pour_toi_banner_incitatif">Pour des recommandations plus personnalisées, renseigne ton ressenti du jour dans ton journal.</string>
+    <string name="pour_toi_banner_action">Remplir mon journal</string>
+    <string name="badge_recommande">Recommandé pour toi</string>
+
+    <!-- Suivi de cycle -->
+    <string name="cycle_section_title">Suivi du cycle</string>
+    <string name="cycle_period_today">Règles ce jour</string>
+    <string name="cycle_flow_label">Abondance du flux</string>
+    <string name="cycle_flow_light">Léger</string>
+    <string name="cycle_flow_medium">Moyen</string>
+    <string name="cycle_flow_heavy">Abondant</string>
+    <string name="cycle_spotting">Spotting (pertes hors règles)</string>
+    <string name="cycle_profile_title">Comment sont tes cycles ?</string>
+    <string name="cycle_profile_message">Pour adapter le suivi à ta situation. Tu pourras le modifier plus tard.</string>
+    <string name="cycle_profile_regular">Réguliers</string>
+    <string name="cycle_profile_irregular">Irréguliers</string>
+    <string name="cycle_profile_absent">Absents ou sous pilule</string>
+    <string name="cycle_profile_current">Mes cycles : %1$s (modifier)</string>
+    <string name="cycle_phase_label">Phase estimée : %1$s</string>
+    <string name="cycle_phase_menstruelle">Menstruelle</string>
+    <string name="cycle_phase_folliculaire">Folliculaire</string>
+    <string name="cycle_phase_ovulation">Ovulation</string>
+    <string name="cycle_phase_luteale">Lutéale</string>
+    <string name="cycle_phase_indeterminee">Indéterminée</string>
 
 </resources>

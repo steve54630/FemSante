@@ -9,13 +9,22 @@ import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.collections.get
+import timber.log.Timber
 
+/**
+ * ViewModel pilotant le lecteur vidéo interactif.
+ *
+ * ### Fonctionnalités :
+ * 1. **Récupération hybride** : Supporte les URLs directes ou les appels API dynamiques.
+ * 2. **Gestion d'état (UI State)** : Gère le plein écran, l'orientation et le chargement.
+ * 3. **Support PDF** : Détecte si un document d'accompagnement doit être proposé à l'utilisatrice.
+ */
 class VideoViewModel(
-    private val videoManager: VideoManager, // On injecte le manager
+    private val videoManager: VideoManager,
     private val videoData: HashMap<*, *>
 ) : ViewModel() {
 
+    // État réactif de l'écran vidéo
     private val internalUiState = MutableStateFlow(VideoUiState())
     val uiState: StateFlow<VideoUiState> = internalUiState.asStateFlow()
 
@@ -23,11 +32,17 @@ class VideoViewModel(
         loadVideoData()
     }
 
+    /**
+     * Initialise les métadonnées et récupère la source vidéo.
+     */
     private fun loadVideoData() {
-        val title = videoData["Title"]?.toString() ?: ""
-        val pdfParam = videoData["PDF"]?.toString() ?: ""
+        val title = videoData["Title"]?.toString() ?: "Vidéo inconnue"
+        val pdfParam = videoData["PDF"]?.toString() ?: "non"
+        val existingUrl = videoData["URL"]?.toString()
 
-        // On initialise avec le titre mais en mode "Loading"
+        Timber.d("Initialisation vidéo : '$title' | PDF requis : $pdfParam")
+
+        // Configuration de l'état initial (avec ou sans bouton PDF)
         internalUiState.value = VideoUiState(
             title = title,
             isLoading = true,
@@ -35,44 +50,56 @@ class VideoViewModel(
             pdfFileName = "$title.pdf"
         )
 
-        // Si l'URL est déjà dans la map, on l'utilise, sinon on appelle l'API
-        val existingUrl = videoData["URL"]?.toString()
-
+        // Cas 1 : L'URL est déjà présente dans les paramètres (optimisation)
         if (!existingUrl.isNullOrEmpty()) {
+            Timber.i("Utilisation de l'URL directe fournie")
             internalUiState.value = internalUiState.value.copy(
                 videoUri = existingUrl.toUri(),
                 isLoading = false
             )
-        } else {
-            // C'est ici que le chargement devient utile !
+        }
+        // Cas 2 : On doit demander l'URL au serveur
+        else {
+            Timber.d("Appel au VideoManager pour récupérer le flux : $title")
             videoManager.getVideoUrl(title) { result ->
                 when (result) {
                     is ApiResult.Success -> {
-                        internalUiState.value = internalUiState.value.copy(
-                            videoUri = result.data?.getString("url")?.toUri(),
-                            isLoading = false
-                        )
+                        val url = result.data?.optString("url")
+                        if (!url.isNullOrBlank()) {
+                            Timber.i("URL récupérée avec succès.")
+                            internalUiState.value = internalUiState.value.copy(
+                                videoUri = url.toUri(),
+                                isLoading = false
+                            )
+                        } else {
+                            Timber.e("Succès API mais contenu vide pour : $title")
+                            internalUiState.value = internalUiState.value.copy(isLoading = false)
+                        }
                     }
                     is ApiResult.Failure -> {
-                        internalUiState.value = internalUiState.value.copy(
-                            isLoading = false
-                        )
+                        Timber.e("Échec récupération vidéo : ${result.message}")
+                        internalUiState.value = internalUiState.value.copy(isLoading = false)
                     }
                 }
             }
         }
     }
 
+    /**
+     * Bascule entre le mode fenêtré et le mode plein écran.
+     */
     fun toggleFullScreen() {
-        internalUiState.value = internalUiState.value.copy(
-            isFullScreen = !internalUiState.value.isFullScreen
-        )
+        val newState = !internalUiState.value.isFullScreen
+        Timber.v("Mode plein écran : $newState")
+        internalUiState.value = internalUiState.value.copy(isFullScreen = newState)
     }
 
+    /**
+     * Définit si la vidéo doit être affichée en format portrait (ex : format réseaux sociaux).
+     */
     fun setPortraitMode(isPortrait: Boolean) {
-        internalUiState.value = internalUiState.value.copy(
-            isPortraitVideo = isPortrait
-        )
+        Timber.v("Orientation portrait forcée : $isPortrait")
+        internalUiState.value = internalUiState.value.copy(isPortraitVideo = isPortrait)
     }
 
     class Factory(

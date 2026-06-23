@@ -1,7 +1,6 @@
 package com.audreyRetournayDiet.femSante.repository.remote
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -12,48 +11,66 @@ import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONObject
+import timber.log.Timber
+import kotlin.coroutines.resume
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserManager(private val context: Context) {
 
     private val queue: RequestQueue = Volley.newRequestQueue(context)
 
-    // 🔧 Utilitaire générique pour éviter de répéter du code
     private suspend fun postRequest(
         endpoint: String,
         parameters: JSONObject,
         successMessage: String? = null
     ): ApiResult<JSONObject> = suspendCancellableCoroutine { cont ->
 
+        val url = "${API_URL}$endpoint"
+        Timber.d("Appel réseau : $endpoint | Params: $parameters")
+
         val request = JsonObjectRequest(
             Request.Method.POST,
-            "${API_URL}$endpoint",
+            url,
             parameters,
             { response ->
-                val ok = Utilitaires.onApiResponse(response, context)
+                try {
+                    val ok = Utilitaires.onApiResponse(response, context)
 
-                if (ok) {
-                    cont.resume(ApiResult.Success(response, successMessage ?: "Succès")) {}
-                } else {
-                    val errorMsg = response.optString("error", "Erreur inconnue")
-                    cont.resume(ApiResult.Failure(errorMsg)) {}
+                    if (ok) {
+                        Timber.i(
+                            "Succès sur $endpoint : ${
+                                response.optString(
+                                    "message",
+                                    "Pas de détail"
+                                )
+                            }"
+                        )
+                        cont.resume(ApiResult.Success(response, successMessage ?: "Succès"))
+                    } else {
+                        val errorMsg = response.optString("error", "Erreur serveur")
+                        Timber.w("Refus serveur sur $endpoint : $errorMsg")
+                        cont.resume(ApiResult.Failure(errorMsg))
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Erreur de parsing sur $endpoint")
+                    cont.resume(ApiResult.Failure("Format de réponse invalide"))
                 }
             },
             { error ->
-                Log.e("UserManager", error.localizedMessage ?: "Erreur inconnue")
-                cont.resume(ApiResult.Failure("Erreur de connexion")) {}
+                val errorMessage = error.localizedMessage ?: "Problème réseau ou Timeout"
+                Timber.e("Erreur connexion sur $endpoint : $errorMessage")
+                cont.resume(ApiResult.Failure("Erreur de connexion au serveur"))
             }
         )
 
-        // Support de l'annulation coroutine
         cont.invokeOnCancellation {
+            Timber.d("Requête $endpoint annulée par la Coroutine")
             request.cancel()
         }
 
         queue.add(request)
     }
 
-    // 🔽 Fonctions lisibles et simples
     suspend fun verifyEmail(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/check-email", parameters)
 

@@ -8,57 +8,78 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity
 import com.audreyRetournayDiet.femSante.shared.Utilitaires.videoLaunch
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
+import timber.log.Timber
 
+/**
+ * Activité dédiée à la Sophrologie dans le module "Bien dans sa tête".
+ *
+ * Elle propose deux types d'exercices :
+ * 1. **Relaxation Dynamique (Vidéo)** : Exercices physiques légers (épaules, miroir, éventails, respiration thoracique).
+ * 2. **Sophronisation (Audio)** : Séances de relaxation profonde guidées par la voix.
+ */
 class SophroActivity : AppCompatActivity() {
-
-    private lateinit var shoulder: Button
-    private lateinit var mirror: Button
-    private lateinit var fans: Button
-    private lateinit var sophronisation: Button
-    private lateinit var thoracic: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sophro)
+        Timber.d("onCreate: Initialisation de l'espace Sophrologie")
 
-        shoulder = findViewById(R.id.buttonShoulder)
-        mirror = findViewById(R.id.buttonMirror)
-        fans = findViewById(R.id.buttonFans)
-        sophronisation = findViewById(R.id.buttonAudio)
-        thoracic = findViewById(R.id.buttonThoracic)
+        setupVideoListeners()
+        setupAudioListeners()
+    }
 
-        val intentAudio = Intent(this, AudioActivity::class.java)
+    /**
+     * Configure les boutons d'exercices physiques de sophrologie.
+     * Récupère le texte du bouton dynamiquement pour identifier la vidéo à lancer.
+     */
+    private fun setupVideoListeners() {
+        val intentVideo = Intent(this, VideoActivity::class.java)
 
-        val intentVideo = Intent(
-            this, VideoActivity::class.java
+        // Liste des IDs de boutons correspondant aux exercices de relaxation dynamique
+        val videoButtons = listOf(
+            R.id.buttonShoulder, // Exercice des épaules
+            R.id.buttonMirror,   // Exercice du miroir
+            R.id.buttonFans,     // Exercice des éventails
+            R.id.buttonThoracic  // Respiration thoracique
         )
 
-        sophronisation.setOnClickListener {
-            val array = ArrayList<String>()
-            array.add("Base vivantielle")
-            array.add("Déplacement du négatif")
+        videoButtons.forEach { resId ->
+            findViewById<Button>(resId).setOnClickListener { view ->
+                val button = view as Button
+                val title = button.text.toString()
 
-            intentAudio.putExtra("map", array)
-            intentAudio.putExtra("Titre", "${sophronisation.text}")
+                Timber.i("Action: Lancement vidéo Sophro -> $title")
 
+                // Utilisation de l'utilitaire global pour le lancement du viewer vidéo
+                videoLaunch(title, "non", intentVideo, this)
+            }
+        }
+    }
+
+    /**
+     * Configure l'accès aux séances audio de sophrologie.
+     * Prépare une playlist spécifique envoyée au lecteur audio.
+     */
+    private fun setupAudioListeners() {
+        val sophroButton = findViewById<Button>(R.id.buttonAudio)
+
+        sophroButton.setOnClickListener {
+            val title = sophroButton.text.toString()
+
+            // Définition de la playlist audio (noms des fichiers/pistes)
+            val playlist = arrayListOf(
+                "Base vivantielle",
+                "Déplacement du négatif"
+            )
+
+            Timber.i("Action: Lancement Playlist Audio -> $title (${playlist.size} pistes)")
+
+            // Préparation de l'Intent avec la liste des pistes et le titre de la catégorie
+            val intentAudio = Intent(this, AudioActivity::class.java).apply {
+                putExtra("map", playlist)
+                putExtra("Titre", title)
+            }
             startActivity(intentAudio)
         }
-
-        shoulder.setOnClickListener {
-            videoLaunch(shoulder.text.toString(), "non", intentVideo, this)
-        }
-
-        mirror.setOnClickListener {
-            videoLaunch(mirror.text.toString(), "non", intentVideo, this)
-        }
-
-        fans.setOnClickListener {
-            videoLaunch(fans.text.toString(), "non", intentVideo, this)
-        }
-
-        thoracic.setOnClickListener {
-            videoLaunch(thoracic.text.toString(), "non", intentVideo, this)
-        }
-
     }
 }

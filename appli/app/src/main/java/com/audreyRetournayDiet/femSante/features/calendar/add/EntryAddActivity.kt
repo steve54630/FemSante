@@ -1,32 +1,47 @@
 package com.audreyRetournayDiet.femSante.features.calendar.add
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
-import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryEvent
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
+import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 
+/**
+ * Activité de gestion des entrées quotidiennes du calendrier (Ajout et Modification).
+ * * Cette activité héberge quatre fragments thématiques via une [BottomNavigationView] :
+ * - [GeneralFragment] : Humeur et flux.
+ * - [SymptomsFragment] : Douleurs et symptômes physiques.
+ * - [PsychologicalFragment] : État émotionnel.
+ * - [ContextFragment] : Activité physique et notes.
+ * * ### Fonctionnement :
+ * L'activité initialise un [EntryViewModel] partagé par tous les fragments. Elle gère
+ * l'ID de l'entrée en cas d'édition et déclenche la sauvegarde globale des données.
+ * * @property fragments Map associant les IDs du menu aux instances de fragments.
+ * @property id ID de l'entrée en base de données (uniquement en mode édition).
+ */
 class EntryAddActivity : AppCompatActivity() {
 
     private lateinit var navBar: BottomNavigationView
     private lateinit var container: FrameLayout
     private lateinit var btnSaveEntry: Button
 
-    // Typage explicite de la Map pour éviter le "Argument type mismatch"
     private lateinit var fragments: Map<Int, Fragment>
+    private var id : Long? = null
 
     private val viewModel: EntryViewModel by viewModels {
         val database = DatabaseProvider.getDatabase(this)
@@ -38,61 +53,71 @@ class EntryAddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_add)
 
-        // 1. Initialisation de la Map de fragments (typage forcé à Fragment)
-        val map = HashMap<Int, Fragment>()
-        map[R.id.nav_general] = GeneralFragment() as Fragment
-        map[R.id.nav_symptoms] = SymptomsFragment() as Fragment
-        map[R.id.nav_psych] = PsychologicalFragment() as Fragment
-        map[R.id.nav_context] = ContextFragment() as Fragment
-        fragments = map
+        initializeFragments()
+        setupViews()
+        handleIntentData()
+        setupNavigation()
+        observeEvents()
+        setupSaveListener()
+    }
 
-        // 2. Récupération des vues (Vérifie que l'ID est bien bottomNavigation)
+    /**
+     * Prépare les instances de fragments pour la navigation.
+     */
+    private fun initializeFragments() {
+        fragments = mapOf(
+            R.id.nav_general to GeneralFragment(),
+            R.id.nav_symptoms to SymptomsFragment(),
+            R.id.nav_psych to PsychologicalFragment(),
+            R.id.nav_context to ContextFragment()
+        )
+    }
+
+    private fun setupViews() {
         navBar = findViewById(R.id.tabLayout)
         container = findViewById(R.id.container)
         btnSaveEntry = findViewById(R.id.btnSaveEntry)
+    }
 
+    /**
+     * Analyse les données reçues via l'Intent pour configurer le ViewModel.
+     * Gère la récupération de la date sélectionnée et le chargement des données existantes si [isEditMode] est vrai.
+     */
+    private fun handleIntentData() {
         val dateString = intent.getStringExtra("selectedDate")
-        val selectedDate = if (dateString != null) LocalDate.parse(dateString) else LocalDate.now()
+        val selectedDate = dateString?.let { LocalDate.parse(it) } ?: LocalDate.now()
 
         val isEdit = intent.getBooleanExtra("isEditMode", false)
-
-        if(isEdit) {
-            val store = UserStore(this)
-            val userId = store.getUser()?.id
-            val id = intent.getLongExtra("ID", 0)
-
-            if (userId != null) viewModel.loadExistingData(userId, id)
-        }
-
+        viewModel.setEdit(isEdit)
         viewModel.setDate(selectedDate)
 
-        setupNavigation()
-        observeEvents()
+        if(isEdit) {
+            id = intent.getLongExtra("ID", 0)
+            val userId = UserStore(this).getUser()?.id
 
-        btnSaveEntry.setOnClickListener {
-            val store = UserStore(this)
-            val userId = store.getUser()?.id
             if (userId != null) {
-                viewModel.saveAllData(userId)
+                Timber.i("Mode ÉDITION : Chargement de l'ID $id")
+                viewModel.loadExistingData(userId, id!!)
             } else {
-                Log.e("EntryAdd", "Impossible de sauvegarder : UserID est null")
-                Toast.makeText(this, "Erreur d'authentification", Toast.LENGTH_SHORT).show()
+                Timber.e("Erreur : UserID introuvable pour l'édition")
             }
+        } else {
+            Timber.i("Mode CRÉATION : Date $selectedDate")
         }
     }
 
+    /**
+     * Configure la navigation entre les fragments avec une animation de fondu.
+     */
     private fun setupNavigation() {
         navBar.setOnItemSelectedListener { item ->
-            val fragment = fragments[item.itemId]
-            if (fragment != null) {
+            fragments[item.itemId]?.let { fragment ->
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.container, fragment)
                     .commit()
                 true
-            } else {
-                false
-            }
+            } ?: false
         }
 
         if (supportFragmentManager.findFragmentById(R.id.container) == null) {
@@ -100,18 +125,39 @@ class EntryAddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Observe les événements de succès ou d'erreur émis par le ViewModel.
+     * En cas de succès, l'activité se ferme pour revenir au calendrier.
+     */
     private fun observeEvents() {
         lifecycleScope.launch {
-            viewModel.events.collect { event ->
-                when (event) {
-                    is EntryEvent.Success -> {
-                        Toast.makeText(this@EntryAddActivity, getString(R.string.msg_save_success), Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    is EntryEvent.Error -> {
-                        Toast.makeText(this@EntryAddActivity, event.message, Toast.LENGTH_LONG).show()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event ->
+                    when (event) {
+                        is EntryEvent.Success -> {
+                            Toast.makeText(this@EntryAddActivity, getString(R.string.msg_save_success), Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        is EntryEvent.Error -> {
+                            Timber.e("Erreur de sauvegarde : ${event.message}")
+                            Toast.makeText(this@EntryAddActivity, event.message, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Gère le clic sur le bouton de sauvegarde globale.
+     */
+    private fun setupSaveListener() {
+        btnSaveEntry.setOnClickListener {
+            val userId = UserStore(this).getUser()?.id
+            if (userId != null) {
+                viewModel.saveAllData(userId, id)
+            } else {
+                Toast.makeText(this, "Erreur d'authentification", Toast.LENGTH_SHORT).show()
             }
         }
     }

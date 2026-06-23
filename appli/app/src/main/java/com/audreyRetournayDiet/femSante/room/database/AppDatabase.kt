@@ -4,41 +4,58 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.audreyRetournayDiet.femSante.room.converter.ActivityConverter
+import com.audreyRetournayDiet.femSante.room.converter.BristolConverter
 import com.audreyRetournayDiet.femSante.room.converter.CausesConverters
+import com.audreyRetournayDiet.femSante.room.converter.FlowConverter
 import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
 import com.audreyRetournayDiet.femSante.room.converter.QualityConverter
 import com.audreyRetournayDiet.femSante.room.dao.ContextStateDao
+import com.audreyRetournayDiet.femSante.room.dao.CycleDayDao
 import com.audreyRetournayDiet.femSante.room.dao.DailyEntryDao
 import com.audreyRetournayDiet.femSante.room.dao.GeneralStateDao
 import com.audreyRetournayDiet.femSante.room.dao.PsychologicalStateDao
 import com.audreyRetournayDiet.femSante.room.dao.SymptomStateDao
 import com.audreyRetournayDiet.femSante.room.dao.UserDao
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
+import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.UserEntity
 
+/**
+ * Point d'accès principal à la base de données SQLite de l'application.
+ * * Cette classe orchestre la structure globale :
+ * 1. **Entities** : Définit les tables de la base (Utilisatrices, Symptômes, Journal, etc.).
+ * 2. **TypeConverters** : Fournit les traducteurs pour les types complexes (Enums, Listes).
+ * 3. **DAOs** : Expose les méthodes d'accès aux données pour les Repositories.
+ */
 @Database(
-    version = 1,
-    exportSchema = false,
+    version = 3,
+    exportSchema = false, // Désactivé pour simplifier le développement initial
     entities = [
         UserEntity::class,
         GeneralStateEntity::class,
         PsychologicalStateEntity::class,
         SymptomStateEntity::class,
         ContextStateEntity::class,
-        DailyEntryEntity::class
+        DailyEntryEntity::class,
+        CycleDayEntity::class
     ]
 )
 @TypeConverters(value = [
     ActivityConverter::class,
     CausesConverters::class,
     QualityConverter::class,
-    PainZoneConverter::class
+    PainZoneConverter::class,
+    BristolConverter::class,
+    FlowConverter::class
 ])
 abstract class AppDatabase : RoomDatabase() {
+
+    // --- ACCÈS AUX DAOs ---
+    // Ces fonctions permettent d'obtenir les instances nécessaires pour interagir avec chaque table.
 
     abstract fun userDao() : UserDao
     abstract fun generalDao() : GeneralStateDao
@@ -46,5 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun symptomsDao() : SymptomStateDao
     abstract fun contextDao(): ContextStateDao
     abstract fun dailyDao() : DailyEntryDao
+    abstract fun cycleDao() : CycleDayDao
 
 }

@@ -90,6 +90,8 @@
                 android:layout_marginBottom="8dp"
                 android:background="#D3D3D3" />
 
+            <include layout="@layout/view_cycle_input" />
+
             <include layout="@layout/layout_symptom_daily" />
         </LinearLayout>
 

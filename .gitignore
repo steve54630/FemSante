@@ -21,3 +21,11 @@ generated/
 **/env_variables.kt
 
 /KeyStore
+
+# Cache local Kotlin
+.kotlin/
+
+# Fichiers métier et de conception locale
+Suivi cycle menstruel - questions dieteticienne.md
+Tagging contenus - a valider avec dieteticienne.md
+tagging_contenus.csv
