@@ -18,10 +18,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePhase
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePhaseCalculator
+import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
+import com.audreyRetournayDiet.femSante.room.type.CycleProfile
+import com.audreyRetournayDiet.femSante.room.type.FlowLevel
 import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.kizitonwose.calendar.core.CalendarDay
@@ -32,8 +40,10 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
@@ -60,10 +70,22 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var userStore: UserStore
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
+    // --- Vues de saisie du cycle (dans le bottom sheet) ---
+    private lateinit var switchPeriod: MaterialSwitch
+    private lateinit var labelFlow: View
+    private lateinit var chipGroupFlow: ChipGroup
+    private lateinit var switchSpotting: MaterialSwitch
+    private lateinit var textCycleProfile: TextView
+    private lateinit var textCyclePhase: TextView
+
+    /** Empêche les listeners de re-sauvegarder pendant qu'on remplit l'UI par programmation. */
+    private var isBindingCycle = false
+
     private val viewModel: CalendarViewModel by viewModels {
         val database = DatabaseProvider.getDatabase(this)
         val repository = DailyRepository(database.dailyDao())
-        CalendarViewModel.Factory(repository)
+        val cycleRepository = CycleRepository(database.cycleDao())
+        CalendarViewModel.Factory(repository, cycleRepository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +93,10 @@ class CalendarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_symptom_calendar)
 
         setupViews()
+        setupCycleInputs()
         initCalendar()
         collectStateFlows()
+        promptCycleProfileIfNeeded()
     }
 
     /**
@@ -85,6 +109,13 @@ class CalendarActivity : AppCompatActivity() {
         nextMonth = findViewById(R.id.btnNextMonth)
         dailyViewSection = findViewById(R.id.dailyView)
         bottomSheetBehavior = BottomSheetBehavior.from(dailyViewSection)
+
+        switchPeriod = findViewById(R.id.switchPeriod)
+        labelFlow = findViewById(R.id.labelFlow)
+        chipGroupFlow = findViewById(R.id.chipGroupFlow)
+        switchSpotting = findViewById(R.id.switchSpotting)
+        textCycleProfile = findViewById(R.id.textCycleProfile)
+        textCyclePhase = findViewById(R.id.textCyclePhase)
 
         userStore = UserStore(this)
 
@@ -110,6 +141,9 @@ class CalendarActivity : AppCompatActivity() {
                 launch {
                     viewModel.date.collect {
                         calendarView.notifyCalendarChanged()
+                        // La phase dépend de la date sélectionnée, même les jours sans
+                        // saisie : on recalcule ici (cycleDay ne ré-émet pas si null->null).
+                        updatePhaseIndicator()
                     }
                 }
                 // Met à jour la section détaillée (BottomSheet) quand une entrée est chargée
@@ -124,8 +158,160 @@ class CalendarActivity : AppCompatActivity() {
                         calendarView.notifyCalendarChanged()
                     }
                 }
+                // Pré-remplit la saisie cycle selon la journée sélectionnée
+                launch {
+                    viewModel.cycleDay.collect { bindCycleInputs(it) }
+                }
+                // Rafraîchit les marqueurs de règles sur la grille + l'indicateur de phase
+                launch {
+                    viewModel.periodDates.collect {
+                        calendarView.notifyCalendarChanged()
+                        updatePhaseIndicator()
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Configure les écouteurs de la saisie cycle. Toute modification (par l'utilisatrice)
+     * déclenche une sauvegarde immédiate via le ViewModel. Le flag [isBindingCycle] évite
+     * que le pré-remplissage par programmation ne re-déclenche une sauvegarde.
+     */
+    private fun setupCycleInputs() {
+        switchPeriod.setOnCheckedChangeListener { _, isChecked ->
+            updateFlowVisibility(isChecked)
+            if (!isBindingCycle) saveCycleInputs()
+        }
+        switchSpotting.setOnCheckedChangeListener { _, _ ->
+            if (!isBindingCycle) saveCycleInputs()
+        }
+        chipGroupFlow.setOnCheckedStateChangeListener { _, _ ->
+            if (!isBindingCycle) saveCycleInputs()
+        }
+
+        textCycleProfile.setOnClickListener { showCycleProfileDialog() }
+        refreshCycleProfileLabel()
+    }
+
+    /** Met à jour le libellé du profil de cycle affiché (cliquable pour le modifier). */
+    private fun refreshCycleProfileLabel() {
+        textCycleProfile.text = getString(R.string.cycle_profile_current, cycleProfileLabel(userStore.getCycleProfile()))
+    }
+
+    private fun cycleProfileLabel(profile: CycleProfile): String = when (profile) {
+        CycleProfile.REGULIER -> getString(R.string.cycle_profile_regular)
+        CycleProfile.IRREGULIER -> getString(R.string.cycle_profile_irregular)
+        CycleProfile.ABSENT_OU_PILULE -> getString(R.string.cycle_profile_absent)
+    }
+
+    /** Affiche l'abondance uniquement quand les règles sont cochées. */
+    private fun updateFlowVisibility(periodChecked: Boolean) {
+        val visibility = if (periodChecked) View.VISIBLE else View.GONE
+        labelFlow.visibility = visibility
+        chipGroupFlow.visibility = visibility
+    }
+
+    /** Remplit les contrôles cycle à partir de l'observation chargée (ou des valeurs par défaut). */
+    private fun bindCycleInputs(cycleDay: CycleDayEntity?) {
+        isBindingCycle = true
+
+        switchPeriod.isChecked = cycleDay?.isPeriod == true
+        switchSpotting.isChecked = cycleDay?.spotting == true
+        updateFlowVisibility(switchPeriod.isChecked)
+
+        chipGroupFlow.clearCheck()
+        when (cycleDay?.flow) {
+            FlowLevel.LEGER -> chipGroupFlow.check(R.id.chipFlowLight)
+            FlowLevel.MOYEN -> chipGroupFlow.check(R.id.chipFlowMedium)
+            FlowLevel.ABONDANT -> chipGroupFlow.check(R.id.chipFlowHeavy)
+            null -> { /* aucun flux sélectionné */ }
+        }
+
+        isBindingCycle = false
+        updatePhaseIndicator()
+    }
+
+    /**
+     * Met à jour l'indicateur de phase pour la date sélectionnée, conditionné par le
+     * profil (masqué si absent/pilule). Incrément 2 : affichage de la phase courante
+     * uniquement, sans aucune prédiction ni compte à rebours.
+     */
+    private fun updatePhaseIndicator() {
+        val phase = CyclePhaseCalculator.calculate(
+            periodDates = viewModel.periodDates.value,
+            target = viewModel.date.value,
+            profile = userStore.getCycleProfile()
+        )
+        if (phase == null) {
+            textCyclePhase.visibility = View.GONE
+            return
+        }
+        textCyclePhase.visibility = View.VISIBLE
+        textCyclePhase.text = getString(R.string.cycle_phase_label, phaseLabel(phase))
+    }
+
+    private fun phaseLabel(phase: CyclePhase): String = when (phase) {
+        CyclePhase.MENSTRUELLE -> getString(R.string.cycle_phase_menstruelle)
+        CyclePhase.FOLLICULAIRE -> getString(R.string.cycle_phase_folliculaire)
+        CyclePhase.OVULATION -> getString(R.string.cycle_phase_ovulation)
+        CyclePhase.LUTEALE -> getString(R.string.cycle_phase_luteale)
+        CyclePhase.INDETERMINEE -> getString(R.string.cycle_phase_indeterminee)
+    }
+
+    /** Récupère l'état des contrôles et enregistre l'observation pour la date sélectionnée. */
+    private fun saveCycleInputs() {
+        val userId = userStore.getUser()?.id ?: return
+        val flow = when (chipGroupFlow.checkedChipId) {
+            R.id.chipFlowLight -> FlowLevel.LEGER
+            R.id.chipFlowMedium -> FlowLevel.MOYEN
+            R.id.chipFlowHeavy -> FlowLevel.ABONDANT
+            else -> null
+        }
+        viewModel.saveCycleDay(
+            userId = userId,
+            selectedDate = viewModel.date.value,
+            isPeriod = switchPeriod.isChecked,
+            flow = flow,
+            spotting = switchSpotting.isChecked
+        )
+    }
+
+    /**
+     * Demande le profil de cycle à la première ouverture du calendrier (zéro anxiété :
+     * conditionne phases/prédictions des incréments suivants). Modifiable plus tard.
+     */
+    private fun promptCycleProfileIfNeeded() {
+        if (userStore.hasCycleProfile()) return
+        showCycleProfileDialog(cancelable = false)
+    }
+
+    /**
+     * Affiche le dialog de choix du profil de cycle. Utilisé au premier lancement
+     * (non annulable) et pour une modification ultérieure (annulable) via le libellé
+     * cliquable de la section cycle.
+     */
+    private fun showCycleProfileDialog(cancelable: Boolean = true) {
+        val labels = arrayOf(
+            getString(R.string.cycle_profile_regular),
+            getString(R.string.cycle_profile_irregular),
+            getString(R.string.cycle_profile_absent)
+        )
+        val profiles = arrayOf(
+            CycleProfile.REGULIER,
+            CycleProfile.IRREGULIER,
+            CycleProfile.ABSENT_OU_PILULE
+        )
+        // NB : ne pas utiliser setMessage() avec setItems() — le message masque la liste.
+        AlertDialog.Builder(this)
+            .setTitle(R.string.cycle_profile_title)
+            .setItems(labels) { _, which ->
+                userStore.setCycleProfile(profiles[which])
+                refreshCycleProfileLabel()
+                updatePhaseIndicator()
+            }
+            .setCancelable(cancelable)
+            .show()
     }
 
     /**
@@ -142,6 +328,10 @@ class CalendarActivity : AppCompatActivity() {
                 val painLevel = viewModel.dailyStatus.value[date]
 
                 container.textView.text = date.dayOfMonth.toString()
+
+                // Marqueur de règles (suivi de cycle)
+                container.periodMarker.isVisible =
+                    data.position == DayPosition.MonthDate && date in viewModel.periodDates.value
 
                 // Logique d'affichage de la pastille (Point)
                 when {
@@ -191,10 +381,16 @@ class CalendarActivity : AppCompatActivity() {
             CalendarUtils.updateDailyView(switcher.currentView, entry)
 
             switcher.currentView.findViewById<MaterialButton>(R.id.btnEdit)?.setOnClickListener {
+                // entry.dailyEntry.date est un timestamp epoch (Long) : on le convertit en
+                // LocalDate ISO, sinon EntryAddActivity.handleIntentData crashe en tentant
+                // LocalDate.parse() sur une chaîne de millisecondes.
+                val selectedDate = Instant.ofEpochMilli(entry.dailyEntry.date)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
                 val intent = Intent(this, EntryAddActivity::class.java).apply {
                     putExtra("ID", entry.dailyEntry.id)
                     putExtra("isEditMode", true)
-                    putExtra("selectedDate", entry.dailyEntry.date.toString())
+                    putExtra("selectedDate", selectedDate.toString())
                 }
                 startActivity(intent)
             }
@@ -268,6 +464,7 @@ class CalendarActivity : AppCompatActivity() {
     inner class DayViewContainer(view: View) : ViewContainer(view) {
         val textView: TextView = view.findViewById(R.id.calendarDayText)
         val dotView: View = view.findViewById(R.id.priorityDot)
+        val periodMarker: View = view.findViewById(R.id.periodMarker)
         lateinit var day: CalendarDay
 
         init {

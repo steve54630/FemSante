@@ -77,6 +77,24 @@ class DailyRepository(private val dao: DailyEntryDao) {
     }
 
     /**
+     * Récupère la dernière entrée connue à ce jour pour piloter les recommandations de
+     * contenu ("Pour toi aujourd'hui"). Retourne `null` si l'utilisatrice n'a encore
+     * jamais rempli son journal — dans ce cas, l'appelant doit afficher tout le contenu
+     * sans filtrage (le journal reste optionnel).
+     */
+    suspend fun getLatestEntry(userId: String, upToDate: LocalDate = LocalDate.now()): ApiResult<DailyEntryFull?> {
+        val timestamp = dateToTimestamp(upToDate)
+        return try {
+            val data = dao.getLatestEntry(userId, timestamp)
+            Timber.d("Dernière entrée récupérée jusqu'au $upToDate (User: $userId) : trouvée=${data != null}")
+            ApiResult.Success(data, "Dernière entrée récupérée")
+        } catch (e: Exception) {
+            Timber.e(e, "Erreur récupération dernière entrée (User: $userId)")
+            ApiResult.Failure("Erreur lors de la récupération de la dernière entrée : ${e.localizedMessage}")
+        }
+    }
+
+    /**
      * Récupère les données d'une journée spécifique à partir d'un objet [LocalDate].
      * Gère la conversion de la date en timestamp pour la recherche en base.
      */

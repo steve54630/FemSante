@@ -35,7 +35,19 @@ android {
             def resDir = 'src/main/res'
             def layoutsDir = new File(projectDir, "src/main/res")
 
-            def layoutSets = layoutsDir.listFiles().findAll { it.isDirectory() }.collect {
+            // Dossiers standards déjà couverts par resDir : les déclarer en plus comme
+            // racines séparées fait planter la compilation incrémentale des ressources
+            // (AAPT2 ne retrouve pas les fichiers nouvellement ajoutés dans values/ ou
+            // drawable/). On ne garde le hack que pour les noms de dossiers non
+            // standards (ex: "main"), qui en ont réellement besoin.
+            def standardResFolderPrefixes = [
+                "values", "drawable", "mipmap", "layout", "menu", "anim", "animator",
+                "color", "font", "interpolator", "raw", "transition", "xml"
+            ]
+
+            def layoutSets = layoutsDir.listFiles().findAll { dir ->
+                dir.isDirectory() && standardResFolderPrefixes.every { prefix -> !dir.name.startsWith(prefix) }
+            }.collect {
                 "src/main/res/${it.name}"
             }
 
@@ -95,6 +107,10 @@ dependencies {
     testImplementation "androidx.room:room-testing:2.6.0"
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
+    /* Chiffrement au repos de la base Room (RGPD - données médicales locales) */
+    implementation "net.zetetic:sqlcipher-android:4.6.1"
+    implementation "androidx.sqlite:sqlite:2.4.0"
+
     implementation "androidx.fragment:fragment-ktx:1.8.5"
     implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
@@ -131,4 +147,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation "org.jetbrains.kotlin:kotlin-test:2.1.0"
 }

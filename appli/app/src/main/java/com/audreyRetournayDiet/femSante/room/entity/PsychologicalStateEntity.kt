@@ -53,5 +53,14 @@ data class PsychologicalStateEntity(
 
     /** Champ libre pour des notes personnelles ou observations spécifiques */
     @ColumnInfo(name = "autres")
-    val autres : String? = null
+    val autres : String? = null,
+
+    /**
+     * Journée difficile sur le plan émotionnel/moral (stress, charge mentale, moral en
+     * baisse), indépendamment de [dayQuality] qui évalue l'état physique global.
+     * Une utilisatrice en forme physique moyenne peut très bien vivre une mauvaise
+     * journée sur ce plan.
+     */
+    @ColumnInfo(name = "is_emotionally_difficult_day", defaultValue = "0")
+    val isEmotionallyDifficultDay: Boolean = false
 )

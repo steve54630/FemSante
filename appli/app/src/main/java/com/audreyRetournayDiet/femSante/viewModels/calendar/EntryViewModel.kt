@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.viewModels.calendar
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,16 +13,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZoneId
 
+/**
+ * ViewModel gérant le formulaire de saisie quotidienne (Entry).
+ * * ### Architecture et Rôles :
+ * 1. **Gestion d'États Granulaires** : Utilise un StateFlow par entité [General, Context, Psy, Symptom]
+ * pour optimiser les recompositions UI.
+ * 2. **Mode Hybride** : Gère nativement l'insertion (nouveau jour) et l'édition (mise à jour via ID).
+ * 3. **Validation et Persistance** : Coordonne la sauvegarde multi-tables via le [DailyRepository].
+ */
 class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
 
-    private val tag = "VM_ENTRY"
-
+    // Canal d'événements à usage unique (Succès/Erreur de navigation)
     private val eventChannel = MutableSharedFlow<EntryEvent>()
     val events = eventChannel.asSharedFlow()
 
+    // Indicateur du mode (true = édition d'une entrée existante)
     private val _editChannel = MutableStateFlow(value = false)
     val edit = _editChannel.asStateFlow()
 
@@ -31,6 +39,8 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
     val isLoading = _isLoading.asStateFlow()
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
+
+    // --- États du Formulaire (Un StateFlow par section de l'entité DailyEntryFull) ---
 
     private val _generalState = MutableStateFlow(GeneralStateEntity(entryId = 0L))
     val generalState = _generalState.asStateFlow()
@@ -53,15 +63,19 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
     private val _symptomState = MutableStateFlow(SymptomStateEntity(entryId = 0L))
     val symptomState = _symptomState.asStateFlow()
 
+    // --- setters de configuration ---
+
     fun setDate(date: LocalDate) {
-        Log.d(tag, "Date du formulaire fixée sur : $date")
+        Timber.d("Date du formulaire fixée sur : $date")
         _selectedDate.value = date
     }
 
     fun setEdit(edit: Boolean) {
-        Log.d(tag, "Mode édition activé : $edit")
+        Timber.d("Mode édition activé : $edit")
         _editChannel.value = edit
     }
+
+    // --- Fonctions de mise à jour des états (Appelées par l'UI via Listeners/Binding) ---
 
     fun updateGeneralState(pain: Int, tired: Boolean) {
         _generalState.value = _generalState.value.copy(painLevel = pain, isTired = tired)
@@ -92,16 +106,21 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
         )
     }
 
+    /**
+     * Sauvegarde l'ensemble des données en base.
+     * Bascule automatiquement entre 'save' (INSERT) et 'update' (UPDATE) selon l'état de [_editChannel].
+     */
     fun saveAllData(userID: String, id : Long?) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
+                // Conversion de la date locale en timestamp pour Room
                 val dateMillis = _selectedDate.value
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()
                     .toEpochMilli()
 
-                Log.i(tag, "Lancement sauvegarde - Mode: ${if (edit.value) "UPDATE (ID: $id)" else "INSERT"} | Date: ${_selectedDate.value}")
+                Timber.i("Lancement sauvegarde - Mode: ${if (edit.value) "UPDATE (ID: $id)" else "INSERT"} | Date: ${_selectedDate.value}")
 
                 val result = if (!edit.value) {
                     repository.saveCompleteEntry(
@@ -126,46 +145,53 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
                 _isLoading.value = false
                 when (result) {
                     is ApiResult.Success -> {
-                        Log.i(tag, "Données enregistrées avec succès en BDD")
+                        Timber.i("Données enregistrées avec succès en BDD")
                         eventChannel.emit(EntryEvent.Success)
                     }
                     is ApiResult.Failure -> {
-                        Log.e(tag, "Échec de sauvegarde : ${result.message}")
+                        Timber.e("Échec de sauvegarde : ${result.message}")
                         eventChannel.emit(EntryEvent.Error(result.message))
                     }
                 }
             } catch (e: Exception) {
                 _isLoading.value = false
-                Log.e(tag, "Exception critique lors de la sauvegarde", e)
+                Timber.e(e, "Exception critique lors de la sauvegarde")
                 eventChannel.emit(EntryEvent.Error(e.localizedMessage ?: "Erreur de sauvegarde"))
             }
         }
     }
 
+    /**
+     * Charge les données d'une journée existante pour pré-remplir le formulaire.
+     */
     fun loadExistingData(userId: String, id: Long) {
         viewModelScope.launch {
             _isLoading.value = true
-            Log.d(tag, "Chargement des données existantes pour ID technique : $id")
+            Timber.d("Chargement des données existantes pour ID technique : $id")
 
             val result = repository.getDailyEntryByID(userId, id)
 
             if (result is ApiResult.Success && result.data != null) {
                 val data = result.data
+                // Mapping des données récupérées vers les StateFlow locaux
                 _generalState.value = data.generalState ?: GeneralStateEntity(entryId = 0L)
                 _psychologicalState.value = data.psychologicalState ?: PsychologicalStateEntity(entryId = 0L)
                 _symptomState.value = data.symptomsState ?: SymptomStateEntity(entryId = 0L)
                 _contextState.value = data.contextState ?: ContextStateEntity(entryId = 0L)
-                Log.i(tag, "Formulaire pré-rempli avec les données de l'ID : $id")
+                Timber.i("Formulaire pré-rempli avec les données de l'ID : $id")
             } else {
-                Log.w(tag, "Aucune donnée trouvée pour l'ID $id, remise à zéro des états")
+                Timber.w("Aucune donnée trouvée pour l'ID $id, remise à zéro des états")
                 resetStates()
             }
             _isLoading.value = false
         }
     }
 
+    /**
+     * Réinitialise tous les champs du formulaire aux valeurs par défaut.
+     */
     private fun resetStates() {
-        Log.d(tag, "Reset complet des états du formulaire")
+        Timber.d("Reset complet des états du formulaire")
         _generalState.value = GeneralStateEntity(entryId = 0L)
         _psychologicalState.value = PsychologicalStateEntity(entryId = 0L, dayQuality = DayQuality.MOYENNE)
         _symptomState.value = SymptomStateEntity(entryId = 0L)

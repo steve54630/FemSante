@@ -41,6 +41,21 @@ abstract class DailyEntryDao {
     abstract suspend fun getFullEntryByDate(userId: String, timestamp: Long): DailyEntryFull?
 
     /**
+     * Récupère la dernière entrée saisie pour une utilisatrice, à une date donnée ou
+     * antérieure. Utilisé pour piloter les recommandations de contenu sans imposer de
+     * saisie du jour : si rien n'a été rempli aujourd'hui, on retombe sur la dernière
+     * entrée connue (ou `null` si aucune n'existe encore).
+     */
+    @Transaction
+    @Query("""
+        SELECT * FROM daily_entry
+        WHERE user_id = :userId AND date <= :upToTimestamp
+        ORDER BY date DESC
+        LIMIT 1
+    """)
+    abstract suspend fun getLatestEntry(userId: String, upToTimestamp: Long): DailyEntryFull?
+
+    /**
      * Extrait les informations minimales pour l'affichage visuel du calendrier.
      * Effectue une jointure SQL pour corréler la date et le niveau de douleur.
      */

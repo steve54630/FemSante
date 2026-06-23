@@ -67,6 +67,7 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
                             PainZone.LOMBAIRES -> R.id.chipLowerBack
                             PainZone.SEINS -> R.id.chipBreasts
                             PainZone.TETE -> R.id.chipHead
+                            PainZone.ABDOMEN -> R.id.chipAbdomen
                             PainZone.AUTRE -> -1
                         }
                         if (chipId != -1) {
@@ -107,6 +108,7 @@ class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
                     R.id.chipLowerBack -> PainZone.LOMBAIRES
                     R.id.chipBreasts -> PainZone.SEINS
                     R.id.chipHead -> PainZone.TETE
+                    R.id.chipAbdomen -> PainZone.ABDOMEN
                     else -> null
                 }
             }

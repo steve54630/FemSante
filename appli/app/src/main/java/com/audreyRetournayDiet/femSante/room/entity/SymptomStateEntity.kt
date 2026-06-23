@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.audreyRetournayDiet.femSante.room.type.BristolType
 import com.audreyRetournayDiet.femSante.room.type.PainZone
 
 /**
@@ -52,5 +53,9 @@ data class SymptomStateEntity(
 
     /** Champ libre pour décrire d'autres symptômes (ex: acné, maux de tête) */
     @ColumnInfo(name = "others")
-    val others : String? = ""
+    val others : String? = "",
+
+    /** Transit digestif du jour, selon l'échelle de Bristol (standard médical à 7 types). */
+    @ColumnInfo(name = "bristol_type", defaultValue = "NON_RENSEIGNE")
+    val bristolType: BristolType = BristolType.NON_RENSEIGNE
 )

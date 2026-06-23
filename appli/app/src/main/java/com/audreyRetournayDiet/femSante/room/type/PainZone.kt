@@ -16,7 +16,7 @@ import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
  * - **TETE** : Migraines cataméniales ou céphalées de tension.
  */
 enum class PainZone {
-    /** Douleurs pelviennes ou abdominales basses. */
+    /** Douleurs pelviennes basses. */
     BASSIN,
 
     /** Irradiation dans le bas du dos ou les reins. */
@@ -27,6 +27,9 @@ enum class PainZone {
 
     /** Maux de tête ou migraines. */
     TETE,
+
+    /** Douleurs ou ballonnements abdominaux (distincts du bassin). */
+    ABDOMEN,
 
     /** Toute autre zone (bras, jambes, articulations, etc.). */
     AUTRE

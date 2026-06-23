@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.repository.ApiResult
+import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
+import com.audreyRetournayDiet.femSante.room.type.FlowLevel
 import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +25,10 @@ import java.time.ZoneId
  * - **StateFlow (`entryResult`)** : Contient l'objet complet [DailyEntryFull] de la journée sélectionnée.
  * - **SharedFlow (`_events`)** : Notifie l'UI des succès ou échecs de suppression.
  */
-class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
+class CalendarViewModel(
+    private val repository: DailyRepository,
+    private val cycleRepository: CycleRepository
+) : ViewModel() {
 
     private val _events = MutableSharedFlow<CalendarEvent>()
 
@@ -36,6 +42,14 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
      * Associe une date à un niveau de douleur (0-10).
      */
     val dailyStatus = MutableStateFlow<Map<LocalDate, Int>>(emptyMap())
+
+    // --- Suivi de cycle ---
+
+    /** Observation de cycle de la journée sélectionnée (null si rien de saisi). */
+    val cycleDay = MutableStateFlow<CycleDayEntity?>(null)
+
+    /** Dates de règles, pour le marqueur visuel du calendrier. */
+    val periodDates = MutableStateFlow<Set<LocalDate>>(emptySet())
 
     /**
      * Charge tous les statuts (date + douleur) pour un utilisateur.
@@ -58,6 +72,12 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
                 }
                 is ApiResult.Failure -> Timber.e("Erreur initData : ${result.message}")
             }
+
+            // Chargement des dates de règles pour le marqueur du calendrier
+            when (val periodResult = cycleRepository.getPeriodDates(userId)) {
+                is ApiResult.Success -> periodDates.value = periodResult.data ?: emptySet()
+                is ApiResult.Failure -> Timber.e("Erreur chargement règles : ${periodResult.message}")
+            }
         }
     }
 
@@ -77,6 +97,41 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
                     Timber.e("Erreur chargement date $selectedDate : ${result.message}")
                     entryResult.value = null
                 }
+            }
+
+            // Chargement de l'observation de cycle pour la date sélectionnée
+            when (val cycleResult = cycleRepository.getCycleDay(userId, selectedDate)) {
+                is ApiResult.Success -> cycleDay.value = cycleResult.data
+                is ApiResult.Failure -> {
+                    Timber.e("Erreur chargement cycle $selectedDate : ${cycleResult.message}")
+                    cycleDay.value = null
+                }
+            }
+        }
+    }
+
+    /**
+     * Enregistre l'observation de cycle de la journée sélectionnée puis rafraîchit
+     * l'état local (observation du jour + dates de règles pour le marqueur).
+     */
+    fun saveCycleDay(
+        userId: String,
+        selectedDate: LocalDate,
+        isPeriod: Boolean,
+        flow: FlowLevel?,
+        spotting: Boolean
+    ) {
+        viewModelScope.launch {
+            when (val result = cycleRepository.saveCycleDay(userId, selectedDate, isPeriod, flow, spotting)) {
+                is ApiResult.Success -> {
+                    cycleDay.value = cycleRepository.getCycleDay(userId, selectedDate).let {
+                        (it as? ApiResult.Success)?.data
+                    }
+                    val current = periodDates.value.toMutableSet()
+                    if (isPeriod) current.add(selectedDate) else current.remove(selectedDate)
+                    periodDates.value = current
+                }
+                is ApiResult.Failure -> Timber.e("Échec sauvegarde cycle : ${result.message}")
             }
         }
     }
@@ -114,10 +169,13 @@ class CalendarViewModel(private val repository: DailyRepository) : ViewModel() {
         }
     }
 
-    class Factory(private val repository: DailyRepository) : ViewModelProvider.Factory {
+    class Factory(
+        private val repository: DailyRepository,
+        private val cycleRepository: CycleRepository
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
-            return CalendarViewModel(repository) as T
+            return CalendarViewModel(repository, cycleRepository) as T
         }
     }
 }

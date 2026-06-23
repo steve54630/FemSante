@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
+import com.audreyRetournayDiet.femSante.room.type.CycleProfile
 
 class UserStore(context: Context) {
 
@@ -42,4 +43,22 @@ class UserStore(context: Context) {
     fun clearSession() {
         sharedPreferences.edit { clear() }
     }
+
+    // --- Profil de cycle (suivi menstruel) ---
+
+    /**
+     * Profil de cycle déclaré. Tant que l'utilisatrice n'a pas répondu, on considère le
+     * cycle comme [CycleProfile.IRREGULIER] (mode prudent : aucune prédiction).
+     */
+    fun getCycleProfile(): CycleProfile {
+        val stored = sharedPreferences.getString("cycle_profile", null) ?: return CycleProfile.IRREGULIER
+        return runCatching { CycleProfile.valueOf(stored) }.getOrDefault(CycleProfile.IRREGULIER)
+    }
+
+    fun setCycleProfile(profile: CycleProfile) {
+        sharedPreferences.edit { putString("cycle_profile", profile.name) }
+    }
+
+    /** Indique si l'utilisatrice a déjà renseigné son profil de cycle (pour le prompt initial). */
+    fun hasCycleProfile(): Boolean = sharedPreferences.contains("cycle_profile")
 }

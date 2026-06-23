@@ -31,13 +31,15 @@ class AudioActivity : AppCompatActivity() {
 
     private val viewModel: AudioViewModel by viewModels {
         val title = intent.getStringExtra("Titre") ?: ""
-        val map = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        @Suppress("UNCHECKED_CAST")
+        val rawList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("map", ArrayList::class.java)!!
         } else {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("map") as ArrayList<*>
         }
-        AudioViewModel.Factory(VideoManager(this), title, map)
+        val tracks = rawList.map { it.toString() }
+        AudioViewModel.Factory(VideoManager(this), title, tracks)
     }
 
     private lateinit var player: ExoPlayer

@@ -4,16 +4,20 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.audreyRetournayDiet.femSante.room.converter.ActivityConverter
+import com.audreyRetournayDiet.femSante.room.converter.BristolConverter
 import com.audreyRetournayDiet.femSante.room.converter.CausesConverters
+import com.audreyRetournayDiet.femSante.room.converter.FlowConverter
 import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
 import com.audreyRetournayDiet.femSante.room.converter.QualityConverter
 import com.audreyRetournayDiet.femSante.room.dao.ContextStateDao
+import com.audreyRetournayDiet.femSante.room.dao.CycleDayDao
 import com.audreyRetournayDiet.femSante.room.dao.DailyEntryDao
 import com.audreyRetournayDiet.femSante.room.dao.GeneralStateDao
 import com.audreyRetournayDiet.femSante.room.dao.PsychologicalStateDao
 import com.audreyRetournayDiet.femSante.room.dao.SymptomStateDao
 import com.audreyRetournayDiet.femSante.room.dao.UserDao
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
+import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
@@ -28,7 +32,7 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
  * 3. **DAOs** : Expose les méthodes d'accès aux données pour les Repositories.
  */
 @Database(
-    version = 1,
+    version = 3,
     exportSchema = false, // Désactivé pour simplifier le développement initial
     entities = [
         UserEntity::class,
@@ -36,14 +40,17 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
         PsychologicalStateEntity::class,
         SymptomStateEntity::class,
         ContextStateEntity::class,
-        DailyEntryEntity::class
+        DailyEntryEntity::class,
+        CycleDayEntity::class
     ]
 )
 @TypeConverters(value = [
     ActivityConverter::class,
     CausesConverters::class,
     QualityConverter::class,
-    PainZoneConverter::class
+    PainZoneConverter::class,
+    BristolConverter::class,
+    FlowConverter::class
 ])
 abstract class AppDatabase : RoomDatabase() {
 
@@ -56,5 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun symptomsDao() : SymptomStateDao
     abstract fun contextDao(): ContextStateDao
     abstract fun dailyDao() : DailyEntryDao
+    abstract fun cycleDao() : CycleDayDao
 
 }

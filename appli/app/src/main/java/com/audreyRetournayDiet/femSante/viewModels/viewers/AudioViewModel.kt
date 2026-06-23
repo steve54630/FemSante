@@ -23,7 +23,7 @@ import timber.log.Timber
 class AudioViewModel(
     private val api: VideoManager,
     initialTitle: String,
-    exerciseMap: ArrayList<*>
+    exerciseMap: List<String>
 ) : ViewModel() {
 
     // État unique de l'interface (Source de vérité)
@@ -96,7 +96,7 @@ class AudioViewModel(
     class Factory(
         private val api: VideoManager,
         private val title: String,
-        private val map: ArrayList<*>
+        private val map: List<String>
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             Timber.d("Création AudioViewModel - Catégorie: $title")
