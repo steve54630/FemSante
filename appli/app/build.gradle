@@ -20,6 +20,20 @@ afterEvaluate {
     }
 }
 
+// Secrets locaux (non versionnés) lus depuis local.properties, avec repli sur les
+// variables d'environnement (utile en CI). Ne jamais committer les valeurs réelles.
+def secretProps = new java.util.Properties()
+def secretPropsFile = rootProject.file("local.properties")
+if (secretPropsFile.exists()) {
+    secretPropsFile.withInputStream { secretProps.load(it) }
+}
+def jfrogUser = secretProps.getProperty("JFROG_USER") ?: System.getenv("JFROG_USER") ?: ""
+def jfrogPassword = secretProps.getProperty("JFROG_PASSWORD") ?: System.getenv("JFROG_PASSWORD") ?: ""
+
+// Configuration runtime (exposee a l'app via BuildConfig). Les valeurs viennent de
+// local.properties / variables d'environnement, jamais codees en dur dans le source.
+def readSecret = { String key -> secretProps.getProperty(key) ?: System.getenv(key) ?: "" }
+
 android {
     namespace 'com.audreyRetournayDiet.femSante'
     compileSdkVersion 36
@@ -30,6 +44,13 @@ android {
         versionCode 7
         versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Secrets/config exposes au code via BuildConfig (sources : local.properties / env).
+        buildConfigField "String", "API_URL", "\"${readSecret('API_URL')}\""
+        buildConfigField "String", "PAYPAL_CLIENT_ID", "\"${readSecret('PAYPAL_CLIENT_ID')}\""
+        buildConfigField "String", "RETURN_URL_CARD", "\"${readSecret('RETURN_URL_CARD')}\""
+        buildConfigField "String", "RETURN_URL_PAYPAL", "\"${readSecret('RETURN_URL_PAYPAL')}\""
+        buildConfigField "String", "AUTHORIZATION_HEADERS", "\"${readSecret('AUTHORIZATION_HEADERS')}\""
     }
     sourceSets {
         main {
@@ -84,14 +105,14 @@ allprojects {
         gradlePluginPortal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        // This private repository is required to resolve the Cardinal SDK transitive dependency.
+        // Dépôt privé requis pour résoudre la dépendance transitive du SDK Cardinal.
+        // Les identifiants proviennent de local.properties / variables d'environnement
+        // (JFROG_USER, JFROG_PASSWORD) — jamais en dur dans le code versionné.
         maven {
-            {url  "https://cardinalcommerceprod.jfrog.io/artifactory/android"
-                credentials {
-                    // Be sure to add these non-sensitive credentials in order to retrieve dependencies from
-                    // the private repository.
-                    username 'paypal_sgerritz'
-                    password 'AKCp8jQ8tAahqpT5JjZ4FRP2mW7GMoFZ674kGqHmupTesKeAY2G8NcmPKLuTxTGkKjDLRzDUQ'}
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username jfrogUser
+                password jfrogPassword
             }
         }
     }
