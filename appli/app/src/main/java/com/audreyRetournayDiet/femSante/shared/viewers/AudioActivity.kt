@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.shared.viewers
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -21,26 +20,17 @@ import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.viewModels.viewers.AudioViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AudioActivity : AppCompatActivity() {
 
-    private val viewModel: AudioViewModel by viewModels {
-        val title = intent.getStringExtra("Titre") ?: ""
-        @Suppress("UNCHECKED_CAST")
-        val rawList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra("map", ArrayList::class.java)!!
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getSerializableExtra("map") as ArrayList<*>
-        }
-        val tracks = rawList.map { it.toString() }
-        AudioViewModel.Factory(VideoManager(this), title, tracks)
-    }
+    // Hilt injecte le ViewModel ; les extras "Titre"/"map" sont lus via SavedStateHandle.
+    private val viewModel: AudioViewModel by viewModels()
 
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView

@@ -1,7 +1,6 @@
 package com.audreyRetournayDiet.femSante.features.alim
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -19,6 +18,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -33,28 +33,12 @@ import timber.log.Timber
  * - `map` (Serializable) : Mapping entre les noms de recettes et les noms de fichiers.
  * - `FOLDER_PATH` (String) : Chemin vers le dossier des ressources.
  */
+@AndroidEntryPoint
 class RecetteActivity : AppCompatActivity() {
 
-    @Suppress("UNCHECKED_CAST")
-    private val viewModel: RecipeViewModel by viewModels {
-        val bundle = intent.extras ?: Bundle()
-
-        // Gestion de la compatibilité Android Tiramisu+ pour la désérialisation
-        val recipeMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra("map", HashMap::class.java)
-        } else {
-            @Suppress("DEPRECATION") intent.getSerializableExtra("map")
-        } as? HashMap<String, String> ?: hashMapOf()
-
-        if (recipeMap.isEmpty()) Timber.w("Init : La map des recettes est vide.")
-
-        RecipeViewModel.Factory(
-            title = bundle.getString("Title") ?: "Recettes",
-            map = recipeMap,
-            path = intent.getStringExtra("FOLDER_PATH") ?: "",
-            context = this
-        )
-    }
+    // Hilt injecte le ViewModel ; les extras "Title"/"map"/"FOLDER_PATH" sont lus via
+    // SavedStateHandle, et le Context applicatif est fourni par Hilt.
+    private val viewModel: RecipeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

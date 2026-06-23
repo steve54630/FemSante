@@ -11,12 +11,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
-import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
 import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
@@ -34,6 +33,7 @@ import java.time.LocalDate
  * * @property fragments Map associant les IDs du menu aux instances de fragments.
  * @property id ID de l'entrée en base de données (uniquement en mode édition).
  */
+@AndroidEntryPoint
 class EntryAddActivity : AppCompatActivity() {
 
     private lateinit var navBar: BottomNavigationView
@@ -43,11 +43,8 @@ class EntryAddActivity : AppCompatActivity() {
     private lateinit var fragments: Map<Int, Fragment>
     private var id : Long? = null
 
-    private val viewModel: EntryViewModel by viewModels {
-        val database = DatabaseProvider.getDatabase(this)
-        val repository = DailyRepository(database.dailyDao())
-        EntryViewModel.Factory(repository)
-    }
+    // Hilt injecte le ViewModel (et son DailyRepository) — plus de Factory manuelle.
+    private val viewModel: EntryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

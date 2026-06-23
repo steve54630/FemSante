@@ -18,6 +18,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -30,6 +31,7 @@ import timber.log.Timber
  * * Utilise un [EntryViewModel] partagé au niveau de l'activité pour centraliser les données
  * avant la sauvegarde finale en base de données.
  */
+@AndroidEntryPoint
 class ContextFragment : Fragment(R.layout.fragment_context) {
 
     private val viewModel: EntryViewModel by activityViewModels()

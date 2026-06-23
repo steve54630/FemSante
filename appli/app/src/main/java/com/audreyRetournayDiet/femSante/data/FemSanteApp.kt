@@ -2,8 +2,10 @@ package com.audreyRetournayDiet.femSante.data
 
 import android.app.Application
 import com.audreyRetournayDiet.femSante.BuildConfig
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class FemSanteApp : Application() {
     override fun onCreate() {
         super.onCreate()

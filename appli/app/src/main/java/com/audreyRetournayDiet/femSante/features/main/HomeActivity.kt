@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.audreyRetournayDiet.femSante.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
@@ -15,6 +16,7 @@ import timber.log.Timber
  * 2. **L'accueil personnalisé** : Affichage d'un message de bienvenue unique.
  * 3. **La persistance de l'état** : Évite la recréation inutile des fragments lors des rotations.
  */
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var menu: BottomNavigationView

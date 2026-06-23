@@ -1,11 +1,13 @@
 package com.audreyRetournayDiet.femSante.viewModels.alim
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.RecipeUiState
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,20 +16,24 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel gérant l'affichage d'une liste de recettes et le détail d'une sélection.
- * * @param initialTitle Le titre de la catégorie (ex: "Mes Petits-Déjeuners").
- * @param recipeMap Dictionnaire associant le nom technique (clé) au nom affichable (valeur).
- * @param folderPath Chemin du dossier contenant les PDFs dans les Assets.
- * @param getResourceId Lambda permettant de récupérer dynamiquement l'ID d'une image.
+ *
+ * Les paramètres (titre, map des recettes, dossier) proviennent des extras de l'Intent
+ * via le [SavedStateHandle]. Le [Context] applicatif est injecté pour résoudre les images.
  */
-class RecipeViewModel(
-    initialTitle: String,
-    private val recipeMap: HashMap<String, String>,
-    private val folderPath: String,
-    private val getResourceId: (String) -> Int
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val recipeMap: HashMap<String, String> =
+        savedStateHandle.get<HashMap<String, String>>("map") ?: hashMapOf()
+    private val folderPath: String = savedStateHandle.get<String>("FOLDER_PATH") ?: ""
+    private val initialTitle: String = savedStateHandle.get<String>("Title") ?: "Recettes"
 
     // État de l'UI : contient la liste des noms, le titre, et l'image de la recette sélectionnée.
     private val internalUiState = MutableStateFlow(
@@ -57,6 +63,7 @@ class RecipeViewModel(
 
         // Tentative de récupération de l'image (drawable) portant le même nom que la clé
         val resId = getResourceId(cleanKey)
+        // (getResourceId est maintenant une fonction membre utilisant le Context injecté)
 
         if (resId == 0) {
             Timber.w("Aucune image trouvée pour la clé : $cleanKey")
@@ -86,21 +93,9 @@ class RecipeViewModel(
     }
 
     /**
-     * Factory pour injecter dynamiquement les données reçues de l'écran précédent
-     * et fournir l'accès aux ressources Android.
+     * Recherche dynamique de l'ID d'un drawable par son nom (remplace l'ancien lambda
+     * injecté via Factory).
      */
-    class Factory(
-        private val context: Context,
-        private val title: String,
-        private val map: HashMap<String, String>,
-        private val path: String
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RecipeViewModel(title, map, path) { search ->
-                // Recherche dynamique de l'ID de ressource par son nom
-                context.resources.getIdentifier(search, "drawable", context.packageName)
-            } as T
-        }
-    }
+    private fun getResourceId(name: String): Int =
+        context.resources.getIdentifier(name, "drawable", context.packageName)
 }

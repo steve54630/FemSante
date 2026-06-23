@@ -13,6 +13,7 @@ import com.audreyRetournayDiet.femSante.data.entities.BodyNavigationEvent
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
 import com.audreyRetournayDiet.femSante.viewModels.body.BodyViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -27,6 +28,7 @@ import timber.log.Timber
  * 3. L'activité reçoit un événement et lance soit une activité spécifique,
  * soit le lecteur vidéo via [Utilitaires].
  */
+@AndroidEntryPoint
 class BienCorpsActivity : AppCompatActivity() {
 
     private val viewModel: BodyViewModel by viewModels()

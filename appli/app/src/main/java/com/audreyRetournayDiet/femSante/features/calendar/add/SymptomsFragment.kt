@@ -15,6 +15,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -27,6 +28,7 @@ import timber.log.Timber
  * * Contrairement aux autres fragments, celui-ci utilise un mapping manuel entre les IDs
  * de ressources XML et les valeurs de l'énumération [PainZone].
  */
+@AndroidEntryPoint
 class SymptomsFragment : Fragment(R.layout.fragment_symptom) {
 
     private val viewModel: EntryViewModel by activityViewModels()

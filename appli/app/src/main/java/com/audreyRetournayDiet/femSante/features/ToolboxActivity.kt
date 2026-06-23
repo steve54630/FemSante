@@ -12,6 +12,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.entities.PdfNavigationEvent
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.ToolboxViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -24,9 +25,10 @@ import timber.log.Timber
  * 3. Le ViewModel traite la logique et émet un événement de navigation ([PdfNavigationEvent]).
  * 4. L'activité observe cet événement et lance la [PdfActivity].
  */
+@AndroidEntryPoint
 class ToolboxActivity : AppCompatActivity() {
 
-    // Injection du ViewModel via le délégué de ktx
+    // Injection du ViewModel via le délégué de ktx (Hilt)
     private val viewModel: ToolboxViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

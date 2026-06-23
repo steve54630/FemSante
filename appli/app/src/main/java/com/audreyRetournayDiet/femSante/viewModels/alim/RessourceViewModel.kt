@@ -3,11 +3,13 @@ package com.audreyRetournayDiet.femSante.viewModels.alim
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.PdfRessource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel gérant la liste des documents de référence (PDFs informatifs).
@@ -15,7 +17,8 @@ import timber.log.Timber
  * 1. Fournir la liste des ressources disponibles (E-books, guides alimentaires).
  * 2. Gérer l'événement unique d'ouverture d'un document spécifique.
  */
-class RessourceViewModel : ViewModel() {
+@HiltViewModel
+class RessourceViewModel @Inject constructor() : ViewModel() {
 
     /**
      * État de l'UI contenant la liste des ressources.

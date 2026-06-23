@@ -1,13 +1,13 @@
 package com.audreyRetournayDiet.femSante.viewModels.calendar
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.entity.*
 import com.audreyRetournayDiet.femSante.room.type.*
 import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZoneId
+import javax.inject.Inject
 
 /**
  * ViewModel gérant le formulaire de saisie quotidienne (Entry).
@@ -25,7 +26,10 @@ import java.time.ZoneId
  * 2. **Mode Hybride** : Gère nativement l'insertion (nouveau jour) et l'édition (mise à jour via ID).
  * 3. **Validation et Persistance** : Coordonne la sauvegarde multi-tables via le [DailyRepository].
  */
-class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
+@HiltViewModel
+class EntryViewModel @Inject constructor(
+    private val repository: DailyRepository
+) : ViewModel() {
 
     // Canal d'événements à usage unique (Succès/Erreur de navigation)
     private val eventChannel = MutableSharedFlow<EntryEvent>()
@@ -201,15 +205,5 @@ class EntryViewModel(private val repository: DailyRepository) : ViewModel() {
             medicationList = "",
             diet = ""
         )
-    }
-
-    class Factory(private val repository: DailyRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(EntryViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return EntryViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
     }
 }

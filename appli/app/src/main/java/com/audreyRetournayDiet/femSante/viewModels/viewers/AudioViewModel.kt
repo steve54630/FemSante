@@ -1,17 +1,19 @@
 package com.audreyRetournayDiet.femSante.viewModels.viewers
 
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.AudioUiState
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * ViewModel pilotant le lecteur audio pour les exercices de relaxation/méditation.
@@ -20,11 +22,17 @@ import timber.log.Timber
  * 2. Récupérer dynamiquement l'URL de streaming depuis le serveur.
  * 3. Gérer les états visuels (ProgressBar, Lecteur, Messages d'erreur).
  */
-class AudioViewModel(
+@HiltViewModel
+class AudioViewModel @Inject constructor(
     private val api: VideoManager,
-    initialTitle: String,
-    exerciseMap: List<String>
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    // Les paramètres (titre + playlist) proviennent des extras de l'Intent, exposés
+    // automatiquement par le SavedStateHandle pour un ViewModel scoppé à l'Activity.
+    private val initialTitle: String = savedStateHandle.get<String>("Titre") ?: ""
+    private val exerciseMap: List<String> =
+        savedStateHandle.get<ArrayList<String>>("map")?.map { it.toString() } ?: emptyList()
 
     // État unique de l'interface (Source de vérité)
     private val internalUiState = MutableStateFlow(
@@ -87,20 +95,5 @@ class AudioViewModel(
             isPlayerVisible = false,
             currentAudioUri = null
         )
-    }
-
-    /**
-     * Factory pour instancier le ViewModel avec ses paramètres dynamiques.
-     */
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val api: VideoManager,
-        private val title: String,
-        private val map: List<String>
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            Timber.d("Création AudioViewModel - Catégorie: $title")
-            return AudioViewModel(api, title, map) as T
-        }
     }
 }

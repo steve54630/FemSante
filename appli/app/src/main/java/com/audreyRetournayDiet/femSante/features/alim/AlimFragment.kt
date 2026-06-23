@@ -13,8 +13,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
 import com.audreyRetournayDiet.femSante.viewModels.alim.AlimViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -23,11 +23,11 @@ import timber.log.Timber
  * * Ce fragment délègue la logique de chargement des données au [AlimViewModel]
  * et observe les événements de navigation pour lancer la [RecetteActivity].
  */
+@AndroidEntryPoint
 class AlimFragment : Fragment() {
 
-    private val viewModel: AlimViewModel by viewModels {
-        AlimViewModel.AlimViewModelFactory(RecipeRepository())
-    }
+    // Hilt fournit AlimViewModel et son RecipeRepository.
+    private val viewModel: AlimViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

@@ -1,18 +1,20 @@
 package com.audreyRetournayDiet.femSante.viewModels.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.data.recommendation.RecommendationEngine
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
+import com.audreyRetournayDiet.femSante.shared.UserStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
+import javax.inject.Inject
 
 /**
  * État de la section "Pour toi aujourd'hui" affichée sur l'écran d'accueil.
@@ -33,10 +35,15 @@ data class PourToiUiState(
  * retourne l'intégralité du contenu sans filtrage (cf. garde-fou : le journal n'est pas
  * un péage).
  */
-class PourToiViewModel(
+@HiltViewModel
+class PourToiViewModel @Inject constructor(
     private val repository: DailyRepository,
-    private val userId: String
+    userStore: UserStore
 ) : ViewModel() {
+
+    // L'identifiant utilisateur est lu une fois depuis le store injecté, plutôt que
+    // passé manuellement via une Factory (ce qui rend ce ViewModel injectable par Hilt).
+    private val userId: String = userStore.getUser()?.id ?: ""
 
     private val internalUiState = MutableStateFlow(PourToiUiState())
     val uiState: StateFlow<PourToiUiState> = internalUiState.asStateFlow()
@@ -55,30 +62,28 @@ class PourToiViewModel(
 
     private fun load() {
         viewModelScope.launch {
+            // Le carrousel "Pour toi aujourd'hui" reflète UNIQUEMENT la saisie du jour :
+            // on charge l'entrée de la date locale du jour, pas la dernière entrée connue.
+            // Ainsi, sans saisie aujourd'hui -> pas de recommandations + bandeau incitatif
+            // (les deux sont mutuellement exclusifs).
             val today = LocalDate.now()
-            when (val result = repository.getLatestEntry(userId, today)) {
+            when (val result = repository.getDailyEntryByDate(userId, today)) {
                 is ApiResult.Success -> {
-                    val latestEntry = result.data
-                    val hasEntryToday = latestEntry?.dailyEntry?.date == dateToTimestamp(today)
-
+                    val todayEntry = result.data
                     internalUiState.value = PourToiUiState(
-                        // Pas de badge "Recommandé" sur du contenu choisi au hasard :
-                        // tant qu'aucune entrée n'existe, le reste du menu (inchangé)
-                        // montre déjà tout le contenu sans filtrage.
-                        recommendations = if (latestEntry != null) {
-                            RecommendationEngine.recommend(latestEntry)
+                        recommendations = if (todayEntry != null) {
+                            RecommendationEngine.recommend(todayEntry)
                         } else {
                             emptyList()
                         },
-                        hasEntryToday = hasEntryToday,
+                        hasEntryToday = todayEntry != null,
                         isLoading = false
                     )
                 }
                 is ApiResult.Failure -> {
                     Timber.e("Échec chargement recommandations : ${result.message}")
                     // En cas d'erreur, on n'affiche pas de recommandation plutôt que
-                    // d'en montrer une potentiellement fausse — le reste du menu reste
-                    // accessible normalement.
+                    // d'en montrer une potentiellement fausse.
                     internalUiState.value = PourToiUiState(
                         recommendations = emptyList(),
                         hasEntryToday = false,
@@ -86,20 +91,6 @@ class PourToiViewModel(
                     )
                 }
             }
-        }
-    }
-
-    private fun dateToTimestamp(date: LocalDate): Long {
-        return date.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
-    }
-
-    class Factory(
-        private val repository: DailyRepository,
-        private val userId: String
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return PourToiViewModel(repository, userId) as T
         }
     }
 }

@@ -20,9 +20,6 @@ import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
 import com.audreyRetournayDiet.femSante.data.cycle.CyclePhase
 import com.audreyRetournayDiet.femSante.data.cycle.CyclePhaseCalculator
-import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
-import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
-import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.CycleProfile
@@ -31,6 +28,7 @@ import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 import com.google.android.material.button.MaterialButton
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -60,6 +58,7 @@ import timber.log.Timber
  * pour la récupération des données en base locale.
  */
 @SuppressLint("SetTextI18n")
+@AndroidEntryPoint
 class CalendarActivity : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
@@ -81,12 +80,8 @@ class CalendarActivity : AppCompatActivity() {
     /** Empêche les listeners de re-sauvegarder pendant qu'on remplit l'UI par programmation. */
     private var isBindingCycle = false
 
-    private val viewModel: CalendarViewModel by viewModels {
-        val database = DatabaseProvider.getDatabase(this)
-        val repository = DailyRepository(database.dailyDao())
-        val cycleRepository = CycleRepository(database.cycleDao())
-        CalendarViewModel.Factory(repository, cycleRepository)
-    }
+    // Hilt injecte le ViewModel (DailyRepository + CycleRepository) — plus de Factory manuelle.
+    private val viewModel: CalendarViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +112,15 @@ class CalendarActivity : AppCompatActivity() {
         textCycleProfile = findViewById(R.id.textCycleProfile)
         textCyclePhase = findViewById(R.id.textCyclePhase)
 
+        // État initial déterministe : vue vide affichée, vue données masquée. Sans cela,
+        // si la journée du jour est vide à l'ouverture, entryResult reste null (pas de
+        // ré-émission) et les deux vues du ViewSwitcher (FrameLayout) se superposent.
+        dailyViewSection.findViewById<ViewSwitcher>(R.id.dailyViewSwitcher)?.let { sw ->
+            sw.getChildAt(1).visibility = View.GONE
+            sw.getChildAt(0).visibility = View.VISIBLE
+            sw.displayedChild = 0
+        }
+
         userStore = UserStore(this)
 
         prevMonth.setOnClickListener {
@@ -141,8 +145,7 @@ class CalendarActivity : AppCompatActivity() {
                 launch {
                     viewModel.date.collect {
                         calendarView.notifyCalendarChanged()
-                        // La phase dépend de la date sélectionnée, même les jours sans
-                        // saisie : on recalcule ici (cycleDay ne ré-émet pas si null->null).
+                        // La phase dépend de la date sélectionnée, même les jours sans saisie.
                         updatePhaseIndicator()
                     }
                 }
@@ -376,7 +379,15 @@ class CalendarActivity : AppCompatActivity() {
     private fun updateUiState(entry: DailyEntryFull?) {
         val switcher = dailyViewSection.findViewById<ViewSwitcher>(R.id.dailyViewSwitcher)
 
+        // Le ViewSwitcher est un FrameLayout : si les deux enfants restent VISIBLE, ils se
+        // superposent (vue vide + vue détail affichées en même temps). On force donc
+        // explicitement la visibilité pour garantir qu'un seul état est montré.
+        val emptyView = switcher.getChildAt(0)
+        val dataView = switcher.getChildAt(1)
+
         if (entry != null) {
+            emptyView.visibility = View.GONE
+            dataView.visibility = View.VISIBLE
             if (switcher.displayedChild != 1) switcher.displayedChild = 1
             CalendarUtils.updateDailyView(switcher.currentView, entry)
 
@@ -399,6 +410,8 @@ class CalendarActivity : AppCompatActivity() {
                 showDeleteConfirmation()
             }
         } else {
+            dataView.visibility = View.GONE
+            emptyView.visibility = View.VISIBLE
             switcher.displayedChild = 0
             val date = viewModel.date.value
             val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE)
