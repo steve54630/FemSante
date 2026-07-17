@@ -4,8 +4,8 @@ import android.content.Context
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.audreyRetournayDiet.femSante.API_URL
-import com.audreyRetournayDiet.femSante.AUTHORIZATION_HEADERS
 import com.audreyRetournayDiet.femSante.repository.ApiResult
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONObject
 import timber.log.Timber
@@ -24,7 +24,8 @@ import javax.inject.Inject
  * 3. Le serveur renvoie une URL JSON que le [com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity] pourra charger.
  */
 class VideoManager @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val userStore: UserStore
 ) {
 
     // Initialisation de la file de requêtes Volley pour le réseau
@@ -67,17 +68,18 @@ class VideoManager @Inject constructor(
                 404 -> "Vidéo introuvable sur le serveur"
                 else -> "Impossible de charger la vidéo pour le moment"
             }
-            onComplete(ApiResult.Failure(message))
+            // On signale spécifiquement le 401 pour permettre un rafraîchissement de session.
+            onComplete(ApiResult.Failure(message, isAuthError = status == 401))
         }) {
             /**
-             * Injection du Token d'authentification pour sécuriser l'accès au média.
-             * Le serveur rejette la requête si ce Header est absent ou invalide.
+             * Injection du token personnel de l'utilisatrice (Sanctum) et de l'en-tête
+             * Accept JSON (sans lui, le serveur tente une redirection "login" sur 401).
              */
             override fun getHeaders(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
                 params.putAll(super.getHeaders())
-                params["Authorization"] = "Bearer $AUTHORIZATION_HEADERS"
-                Timber.v("Headers : Token Bearer injecté dans la requête")
+                params["Authorization"] = "Bearer ${userStore.getToken().orEmpty()}"
+                params["Accept"] = "application/json"
                 return params
             }
         }

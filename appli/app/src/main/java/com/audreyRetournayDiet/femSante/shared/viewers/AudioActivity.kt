@@ -22,6 +22,7 @@ import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
+import com.audreyRetournayDiet.femSante.shared.redirectToLoginAfterSessionExpiry
 import com.audreyRetournayDiet.femSante.viewModels.viewers.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -88,6 +89,12 @@ class AudioActivity : AppCompatActivity() {
     private fun observeState() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
+                // 0. Session expirée (refresh impossible) : retour au login.
+                if (state.sessionExpired) {
+                    redirectToLoginAfterSessionExpiry()
+                    return@collect
+                }
+
                 // 1. UI Simple
                 titleTextView.text = state.mainTitle
                 playerView.visibility = if (state.isPlayerVisible) View.VISIBLE else View.GONE

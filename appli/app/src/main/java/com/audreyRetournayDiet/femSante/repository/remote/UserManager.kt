@@ -8,14 +8,18 @@ import com.android.volley.toolbox.Volley
 import com.audreyRetournayDiet.femSante.API_URL
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.json.JSONObject
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UserManager(private val context: Context) {
+class UserManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private val queue: RequestQueue = Volley.newRequestQueue(context)
 

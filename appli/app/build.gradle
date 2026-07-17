@@ -50,7 +50,6 @@ android {
         buildConfigField "String", "PAYPAL_CLIENT_ID", "\"${readSecret('PAYPAL_CLIENT_ID')}\""
         buildConfigField "String", "RETURN_URL_CARD", "\"${readSecret('RETURN_URL_CARD')}\""
         buildConfigField "String", "RETURN_URL_PAYPAL", "\"${readSecret('RETURN_URL_PAYPAL')}\""
-        buildConfigField "String", "AUTHORIZATION_HEADERS", "\"${readSecret('AUTHORIZATION_HEADERS')}\""
     }
     sourceSets {
         main {

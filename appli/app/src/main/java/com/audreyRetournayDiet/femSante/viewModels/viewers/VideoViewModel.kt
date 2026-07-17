@@ -3,13 +3,16 @@ package com.audreyRetournayDiet.femSante.viewModels.viewers
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.VideoUiState
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
+import com.audreyRetournayDiet.femSante.shared.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoViewModel @Inject constructor(
     private val videoManager: VideoManager,
+    private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -69,24 +73,49 @@ class VideoViewModel @Inject constructor(
         // Cas 2 : On doit demander l'URL au serveur
         else {
             Timber.d("Appel au VideoManager pour récupérer le flux : $title")
-            videoManager.getVideoUrl(title) { result ->
-                when (result) {
-                    is ApiResult.Success -> {
-                        val url = result.data?.optString("url")
-                        if (!url.isNullOrBlank()) {
-                            Timber.i("URL récupérée avec succès.")
-                            internalUiState.value = internalUiState.value.copy(
-                                videoUri = url.toUri(),
-                                isLoading = false
-                            )
-                        } else {
-                            Timber.e("Succès API mais contenu vide pour : $title")
-                            internalUiState.value = internalUiState.value.copy(isLoading = false)
-                        }
-                    }
-                    is ApiResult.Failure -> {
-                        Timber.e("Échec récupération vidéo : ${result.message}")
+            requestUrl(title, isRetry = false)
+        }
+    }
+
+    /**
+     * Demande l'URL de streaming. Sur 401 (token mort), tente un rafraîchissement
+     * silencieux puis **un seul** nouvel essai ; si le refresh échoue, signale la session
+     * expirée à l'UI (redirection login).
+     */
+    private fun requestUrl(title: String, isRetry: Boolean) {
+        videoManager.getVideoUrl(title) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    val url = result.data?.optString("url")
+                    if (!url.isNullOrBlank()) {
+                        Timber.i("URL récupérée avec succès.")
+                        internalUiState.value = internalUiState.value.copy(
+                            videoUri = url.toUri(),
+                            isLoading = false
+                        )
+                    } else {
+                        Timber.e("Succès API mais contenu vide pour : $title")
                         internalUiState.value = internalUiState.value.copy(isLoading = false)
+                    }
+                }
+                is ApiResult.Failure -> {
+                    if (result.isAuthError && !isRetry) {
+                        Timber.w("401 vidéo : tentative de rafraîchissement de session.")
+                        viewModelScope.launch {
+                            if (sessionManager.refreshToken()) {
+                                requestUrl(title, isRetry = true)
+                            } else {
+                                internalUiState.value = internalUiState.value.copy(
+                                    isLoading = false, sessionExpired = true
+                                )
+                            }
+                        }
+                    } else {
+                        Timber.e("Échec récupération vidéo : ${result.message}")
+                        internalUiState.value = internalUiState.value.copy(
+                            isLoading = false,
+                            errorMessage = result.message
+                        )
                     }
                 }
             }

@@ -6,5 +6,6 @@ data class AudioUiState(
     val currentAudioUri: android.net.Uri? = null,
     val isPlayerVisible: Boolean = false,
     val errorMessage: String? = null,
-    val isLoading : Boolean = false
+    val isLoading : Boolean = false,
+    val sessionExpired: Boolean = false
 )

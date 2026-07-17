@@ -19,6 +19,12 @@ sealed class ApiResult<out T> {
     /**
      * Représente une opération ayant échoué.
      * * @property message Le message d'erreur explicite à afficher à l'utilisatrice ou à logger.
+     * @property isAuthError Vrai si l'échec vient d'une authentification refusée (HTTP 401) :
+     * permet à l'appelant de déclencher un rafraîchissement de session plutôt qu'une simple
+     * erreur affichée.
      */
-    data class Failure(val message: String) : ApiResult<Nothing>()
+    data class Failure(
+        val message: String,
+        val isAuthError: Boolean = false
+    ) : ApiResult<Nothing>()
 }

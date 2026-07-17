@@ -30,6 +30,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.redirectToLoginAfterSessionExpiry
 import com.audreyRetournayDiet.femSante.viewModels.viewers.VideoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -107,13 +108,21 @@ class VideoActivity : AppCompatActivity() {
     private fun observeState() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
+                // Session expirée (refresh impossible) : retour au login.
+                if (state.sessionExpired) {
+                    redirectToLoginAfterSessionExpiry()
+                    return@collect
+                }
+
                 titleText.text = state.title
                 findViewById<Button>(R.id.pdfButton).visibility =
                     if (state.isPdfVisible) View.VISIBLE else View.GONE
 
-                // --- AJOUT ICI ---
+                state.errorMessage?.let {
+                    android.widget.Toast.makeText(this@VideoActivity, it, android.widget.Toast.LENGTH_LONG).show()
+                }
+
                 handleLoadingDialog(state.isLoading)
-                // -----------------
 
                 when {
                     state.isFullScreen -> enterFullScreen()

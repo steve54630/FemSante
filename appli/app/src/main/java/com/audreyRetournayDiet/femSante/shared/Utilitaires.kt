@@ -2,10 +2,7 @@ package com.audreyRetournayDiet.femSante.shared
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
-import com.audreyRetournayDiet.femSante.repository.ApiResult
-import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
@@ -24,8 +21,12 @@ object Utilitaires {
     }
 
     /**
-     * Gère la récupération de l'URL et le lancement de l'Intent Vidéo.
-     * Cette fonction permet de déporter la logique réseau hors des Views.
+     * Lance le lecteur vidéo pour un titre donné.
+     *
+     * On ne récupère plus l'URL ici : on transmet seulement le titre (et le flag PDF),
+     * et c'est le [com.audreyRetournayDiet.femSante.viewModels.viewers.VideoViewModel] qui
+     * appelle l'API — ainsi la gestion du token et le rafraîchissement de session (401)
+     * s'appliquent à TOUS les lancements vidéo, par un seul chemin.
      */
     fun videoLaunch(
         titre: String?,
@@ -33,26 +34,13 @@ object Utilitaires {
         intent: Intent,
         context: Context,
     ) {
-        val api = VideoManager(context)
+        val map = HashMap<String, String>()
+        map["Title"] = titre ?: ""
+        map["PDF"] = pdf ?: "non"
+        // Pas d'URL : VideoViewModel la récupère via l'API (avec gestion 401 / refresh).
 
-        api.getVideoUrl(titre!!) { apiResult ->
-            when (apiResult) {
-                is ApiResult.Success -> {
-                    val extrasVideo = Bundle()
-                    val map = HashMap<String, String>()
-                    map["Title"] = titre
-                    map["URL"] = apiResult.data!!.getString("url")
-                    map["PDF"] = pdf!!
-
-                    extrasVideo.putSerializable("map", map)
-                    intent.putExtras(extrasVideo)
-                    context.startActivity(intent)
-                }
-                is ApiResult.Failure -> {
-                    Toast.makeText(context, apiResult.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
+        intent.putExtra("map", map)
+        context.startActivity(intent)
     }
 
     /**

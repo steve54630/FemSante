@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.entities.AudioUiState
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.VideoManager
+import com.audreyRetournayDiet.femSante.shared.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AudioViewModel @Inject constructor(
     private val api: VideoManager,
+    private val sessionManager: SessionManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -46,35 +48,49 @@ class AudioViewModel @Inject constructor(
      */
     fun onExerciseSelected(exerciseName: String) {
         Timber.d("Exercice sélectionné : $exerciseName. Requête URL en cours...")
+        internalUiState.value = internalUiState.value.copy(isLoading = true)
+        requestUrl(exerciseName, isRetry = false)
+    }
 
-        viewModelScope.launch {
-            // 1. Activation de l'indicateur de chargement
-            internalUiState.value = internalUiState.value.copy(isLoading = true)
-
-            // 2. Appel au VideoManager (qui gère aussi les flux audio)
-            api.getVideoUrl(exerciseName) { result ->
-                when (result) {
-                    is ApiResult.Success -> {
-                        val url = result.data?.optString("url")
-
-                        if (!url.isNullOrBlank()) {
-                            Timber.i("Lien de lecture obtenu pour '$exerciseName'.")
-                            // 3. Mise à jour de l'état avec l'URI de lecture
-                            internalUiState.value = internalUiState.value.copy(
-                                currentAudioUri = url.toUri(),
-                                isPlayerVisible = true,
-                                isLoading = false,
-                                errorMessage = null
-                            )
-                        } else {
-                            Timber.e("Erreur : Réponse API vide pour $exerciseName")
-                            internalUiState.value = internalUiState.value.copy(
-                                isLoading = false,
-                                errorMessage = "Lien de lecture invalide"
-                            )
-                        }
+    /**
+     * Demande l'URL de lecture. En cas de 401 (token mort), tente un rafraîchissement
+     * silencieux puis **un seul** nouvel essai ; si le refresh échoue, signale la session
+     * expirée à l'UI (redirection login).
+     */
+    private fun requestUrl(exerciseName: String, isRetry: Boolean) {
+        api.getVideoUrl(exerciseName) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    val url = result.data?.optString("url")
+                    if (!url.isNullOrBlank()) {
+                        Timber.i("Lien de lecture obtenu pour '$exerciseName'.")
+                        internalUiState.value = internalUiState.value.copy(
+                            currentAudioUri = url.toUri(),
+                            isPlayerVisible = true,
+                            isLoading = false,
+                            errorMessage = null
+                        )
+                    } else {
+                        Timber.e("Erreur : Réponse API vide pour $exerciseName")
+                        internalUiState.value = internalUiState.value.copy(
+                            isLoading = false,
+                            errorMessage = "Lien de lecture invalide"
+                        )
                     }
-                    is ApiResult.Failure -> {
+                }
+                is ApiResult.Failure -> {
+                    if (result.isAuthError && !isRetry) {
+                        Timber.w("401 audio : tentative de rafraîchissement de session.")
+                        viewModelScope.launch {
+                            if (sessionManager.refreshToken()) {
+                                requestUrl(exerciseName, isRetry = true)
+                            } else {
+                                internalUiState.value = internalUiState.value.copy(
+                                    isLoading = false, sessionExpired = true
+                                )
+                            }
+                        }
+                    } else {
                         Timber.e("Échec API : ${result.message}")
                         internalUiState.value = internalUiState.value.copy(
                             isLoading = false,

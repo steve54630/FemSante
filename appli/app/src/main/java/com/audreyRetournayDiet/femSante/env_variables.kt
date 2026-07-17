@@ -18,5 +18,3 @@ val API_URL: String = BuildConfig.API_URL
 val RETURN_URL_CARD: String = BuildConfig.RETURN_URL_CARD
 
 val RETURN_URL_PAYPAL: String = BuildConfig.RETURN_URL_PAYPAL
-
-val AUTHORIZATION_HEADERS: String = BuildConfig.AUTHORIZATION_HEADERS

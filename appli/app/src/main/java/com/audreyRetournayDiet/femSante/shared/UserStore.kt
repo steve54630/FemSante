@@ -44,6 +44,16 @@ class UserStore(context: Context) {
         sharedPreferences.edit { clear() }
     }
 
+    // --- Token d'authentification API (Sanctum) ---
+
+    /** Enregistre le token personnel reçu au login (utilisé en Bearer pour les flux vidéo/audio). */
+    fun saveToken(token: String) {
+        sharedPreferences.edit { putString("auth_token", token) }
+    }
+
+    /** Token courant, ou null si absent. Effacé par [clearSession]. */
+    fun getToken(): String? = sharedPreferences.getString("auth_token", null)
+
     // --- Profil de cycle (suivi menstruel) ---
 
     /**

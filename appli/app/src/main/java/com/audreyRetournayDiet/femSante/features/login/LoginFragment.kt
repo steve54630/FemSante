@@ -192,7 +192,17 @@ class LoginFragment : Fragment() {
             password = passwordText
         )
 
-        UserStore(requireContext()).saveUser(newUser)
+        val store = UserStore(requireContext())
+        store.saveUser(newUser)
+
+        // Token personnel (Sanctum) émis par le serveur : requis pour les flux vidéo/audio.
+        val token = apiResult.data?.optString("token").orEmpty()
+        if (token.isNotBlank()) {
+            store.saveToken(token)
+            Timber.i("Session : token d'authentification stocké.")
+        } else {
+            Timber.w("Session : réponse de connexion sans token.")
+        }
         Timber.i("Session : Utilisateur $emailText sauvegardé dans le Store")
 
         // 3️⃣ Navigation finale
