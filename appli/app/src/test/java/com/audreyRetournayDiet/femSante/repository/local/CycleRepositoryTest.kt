@@ -4,6 +4,8 @@ import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.room.dao.CycleDayDao
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.FlowLevel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -35,6 +37,15 @@ class CycleRepositoryTest {
 
         override suspend fun getPeriodDates(userId: String): List<Long> =
             store.filter { it.userId == userId && it.isPeriod }.map { it.date }
+
+        override suspend fun getRecordedDates(userId: String): List<Long> =
+            store.filter { it.userId == userId }.map { it.date }
+
+        override fun observeByDate(userId: String, date: Long): Flow<CycleDayEntity?> =
+            flowOf(store.firstOrNull { it.userId == userId && it.date == date })
+
+        override fun observePeriodDates(userId: String): Flow<List<Long>> =
+            flowOf(store.filter { it.userId == userId && it.isPeriod }.map { it.date })
     }
 
     private val repository = CycleRepository(FakeCycleDayDao())
@@ -71,6 +82,15 @@ class CycleRepositoryTest {
 
         val dates = (repository.getPeriodDates(userId) as ApiResult.Success).data!!
         assertEquals(setOf(date), dates)
+    }
+
+    @Test
+    fun `getRecordedDates renvoie tous les jours saisis (regles ou non)`() = runTest {
+        repository.saveCycleDay(userId, date, isPeriod = true, flow = null, spotting = false)
+        repository.saveCycleDay(userId, date.plusDays(5), isPeriod = false, flow = null, spotting = true)
+
+        val dates = (repository.getRecordedDates(userId) as ApiResult.Success).data!!
+        assertEquals(setOf(date, date.plusDays(5)), dates)
     }
 
     @Test

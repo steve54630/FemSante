@@ -75,4 +75,30 @@ class CyclePhaseCalculatorTest {
         val result = CyclePhaseCalculator.calculate(periods, start.plusDays(2), CycleProfile.REGULIER)
         assertEquals(CyclePhase.MENSTRUELLE, result)
     }
+
+    @Test
+    fun `la longueur de cycle declaree decale l'ovulation sans historique`() {
+        // Un seul début de règles : pas de moyenne exploitable -> on retombe sur la valeur
+        // déclarée (32). Ovulation ~ J18 : à J14 on est encore folliculaire.
+        val result = CyclePhaseCalculator.calculate(
+            periodDates = setOf(start),
+            target = start.plusDays(14),
+            profile = CycleProfile.REGULIER,
+            cycleLength = 32
+        )
+        assertEquals(CyclePhase.FOLLICULAIRE, result)
+    }
+
+    @Test
+    fun `la duree des regles declaree elargit la fenetre menstruelle`() {
+        // Règles déclarées à 7 jours : J7 (index 6) est encore menstruel,
+        // alors qu'avec la valeur par défaut (5) il serait folliculaire.
+        val result = CyclePhaseCalculator.calculate(
+            periodDates = setOf(start),
+            target = start.plusDays(6),
+            profile = CycleProfile.REGULIER,
+            periodLength = 7
+        )
+        assertEquals(CyclePhase.MENSTRUELLE, result)
+    }
 }

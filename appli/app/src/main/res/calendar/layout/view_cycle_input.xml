@@ -33,6 +33,17 @@
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
 
     <TextView
+        android:id="@+id/textPeriodPrediction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/cycle_period_predicted_hint"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/labelFlow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,16 +90,5 @@
         android:layout_marginTop="12dp"
         android:text="@string/cycle_spotting"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
-
-    <TextView
-        android:id="@+id/textCycleProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:drawablePadding="6dp"
-        android:paddingVertical="8dp"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="13sp" />
 
 </LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Fond de case du calendrier : rectangle arrondi plein blanc, destiné à être teinté
+  par code (backgroundTintList) selon la qualité de la journée. Un tint transparent
+  rend la case neutre (aucune donnée).
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/white" />
+    <corners android:radius="10dp" />
+</shape>

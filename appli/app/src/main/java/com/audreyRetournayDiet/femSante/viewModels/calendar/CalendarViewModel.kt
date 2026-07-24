@@ -2,166 +2,131 @@ package com.audreyRetournayDiet.femSante.viewModels.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePeriodForecaster
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.FlowLevel
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
+import javax.inject.Inject
 
 /**
- * ViewModel gérant la logique du calendrier de suivi de santé.
- * * ### Architecture :
- * - **StateFlow (`dailyStatus`)** : Gère la "vue d'ensemble" (Map date → niveau de douleur).
- * - **StateFlow (`entryResult`)** : Contient l'objet complet [DailyEntryFull] de la journée sélectionnée.
- * - **SharedFlow (`_events`)** : Notifie l'UI des succès ou échecs de suppression.
+ * ViewModel du calendrier de suivi. **Réactif** : la grille (couleurs, marqueurs de règles),
+ * le résumé et la saisie cycle de la journée sélectionnée sont exposés via des `Flow` Room.
+ * Toute écriture en base ré-émet automatiquement → l'UI se met à jour sans rechargement
+ * manuel (`initData`/`loadData`/`onResume`).
+ *
+ * Seul le **prévisionnel** dépend aussi des préférences (profil, durées) hors base : il est
+ * recalculé quand les vraies règles changent (réactif) et sur [refreshForecast] (retour des
+ * préférences).
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
     private val repository: DailyRepository,
-    private val cycleRepository: CycleRepository
+    private val cycleRepository: CycleRepository,
+    private val userStore: UserStore
 ) : ViewModel() {
 
     private val _events = MutableSharedFlow<CalendarEvent>()
 
-    // Résultat détaillé de la journée sélectionnée
-    val entryResult = MutableStateFlow<DailyEntryFull?>(null)
+    private val userId: String = userStore.getUser()?.id ?: ""
 
-    // Date actuellement affichée ou sélectionnée par l'utilisatrice
-    val date = MutableStateFlow<LocalDate>(LocalDate.now())
+    /** Journée observée (par l'écran détail). */
+    private val selectedDate = MutableStateFlow(LocalDate.now())
+    val date: StateFlow<LocalDate> = selectedDate.asStateFlow()
 
-    /** * Map utilisée par le composant Calendrier pour afficher les pastilles de couleur.
-     * Associe une date à un niveau de douleur (0-10).
-     */
-    val dailyStatus = MutableStateFlow<Map<LocalDate, Int>>(emptyMap())
+    /** Map date→douleur pour la coloration de la grille (réactif). */
+    val dailyStatus: StateFlow<Map<LocalDate, Int>> =
+        repository.observeCalendarStatus(userId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 0, replayExpirationMillis = 0), emptyMap())
 
-    // --- Suivi de cycle ---
+    /** Dates de règles réelles, pour les marqueurs (réactif). */
+    val periodDates: StateFlow<Set<LocalDate>> =
+        cycleRepository.observePeriodDates(userId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 0, replayExpirationMillis = 0), emptySet())
 
-    /** Observation de cycle de la journée sélectionnée (null si rien de saisi). */
-    val cycleDay = MutableStateFlow<CycleDayEntity?>(null)
+    /** Résumé complet de la journée sélectionnée (réactif). */
+    val entryResult: StateFlow<DailyEntryFull?> =
+        selectedDate
+            .flatMapLatest { d -> repository.observeDailyEntry(userId, d) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 0, replayExpirationMillis = 0), null)
 
-    /** Dates de règles, pour le marqueur visuel du calendrier. */
-    val periodDates = MutableStateFlow<Set<LocalDate>>(emptySet())
+    /** Observation de cycle de la journée sélectionnée (réactif). */
+    val cycleDay: StateFlow<CycleDayEntity?> =
+        selectedDate
+            .flatMapLatest { d -> cycleRepository.observeCycleDay(userId, d) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 0, replayExpirationMillis = 0), null)
 
     /**
-     * Charge tous les statuts (date + douleur) pour un utilisateur.
-     * Utilisé pour "allumer" les jours renseignés dans le calendrier.
+     * Jours de règles **prédits** (incrément 3), calculés à la volée et jamais persistés.
+     * Dépend des préférences (hors base) → recalculé réactivement quand les règles changent.
      */
-    fun initData(userId: String) {
-        viewModelScope.launch {
-            Timber.d("Initialisation du calendrier pour l'utilisateur : $userId")
-            when (val result = repository.getCalendarStatus(userId)) {
-                is ApiResult.Success -> {
-                    // Conversion du Long (timestamp) en LocalDate pour faciliter l'usage UI
-                    val statusMap = result.data?.associate {
-                        Instant.ofEpochMilli(it.date)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate() to it.painLevel
-                    } ?: emptyMap()
+    val predictedPeriodDates = MutableStateFlow<Set<LocalDate>>(emptySet())
 
-                    Timber.i("Calendrier initialisé : ${statusMap.size} jours avec données")
-                    dailyStatus.value = statusMap
-                }
-                is ApiResult.Failure -> Timber.e("Erreur initData : ${result.message}")
-            }
+    // Le prévisionnel est recalculé explicitement quand un écran devient visible
+    // ([refreshForecast], appelé en onResume) et après chaque sauvegarde de cycle. On évite
+    // un collecteur permanent sur periodDates qui empêcherait la re-requête au retour d'écran.
 
-            // Chargement des dates de règles pour le marqueur du calendrier
-            when (val periodResult = cycleRepository.getPeriodDates(userId)) {
-                is ApiResult.Success -> periodDates.value = periodResult.data ?: emptySet()
-                is ApiResult.Failure -> Timber.e("Erreur chargement règles : ${periodResult.message}")
-            }
-        }
+    /** Sélectionne la journée observée (résumé + saisie cycle). */
+    fun selectDate(date: LocalDate) {
+        selectedDate.value = date
+    }
+
+    /** Recalcule le prévisionnel avec le profil + durées courants (retour des préférences). */
+    fun refreshForecast() {
+        viewModelScope.launch { computeForecast() }
+    }
+
+    private suspend fun computeForecast() {
+        val periods = (cycleRepository.getPeriodDates(userId) as? ApiResult.Success)?.data ?: emptySet()
+        val recorded = (cycleRepository.getRecordedDates(userId) as? ApiResult.Success)?.data ?: emptySet()
+        val predicted = CyclePeriodForecaster.predictPeriodDates(
+            periodDates = periods,
+            profile = userStore.getCycleProfile(),
+            cycleLength = userStore.getCycleLength(),
+            periodLength = userStore.getPeriodLength()
+        )
+        // On n'affiche pas comme "prévu" un jour déjà explicitement traité (confirmé/décoché).
+        predictedPeriodDates.value = predicted - recorded
     }
 
     /**
-     * Récupère l'intégralité des données (Symptômes, Psychologie, etc.) pour une date précise.
+     * Enregistre l'observation de cycle de la journée sélectionnée. Les Flow (cycleDay,
+     * periodDates) se mettent à jour automatiquement ; on réévalue aussi le prévisionnel
+     * ici pour couvrir la décoche d'un jour prédit (l'ensemble des règles ne change pas).
      */
-    fun loadData(userId: String, selectedDate: LocalDate) {
+    fun saveCycleDay(isPeriod: Boolean, flow: FlowLevel?, spotting: Boolean) {
+        if (userId.isEmpty()) return
         viewModelScope.launch {
-            Timber.d("Chargement des données pour la date : $selectedDate")
-            date.value = selectedDate
-            when (val result = repository.getDailyEntryByDate(userId, selectedDate)) {
-                is ApiResult.Success -> {
-                    entryResult.value = result.data
-                    if (result.data == null) Timber.d("Aucune entrée existante pour $selectedDate")
-                }
-                is ApiResult.Failure -> {
-                    Timber.e("Erreur chargement date $selectedDate : ${result.message}")
-                    entryResult.value = null
-                }
-            }
-
-            // Chargement de l'observation de cycle pour la date sélectionnée
-            when (val cycleResult = cycleRepository.getCycleDay(userId, selectedDate)) {
-                is ApiResult.Success -> cycleDay.value = cycleResult.data
-                is ApiResult.Failure -> {
-                    Timber.e("Erreur chargement cycle $selectedDate : ${cycleResult.message}")
-                    cycleDay.value = null
-                }
-            }
+            cycleRepository.saveCycleDay(userId, selectedDate.value, isPeriod, flow, spotting)
+            computeForecast()
         }
     }
 
-    /**
-     * Enregistre l'observation de cycle de la journée sélectionnée puis rafraîchit
-     * l'état local (observation du jour + dates de règles pour le marqueur).
-     */
-    fun saveCycleDay(
-        userId: String,
-        selectedDate: LocalDate,
-        isPeriod: Boolean,
-        flow: FlowLevel?,
-        spotting: Boolean
-    ) {
-        viewModelScope.launch {
-            when (val result = cycleRepository.saveCycleDay(userId, selectedDate, isPeriod, flow, spotting)) {
-                is ApiResult.Success -> {
-                    cycleDay.value = cycleRepository.getCycleDay(userId, selectedDate).let {
-                        (it as? ApiResult.Success)?.data
-                    }
-                    val current = periodDates.value.toMutableSet()
-                    if (isPeriod) current.add(selectedDate) else current.remove(selectedDate)
-                    periodDates.value = current
-                }
-                is ApiResult.Failure -> Timber.e("Échec sauvegarde cycle : ${result.message}")
-            }
-        }
-    }
-
-    /**
-     * Supprime l'entrée sélectionnée et met à jour l'état local immédiatement.
-     */
+    /** Supprime l'entrée. Le résumé et la grille se rafraîchissent via les Flow. */
     fun deleteData(dailyEntryFull: DailyEntryFull) {
         viewModelScope.launch {
             try {
                 val entryId = dailyEntryFull.dailyEntry.id
-                val userId = dailyEntryFull.dailyEntry.userId
-                val entryDate = Instant.ofEpochMilli(dailyEntryFull.dailyEntry.date)
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-
-                when (val result = repository.deleteEntry(userId, entryId)) {
-                    is ApiResult.Success -> {
-                        // Nettoyage de l'UI
-                        entryResult.value = null
-
-                        // Mise à jour de la map globale pour retirer la couleur du calendrier
-                        val currentMap = dailyStatus.value.toMutableMap()
-                        currentMap.remove(entryDate)
-                        dailyStatus.value = currentMap
-
-                        _events.emit(CalendarEvent.DeleteSuccess)
-                    }
+                val uid = dailyEntryFull.dailyEntry.userId
+                when (val result = repository.deleteEntry(uid, entryId)) {
+                    is ApiResult.Success -> _events.emit(CalendarEvent.DeleteSuccess)
                     is ApiResult.Failure -> _events.emit(CalendarEvent.Error(result.message))
                 }
             } catch (e: Exception) {
@@ -170,5 +135,4 @@ class CalendarViewModel @Inject constructor(
             }
         }
     }
-
 }

@@ -66,9 +66,37 @@ class UserStore(context: Context) {
     }
 
     fun setCycleProfile(profile: CycleProfile) {
-        sharedPreferences.edit { putString("cycle_profile", profile.name) }
+        sharedPreferences.edit(commit = true) { putString("cycle_profile", profile.name) }
     }
 
     /** Indique si l'utilisatrice a déjà renseigné son profil de cycle (pour le prompt initial). */
     fun hasCycleProfile(): Boolean = sharedPreferences.contains("cycle_profile")
+
+    /** Invitation à renseigner le cycle : affichée une seule fois pour ne pas gêner l'onglet. */
+    fun hasSeenCyclePrompt(): Boolean = sharedPreferences.getBoolean("cycle_prompt_seen", false)
+
+    fun setCyclePromptSeen() {
+        sharedPreferences.edit { putBoolean("cycle_prompt_seen", true) }
+    }
+
+    // --- Paramètres de cycle déclarés (dans le profil) ---
+
+    /** Durée moyenne du cycle déclarée par l'utilisatrice (jours). Défaut : 28. */
+    fun getCycleLength(): Int = sharedPreferences.getInt("cycle_length", DEFAULT_CYCLE_LENGTH)
+
+    fun setCycleLength(days: Int) {
+        sharedPreferences.edit(commit = true) { putInt("cycle_length", days) }
+    }
+
+    /** Durée des règles déclarée (jours). Défaut : 5. */
+    fun getPeriodLength(): Int = sharedPreferences.getInt("period_length", DEFAULT_PERIOD_LENGTH)
+
+    fun setPeriodLength(days: Int) {
+        sharedPreferences.edit(commit = true) { putInt("period_length", days) }
+    }
+
+    companion object {
+        const val DEFAULT_CYCLE_LENGTH = 28
+        const val DEFAULT_PERIOD_LENGTH = 5
+    }
 }

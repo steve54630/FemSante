@@ -118,6 +118,11 @@
     <string name="price">Prix à payer:</string>
     <string name="main_menu">Menu principal</string>
     <string name="account">Mon compte</string>
+    <string name="account_preferences">Mes préférences</string>
+    <string name="preferences_title">Mes préférences</string>
+    <string name="preferences_cycle_section">Mon cycle</string>
+    <string name="preferences_save">Enregistrer</string>
+    <string name="preferences_saved">Préférences enregistrées</string>
     <string name="legal_mentions">Mentions légales</string>
     <string name="confidentiality">Politiques de confidentialité</string>
     <string name="password_change">Changer de mot de passe</string>
@@ -175,9 +180,20 @@
     <string name="pour_toi_banner_action">Remplir mon journal</string>
     <string name="badge_recommande">Recommandé pour toi</string>
 
+    <!-- Onglet Calendrier -->
+    <string name="tab_calendar">Calendrier</string>
+    <string name="legend_pain_title">Douleur du jour</string>
+    <string name="legend_pain_low">Faible</string>
+    <string name="legend_pain_mid">Modérée</string>
+    <string name="legend_pain_high">Forte</string>
+    <string name="legend_cycle_title">Cycle</string>
+    <string name="legend_period">Règles</string>
+    <string name="legend_predicted">Prévu</string>
+
     <!-- Suivi de cycle -->
     <string name="cycle_section_title">Suivi du cycle</string>
     <string name="cycle_period_today">Règles ce jour</string>
+    <string name="cycle_period_predicted_hint">Prévision : décoche si tes règles ne sont pas arrivées.</string>
     <string name="cycle_flow_label">Abondance du flux</string>
     <string name="cycle_flow_light">Léger</string>
     <string name="cycle_flow_medium">Moyen</string>
@@ -188,7 +204,11 @@
     <string name="cycle_profile_regular">Réguliers</string>
     <string name="cycle_profile_irregular">Irréguliers</string>
     <string name="cycle_profile_absent">Absents ou sous pilule</string>
-    <string name="cycle_profile_current">Mes cycles : %1$s (modifier)</string>
+    <string name="cycle_length_label">Durée moyenne du cycle (jours)</string>
+    <string name="period_length_label">Durée des règles (jours)</string>
+    <string name="cycle_invite_message">Pour un suivi adapté à ta situation, renseigne tes cycles dans tes préférences. Tu pourras les modifier à tout moment.</string>
+    <string name="cycle_invite_configure">Configurer</string>
+    <string name="cycle_invite_later">Plus tard</string>
     <string name="cycle_phase_label">Phase estimée : %1$s</string>
     <string name="cycle_phase_menstruelle">Menstruelle</string>
     <string name="cycle_phase_folliculaire">Folliculaire</string>

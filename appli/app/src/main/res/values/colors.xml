@@ -7,4 +7,12 @@
     <color name="orange_app">#ee9e3d</color>
     <color name="yellow_app">#f3bc0f</color>
     <color name="blue_app">#0085ac</color>
+
+    <!-- Tuiles du calendrier : teintes douces pour la qualité de la journée -->
+    <color name="day_good">#C8E6C9</color>
+    <color name="day_medium">#FFE3A3</color>
+    <color name="day_bad">#F5C2C2</color>
+    <!-- Anneaux (contours) : sélection et jour courant -->
+    <color name="calendar_selected">#C2185B</color>
+    <color name="calendar_today">#00897B</color>
 </resources>

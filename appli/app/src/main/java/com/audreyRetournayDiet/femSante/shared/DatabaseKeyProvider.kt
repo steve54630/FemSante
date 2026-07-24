@@ -32,7 +32,7 @@ object DatabaseKeyProvider {
         }
 
         val passphrase = ByteArray(KEY_SIZE_BYTES).also { SecureRandom().nextBytes(it) }
-        prefs.edit { putString(KEY_NAME, Base64.encodeToString(passphrase, Base64.NO_WRAP)) }
+        prefs.edit(commit = true) { putString(KEY_NAME, Base64.encodeToString(passphrase, Base64.NO_WRAP)) }
         return passphrase
     }
 

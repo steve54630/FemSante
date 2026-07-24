@@ -12,6 +12,7 @@ import com.audreyRetournayDiet.femSante.room.entity.DatePainStatus
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO Maître pour la gestion des entrées quotidiennes du journal de bord.
@@ -39,6 +40,24 @@ abstract class DailyEntryDao {
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
     abstract suspend fun getFullEntryByDate(userId: String, timestamp: Long): DailyEntryFull?
+
+    /**
+     * Version réactive de [getFullEntryByDate] : ré-émet automatiquement à chaque
+     * modification des tables concernées (journal + sous-états). Utilisée pour l'affichage
+     * (écran détail, "Pour toi aujourd'hui") afin d'éviter tout rafraîchissement manuel.
+     */
+    @Transaction
+    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
+    abstract fun observeFullEntryByDate(userId: String, timestamp: Long): Flow<DailyEntryFull?>
+
+    /** Version réactive de [getCalendarStatus] (couleurs de la grille). */
+    @Query("""
+        SELECT de.date as date, gs.pain_level as painLevel
+        FROM daily_entry de
+        JOIN general_state gs ON de.id = gs.entry_id
+        WHERE de.user_id = :userId
+    """)
+    abstract fun observeCalendarStatus(userId: String): Flow<List<DatePainStatus>>
 
     /**
      * Récupère la dernière entrée saisie pour une utilisatrice, à une date donnée ou

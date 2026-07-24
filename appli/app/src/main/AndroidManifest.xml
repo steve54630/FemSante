@@ -24,7 +24,13 @@
             android:name="com.audreyRetournayDiet.femSante.features.main.HomeActivity"
             android:exported="false" />
         <activity
+            android:name="com.audreyRetournayDiet.femSante.features.main.PreferencesActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.calendar.view.CalendarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.calendar.view.DayDetailActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity"

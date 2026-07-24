@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Écran détail d'une journée (calendrier classique : tap sur un jour → cet écran).
+  Reprend la saisie cycle (view_cycle_input) et le résumé/état vide (ViewSwitcher),
+  auparavant intégrés sous la grille.
+-->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond_appli"
+    tools:context=".features.calendar.view.DayDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:id="@+id/textDayTitle"
+            style="@style/AppTextAppearance.TitleFancy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:textSize="30sp" />
+
+        <include layout="@layout/view_cycle_input" />
+
+        <ViewSwitcher
+            android:id="@+id/dailyViewSwitcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inAnimation="@android:anim/fade_in"
+            android:measureAllChildren="false"
+            android:outAnimation="@android:anim/fade_out">
+
+            <include
+                android:id="@+id/viewDailyEmpty"
+                layout="@layout/view_daily_empty" />
+
+            <include
+                android:id="@+id/viewDailyData"
+                layout="@layout/view_daily_data" />
+
+        </ViewSwitcher>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -8,7 +8,10 @@ import com.audreyRetournayDiet.femSante.room.entity.DatePainStatus
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -95,6 +98,19 @@ class DailyRepository(private val dao: DailyEntryDao) {
     }
 
     /**
+     * Observe (réactif) l'entrée d'une journée : ré-émet à chaque écriture en base, ce qui
+     * met à jour l'UI automatiquement (plus de rechargement manuel).
+     */
+    fun observeDailyEntry(userId: String, date: LocalDate): Flow<DailyEntryFull?> =
+        dao.observeFullEntryByDate(userId, dateToTimestamp(date))
+
+    /** Observe (réactif) la map date→douleur pour la coloration de la grille du calendrier. */
+    fun observeCalendarStatus(userId: String): Flow<Map<LocalDate, Int>> =
+        dao.observeCalendarStatus(userId).map { list ->
+            list.associate { timestampToDate(it.date) to it.painLevel }
+        }
+
+    /**
      * Récupère les données d'une journée spécifique à partir d'un objet [LocalDate].
      * Gère la conversion de la date en timestamp pour la recherche en base.
      */
@@ -161,4 +177,7 @@ class DailyRepository(private val dao: DailyEntryDao) {
     private fun dateToTimestamp(date: LocalDate): Long {
         return date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
+
+    private fun timestampToDate(timestamp: Long): LocalDate =
+        Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
 }

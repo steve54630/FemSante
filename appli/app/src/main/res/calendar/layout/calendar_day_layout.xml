@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Cellule d'un jour. La tuile de fond (dayTile) est teintée par code selon la qualité
+  de la journée ; le contour de sélection / jour courant est posé en foreground sur le
+  FrameLayout racine. Le marqueur de règles reste une petite goutte en coin.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp">
+
+    <View
+        android:id="@+id/dayTile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:background="@drawable/bg_day_tile"
+        android:backgroundTint="@android:color/transparent" />
 
     <TextView
         android:id="@+id/calendarDayText"
@@ -10,23 +23,14 @@
         android:layout_gravity="center"
         android:textColor="@color/black" />
 
-    <View
-        android:id="@+id/priorityDot"
-        android:layout_width="6dp"
-        android:layout_height="6dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="4dp"
-        android:background="@android:color/holo_blue_light"
-        android:visibility="invisible" />
-
-    <!-- Marqueur de règles (suivi de cycle), distinct de la pastille de douleur -->
+    <!-- Marqueur de règles (suivi de cycle) -->
     <View
         android:id="@+id/periodMarker"
         android:layout_width="6dp"
         android:layout_height="6dp"
         android:layout_gravity="top|end"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
         android:background="@drawable/bg_period_marker"
         android:visibility="invisible" />
 
