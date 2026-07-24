@@ -41,6 +41,7 @@ class AccountFragment : Fragment() {
     private lateinit var legal: Button
     private lateinit var confidentiality: Button
     private lateinit var passwordChange: Button
+    private lateinit var preferences: Button
     private lateinit var login: TextView
     private lateinit var update: Button
     private lateinit var logout: Button
@@ -72,6 +73,7 @@ class AccountFragment : Fragment() {
         legal = view.findViewById(R.id.buttonLegalMentions)
         confidentiality = view.findViewById(R.id.buttonConfidentiality)
         passwordChange = view.findViewById(R.id.buttonPasswordChanged)
+        preferences = view.findViewById(R.id.buttonPreferences)
         update = view.findViewById(R.id.buttonUpdateAbonnement)
         logout = view.findViewById(R.id.buttonLogout)
     }
@@ -103,8 +105,8 @@ class AccountFragment : Fragment() {
                 login.text = user.email
 
                 // Gestion dynamique du bouton d'abonnement :
-                // Masqué si l'utilisatrice possède déjà l'accès à vie.
-                update.visibility = if (user.lifetimeAccess) View.INVISIBLE else View.VISIBLE
+                // Masqué (sans réserver d'espace) si l'utilisatrice possède déjà l'accès à vie.
+                update.visibility = if (user.lifetimeAccess) View.GONE else View.VISIBLE
 
                 update.setOnClickListener {
                     Timber.d("Navigation : Tunnel de paiement (Mise à jour pour ${user.email})")
@@ -136,10 +138,10 @@ class AccountFragment : Fragment() {
 
         // Mapping des boutons PDF pour éviter la redondance de code
         val pdfMap = mapOf(
-            cgu to "Conditions Générales d'Utilisation.pdf",
-            cgv to "Conditions Générales de Vente.pdf",
-            legal to "Mentions Légales.pdf",
-            confidentiality to "Politique de Confidentialité.pdf"
+            cgu to "Conditions générales d'utilisation.pdf",
+            cgv to "Conditions générales de vente.pdf",
+            legal to "Mentions légales.pdf",
+            confidentiality to "Politique de confidentialité.pdf"
         )
 
         pdfMap.forEach { (button, fileName) ->
@@ -155,6 +157,12 @@ class AccountFragment : Fragment() {
         passwordChange.setOnClickListener {
             Timber.d("Navigation : Écran de modification du mot de passe")
             startActivity(Intent(activity, ForgottenActivity::class.java))
+        }
+
+        // Redirection vers les préférences utilisateur (dont le paramétrage du cycle)
+        preferences.setOnClickListener {
+            Timber.d("Navigation : Écran des préférences utilisateur")
+            startActivity(Intent(activity, PreferencesActivity::class.java))
         }
     }
 

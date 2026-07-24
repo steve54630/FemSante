@@ -96,19 +96,19 @@ object ContentTagRepository {
         video("Fitness") to setOf(activity(PhysicalActivity.SPORT)),
 
         // --- Vidéo - Sophrologie dynamique ---
-        video("Épaules") to setOf(
+        video("Pompage des épaules") to setOf(
             zone(PainZone.LOMBAIRES), cause(DifficultyCause.STRESS), EmotionallementDifficile,
             quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
-        video("Miroir") to setOf(
+        video("Exercice du miroir") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.TRISTESSE), EmotionallementDifficile,
             quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
         ),
-        video("Éventails") to setOf(
+        video("Eventails") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), EmotionallementDifficile,
             quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
         ),
-        video("Respiration thoracique") to setOf(
+        video("Soufflet thoracique") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
             quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
@@ -129,7 +129,7 @@ object ContentTagRepository {
         ),
 
         // --- Vidéo - directe ---
-        video("Gestion des émotions") to setOf(
+        video("Intelligence émotionnelle") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), cause(DifficultyCause.TRISTESSE),
             EmotionallementDifficile, quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
         ),

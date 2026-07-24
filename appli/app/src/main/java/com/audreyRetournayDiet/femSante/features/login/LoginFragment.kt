@@ -148,9 +148,10 @@ class LoginFragment : Fragment() {
         emailText: String,
         passwordText: String
     ) {
-        // Extraction des droits d'accès
-        val lifetimeAccess = apiResult.data?.optBoolean("lifetimeAccess", false) ?: false
-        Timber.v("Droits d'accès : Premium=$lifetimeAccess")
+        // Extraction des droits d'accès. La clé JSON renvoyée par l'API est "A vie"
+        // (booléen = is_null(VALID_DATE) côté serveur), pas "lifetimeAccess".
+        val lifetimeAccess = apiResult.data?.optBoolean("A vie", false) ?: false
+        Timber.v("Droits d'accès : à vie=$lifetimeAccess")
 
         // 1️⃣ Synchronisation Locale (Room)
         // Recherche de l'utilisateur ou création s'il se connecte pour la première fois sur ce device
