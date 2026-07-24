@@ -180,6 +180,17 @@
     <string name="pour_toi_banner_action">Remplir mon journal</string>
     <string name="badge_recommande">Recommandé pour toi</string>
 
+    <!-- Onglets de navigation -->
+    <string name="nav_pour_toi">Pour toi</string>
+    <string name="nav_decouvrir">Découvrir</string>
+
+    <!-- Onglet "Pour toi" : geste du jour + reste des recommandations -->
+    <string name="geste_du_jour_label">Ton geste du jour</string>
+    <string name="geste_du_jour_prefix">Aujourd\'hui, tu pourrais essayer :</string>
+    <string name="geste_du_jour_action">Découvrir</string>
+    <string name="pour_toi_more_title">Recommandé pour toi</string>
+    <string name="pour_toi_empty">Rien de particulier à te proposer aujourd\'hui.\nPrends soin de toi, à ton rythme 🌿</string>
+
     <!-- Onglet Calendrier -->
     <string name="tab_calendar">Calendrier</string>
     <string name="legend_pain_title">Douleur du jour</string>

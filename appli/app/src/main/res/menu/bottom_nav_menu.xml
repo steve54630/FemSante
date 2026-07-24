@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu"
-        android:icon="@drawable/baseline_menu_24"
-        android:title="@string/main_menu"/>
+    <item android:id="@+id/pour_toi"
+        android:icon="@drawable/ic_tab_pour_toi"
+        android:title="@string/nav_pour_toi"/>
+
+    <item android:id="@+id/decouvrir"
+        android:icon="@drawable/ic_tab_decouvrir"
+        android:title="@string/nav_decouvrir"/>
+
+    <item android:id="@+id/calendar"
+        android:icon="@drawable/ic_tab_calendar"
+        android:title="@string/tab_calendar"/>
 
     <item android:id="@+id/account"
         android:icon="@drawable/baseline_manage_accounts_24"

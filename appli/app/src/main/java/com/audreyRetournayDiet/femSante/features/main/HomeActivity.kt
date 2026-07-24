@@ -12,7 +12,7 @@ import timber.log.Timber
  * Activité principale de l'application (Dashboard).
  * * Cette activité accueille l'utilisatrice après sa connexion ou si sa session est active.
  * Elle gère :
- * 1. **La navigation de base** : Switch entre [MainMenuFragment] et [AccountFragment].
+ * 1. **La navigation de base** : 4 onglets (Pour toi, Découvrir, Calendrier, Compte) en add/hide/show.
  * 2. **L'accueil personnalisé** : Affichage d'un message de bienvenue unique.
  * 3. **La persistance de l'état** : Évite la recréation inutile des fragments lors des rotations.
  */
@@ -25,8 +25,18 @@ class HomeActivity : AppCompatActivity() {
      * Instances des fragments maintenues pour la durée de vie de la session de l'activité.
      * Cela permet de conserver l'état de défilement ou de saisie lors du switch d'onglet.
      */
-    private val homeFragment = MainMenuFragment()
-    private val accountFragment = AccountFragment()
+    private var pourToiFragment = PourToiFragment()
+    private var exploreFragment = ExploreFragment()
+    private var calendarFragment = com.audreyRetournayDiet.femSante.features.calendar.view.CalendarFragment()
+    private var accountFragment = AccountFragment()
+    private lateinit var activeFragment: androidx.fragment.app.Fragment
+
+    private companion object {
+        const val TAG_POUR_TOI = "pour_toi"
+        const val TAG_DECOUVRIR = "decouvrir"
+        const val TAG_CALENDAR = "calendar"
+        const val TAG_ACCOUNT = "account"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,12 +72,19 @@ class HomeActivity : AppCompatActivity() {
     private fun initNavigation(savedInstanceState: Bundle?) {
         menu = findViewById(R.id.bottom_navigation_menu)
 
-        // Affichage du fragment initial uniquement au premier lancement
         if (savedInstanceState == null) {
-            Timber.d("Initialisation : Affichage du fragment Home par défaut")
+            Timber.d("Initialisation : onglet \"Pour toi\" par défaut")
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, homeFragment)
+                .add(R.id.container, pourToiFragment, TAG_POUR_TOI)
                 .commit()
+            activeFragment = pourToiFragment
+        } else {
+            // Restauration : récupérer les instances recréées par le FragmentManager.
+            (supportFragmentManager.findFragmentByTag(TAG_POUR_TOI) as? PourToiFragment)?.let { pourToiFragment = it }
+            (supportFragmentManager.findFragmentByTag(TAG_DECOUVRIR) as? ExploreFragment)?.let { exploreFragment = it }
+            (supportFragmentManager.findFragmentByTag(TAG_CALENDAR) as? com.audreyRetournayDiet.femSante.features.calendar.view.CalendarFragment)?.let { calendarFragment = it }
+            (supportFragmentManager.findFragmentByTag(TAG_ACCOUNT) as? AccountFragment)?.let { accountFragment = it }
+            activeFragment = supportFragmentManager.fragments.lastOrNull { !it.isHidden } ?: pourToiFragment
         }
 
         setupNavigationListener()
@@ -79,33 +96,34 @@ class HomeActivity : AppCompatActivity() {
      */
     private fun setupNavigationListener() {
         menu.setOnItemSelectedListener { item ->
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
-
-            when (item.itemId) {
-                R.id.menu -> {
-                    if (currentFragment !is MainMenuFragment) {
-                        Timber.v("Navigation : Switch vers MENU")
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, homeFragment)
-                            .commit()
-                    }
-                    true
-                }
-                R.id.account -> {
-                    if (currentFragment !is AccountFragment) {
-                        Timber.v("Navigation : Switch vers COMPTE")
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, accountFragment)
-                            .commit()
-                    }
-                    true
-                }
+            val (target, tag) = when (item.itemId) {
+                R.id.pour_toi -> pourToiFragment to TAG_POUR_TOI
+                R.id.decouvrir -> exploreFragment to TAG_DECOUVRIR
+                R.id.calendar -> calendarFragment to TAG_CALENDAR
+                R.id.account -> accountFragment to TAG_ACCOUNT
                 else -> {
                     Timber.w("Navigation : ID de menu inconnu (${item.itemId})")
-                    false
+                    return@setOnItemSelectedListener false
                 }
             }
+            showFragment(target, tag)
+            true
         }
+    }
+
+    /**
+     * Affiche l'onglet demandé sans détruire les autres (add/hide/show). L'état est conservé,
+     * et surtout [androidx.fragment.app.Fragment.onHiddenChanged] se déclenche de façon fiable
+     * au retour sur un onglet — ce que `replace()` sur instance réutilisée ne garantissait pas
+     * (d'où "Pour toi" qui ne se rafraîchissait plus). Les onglets sont ajoutés à la demande.
+     */
+    private fun showFragment(target: androidx.fragment.app.Fragment, tag: String) {
+        if (target === activeFragment) return
+        supportFragmentManager.beginTransaction().apply {
+            hide(activeFragment)
+            if (target.isAdded) show(target) else add(R.id.container, target, tag)
+        }.commit()
+        activeFragment = target
     }
 
     override fun onResume() {
