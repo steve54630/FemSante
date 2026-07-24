@@ -173,6 +173,18 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Récap médical : génère un PDF local à présenter à un professionnel de santé. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMedicalReport"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/report_button"
+            app:icon="@drawable/ic_report"
+            app:iconGravity="textStart" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

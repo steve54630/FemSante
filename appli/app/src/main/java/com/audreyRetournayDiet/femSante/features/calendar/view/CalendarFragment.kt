@@ -5,13 +5,17 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isNotEmpty
@@ -22,9 +26,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.report.MedicalReport
+import com.audreyRetournayDiet.femSante.data.report.MedicalReportPdfGenerator
+import com.audreyRetournayDiet.femSante.data.report.MedicalReportSharer
+import com.audreyRetournayDiet.femSante.data.report.ReportFormat
+import com.audreyRetournayDiet.femSante.data.report.ReportPeriod
 import com.audreyRetournayDiet.femSante.features.main.PreferencesActivity
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
+import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
+import com.google.android.material.button.MaterialButton
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -32,7 +43,11 @@ import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.File
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -58,6 +73,18 @@ class CalendarFragment : Fragment() {
     private lateinit var userStore: UserStore
 
     private val viewModel: CalendarViewModel by viewModels()
+
+    /** Ce que l'utilisatrice veut faire du récap une fois généré : partager ou enregistrer. */
+    private enum class ReportAction { SHARE, SAVE }
+    private var pendingAction = ReportAction.SHARE
+
+    /** PDF en attente d'écriture vers l'emplacement choisi (flux « Enregistrer »). */
+    private var pendingSaveFile: File? = null
+
+    /** Sélecteur d'emplacement système (SAF) pour enregistrer le PDF sur l'appareil. */
+    private val saveDocumentLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri -> onSaveLocationPicked(uri) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +114,84 @@ class CalendarFragment : Fragment() {
         nextMonth.setOnClickListener {
             calendarView.scrollToMonth(calendarView.findFirstVisibleMonth()!!.yearMonth.plusMonths(1))
         }
+
+        view.findViewById<MaterialButton>(R.id.btnMedicalReport).setOnClickListener {
+            showReportDialog()
+        }
+    }
+
+    /**
+     * Dialog du récap médical : choix de la période (1/3/6 mois) et du niveau de détail.
+     * À la validation, on délègue l'agrégation au ViewModel (le PDF + le partage suivent via
+     * [CalendarEvent.ReportReady]).
+     */
+    private fun showReportDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_report_options, null)
+        val groupPeriod = dialogView.findViewById<RadioGroup>(R.id.groupPeriod)
+        val groupFormat = dialogView.findViewById<RadioGroup>(R.id.groupFormat)
+
+        fun requestReport(action: ReportAction) {
+            val period = when (groupPeriod.checkedRadioButtonId) {
+                R.id.periodOne -> ReportPeriod.ONE_MONTH
+                R.id.periodSix -> ReportPeriod.SIX_MONTHS
+                else -> ReportPeriod.THREE_MONTHS
+            }
+            val format = if (groupFormat.checkedRadioButtonId == R.id.formatJournal)
+                ReportFormat.SUMMARY_AND_JOURNAL else ReportFormat.SUMMARY_ONLY
+            pendingAction = action
+            viewModel.buildMedicalReport(period, format)
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.report_dialog_title)
+            .setView(dialogView)
+            .setPositiveButton(R.string.report_share) { _, _ -> requestReport(ReportAction.SHARE) }
+            .setNeutralButton(R.string.report_save) { _, _ -> requestReport(ReportAction.SAVE) }
+            .setNegativeButton(R.string.report_cancel, null)
+            .show()
+    }
+
+    /**
+     * Génère le PDF (hors thread principal) dans le cache privé, puis selon le choix de
+     * l'utilisatrice : ouvre le sélecteur de partage, ou le sélecteur d'emplacement pour
+     * enregistrer une copie sur l'appareil.
+     */
+    private fun handleReportReady(report: MedicalReport, format: ReportFormat) {
+        val action = pendingAction
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val file = withContext(Dispatchers.IO) {
+                    val target = MedicalReportSharer.newReportFile(requireContext())
+                    MedicalReportPdfGenerator().generate(report, format, target)
+                }
+                when (action) {
+                    ReportAction.SHARE -> MedicalReportSharer.share(requireContext(), file)
+                    ReportAction.SAVE -> {
+                        pendingSaveFile = file
+                        saveDocumentLauncher.launch(file.name)
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Échec génération du récap médical")
+                Toast.makeText(requireContext(), R.string.report_error, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /** Copie le PDF généré vers l'emplacement choisi par l'utilisatrice (ou ignore si annulé). */
+    private fun onSaveLocationPicked(uri: Uri?) {
+        val file = pendingSaveFile
+        pendingSaveFile = null
+        if (uri == null || file == null) return
+        try {
+            requireContext().contentResolver.openOutputStream(uri)?.use { out ->
+                file.inputStream().use { it.copyTo(out) }
+            }
+            Toast.makeText(requireContext(), R.string.report_saved, Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Timber.e(e, "Échec enregistrement du récap médical")
+            Toast.makeText(requireContext(), R.string.report_error, Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
@@ -105,6 +210,16 @@ class CalendarFragment : Fragment() {
                 }
                 launch {
                     viewModel.predictedPeriodDates.collect { calendarView.notifyCalendarChanged() }
+                }
+                launch {
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            is CalendarEvent.ReportReady -> handleReportReady(event.report, event.format)
+                            is CalendarEvent.Error ->
+                                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+                            else -> Unit
+                        }
+                    }
                 }
             }
         }

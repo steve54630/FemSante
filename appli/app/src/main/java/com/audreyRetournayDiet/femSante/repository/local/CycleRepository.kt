@@ -88,6 +88,19 @@ class CycleRepository(private val dao: CycleDayDao) {
     fun observePeriodDates(userId: String): Flow<Set<LocalDate>> =
         dao.observePeriodDates(userId).map { list -> list.map { timestampToDate(it) }.toSet() }
 
+    /** Observations de cycle sur une plage de dates (bornes incluses), pour le récap médical. */
+    suspend fun getCycleDaysBetween(userId: String, from: LocalDate, to: LocalDate): ApiResult<List<CycleDayEntity>> {
+        return try {
+            val fromTs = dateToTimestamp(from)
+            val toTs = dateToTimestamp(to)
+            val data = dao.getAll(userId).filter { it.date in fromTs..toTs }
+            ApiResult.Success(data, "Observations de cycle récupérées")
+        } catch (e: Exception) {
+            Timber.e(e, "Erreur lecture cycle du $from au $to")
+            ApiResult.Failure("Erreur lecture du cycle : ${e.localizedMessage}")
+        }
+    }
+
     private fun dateToTimestamp(date: LocalDate): Long =
         date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 

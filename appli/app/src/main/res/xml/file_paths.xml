@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chemins exposables via FileProvider. On n'expose QUE le sous-dossier "reports" du cache
+  privé : le récap médical y est écrit puis partagé par une action explicite de
+  l'utilisatrice (share sheet). Aucun autre fichier de l'app n'est accessible.
+-->
+<paths>
+    <cache-path
+        name="reports"
+        path="reports/" />
+</paths>

@@ -227,4 +227,21 @@
     <string name="cycle_phase_luteale">Lutéale</string>
     <string name="cycle_phase_indeterminee">Indéterminée</string>
 
+    <!-- Récap médical (PDF pour un professionnel de santé) -->
+    <string name="report_button">Récap pour mon médecin</string>
+    <string name="report_dialog_title">Récap pour mon médecin</string>
+    <string name="report_period_label">Sur quelle période ?</string>
+    <string name="report_period_1">1 mois</string>
+    <string name="report_period_3">3 mois</string>
+    <string name="report_period_6">6 mois</string>
+    <string name="report_format_label">Niveau de détail</string>
+    <string name="report_format_summary">Synthèse seule</string>
+    <string name="report_format_journal">Synthèse + journal jour par jour</string>
+    <string name="report_privacy_note">🔒 Généré sur ton téléphone. Rien n\'est envoyé à nos serveurs — tu choisis toi-même avec qui le partager.</string>
+    <string name="report_share">Partager</string>
+    <string name="report_save">Enregistrer</string>
+    <string name="report_saved">Récap enregistré.</string>
+    <string name="report_cancel">Annuler</string>
+    <string name="report_error">Impossible de générer le récap pour le moment.</string>
+
 </resources>

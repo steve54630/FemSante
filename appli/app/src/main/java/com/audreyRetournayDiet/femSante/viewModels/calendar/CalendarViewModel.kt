@@ -3,6 +3,9 @@ package com.audreyRetournayDiet.femSante.viewModels.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.cycle.CyclePeriodForecaster
+import com.audreyRetournayDiet.femSante.data.report.MedicalReportBuilder
+import com.audreyRetournayDiet.femSante.data.report.ReportFormat
+import com.audreyRetournayDiet.femSante.data.report.ReportPeriod
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
@@ -15,8 +18,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -44,6 +49,8 @@ class CalendarViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _events = MutableSharedFlow<CalendarEvent>()
+    /** Événements ponctuels (suppression, erreur, récap prêt). */
+    val events: SharedFlow<CalendarEvent> = _events.asSharedFlow()
 
     private val userId: String = userStore.getUser()?.id ?: ""
 
@@ -116,6 +123,31 @@ class CalendarViewModel @Inject constructor(
         viewModelScope.launch {
             cycleRepository.saveCycleDay(userId, selectedDate.value, isPeriod, flow, spotting)
             computeForecast()
+        }
+    }
+
+    /**
+     * Agrège le récap médical sur la période demandée (à partir d'aujourd'hui, en arrière) et
+     * émet [CalendarEvent.ReportReady]. L'agrégation reste locale ; la mise en PDF et le
+     * partage sont pris en charge par l'UI (qui a besoin du Context / FileProvider).
+     */
+    fun buildMedicalReport(period: ReportPeriod, format: ReportFormat) {
+        if (userId.isEmpty()) {
+            viewModelScope.launch { _events.emit(CalendarEvent.Error("Utilisatrice inconnue")) }
+            return
+        }
+        viewModelScope.launch {
+            try {
+                val to = LocalDate.now()
+                val from = to.minusMonths(period.months)
+                val entries = (repository.getEntriesBetween(userId, from, to) as? ApiResult.Success)?.data ?: emptyList()
+                val cycleDays = (cycleRepository.getCycleDaysBetween(userId, from, to) as? ApiResult.Success)?.data ?: emptyList()
+                val report = MedicalReportBuilder.build(from, to, entries, cycleDays, userStore.getCycleProfile())
+                _events.emit(CalendarEvent.ReportReady(report, format))
+            } catch (e: Exception) {
+                Timber.e(e, "Échec construction du récap médical")
+                _events.emit(CalendarEvent.Error("Impossible de générer le récap"))
+            }
         }
     }
 

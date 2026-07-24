@@ -41,6 +41,11 @@ abstract class DailyEntryDao {
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date = :timestamp LIMIT 1")
     abstract suspend fun getFullEntryByDate(userId: String, timestamp: Long): DailyEntryFull?
 
+    /** Entrées complètes sur une plage (bornes incluses), pour le récap médical. */
+    @Transaction
+    @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date BETWEEN :start AND :end ORDER BY date ASC")
+    abstract suspend fun getFullEntriesBetween(userId: String, start: Long, end: Long): List<DailyEntryFull>
+
     /**
      * Version réactive de [getFullEntryByDate] : ré-émet automatiquement à chaque
      * modification des tables concernées (journal + sous-états). Utilisée pour l'affichage

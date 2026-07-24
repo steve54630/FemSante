@@ -126,6 +126,17 @@ class DailyRepository(private val dao: DailyEntryDao) {
         }
     }
 
+    /** Entrées complètes du journal sur une plage de dates (bornes incluses). */
+    suspend fun getEntriesBetween(userId: String, from: LocalDate, to: LocalDate): ApiResult<List<DailyEntryFull>> {
+        return try {
+            val data = dao.getFullEntriesBetween(userId, dateToTimestamp(from), dateToTimestamp(to))
+            ApiResult.Success(data, "Entrées récupérées")
+        } catch (e: Exception) {
+            Timber.e(e, "Erreur lecture entrées du $from au $to")
+            ApiResult.Failure("Erreur lecture des entrées : ${e.localizedMessage}")
+        }
+    }
+
     /**
      * Met à jour l'ensemble des composants d'une entrée existante.
      * Utilise une transaction interne au DAO pour modifier toutes les entités liées.
