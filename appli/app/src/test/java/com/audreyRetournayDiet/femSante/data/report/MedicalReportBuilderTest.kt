@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.data.report
 
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
@@ -25,14 +26,17 @@ class MedicalReportBuilderTest {
     private fun ts(date: LocalDate): Long =
         date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-    private fun entry(date: LocalDate, pain: Int, zones: List<PainZone>, nausea: Boolean, notes: String? = null) =
-        DailyEntryFull(
-            dailyEntry = DailyEntryEntity(userId = userId, date = ts(date)),
-            generalState = GeneralStateEntity(entryId = 0L, painLevel = pain),
-            psychologicalState = null,
-            symptomsState = SymptomStateEntity(entryId = 0L, localizedPains = zones, hasNausea = nausea, others = notes ?: ""),
-            contextState = null
-        )
+    private fun entry(
+        date: LocalDate, pain: Int, zones: List<PainZone>, nausea: Boolean, notes: String? = null,
+        bed: Int? = null, wake: Int? = null, measurement: BodyMeasurementEntity? = null
+    ) = DailyEntryFull(
+        dailyEntry = DailyEntryEntity(userId = userId, date = ts(date)),
+        generalState = GeneralStateEntity(entryId = 0L, painLevel = pain, bedTimeMinutes = bed, wakeTimeMinutes = wake),
+        psychologicalState = null,
+        symptomsState = SymptomStateEntity(entryId = 0L, localizedPains = zones, hasNausea = nausea, others = notes ?: ""),
+        contextState = null,
+        measurement = measurement
+    )
 
     @Test
     fun `synthese symptomes correcte`() {
@@ -83,6 +87,47 @@ class MedicalReportBuilderTest {
 
         assertNull(report.cycle.averageCycleLength)
         assertEquals(1, report.cycle.periodStartsCount)
+    }
+
+    @Test
+    fun `synthese sommeil - nuits renseignees et duree moyenne`() {
+        val entries = listOf(
+            entry(d1, pain = 5, zones = emptyList(), nausea = false, bed = 23 * 60, wake = 7 * 60), // 8 h = 480
+            entry(d1.plusDays(1), pain = 5, zones = emptyList(), nausea = false, bed = 0, wake = 6 * 60), // minuit -> 6 h = 360
+            entry(d1.plusDays(2), pain = 5, zones = emptyList(), nausea = false) // pas de sommeil renseigné
+        )
+
+        val report = MedicalReportBuilder.build(
+            from = d1, to = d1.plusDays(40),
+            entries = entries, cycleDays = emptyList(), profile = CycleProfile.REGULIER
+        )
+
+        assertEquals(2, report.sleep.loggedNights)
+        assertEquals(420, report.sleep.averageDurationMinutes) // (480 + 360) / 2
+    }
+
+    @Test
+    fun `evolution des mesures - premiere et derniere valeur`() {
+        val entries = listOf(
+            entry(d1, 5, emptyList(), false, measurement = BodyMeasurementEntity(entryId = 0L, weightKg = 62.0, waistCm = 70.0)),
+            entry(d1.plusDays(10), 5, emptyList(), false, measurement = BodyMeasurementEntity(entryId = 0L, weightKg = 60.0))
+        )
+
+        val report = MedicalReportBuilder.build(
+            from = d1, to = d1.plusDays(40),
+            entries = entries, cycleDays = emptyList(), profile = CycleProfile.REGULIER
+        )
+
+        val weight = report.measurements.trends.first { it.metric == MeasurementMetric.WEIGHT }
+        assertEquals(62.0, weight.firstValue, 0.001)
+        assertEquals(d1, weight.firstDate)
+        assertEquals(60.0, weight.lastValue, 0.001)
+        assertEquals(d1.plusDays(10), weight.lastDate)
+
+        // Le tour de taille n'a qu'une mesure : début = fin.
+        val waist = report.measurements.trends.first { it.metric == MeasurementMetric.WAIST }
+        assertEquals(70.0, waist.firstValue, 0.001)
+        assertEquals(70.0, waist.lastValue, 0.001)
     }
 
     @Test

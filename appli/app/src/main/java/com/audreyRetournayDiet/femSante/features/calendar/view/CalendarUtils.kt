@@ -4,87 +4,136 @@ import android.view.View
 import android.widget.TextView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
+import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.type.DayQuality
 import com.audreyRetournayDiet.femSante.room.type.DifficultyCause
+import com.audreyRetournayDiet.femSante.room.type.PainZone
 import timber.log.Timber
 import java.util.Locale
 
 /**
- * Objet utilitaire pour le formatage et l'affichage des données du calendrier.
- * * Il centralise la logique de transformation des Enums et des listes d'entités
- * en chaînes de caractères lisibles pour l'utilisatrice dans l'interface "Détail du jour".
+ * Formatage et remplissage du résumé du jour (écran détail). Aligné sur les onglets de
+ * saisie : Corps & douleur / Moral & sommeil / Mode de vie / Mesures.
+ *
+ * Principe : on **n'affiche que ce qui est renseigné** — chaque ligne vide est masquée, et
+ * la carte Mesures disparaît si aucune mesure n'existe.
  */
 object CalendarUtils {
 
-    /**
-     * Remplit les composants d'une vue avec les données d'une entrée quotidienne complète.
-     * * @param v La vue racine (généralement le contenu du BottomSheet).
-     * @param entry L'objet [DailyEntryFull] contenant toutes les relations (Symptômes, Psychologie, etc.).
-     */
     fun updateDailyView(v: View, entry: DailyEntryFull) {
-        Timber.d("Mise à jour de la vue quotidienne pour l'entrée ID: ${entry.dailyEntry.id}")
-
         try {
             with(entry) {
-                // --- État Général ---
-                updateText(v, R.id.tvIsTired, "Fatigue : ${if (generalState?.isTired == true) "Fatiguée" else "En forme"}")
-                updateText(v, R.id.tvPainLevel, "Douleur : ${generalState?.painLevel ?: 0}/10")
+                // --- Corps & douleur ---
+                setLine(v, R.id.tvPainByZone, painSummary(symptomsState))
+                setLine(v, R.id.tvHasNausea, if (symptomsState?.hasNausea == true) "Nausées : oui" else null)
+                setLine(v, R.id.tvOtherSymptoms, symptomsState?.others?.takeIf { it.isNotBlank() }?.let { "Notes : $it" })
 
-                // --- État Psychologique ---
-                val quality = psychologicalState?.dayQuality?.format() ?: "Non renseignée"
-                updateText(v, R.id.tvDayQuality, "Qualité du jour : $quality")
-                updateText(v, R.id.tvDifficultyCauses, "Causes : ${psychologicalState?.format() ?: "Aucune"}")
+                // --- Moral & sommeil ---
+                setLine(v, R.id.tvDayQuality, "Moral : ${psychologicalState?.dayQuality?.format() ?: "—"}")
+                setLine(v, R.id.tvDifficultyCauses, psychologicalState?.causesOrNull()?.let { "Causes : $it" })
+                setLine(v, R.id.tvIsTired, if (generalState?.isTired == true) "Fatigue : oui" else null)
+                setLine(v, R.id.tvSleep, sleepSummary(generalState))
+                setLine(v, R.id.tvGratitude, psychologicalState?.gratitude?.takeIf { it.isNotBlank() }?.let { "Gratitude : $it" })
 
-                // --- Symptômes ---
-                val pains = symptomsState?.localizedPains?.joinToString(", ") { it.name }?.ifEmpty { "Aucune" } ?: "Aucune"
-                updateText(v, R.id.tvLocalizedPains, "Zones : $pains")
-                updateText(v, R.id.tvHasNausea, "Nausées : ${if (symptomsState?.hasNausea == true) "Oui" else "Non"}")
-
-                // --- Contexte ---
+                // --- Mode de vie ---
                 val activity = contextState?.physicalActivity?.name?.lowercase()?.capitalize() ?: "Repos"
-                updateText(v, R.id.tvPhysicalActivity, "Activité : $activity")
-                updateText(v, R.id.tvTookMedication, "Traitement : ${contextState?.formatMedication() ?: "Non"}")
+                setLine(v, R.id.tvPhysicalActivity, "Activité : $activity")
+                setLine(v, R.id.tvTookMedication, contextState?.medicationOrNull()?.let { "Traitement : $it" })
+                setLine(v, R.id.tvDiet, contextState?.diet?.takeIf { it.isNotBlank() }?.let { "Alimentation : $it" })
+
+                // --- Mesures (carte masquée si vide) ---
+                val measures = measuresSummary(measurement)
+                setLine(v, R.id.tvMeasures, measures)
+                v.findViewById<View>(R.id.cardMeasures)?.visibility = if (measures == null) View.GONE else View.VISIBLE
             }
         } catch (e: Exception) {
-            Timber.e(e, "Erreur critique lors du formatage des données du jour")
+            Timber.e(e, "Erreur lors du formatage du résumé du jour")
         }
     }
 
-    /**
-     * Met à jour de manière sécurisée le texte d'un TextView.
-     */
-    private fun updateText(root: View, id: Int, text: String) {
-        val textView = root.findViewById<TextView>(id)
-        if (textView == null) {
-            Timber.w("Composant TextView introuvable pour l'ID: $id (Vérifiez le layout XML)")
+    /** Douleur par zone avec intensité (fallback sur l'ancienne liste sans intensité). */
+    private fun painSummary(symptom: com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity?): String {
+        val byZone = symptom?.painByZone ?: emptyMap()
+        if (byZone.isNotEmpty()) {
+            val parts = byZone.entries.sortedByDescending { it.value }
+                .joinToString(" · ") { "${zoneLabel(it.key)} ${it.value}" }
+            return "Douleur : $parts"
         }
-        textView?.text = text
+        val zones = symptom?.localizedPains ?: emptyList()
+        if (zones.isNotEmpty()) return "Douleur : ${zones.joinToString(", ") { zoneLabel(it) }}"
+        return "Douleur : aucune"
     }
 
-    /** Formatage de la qualité du jour (ex: "MOYENNE" -> "Moyenne") */
+    private fun sleepSummary(general: GeneralStateEntity?): String? {
+        val bed = general?.bedTimeMinutes ?: return null
+        val wake = general.wakeTimeMinutes ?: return null
+        var minutes = wake - bed
+        if (minutes <= 0) minutes += 24 * 60
+        val duration = "${minutes / 60} h ${"%02d".format(minutes % 60)}"
+        return "Sommeil : $duration (${formatTime(bed)} → ${formatTime(wake)})"
+    }
+
+    private fun measuresSummary(m: BodyMeasurementEntity?): String? {
+        if (m == null) return null
+        val parts = buildList {
+            m.weightKg?.let { add("Poids ${num(it)} kg") }
+            m.waistCm?.let { add("Taille ${num(it)} cm") }
+            m.hipsCm?.let { add("Hanches ${num(it)} cm") }
+            m.thighsCm?.let { add("Cuisses ${num(it)} cm") }
+            m.chestCm?.let { add("Poitrine ${num(it)} cm") }
+            m.armsCm?.let { add("Bras ${num(it)} cm") }
+        }
+        return parts.joinToString(" · ").ifEmpty { null }
+    }
+
+    /** Affiche la ligne, ou la masque si le texte est vide. */
+    private fun setLine(root: View, id: Int, text: String?) {
+        val tv = root.findViewById<TextView>(id) ?: return
+        if (text.isNullOrBlank()) {
+            tv.visibility = View.GONE
+        } else {
+            tv.visibility = View.VISIBLE
+            tv.text = text
+        }
+    }
+
+    private fun formatTime(minutes: Int): String =
+        String.format(Locale.FRANCE, "%02d:%02d", minutes / 60, minutes % 60)
+
+    private fun num(value: Double): String =
+        if (value % 1.0 == 0.0) value.toInt().toString() else value.toString()
+
+    private fun zoneLabel(zone: PainZone): String = when (zone) {
+        PainZone.BASSIN -> "Bassin"
+        PainZone.LOMBAIRES -> "Lombaires"
+        PainZone.SEINS -> "Seins"
+        PainZone.TETE -> "Tête"
+        PainZone.ABDOMEN -> "Abdomen"
+        PainZone.BRAS -> "Bras"
+        PainZone.CUISSES -> "Cuisses"
+        PainZone.HAUT_DOS -> "Haut du dos"
+        PainZone.JAMBES -> "Jambes"
+        PainZone.AUTRE -> "Autre"
+    }
+
     private fun DayQuality.format() = name.lowercase().capitalize()
 
-    /** * Formate la liste des causes psychologiques.
-     * Gère l'ajout intelligent du champ "Autre" à la fin de la liste.
-     */
-    private fun PsychologicalStateEntity.format(): String {
-        val items = difficultyCauses.filter { it != DifficultyCause.AUTRE }.map { it.name }.toMutableList()
-        if (difficultyCauses.contains(DifficultyCause.AUTRE) && !autres.isNullOrBlank()) {
-            items.add(autres)
-        }
-        return items.joinToString(", ").ifEmpty { "Aucune" }
+    /** Causes de difficulté (avec le champ « Autre » ajouté), ou null si aucune. */
+    private fun PsychologicalStateEntity.causesOrNull(): String? {
+        val items = difficultyCauses.filter { it != DifficultyCause.AUTRE }.map { it.name.lowercase().capitalize() }.toMutableList()
+        if (difficultyCauses.contains(DifficultyCause.AUTRE) && !autres.isNullOrBlank()) items.add(autres)
+        return items.joinToString(", ").ifEmpty { null }
     }
 
-    /** Formate l'état de la médication avec le détail si présent. */
-    private fun ContextStateEntity.formatMedication(): String {
-        return if (medecineTaken) {
-            if (!medicationList.isNullOrBlank()) "Oui ($medicationList)" else "Oui"
-        } else "Non"
+    /** État de la médication avec détail, ou null si aucun traitement. */
+    private fun ContextStateEntity.medicationOrNull(): String? {
+        if (!medecineTaken) return null
+        return if (!medicationList.isNullOrBlank()) "oui ($medicationList)" else "oui"
     }
 
-    /** Extension utilitaire pour mettre une majuscule à la première lettre. */
     private fun String.capitalize() = replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
     }

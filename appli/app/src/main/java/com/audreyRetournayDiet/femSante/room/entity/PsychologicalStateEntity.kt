@@ -62,5 +62,9 @@ data class PsychologicalStateEntity(
      * journée sur ce plan.
      */
     @ColumnInfo(name = "is_emotionally_difficult_day", defaultValue = "0")
-    val isEmotionallyDifficultDay: Boolean = false
+    val isEmotionallyDifficultDay: Boolean = false,
+
+    /** Journal de gratitude : un moment positif de la journée (facultatif). */
+    @ColumnInfo(name = "gratitude")
+    val gratitude: String? = null
 )

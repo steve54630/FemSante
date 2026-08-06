@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Onglets de saisie d'une journée (réorganisés) :
+  - Corps & douleur (carte du corps + nausée + notes)
+  - Moral & sommeil (moral, causes, fatigue)
+  - Mode de vie (activité, alimentation, médicaments)
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_general"
+        android:id="@+id/nav_symptoms"
         android:icon="@drawable/baseline_accessibility_new_24"
-        android:title="@string/calendar_general" />
+        android:title="@string/tab_corps_douleur" />
 
     <item
         android:id="@+id/nav_psych"
         android:icon="@drawable/baseline_psychology_24"
-        android:title="@string/calendar_moral" />
-
-    <item
-        android:id="@+id/nav_symptoms"
-        android:icon="@drawable/baseline_medication_24"
-        android:title="@string/calendar_symptom" />
+        android:title="@string/tab_moral_sommeil" />
 
     <item
         android:id="@+id/nav_context"
         android:icon="@drawable/baseline_contextual_24"
-        android:title="@string/calendar_context" />
+        android:title="@string/tab_mode_vie" />
+
+    <item
+        android:id="@+id/nav_measures"
+        android:icon="@drawable/ic_measure"
+        android:title="@string/tab_mesures" />
 
 </menu>

@@ -46,5 +46,13 @@ data class GeneralStateEntity(
      * Utilisé pour la coloration visuelle du calendrier de suivi.
      */
     @ColumnInfo(name = "pain_level")
-    val painLevel: Int = 0
+    val painLevel: Int = 0,
+
+    /** Heure de coucher, en minutes depuis minuit (0–1439), ou null si non renseignée. */
+    @ColumnInfo(name = "bed_time")
+    val bedTimeMinutes: Int? = null,
+
+    /** Heure de réveil, en minutes depuis minuit (0–1439), ou null si non renseignée. */
+    @ColumnInfo(name = "wake_time")
+    val wakeTimeMinutes: Int? = null
 )

@@ -244,4 +244,52 @@
     <string name="report_cancel">Annuler</string>
     <string name="report_error">Impossible de générer le récap pour le moment.</string>
 
+    <!-- Saisie : onglets réorganisés + carte de douleur -->
+    <string name="tab_corps_douleur">Corps &amp; douleur</string>
+    <string name="tab_moral_sommeil">Moral &amp; sommeil</string>
+    <string name="tab_mode_vie">Mode de vie</string>
+    <string name="pain_map_title">Où as-tu mal aujourd\'hui ?</string>
+    <string name="pain_map_face">Face</string>
+    <string name="pain_map_back">Dos</string>
+    <string name="pain_map_hint">Touche une zone, puis règle l\'intensité. Une zone non touchée = aucune douleur.</string>
+    <string name="pain_intensity_value">%1$d / 10</string>
+    <string name="pain_remove_zone">Retirer cette zone</string>
+    <string name="pain_validate">Valider</string>
+    <string name="pain_level_low">1 · léger</string>
+    <string name="pain_level_high">10 · fort</string>
+    <string name="fatigue_title">Fatigue</string>
+    <string name="fatigue_question">Ressens-tu de la fatigue aujourd\'hui ?</string>
+
+    <!-- Sommeil -->
+    <string name="sleep_title">Sommeil</string>
+    <string name="sleep_bedtime">Coucher</string>
+    <string name="sleep_waketime">Réveil</string>
+    <string name="sleep_bedtime_value">Coucher : %1$s</string>
+    <string name="sleep_waketime_value">Réveil : %1$s</string>
+    <string name="sleep_bedtime_title">Heure de coucher</string>
+    <string name="sleep_waketime_title">Heure de réveil</string>
+    <string name="sleep_duration">Durée de sommeil : %1$s</string>
+    <string name="sleep_duration_empty">Renseigne le coucher et le réveil pour la durée.</string>
+
+    <!-- Journal de gratitude -->
+    <string name="gratitude_title">Gratitude</string>
+    <string name="gratitude_subtitle">Note un moment positif de ta journée.</string>
+    <string name="gratitude_hint">Le positif du jour</string>
+
+    <!-- Mesures corporelles -->
+    <string name="tab_mesures">Mesures</string>
+    <string name="measures_title">Mes mesures</string>
+    <string name="measures_note">Le poids n\'est pas l\'indicateur principal : les tours (taille, hanches) reflètent mieux tes évolutions.</string>
+    <string name="measures_weight">Poids (kg)</string>
+    <string name="measures_waist">Tour de taille (cm)</string>
+    <string name="measures_hips">Tour de hanches (cm)</string>
+    <string name="measures_thighs">Tour de cuisses (cm)</string>
+    <string name="measures_chest">Tour de poitrine (cm)</string>
+    <string name="measures_arms">Tour de bras (cm)</string>
+
+    <!-- Courbes de tendance des mesures -->
+    <string name="trend_button">Mon évolution</string>
+    <string name="trend_title">Mon évolution</string>
+    <string name="trend_empty">Aucune mesure enregistrée pour l\'instant.</string>
+
 </resources>

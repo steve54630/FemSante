@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.data.report
 
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.CycleProfile
 import java.time.Instant
@@ -62,6 +63,32 @@ object MedicalReportBuilder {
             periodStartsCount = periodStarts.size
         )
 
+        // --- Synthèse sommeil ---
+        val sleepDurations = entries.mapNotNull {
+            sleepMinutes(it.generalState?.bedTimeMinutes, it.generalState?.wakeTimeMinutes)
+        }
+        val sleep = SleepSummary(
+            loggedNights = sleepDurations.size,
+            averageDurationMinutes = if (sleepDurations.isEmpty()) null else sleepDurations.average().toInt()
+        )
+
+        // --- Évolution des mesures (première -> dernière valeur de la période) ---
+        val trends = MeasurementMetric.values().mapNotNull { metric ->
+            val samples = entries
+                .mapNotNull { e -> metricValue(e.measurement, metric)?.let { toDate(e.dailyEntry.date) to it } }
+                .sortedBy { it.first }
+            if (samples.isEmpty()) null
+            else MetricTrend(
+                metric = metric,
+                firstDate = samples.first().first,
+                firstValue = samples.first().second,
+                lastDate = samples.last().first,
+                lastValue = samples.last().second,
+                points = samples.map { MeasurePoint(it.first, it.second) }
+            )
+        }
+        val measurements = MeasurementSummary(trends)
+
         // --- Journal chronologique (union des jours saisis en journal ou en cycle) ---
         val days = (journalByDate.keys + cycleByDate.keys).toSortedSet().map { date ->
             val entry = journalByDate[date]
@@ -71,10 +98,31 @@ object MedicalReportBuilder {
                 zones = entry?.symptomsState?.localizedPains ?: emptyList(),
                 nausea = entry?.symptomsState?.hasNausea == true,
                 isPeriod = cycleByDate[date]?.isPeriod == true,
-                notes = entry?.symptomsState?.others?.takeIf { it.isNotBlank() }
+                notes = entry?.symptomsState?.others?.takeIf { it.isNotBlank() },
+                sleepDurationMinutes = sleepMinutes(entry?.generalState?.bedTimeMinutes, entry?.generalState?.wakeTimeMinutes)
             )
         }
 
-        return MedicalReport(from = from, to = to, cycle = cycle, symptoms = symptoms, days = days)
+        return MedicalReport(
+            from = from, to = to, cycle = cycle, symptoms = symptoms,
+            sleep = sleep, measurements = measurements, days = days
+        )
+    }
+
+    /** Durée de sommeil en minutes (gère le passage de minuit), ou null si incomplet. */
+    private fun sleepMinutes(bed: Int?, wake: Int?): Int? {
+        if (bed == null || wake == null) return null
+        var minutes = wake - bed
+        if (minutes <= 0) minutes += 24 * 60
+        return minutes
+    }
+
+    private fun metricValue(m: BodyMeasurementEntity?, metric: MeasurementMetric): Double? = when (metric) {
+        MeasurementMetric.WEIGHT -> m?.weightKg
+        MeasurementMetric.WAIST -> m?.waistCm
+        MeasurementMetric.HIPS -> m?.hipsCm
+        MeasurementMetric.THIGHS -> m?.thighsCm
+        MeasurementMetric.CHEST -> m?.chestCm
+        MeasurementMetric.ARMS -> m?.armsCm
     }
 }

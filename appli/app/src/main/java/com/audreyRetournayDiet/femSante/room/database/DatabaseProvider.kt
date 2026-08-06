@@ -5,6 +5,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.audreyRetournayDiet.femSante.room.migration.MIGRATION_1_2
 import com.audreyRetournayDiet.femSante.room.migration.MIGRATION_2_3
+import com.audreyRetournayDiet.femSante.room.migration.MIGRATION_3_4
+import com.audreyRetournayDiet.femSante.room.migration.MIGRATION_4_5
+import com.audreyRetournayDiet.femSante.room.migration.MIGRATION_5_6
 import com.audreyRetournayDiet.femSante.shared.DatabaseKeyProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import timber.log.Timber
@@ -46,7 +49,7 @@ class DatabaseProvider {
                 .setQueryCallback({ sqlQuery, bindArgs ->
                     Timber.d("Room SQL Executed -> %s | Args: %s", sqlQuery, bindArgs)
                 }, Executors.newSingleThreadExecutor())
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
         }
 

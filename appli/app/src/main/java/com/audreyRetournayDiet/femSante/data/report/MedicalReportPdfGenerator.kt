@@ -40,6 +40,8 @@ class MedicalReportPdfGenerator {
         drawHeader(writer, report)
         drawCycleSection(writer, report.cycle)
         drawSymptomsSection(writer, report.symptoms)
+        drawSleepSection(writer, report.sleep)
+        drawMeasuresSection(writer, report.measurements)
         if (format == ReportFormat.SUMMARY_AND_JOURNAL) {
             drawJournalSection(writer, report.days)
         }
@@ -89,6 +91,30 @@ class MedicalReportPdfGenerator {
         w.gap(14f)
     }
 
+    private fun drawSleepSection(w: PageWriter, sleep: SleepSummary) {
+        w.section("Sommeil")
+        w.field("Nuits renseignées", sleep.loggedNights.toString())
+        w.field("Durée moyenne de sommeil", sleep.averageDurationMinutes?.let { formatDuration(it) } ?: "—")
+        w.gap(14f)
+    }
+
+    private fun drawMeasuresSection(w: PageWriter, m: MeasurementSummary) {
+        w.section("Mesures (évolution)")
+        if (m.trends.isEmpty()) {
+            w.field("Mesures", "aucune mesure sur la période")
+        } else {
+            m.trends.forEach { t ->
+                val unit = metricUnit(t.metric)
+                val value = "${num(t.firstValue)} $unit (${t.firstDate.format(dateFormat)}) → " +
+                    "${num(t.lastValue)} $unit (${t.lastDate.format(dateFormat)}), ${deltaText(t.lastValue - t.firstValue, unit)}"
+                w.field(metricLabel(t.metric), value)
+                // Une courbe n'a de sens qu'à partir de 3 points (2 points = segment droit).
+                if (t.points.size >= 3) w.sparkline(t.points)
+            }
+        }
+        w.gap(14f)
+    }
+
     private fun drawJournalSection(w: PageWriter, days: List<DayLine>) {
         w.section("Journal jour par jour")
         if (days.isEmpty()) {
@@ -106,6 +132,7 @@ class MedicalReportPdfGenerator {
         if (day.zones.isNotEmpty()) parts.add(day.zones.joinToString(", ") { painZoneLabel(it) })
         if (day.isPeriod) parts.add("règles")
         if (day.nausea) parts.add("nausées")
+        day.sleepDurationMinutes?.let { parts.add("sommeil ${formatDuration(it)}") }
         val summary = if (parts.isEmpty()) "—" else parts.joinToString(" · ")
 
         // On garde une ligne (date + résumé) solidaire de ses notes éventuelles.
@@ -132,7 +159,37 @@ class MedicalReportPdfGenerator {
         PainZone.SEINS -> "Seins"
         PainZone.TETE -> "Tête"
         PainZone.ABDOMEN -> "Abdomen"
+        PainZone.BRAS -> "Bras"
+        PainZone.CUISSES -> "Cuisses"
+        PainZone.HAUT_DOS -> "Haut du dos"
+        PainZone.JAMBES -> "Jambes"
         PainZone.AUTRE -> "Autre"
+    }
+
+    private fun formatDuration(minutes: Int): String =
+        "${minutes / 60} h ${String.format(Locale.FRANCE, "%02d", minutes % 60)}"
+
+    private fun metricLabel(metric: MeasurementMetric): String = when (metric) {
+        MeasurementMetric.WEIGHT -> "Poids"
+        MeasurementMetric.WAIST -> "Tour de taille"
+        MeasurementMetric.HIPS -> "Tour de hanches"
+        MeasurementMetric.THIGHS -> "Tour de cuisses"
+        MeasurementMetric.CHEST -> "Tour de poitrine"
+        MeasurementMetric.ARMS -> "Tour de bras"
+    }
+
+    private fun metricUnit(metric: MeasurementMetric): String =
+        if (metric == MeasurementMetric.WEIGHT) "kg" else "cm"
+
+    private fun num(value: Double): String =
+        if (value % 1.0 == 0.0) value.toInt().toString() else String.format(Locale.FRANCE, "%.1f", value)
+
+    /** Variation lisible : "+2 kg", "-3 cm", ou "stable". */
+    private fun deltaText(delta: Double, unit: String): String {
+        if (delta == 0.0) return "stable"
+        val magnitude = if (delta < 0) -delta else delta
+        val sign = if (delta > 0) "+" else "-"
+        return "$sign${num(magnitude)} $unit"
     }
 
     // --- Word-wrap manuel (mesuré au Paint) ---
@@ -249,6 +306,37 @@ class MedicalReportPdfGenerator {
             }
         }
 
+        /** Petit graphe (sparkline) d'une mesure : ligne + points d'extrémité. */
+        fun sparkline(points: List<MeasurePoint>) {
+            val chartHeight = 46f
+            ensureSpace(chartHeight + LINE_HEIGHT + 6f)
+            val left = MARGIN_LEFT + 8f
+            val right = MARGIN_LEFT + CONTENT_WIDTH
+            val top = y
+            val bottom = y + chartHeight
+
+            val values = points.map { it.value }
+            var minV = values.minOrNull()!!
+            var maxV = values.maxOrNull()!!
+            if (minV == maxV) { minV -= 1.0; maxV += 1.0 }
+
+            fun xAt(i: Int): Float = left + (right - left) * i / (points.size - 1)
+            fun yAt(v: Double): Float = bottom - ((v - minV) / (maxV - minV) * (bottom - top)).toFloat()
+
+            canvas.drawLine(left, bottom, right, bottom, sparkGuidePaint)
+            val path = Path()
+            points.forEachIndexed { i, p ->
+                val x = xAt(i); val py = yAt(p.value)
+                if (i == 0) path.moveTo(x, py) else path.lineTo(x, py)
+            }
+            canvas.drawPath(path, sparkLinePaint)
+            canvas.drawCircle(xAt(0), yAt(points.first().value), 2.5f, sparkDotPaint)
+            canvas.drawCircle(xAt(points.size - 1), yAt(points.last().value), 2.5f, sparkDotPaint)
+
+            // Saute une ligne sous le graphe pour ne pas coller au texte suivant.
+            y = bottom + LINE_HEIGHT + 6f
+        }
+
         fun finish() { document.finishPage(page) }
     }
 
@@ -295,6 +383,17 @@ class MedicalReportPdfGenerator {
         val orangePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.parseColor("#ee9e3d") }
         val brandFooterPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE; textSize = 10f
+        }
+        // Sparkline des mesures : ligne bleue (blue_app) + repère de base gris clair.
+        val sparkLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE; strokeWidth = 1.4f; color = Color.parseColor("#0085ac")
+            strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND
+        }
+        val sparkDotPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.FILL; color = Color.parseColor("#0085ac")
+        }
+        val sparkGuidePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE; strokeWidth = 0.6f; color = Color.rgb(220, 220, 220)
         }
     }
 }

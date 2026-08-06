@@ -118,6 +118,10 @@ class CalendarFragment : Fragment() {
         view.findViewById<MaterialButton>(R.id.btnMedicalReport).setOnClickListener {
             showReportDialog()
         }
+
+        view.findViewById<MaterialButton>(R.id.btnMeasureTrend).setOnClickListener {
+            startActivity(Intent(requireContext(), MeasureTrendActivity::class.java))
+        }
     }
 
     /**

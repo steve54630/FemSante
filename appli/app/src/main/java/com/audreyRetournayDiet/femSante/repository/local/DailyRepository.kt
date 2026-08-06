@@ -3,6 +3,8 @@ package com.audreyRetournayDiet.femSante.repository.local
 import com.audreyRetournayDiet.femSante.room.dao.DailyEntryDao
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.dto.MeasurementHistoryRow
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.DatePainStatus
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
@@ -126,6 +128,16 @@ class DailyRepository(private val dao: DailyEntryDao) {
         }
     }
 
+    /** Historique des mesures (date + valeurs), chronologique, pour les courbes de tendance. */
+    suspend fun getMeasurementHistory(userId: String): ApiResult<List<MeasurementHistoryRow>> {
+        return try {
+            ApiResult.Success(dao.getMeasurementHistory(userId), "Historique des mesures récupéré")
+        } catch (e: Exception) {
+            Timber.e(e, "Erreur lecture historique des mesures")
+            ApiResult.Failure("Erreur lecture des mesures : ${e.localizedMessage}")
+        }
+    }
+
     /** Entrées complètes du journal sur une plage de dates (bornes incluses). */
     suspend fun getEntriesBetween(userId: String, from: LocalDate, to: LocalDate): ApiResult<List<DailyEntryFull>> {
         return try {
@@ -148,9 +160,10 @@ class DailyRepository(private val dao: DailyEntryDao) {
         context: ContextStateEntity,
         psy: PsychologicalStateEntity,
         symptom: SymptomStateEntity,
+        measurement: BodyMeasurementEntity,
     ): ApiResult<String> {
         return try {
-            dao.editFullDailyEntry(userId, id, general, psy, symptom, context)
+            dao.editFullDailyEntry(userId, id, general, psy, symptom, context, measurement)
             Timber.i("Mise à jour réussie - ID: $id")
             ApiResult.Success("Success", "Données mises à jour avec succès")
         } catch (e: Exception) {
@@ -170,9 +183,10 @@ class DailyRepository(private val dao: DailyEntryDao) {
         context: ContextStateEntity,
         psy: PsychologicalStateEntity,
         symptom: SymptomStateEntity,
+        measurement: BodyMeasurementEntity,
     ): ApiResult<String> {
         return try {
-            dao.insertFullDailyEntry(userId, date, general, psy, symptom, context)
+            dao.insertFullDailyEntry(userId, date, general, psy, symptom, context, measurement)
             Timber.i("Nouvelle entrée enregistrée - Date: $date")
             ApiResult.Success("Success", "Données enregistrées avec succès")
         } catch (e: Exception) {

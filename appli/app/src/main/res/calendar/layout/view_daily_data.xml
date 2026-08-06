@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Fiche détail du jour. Racine LinearLayout (plus de NestedScrollView) : le défilement
-  est assuré par le NestedScrollView unique de fragment_calendar, on évite le scroll
-  imbriqué et une hauteur réservée superflue.
+  Résumé du jour, aligné sur les onglets de saisie. Chaque ligne non renseignée est masquée
+  par CalendarUtils (on n'affiche que ce qui a été rempli). La carte Mesures est masquée si
+  aucune mesure n'a été saisie.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,175 +13,195 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- En-tête : titre + actions -->
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tvSummaryTitle"
+            style="@style/AppTextAppearance.TitleFancy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/containerActions"
+            android:text="@string/daily_resume"
+            android:textSize="26sp" />
+
+        <LinearLayout
+            android:id="@+id/containerActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDelete"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/entry_remove"
+                app:icon="@drawable/ic_delete" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEdit"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/entry_modify"
+                app:icon="@drawable/ic_edit" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Carte : Corps & douleur -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:contentPadding="14dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvSummaryTitle"
-                style="@style/AppTextAppearance.TitleFancy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/containerActions"
-                android:text="@string/daily_resume"
-                android:textSize="26sp" />
+                style="@style/SummarySectionTitle"
+                android:text="@string/tab_corps_douleur" />
 
-            <LinearLayout
-                android:id="@+id/containerActions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+            <View style="@style/SummaryDivider" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDelete"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="@string/entry_remove"
-                    app:icon="@drawable/ic_delete" />
+            <TextView
+                android:id="@+id/tvPainByZone"
+                style="@style/SummaryDetailStyle"
+                tools:text="Douleur : Bassin 8 · Tête 3" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnEdit"
-                    style="@style/Widget.Material3.Button.IconButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="@string/entry_modify"
-                    app:icon="@drawable/ic_edit" />
-            </LinearLayout>
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/tvHasNausea"
+                style="@style/SummaryDetailStyle"
+                tools:text="Nausées : oui" />
 
-        <!-- Carte : État général -->
-        <com.google.android.material.card.MaterialCardView
+            <TextView
+                android:id="@+id/tvOtherSymptoms"
+                style="@style/SummaryDetailStyle"
+                tools:text="Notes : ..." />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Carte : Moral & sommeil -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:contentPadding="14dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
-            app:contentPadding="14dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <TextView
+                style="@style/SummarySectionTitle"
+                android:text="@string/tab_moral_sommeil" />
 
-                <TextView
-                    style="@style/SummarySectionTitle"
-                    android:text="@string/general" />
+            <View style="@style/SummaryDivider" />
 
-                <View style="@style/SummaryDivider" />
+            <TextView
+                android:id="@+id/tvDayQuality"
+                style="@style/SummaryDetailStyle"
+                tools:text="Moral : Bonne" />
 
-                <TextView
-                    android:id="@+id/tvIsTired"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Fatigue : En forme" />
+            <TextView
+                android:id="@+id/tvDifficultyCauses"
+                style="@style/SummaryDetailStyle"
+                tools:text="Causes : Stress" />
 
-                <TextView
-                    android:id="@+id/tvPainLevel"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Douleur : 2/10" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/tvIsTired"
+                style="@style/SummaryDetailStyle"
+                tools:text="Fatigue : oui" />
 
-        <!-- Carte : État psychologique -->
-        <com.google.android.material.card.MaterialCardView
+            <TextView
+                android:id="@+id/tvSleep"
+                style="@style/SummaryDetailStyle"
+                tools:text="Sommeil : 8 h 00 (23:00 → 07:00)" />
+
+            <TextView
+                android:id="@+id/tvGratitude"
+                style="@style/SummaryDetailStyle"
+                tools:text="Gratitude : ..." />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Carte : Mode de vie -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:contentPadding="14dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
-            app:contentPadding="14dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <TextView
+                style="@style/SummarySectionTitle"
+                android:text="@string/tab_mode_vie" />
 
-                <TextView
-                    style="@style/SummarySectionTitle"
-                    android:text="@string/psychological" />
+            <View style="@style/SummaryDivider" />
 
-                <View style="@style/SummaryDivider" />
+            <TextView
+                android:id="@+id/tvPhysicalActivity"
+                style="@style/SummaryDetailStyle"
+                tools:text="Activité : Repos" />
 
-                <TextView
-                    android:id="@+id/tvDayQuality"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Qualité du jour : Bonne" />
+            <TextView
+                android:id="@+id/tvTookMedication"
+                style="@style/SummaryDetailStyle"
+                tools:text="Traitement : Oui (Paracétamol)" />
 
-                <TextView
-                    android:id="@+id/tvDifficultyCauses"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Causes : Stress" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/tvDiet"
+                style="@style/SummaryDetailStyle"
+                tools:text="Alimentation : ..." />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        <!-- Carte : Symptômes -->
-        <com.google.android.material.card.MaterialCardView
+    <!-- Carte : Mesures (masquée si aucune mesure) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardMeasures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:contentPadding="14dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
-            app:contentPadding="14dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <TextView
+                style="@style/SummarySectionTitle"
+                android:text="@string/tab_mesures" />
 
-                <TextView
-                    style="@style/SummarySectionTitle"
-                    android:text="@string/symptom" />
+            <View style="@style/SummaryDivider" />
 
-                <View style="@style/SummaryDivider" />
+            <TextView
+                android:id="@+id/tvMeasures"
+                style="@style/SummaryDetailStyle"
+                tools:text="Poids 60 kg · Taille 70 cm" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:id="@+id/tvLocalizedPains"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Zones : Ventre, Tête" />
-
-                <TextView
-                    android:id="@+id/tvHasNausea"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Nausées : Non" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Carte : Contexte -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
-            app:contentPadding="14dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/SummarySectionTitle"
-                    android:text="@string/context" />
-
-                <View style="@style/SummaryDivider" />
-
-                <TextView
-                    android:id="@+id/tvPhysicalActivity"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Activité : Repos" />
-
-                <TextView
-                    android:id="@+id/tvTookMedication"
-                    style="@style/SummaryDetailStyle"
-                    tools:text="Traitement : Oui (Paracétamol)" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-    </LinearLayout>
+</LinearLayout>

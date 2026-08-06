@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Onglet « Corps & douleur » : carte du corps (douleur par zone) + nausée + notes.
+  La saisie de la douleur se fait en touchant une zone puis en réglant l'intensité (1–10).
+-->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,54 +19,49 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dolor_symptom"
+            android:text="@string/pain_map_title"
             android:textColor="?attr/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupPainZones"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleFaceBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            app:singleSelection="false">
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipPelvis"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFace"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/zone_pelvis" />
+                android:layout_weight="1"
+                android:text="@string/pain_map_face" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipLowerBack"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBack"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/zone_back" />
+                android:layout_weight="1"
+                android:text="@string/pain_map_back" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipBreasts"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zone_breasts" />
+        <com.audreyRetournayDiet.femSante.features.calendar.add.BodyPainMapView
+            android:id="@+id/bodyPainMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipHead"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zone_head" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAbdomen"
-                style="@style/Widget.Material3.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/zone_abdomen" />
-
-        </com.google.android.material.chip.ChipGroup>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/pain_map_hint"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="12sp" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switchNausea"

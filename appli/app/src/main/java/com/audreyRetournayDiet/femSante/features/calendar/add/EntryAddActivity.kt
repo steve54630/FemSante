@@ -23,10 +23,10 @@ import java.time.LocalDate
 /**
  * Activité de gestion des entrées quotidiennes du calendrier (Ajout et Modification).
  * * Cette activité héberge quatre fragments thématiques via une [BottomNavigationView] :
- * - [GeneralFragment] : Humeur et flux.
- * - [SymptomsFragment] : Douleurs et symptômes physiques.
- * - [PsychologicalFragment] : État émotionnel.
- * - [ContextFragment] : Activité physique et notes.
+ * - [SymptomsFragment] : Corps & douleur (carte du corps, nausée, notes).
+ * - [PsychologicalFragment] : Moral & sommeil (moral, causes, fatigue, gratitude).
+ * - [ContextFragment] : Mode de vie (activité, alimentation, médicaments).
+ * - [MeasuresFragment] : Mesures (poids, tours).
  * * ### Fonctionnement :
  * L'activité initialise un [EntryViewModel] partagé par tous les fragments. Elle gère
  * l'ID de l'entrée en cas d'édition et déclenche la sauvegarde globale des données.
@@ -63,10 +63,10 @@ class EntryAddActivity : AppCompatActivity() {
      */
     private fun initializeFragments() {
         fragments = mapOf(
-            R.id.nav_general to GeneralFragment(),
             R.id.nav_symptoms to SymptomsFragment(),
             R.id.nav_psych to PsychologicalFragment(),
-            R.id.nav_context to ContextFragment()
+            R.id.nav_context to ContextFragment(),
+            R.id.nav_measures to MeasuresFragment()
         )
     }
 
@@ -118,7 +118,7 @@ class EntryAddActivity : AppCompatActivity() {
         }
 
         if (supportFragmentManager.findFragmentById(R.id.container) == null) {
-            navBar.selectedItemId = R.id.nav_general
+            navBar.selectedItemId = R.id.nav_symptoms
         }
     }
 

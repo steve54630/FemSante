@@ -185,6 +185,18 @@
             app:icon="@drawable/ic_report"
             app:iconGravity="textStart" />
 
+        <!-- Courbes de tendance des mesures (poids + tours). -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMeasureTrend"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/trend_button"
+            app:icon="@drawable/ic_measure"
+            app:iconGravity="textStart" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -33,6 +33,9 @@
             android:name=".features.calendar.view.DayDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".features.calendar.view.MeasureTrendActivity"
+            android:exported="false" />
+        <activity
             android:name="com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity"
             android:exported="false" />
         <activity

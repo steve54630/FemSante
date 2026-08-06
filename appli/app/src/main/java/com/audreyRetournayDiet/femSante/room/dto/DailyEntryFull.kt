@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.room.dto
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
@@ -57,5 +58,15 @@ data class DailyEntryFull(
         parentColumn = "id",
         entityColumn = "entry_id"
     )
-    val contextState: ContextStateEntity?
+    val contextState: ContextStateEntity?,
+
+    /**
+     * Mesures corporelles (poids, tours). Optionnel : `null` par défaut pour ne pas
+     * casser les constructions existantes (Room le renseigne via la relation).
+     */
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "entry_id"
+    )
+    val measurement: BodyMeasurementEntity? = null
 )

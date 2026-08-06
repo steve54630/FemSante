@@ -64,7 +64,10 @@ fun DailyEntryFull.toJournalTags(): Set<JournalTag> {
     val tags = mutableSetOf<JournalTag>()
 
     symptomsState?.let { symptom ->
+        // Zones douloureuses : ancienne saisie binaire ([localizedPains]) + nouvelle saisie
+        // par intensité (clés de [painByZone]). L'ensemble déduplique naturellement.
         symptom.localizedPains.forEach { tags += JournalTag.Zone(it) }
+        symptom.painByZone.keys.forEach { tags += JournalTag.Zone(it) }
         if (symptom.hasNausea) tags += JournalTag.Digestif
     }
 

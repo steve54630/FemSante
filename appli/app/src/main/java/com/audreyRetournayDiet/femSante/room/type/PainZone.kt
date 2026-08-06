@@ -31,6 +31,18 @@ enum class PainZone {
     /** Douleurs ou ballonnements abdominaux (distincts du bassin). */
     ABDOMEN,
 
-    /** Toute autre zone (bras, jambes, articulations, etc.). */
+    /** Bras (épaules, coudes, avant-bras). */
+    BRAS,
+
+    /** Cuisses (face avant des jambes). */
+    CUISSES,
+
+    /** Haut du dos (entre les omoplates, trapèzes). */
+    HAUT_DOS,
+
+    /** Jambes (mollets, bas des jambes). */
+    JAMBES,
+
+    /** Toute autre zone (articulations, etc.). */
     AUTRE
 }

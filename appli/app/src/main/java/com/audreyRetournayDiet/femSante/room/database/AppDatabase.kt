@@ -8,6 +8,7 @@ import com.audreyRetournayDiet.femSante.room.converter.BristolConverter
 import com.audreyRetournayDiet.femSante.room.converter.CausesConverters
 import com.audreyRetournayDiet.femSante.room.converter.FlowConverter
 import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
+import com.audreyRetournayDiet.femSante.room.converter.PainZoneLevelConverter
 import com.audreyRetournayDiet.femSante.room.converter.QualityConverter
 import com.audreyRetournayDiet.femSante.room.dao.ContextStateDao
 import com.audreyRetournayDiet.femSante.room.dao.CycleDayDao
@@ -16,6 +17,7 @@ import com.audreyRetournayDiet.femSante.room.dao.GeneralStateDao
 import com.audreyRetournayDiet.femSante.room.dao.PsychologicalStateDao
 import com.audreyRetournayDiet.femSante.room.dao.SymptomStateDao
 import com.audreyRetournayDiet.femSante.room.dao.UserDao
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
@@ -32,7 +34,7 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
  * 3. **DAOs** : Expose les méthodes d'accès aux données pour les Repositories.
  */
 @Database(
-    version = 3,
+    version = 6,
     exportSchema = false, // Désactivé pour simplifier le développement initial
     entities = [
         UserEntity::class,
@@ -41,7 +43,8 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
         SymptomStateEntity::class,
         ContextStateEntity::class,
         DailyEntryEntity::class,
-        CycleDayEntity::class
+        CycleDayEntity::class,
+        BodyMeasurementEntity::class
     ]
 )
 @TypeConverters(value = [
@@ -49,6 +52,7 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
     CausesConverters::class,
     QualityConverter::class,
     PainZoneConverter::class,
+    PainZoneLevelConverter::class,
     BristolConverter::class,
     FlowConverter::class
 ])

@@ -6,6 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
+import com.audreyRetournayDiet.femSante.room.dto.MeasurementHistoryRow
+import com.audreyRetournayDiet.femSante.room.entity.BodyMeasurementEntity
 import com.audreyRetournayDiet.femSante.room.entity.ContextStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.DatePainStatus
@@ -45,6 +47,20 @@ abstract class DailyEntryDao {
     @Transaction
     @Query("SELECT * FROM daily_entry WHERE user_id = :userId AND date BETWEEN :start AND :end ORDER BY date ASC")
     abstract suspend fun getFullEntriesBetween(userId: String, start: Long, end: Long): List<DailyEntryFull>
+
+    /** Historique des mesures (date + valeurs du jour), chronologique, pour les courbes. */
+    @Query(
+        """
+        SELECT de.date AS date,
+               bm.weight AS weight, bm.waist AS waist, bm.hips AS hips,
+               bm.thighs AS thighs, bm.chest AS chest, bm.arms AS arms
+        FROM body_measurement bm
+        JOIN daily_entry de ON de.id = bm.entry_id
+        WHERE de.user_id = :userId
+        ORDER BY de.date ASC
+        """
+    )
+    abstract suspend fun getMeasurementHistory(userId: String): List<MeasurementHistoryRow>
 
     /**
      * Version réactive de [getFullEntryByDate] : ré-émet automatiquement à chaque
@@ -109,6 +125,9 @@ abstract class DailyEntryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertContext(context: ContextStateEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertMeasurement(measurement: BodyMeasurementEntity)
+
     // --- LOGIQUE MÉTIER (TRANSACTIONS) ---
 
     /**
@@ -122,13 +141,14 @@ abstract class DailyEntryDao {
         general: GeneralStateEntity,
         psy: PsychologicalStateEntity,
         symptom: SymptomStateEntity,
-        context: ContextStateEntity
+        context: ContextStateEntity,
+        measurement: BodyMeasurementEntity
     ) {
         // 1. On crée le parent (DailyEntryEntity) et on récupère son ID auto-généré
         val newId = insertDailyEntry(DailyEntryEntity(userId = userId, date = date))
 
         // 2. On injecte cet ID dans tous les sous-états avant de les sauvegarder
-        saveSubStates(newId, general, psy, symptom, context)
+        saveSubStates(newId, general, psy, symptom, context, measurement)
     }
 
     /**
@@ -142,10 +162,11 @@ abstract class DailyEntryDao {
         general: GeneralStateEntity,
         psy: PsychologicalStateEntity,
         symptom: SymptomStateEntity,
-        context: ContextStateEntity
+        context: ContextStateEntity,
+        measurement: BodyMeasurementEntity
     ) {
         getFullEntry(userId, id)?.let { existing ->
-            saveSubStates(existing.dailyEntry.id, general, psy, symptom, context)
+            saveSubStates(existing.dailyEntry.id, general, psy, symptom, context, measurement)
         }
     }
 
@@ -158,12 +179,14 @@ abstract class DailyEntryDao {
         general: GeneralStateEntity,
         psy: PsychologicalStateEntity,
         symptom: SymptomStateEntity,
-        context: ContextStateEntity
+        context: ContextStateEntity,
+        measurement: BodyMeasurementEntity
     ) {
         insertGeneral(general.copy(entryId = entryId))
         insertPsychological(psy.copy(entryId = entryId))
         insertSymptom(symptom.copy(entryId = entryId))
         insertContext(context.copy(entryId = entryId))
+        insertMeasurement(measurement.copy(entryId = entryId))
     }
 
     // --- SUPPRESSION ---

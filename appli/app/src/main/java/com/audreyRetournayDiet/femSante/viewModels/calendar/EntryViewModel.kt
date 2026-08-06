@@ -67,6 +67,9 @@ class EntryViewModel @Inject constructor(
     private val _symptomState = MutableStateFlow(SymptomStateEntity(entryId = 0L))
     val symptomState = _symptomState.asStateFlow()
 
+    private val _measurementState = MutableStateFlow(BodyMeasurementEntity(entryId = 0L))
+    val measurementState = _measurementState.asStateFlow()
+
     // --- setters de configuration ---
 
     fun setDate(date: LocalDate) {
@@ -111,6 +114,55 @@ class EntryViewModel @Inject constructor(
     }
 
     /**
+     * Douleur par zone (carte du corps). On garde [SymptomStateEntity.localizedPains]
+     * synchronisé sur les zones douloureuses (compat recos), et on **dérive** la douleur
+     * globale ([GeneralStateEntity.painLevel]) = intensité maximale des zones, qui pilote
+     * la coloration du calendrier et le mode SOS.
+     */
+    fun updatePainByZone(painByZone: Map<PainZone, Int>) {
+        val maxLevel = painByZone.values.maxOrNull() ?: 0
+        _symptomState.value = _symptomState.value.copy(
+            painByZone = painByZone,
+            localizedPains = painByZone.keys.toList()
+        )
+        _generalState.value = _generalState.value.copy(painLevel = maxLevel)
+    }
+
+    /** Symptômes hors douleur localisée (nausée, notes) — la douleur passe par la carte. */
+    fun updateSymptomExtras(nausea: Boolean, notes: String?) {
+        _symptomState.value = _symptomState.value.copy(hasNausea = nausea, others = notes)
+    }
+
+    /** Fatigue du jour (déplacée dans l'onglet « Moral & sommeil »). */
+    fun updateTired(tired: Boolean) {
+        _generalState.value = _generalState.value.copy(isTired = tired)
+    }
+
+    /** Sommeil : heures de coucher / réveil en minutes depuis minuit (null = non renseigné). */
+    fun updateSleep(bedMinutes: Int?, wakeMinutes: Int?) {
+        _generalState.value = _generalState.value.copy(
+            bedTimeMinutes = bedMinutes,
+            wakeTimeMinutes = wakeMinutes
+        )
+    }
+
+    /** Journal de gratitude : le positif du jour. */
+    fun updateGratitude(text: String?) {
+        _psychologicalState.value = _psychologicalState.value.copy(gratitude = text)
+    }
+
+    /** Mesures corporelles (poids + tours), toutes optionnelles (null si non renseignées). */
+    fun updateMeasurements(
+        weight: Double?, waist: Double?, hips: Double?,
+        thighs: Double?, chest: Double?, arms: Double?
+    ) {
+        _measurementState.value = _measurementState.value.copy(
+            weightKg = weight, waistCm = waist, hipsCm = hips,
+            thighsCm = thighs, chestCm = chest, armsCm = arms
+        )
+    }
+
+    /**
      * Sauvegarde l'ensemble des données en base.
      * Bascule automatiquement entre 'save' (INSERT) et 'update' (UPDATE) selon l'état de [_editChannel].
      */
@@ -133,7 +185,8 @@ class EntryViewModel @Inject constructor(
                         general = _generalState.value,
                         context = _contextState.value,
                         psy = _psychologicalState.value,
-                        symptom = _symptomState.value
+                        symptom = _symptomState.value,
+                        measurement = _measurementState.value
                     )
                 } else {
                     repository.updateCompleteEntry(
@@ -142,7 +195,8 @@ class EntryViewModel @Inject constructor(
                         general = _generalState.value,
                         context = _contextState.value,
                         psy = _psychologicalState.value,
-                        symptom = _symptomState.value
+                        symptom = _symptomState.value,
+                        measurement = _measurementState.value
                     )
                 }
 
@@ -182,6 +236,7 @@ class EntryViewModel @Inject constructor(
                 _psychologicalState.value = data.psychologicalState ?: PsychologicalStateEntity(entryId = 0L)
                 _symptomState.value = data.symptomsState ?: SymptomStateEntity(entryId = 0L)
                 _contextState.value = data.contextState ?: ContextStateEntity(entryId = 0L)
+                _measurementState.value = data.measurement ?: BodyMeasurementEntity(entryId = 0L)
                 Timber.i("Formulaire pré-rempli avec les données de l'ID : $id")
             } else {
                 Timber.w("Aucune donnée trouvée pour l'ID $id, remise à zéro des états")
@@ -205,5 +260,6 @@ class EntryViewModel @Inject constructor(
             medicationList = "",
             diet = ""
         )
+        _measurementState.value = BodyMeasurementEntity(entryId = 0L)
     }
 }

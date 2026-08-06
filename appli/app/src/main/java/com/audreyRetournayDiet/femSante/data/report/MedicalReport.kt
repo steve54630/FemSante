@@ -30,6 +30,8 @@ data class MedicalReport(
     val to: LocalDate,
     val cycle: CycleSummary,
     val symptoms: SymptomSummary,
+    val sleep: SleepSummary,
+    val measurements: MeasurementSummary,
     /** Journal chronologique (jours saisis uniquement), le plus récent en dernier. */
     val days: List<DayLine>
 )
@@ -59,5 +61,34 @@ data class DayLine(
     val zones: List<PainZone>,
     val nausea: Boolean,
     val isPeriod: Boolean,
-    val notes: String?
+    val notes: String?,
+    /** Durée de sommeil du jour en minutes, si coucher + réveil renseignés. */
+    val sleepDurationMinutes: Int? = null
 )
+
+/** Synthèse du sommeil sur la période. */
+data class SleepSummary(
+    val loggedNights: Int,
+    /** Durée moyenne en minutes, ou null si aucune nuit renseignée. */
+    val averageDurationMinutes: Int?
+)
+
+/** Mesures suivies (une métrique par ligne présente dans les saisies). */
+enum class MeasurementMetric { WEIGHT, WAIST, HIPS, THIGHS, CHEST, ARMS }
+
+/** Évolution des mesures : pour chaque métrique, valeur de début et de fin sur la période. */
+data class MeasurementSummary(
+    val trends: List<MetricTrend>
+)
+
+data class MetricTrend(
+    val metric: MeasurementMetric,
+    val firstDate: LocalDate,
+    val firstValue: Double,
+    val lastDate: LocalDate,
+    val lastValue: Double,
+    /** Tous les points chronologiques (pour tracer la courbe). */
+    val points: List<MeasurePoint>
+)
+
+data class MeasurePoint(val date: LocalDate, val value: Double)

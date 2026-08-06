@@ -57,5 +57,13 @@ data class SymptomStateEntity(
 
     /** Transit digestif du jour, selon l'échelle de Bristol (standard médical à 7 types). */
     @ColumnInfo(name = "bristol_type", defaultValue = "NON_RENSEIGNE")
-    val bristolType: BristolType = BristolType.NON_RENSEIGNE
+    val bristolType: BristolType = BristolType.NON_RENSEIGNE,
+
+    /**
+     * Douleur **par zone** : zone → intensité (1 à 10), saisie via la carte du corps.
+     * Remplace progressivement [localizedPains] (présence binaire) en apportant l'intensité.
+     * Sérialisé par [com.audreyRetournayDiet.femSante.room.converter.PainZoneLevelConverter].
+     */
+    @ColumnInfo(name = "pain_by_zone", defaultValue = "")
+    val painByZone: Map<PainZone, Int> = emptyMap()
 )
