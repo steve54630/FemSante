@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
-import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
 import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -78,15 +78,17 @@ class RecetteActivity : AppCompatActivity() {
     }
 
     /**
-     * Gère la navigation vers le lecteur PDF suite à une action du ViewModel.
+     * Gère la navigation vers la fiche recette native suite à une action du ViewModel.
+     * La fiche bascule elle-même sur le PDF si la recette n'est pas encore dans le catalogue.
      */
     private fun observeNavigation() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.navigationEvent.collect { fullPath ->
-                    Timber.i("Navigation : Ouverture du PDF -> $fullPath")
-                    val intentTarget = Intent(this@RecetteActivity, PdfActivity::class.java).apply {
-                        putExtra("PDF", fullPath)
+                viewModel.navigationEvent.collect { request ->
+                    Timber.i("Navigation : Ouverture de la recette -> ${request.recipeId}")
+                    val intentTarget = Intent(this@RecetteActivity, RecetteDetailActivity::class.java).apply {
+                        putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, request.recipeId)
+                        putExtra(RecetteDetailActivity.EXTRA_PDF_PATH, request.pdfPath)
                     }
                     startActivity(intentTarget)
                 }
@@ -109,7 +111,7 @@ class RecetteActivity : AppCompatActivity() {
         }
 
         recettePdf.setOnClickListener {
-            viewModel.onOpenPdfClicked()
+            viewModel.onOpenRecipeClicked()
         }
     }
 

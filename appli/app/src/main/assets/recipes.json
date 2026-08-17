@@ -1,0 +1,575 @@
+[
+  {
+    "id": "pain_lentilles_corail_oeufs",
+    "category": "BREAKFAST",
+    "title": "Tartine de pain de lentilles corail & œufs brouillés",
+    "servings": "2 personnes",
+    "prepMinutes": 10,
+    "cookMinutes": 45,
+    "ingredients": [
+      { "quantity": "200", "unit": "g", "name": "Lentilles corail", "note": null, "section": "Pour le pain" },
+      { "quantity": "10", "unit": "cl", "name": "Eau tiède", "note": null, "section": "Pour le pain" },
+      { "quantity": "0.5", "unit": "sachet", "name": "Levure boulangère", "note": "avec ou sans gluten", "section": "Pour le pain" },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Huile d'olive", "note": null, "section": "Pour le pain" },
+      { "quantity": "1", "unit": "c. à café", "name": "Sel", "note": "rase", "section": "Pour le pain" },
+      { "quantity": "1", "unit": "c. à café", "name": "Origan", "note": null, "section": "Pour le pain" },
+      { "quantity": "1", "unit": "c. à café", "name": "Curcuma", "note": null, "section": "Pour le pain" },
+      { "quantity": "3", "unit": "pièce", "name": "Œufs", "note": "labellisés bleu-blanc-cœur", "section": "Pour les œufs brouillés" },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Lait", "note": "animal ou végétal sans sucre ajouté", "section": "Pour les œufs brouillés" },
+      { "quantity": "1", "unit": "filet", "name": "Huile de colza", "note": null, "section": "Pour les œufs brouillés" },
+      { "quantity": null, "unit": null, "name": "Poivre, sel", "note": null, "section": "Pour les œufs brouillés" },
+      { "quantity": null, "unit": null, "name": "Graines de courge", "note": null, "section": "Topping (option)" },
+      { "quantity": null, "unit": null, "name": "Pousses d'épinards (hiver/printemps) ou tomates cerises (été)", "note": null, "section": "Topping (option)" }
+    ],
+    "steps": [
+      "La veille ou 6 h avant, faire tremper les lentilles dans un grand volume d'eau.",
+      "Préchauffer le four à 180 °C (chaleur tournante). Égoutter et rincer les lentilles.",
+      "Dans un récipient à bord haut, mettre les lentilles, l'eau tiédie, la levure, l'huile d'olive et le sel.",
+      "Mixer au mixeur plongeur jusqu'à une texture assez lisse.",
+      "Beurrer puis fariner un petit moule à cake (~20 cm) ou y placer un papier sulfurisé. Verser le mélange puis saupoudrer d'origan et de curcuma.",
+      "Laisser reposer 30 min à température ambiante si possible, puis enfourner 45 min. Laisser tiédir avant de couper en tranches.",
+      "Pour les œufs brouillés : battre 3 œufs avec sel et poivre. Chauffer un filet d'huile de colza à feu doux, verser les œufs et remuer sans cesse jusqu'à ce qu'ils commencent à sécher (2-3 min). Hors du feu, ajouter le lait pour stopper la cuisson.",
+      "Servir les œufs brouillés sur la tartine de pain de lentilles, garnir de graines de courge et de pousses d'épinards ou de tomates cerises selon la saison."
+    ],
+    "nutritionTip": "L'association lentilles corail–œufs, source de protéines, apporte de l'énergie dès le matin. L'huile de colza et les œufs bleu-blanc-cœur, riches en oméga 3, agissent sur l'inflammation et peuvent aider à réduire l'intensité des douleurs.",
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "porridge_sale_amandes",
+    "category": "BREAKFAST",
+    "title": "Porridge salé aux amandes",
+    "servings": "2 personnes",
+    "prepMinutes": 5,
+    "cookMinutes": 5,
+    "ingredients": [
+      { "quantity": "100", "unit": "g", "name": "Flocons d'avoine", "note": "ou flocons de sarrasin sans gluten", "section": null },
+      { "quantity": "300", "unit": "ml", "name": "Lait végétal", "note": "soja, avoine, amande… sans sucre ni additifs", "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Curcuma", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Thym", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Moutarde douce", "note": "classique ou en grains", "section": null },
+      { "quantity": null, "unit": null, "name": "Sel, poivre", "note": null, "section": null },
+      { "quantity": null, "unit": null, "name": "Pousses d'épinards / roquette / petits pois / betterave", "note": "selon la saison", "section": "Topping" },
+      { "quantity": "1", "unit": "c. à café", "name": "Purée d'amandes", "note": "sans sucre ajouté ; ou une poignée d'amandes", "section": "Topping" },
+      { "quantity": null, "unit": null, "name": "Fromage frais de chèvre ou brebis", "note": null, "section": "Topping" }
+    ],
+    "steps": [
+      "Dans une petite casserole, mettre les flocons d'avoine, le lait végétal, le curcuma, la moutarde, une pincée de sel et 2 pincées de poivre.",
+      "Chauffer à feu moyen en remuant ~2 min. À mi-cuisson, ajouter selon la saison les épinards, la roquette, les petits pois ou la betterave. Poursuivre ~2 min.",
+      "Dresser dans des bols. Ajouter la purée d'amandes et/ou les amandes concassées et quelques dés de fromage frais."
+    ],
+    "nutritionTip": "Comme les flocons d'avoine, les amandes sont riches en fibres et favorisent un meilleur transit. Pour le soja, privilégier les références bio françaises.",
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "blinis_avocat_saumon",
+    "category": "ENTREE",
+    "title": "Blinis avocat - saumon",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": null,
+    "ingredients": [
+      { "quantity": "80", "unit": "g", "name": "Farine sans gluten", "note": "au choix", "section": "Pour les blinis" },
+      { "quantity": "70", "unit": "g", "name": "Farine de pois chiches", "note": null, "section": "Pour les blinis" },
+      { "quantity": "100", "unit": "ml", "name": "Boisson végétale", "note": null, "section": "Pour les blinis" },
+      { "quantity": "1", "unit": "c. à café", "name": "Huile d'olive", "note": null, "section": "Pour les blinis" },
+      { "quantity": null, "unit": null, "name": "Sel", "note": null, "section": "Pour les blinis" },
+      { "quantity": "1", "unit": "c. à café", "name": "Bicarbonate", "note": null, "section": "Pour les blinis" },
+      { "quantity": null, "unit": null, "name": "Œufs", "note": "utilisés dans les étapes (jaune + blancs en neige), quantité à préciser", "section": "Pour les blinis" },
+      { "quantity": "0.5", "unit": "pièce", "name": "Avocat", "note": "par personne", "section": "Pour la garniture" },
+      { "quantity": "1", "unit": "c. à café", "name": "Moutarde", "note": null, "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Paprika", "note": null, "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Cumin", "note": null, "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Sel, poivre", "note": null, "section": "Pour la garniture" },
+      { "quantity": "100", "unit": "g", "name": "Saumon fumé", "note": "en courtes tranches", "section": "Pour la garniture" }
+    ],
+    "steps": [
+      "Dans un saladier, mélanger la farine, le jaune d'œuf et le lait.",
+      "Monter les blancs en neige.",
+      "Les incorporer délicatement à la préparation.",
+      "Préchauffer une poêle avec un peu d'huile de coco et cuire les blinis à feu moyen.",
+      "Écraser l'avocat à la fourchette, ajouter moutarde, paprika, cumin, sel et poivre.",
+      "Garnir les blinis d'avocat écrasé et de saumon fumé.",
+      "Option végétale : remplacer le saumon par du tofu à l'ail des ours en fines lamelles légèrement poêlées."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "houmous_betteraves",
+    "category": "ENTREE",
+    "title": "Houmous de betteraves",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "250", "unit": "g", "name": "Haricots rouges", "note": "déjà cuits, en boîte", "section": null },
+      { "quantity": "300", "unit": "g", "name": "Betteraves cuites", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Purée d'amandes", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Huile d'olive", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Jus de citron", "note": null, "section": null },
+      { "quantity": "0.5", "unit": "c. à café", "name": "Cumin", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Graines de sésame", "note": null, "section": null },
+      { "quantity": null, "unit": null, "name": "Sel, poivre", "note": null, "section": null }
+    ],
+    "steps": [
+      "Placer les haricots rouges et la betterave coupée en dés dans un robot et mixer.",
+      "Ajouter le reste des ingrédients et mixer de nouveau.",
+      "Servir tel quel, à tartiner.",
+      "Accompagner de crudités à tremper, de pain des fleurs au sarrasin, ou en accompagnement de salades et toasts."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "salade_ete",
+    "category": "ENTREE",
+    "title": "Salade d'été",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "1", "unit": "poignée", "name": "Pousses d'épinards", "note": null, "section": "Pour la salade" },
+      { "quantity": "0.25", "unit": "pièce", "name": "Melon", "note": "frais et mûr", "section": "Pour la salade" },
+      { "quantity": "1", "unit": "tranche", "name": "Saumon fumé", "note": null, "section": "Pour la salade" },
+      { "quantity": "0.25", "unit": "pièce", "name": "Avocat", "note": null, "section": "Pour la salade" },
+      { "quantity": null, "unit": null, "name": "Vinaigre balsamique", "note": "un peu", "section": "Pour la vinaigrette" },
+      { "quantity": "1", "unit": "c. à café", "name": "Tahini", "note": null, "section": "Pour la vinaigrette" }
+    ],
+    "steps": [
+      "Laver et sécher les pousses d'épinards, les couper en petits morceaux.",
+      "Ajouter l'avocat et le melon coupés en dés.",
+      "Ajouter le saumon fumé en lamelles.",
+      "Vinaigrette : un peu de vinaigre balsamique et 1 c. à café de tahini."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "tartines_gourmandes_thon",
+    "category": "ENTREE",
+    "title": "Tartines gourmandes au thon",
+    "servings": "2 tartines",
+    "prepMinutes": null,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "0.5", "unit": "boîte", "name": "Thon", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Yaourt végétal", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Moutarde", "note": null, "section": null },
+      { "quantity": "1", "unit": "filet", "name": "Jus de citron", "note": null, "section": null },
+      { "quantity": null, "unit": null, "name": "Sel, poivre, cumin", "note": null, "section": null },
+      { "quantity": "0.25", "unit": "pièce", "name": "Avocat", "note": null, "section": null },
+      { "quantity": "2", "unit": "tranche", "name": "Pain sans gluten", "note": null, "section": null }
+    ],
+    "steps": [
+      "Émietter le thon, ajouter le yaourt, la moutarde, le jus de citron et l'assaisonnement. Mélanger et réserver au frais.",
+      "Griller les tartines.",
+      "Répartir l'avocat sur chaque tartine et l'écraser à la fourchette.",
+      "Ajouter la préparation au thon et quelques graines (ou graines germées)."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "veloute_epinards_amandes",
+    "category": "ENTREE",
+    "title": "Velouté d'épinards, amandes et noisettes",
+    "servings": "2 personnes",
+    "prepMinutes": 10,
+    "cookMinutes": 12,
+    "ingredients": [
+      { "quantity": "250", "unit": "g", "name": "Épinards", "note": "frais ou surgelés, idéalement origine France", "section": null },
+      { "quantity": "70", "unit": "g", "name": "Pois chiches", "note": "en conserve ; ou 70 g de pâtes complètes ou 1 pomme de terre cuite vapeur si sensible aux légumineuses", "section": null },
+      { "quantity": "30", "unit": "cl", "name": "Eau", "note": null, "section": null },
+      { "quantity": "1", "unit": "gousse", "name": "Ail", "note": null, "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Oignon jaune", "note": "petit", "section": null },
+      { "quantity": "20", "unit": "g", "name": "Amandes et noisettes", "note": "mélange, idéalement origine France ou Europe", "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Curcuma", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Curry", "note": null, "section": null },
+      { "quantity": "0.5", "unit": "pièce", "name": "Citron", "note": "le jus", "section": null },
+      { "quantity": "1", "unit": "filet", "name": "Huile d'olive", "note": null, "section": null },
+      { "quantity": "0.25", "unit": "pièce", "name": "Bouillon cube de légumes", "note": "ou de volaille sans additif ; sinon saler simplement", "section": null },
+      { "quantity": null, "unit": null, "name": "Poivre", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Graines de lin", "note": null, "section": "Topping (option)" },
+      { "quantity": "10", "unit": "cl", "name": "Lait de coco", "note": "sans sucre ajouté", "section": "Topping (option)" }
+    ],
+    "steps": [
+      "Éplucher l'ail et l'oignon, les dégermer et les couper grossièrement (ils seront mixés).",
+      "Faire chauffer un peu d'eau.",
+      "Dans une casserole à feu moyen, verser un filet d'huile d'olive, ajouter l'ail et l'oignon. Faire revenir 2-3 min puis ajouter les épinards, 30 cl d'eau chaude, le quart de bouillon cube, le mélange amandes-noisettes, le curcuma et le curry.",
+      "Laisser cuire 10 min à feu moyen. Pendant ce temps, rincer les pois chiches. Extruder les graines de lin au petit robot (30 s par impulsions) pour une meilleure assimilation des oméga 3.",
+      "En fin de cuisson, ajouter le jus de citron et les pois chiches (ou les pâtes / la pomme de terre). Poivrer et mixer au mixeur plongeur. Ajuster la consistance avec un peu d'eau, rectifier l'assaisonnement.",
+      "Servir dans un bol, ajouter un filet de lait de coco (5 cl par bol) et saupoudrer de graines de lin et de curcuma."
+    ],
+    "nutritionTip": "Anti-inflammatoire puissant, le curcuma combiné aux graines de lin (oméga 3) peut agir sur l'intensité des douleurs. Le citron, alcalinisant, aide à désacidifier l'organisme.",
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "cake_sale",
+    "category": "PLAT",
+    "title": "Cake salé",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 35,
+    "ingredients": [
+      { "quantity": "150", "unit": "g", "name": "Farine sans gluten", "note": "sarrasin, riz ou mix de farines", "section": null },
+      { "quantity": "3", "unit": "pièce", "name": "Œufs", "note": null, "section": null },
+      { "quantity": "1", "unit": "sachet", "name": "Levure chimique", "note": null, "section": null },
+      { "quantity": "125", "unit": "ml", "name": "Lait de coco", "note": null, "section": null },
+      { "quantity": "50", "unit": "ml", "name": "Huile de coco", "note": null, "section": null },
+      { "quantity": "8", "unit": "tranche", "name": "Protéine", "note": "poulet, saumon ou tofu fumé", "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Oignon", "note": null, "section": null },
+      { "quantity": "300", "unit": "g", "name": "Blettes", "note": "ou épinards, brocoli ou courgette selon la saison", "section": null }
+    ],
+    "steps": [
+      "Faire revenir l'oignon émincé dans un peu d'huile d'olive, ajouter les blettes, cuire quelques minutes puis réserver.",
+      "Mélanger les œufs, le lait et l'huile. Ajouter progressivement la farine et la levure tamisée.",
+      "Ajouter les blettes poêlées et la protéine coupée en dés.",
+      "Assaisonner (attention, le saumon est déjà salé).",
+      "Verser dans un moule huilé et enfourner 30 à 40 min à 180 °C."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "crepes_salees_houmous_rose",
+    "category": "PLAT",
+    "title": "Crêpes salées au houmous rose",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": null,
+    "ingredients": [
+      { "quantity": "100", "unit": "g", "name": "Haricots rouges", "note": "en conserve", "section": "Pour le houmous" },
+      { "quantity": "1", "unit": "pièce", "name": "Betterave cuite", "note": null, "section": "Pour le houmous" },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Crème de coco", "note": "bombées", "section": "Pour le houmous" },
+      { "quantity": "1", "unit": "gousse", "name": "Ail", "note": null, "section": "Pour le houmous" },
+      { "quantity": "1", "unit": "c. à café", "name": "Moutarde", "note": null, "section": "Pour le houmous" },
+      { "quantity": "1", "unit": "filet", "name": "Jus de citron", "note": null, "section": "Pour le houmous" },
+      { "quantity": null, "unit": null, "name": "Sel, poivre, cumin", "note": null, "section": "Pour le houmous" },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Farine de sarrasin", "note": "bombée", "section": "Pour les crêpes" },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Farine de maïs", "note": null, "section": "Pour les crêpes" },
+      { "quantity": "1", "unit": "c. à café", "name": "Psyllium", "note": "téguments", "section": "Pour les crêpes" },
+      { "quantity": null, "unit": null, "name": "Eau", "note": null, "section": "Pour les crêpes" },
+      { "quantity": "100", "unit": "g", "name": "Tofu fumé", "note": null, "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Feuilles de salade", "note": null, "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Crudités", "note": "ici carottes et concombre", "section": "Pour la garniture" },
+      { "quantity": null, "unit": null, "name": "Champignons", "note": "crus ou cuits, facultatif", "section": "Pour la garniture" }
+    ],
+    "steps": [
+      "Mixer tous les ingrédients du houmous.",
+      "Mélanger les farines et le psyllium.",
+      "Ajouter l'eau progressivement au fouet jusqu'à une pâte homogène et assez liquide (type galette de sarrasin).",
+      "Cuire les crêpes à la poêle, une face après l'autre.",
+      "Couper le tofu en lamelles et le poêler avec un peu de sauce soja sur chaque face.",
+      "Garnir chaque crêpe de houmous rose, de salade, de tofu fumé et de crudités."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "polenta_champignons",
+    "category": "PLAT",
+    "title": "Polenta aux champignons",
+    "servings": "1 personne",
+    "prepMinutes": null,
+    "cookMinutes": 30,
+    "ingredients": [
+      { "quantity": "50", "unit": "g", "name": "Semoule de maïs", "note": "pour polenta", "section": null },
+      { "quantity": "100", "unit": "g", "name": "Eau", "note": "à ajouter au fur et à mesure", "section": null },
+      { "quantity": "100", "unit": "g", "name": "Lait végétal ou crème végétale", "note": "facultatif, pour le crémeux", "section": null },
+      { "quantity": "65", "unit": "g", "name": "Champignons", "note": null, "section": null },
+      { "quantity": "40", "unit": "g", "name": "Oignon", "note": null, "section": null },
+      { "quantity": "30", "unit": "g", "name": "Châtaignes cuites", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Sauce soja sucrée", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Sauce chili", "note": "facultatif", "section": null }
+    ],
+    "steps": [
+      "Porter 100 g d'eau salée à ébullition, ajouter la polenta. Mélanger et ajouter de l'eau au fur et à mesure jusqu'à cuisson (~30 min). En fin de cuisson, ajouter le lait ou la crème, saler et poivrer.",
+      "En parallèle, émincer l'oignon et les champignons et les faire revenir à l'huile d'olive. Ajouter la sauce soja et la sauce aigre-douce pour caraméliser.",
+      "Rectifier l'assaisonnement.",
+      "Verser la polenta dans un bol, garnir des oignons et champignons poêlés."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "tarte_epinards",
+    "category": "PLAT",
+    "title": "Tarte aux épinards",
+    "servings": "2 à 3 personnes",
+    "prepMinutes": null,
+    "cookMinutes": 35,
+    "ingredients": [
+      { "quantity": "3", "unit": "poignée", "name": "Épinards", "note": null, "section": null },
+      { "quantity": "100", "unit": "ml", "name": "Boisson végétale", "note": "soja ou coco conseillé", "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Moutarde", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Crème de coco", "note": null, "section": null },
+      { "quantity": "3", "unit": "pièce", "name": "Œufs", "note": null, "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Pâte à tarte", "note": "option maison", "section": null }
+    ],
+    "steps": [
+      "Étaler la pâte dans un moule (option maison).",
+      "Étaler la crème de coco et la moutarde sur la pâte, puis répartir les épinards lavés. Deux options : (1) faire revenir les épinards à mi-cuisson, battre les œufs avec le lait végétal et verser dessus ; (2) placer les épinards crus sur la pâte, verser le lait végétal et casser les œufs par-dessus.",
+      "Assaisonner (sel, poivre, cumin).",
+      "Enfourner 30 à 40 min à 180 °C."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "tartelettes_saumon_champignons",
+    "category": "PLAT",
+    "title": "Tartelettes saumon et champignons",
+    "servings": "5 tartelettes",
+    "prepMinutes": null,
+    "cookMinutes": 25,
+    "ingredients": [
+      { "quantity": "90", "unit": "g", "name": "Farine de riz complet", "note": null, "section": "Pour la pâte" },
+      { "quantity": "90", "unit": "g", "name": "Farine de sarrasin", "note": null, "section": "Pour la pâte" },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Tahini", "note": "purée de sésame", "section": "Pour la pâte" },
+      { "quantity": null, "unit": null, "name": "Eau", "note": null, "section": "Pour la pâte" },
+      { "quantity": null, "unit": null, "name": "Sel", "note": null, "section": "Pour la pâte" },
+      { "quantity": "2", "unit": "pièce", "name": "Œufs", "note": null, "section": "Pour l'appareil à quiche" },
+      { "quantity": "50", "unit": "ml", "name": "Boisson végétale", "note": null, "section": "Pour l'appareil à quiche" },
+      { "quantity": "4", "unit": "tranche", "name": "Saumon fumé", "note": null, "section": "Pour l'appareil à quiche" },
+      { "quantity": "10", "unit": "pièce", "name": "Champignons", "note": null, "section": "Pour l'appareil à quiche" },
+      { "quantity": null, "unit": null, "name": "Moutarde", "note": null, "section": "Pour l'appareil à quiche" }
+    ],
+    "steps": [
+      "Mélanger la farine, le tahini et le sel. Ajouter l'eau progressivement jusqu'à une pâte homogène et malléable.",
+      "Étaler la pâte et foncer les moules à tartelettes.",
+      "Déposer un peu de moutarde au fond de chaque tartelette.",
+      "Répartir les champignons coupés, ajouter le mélange œufs + boisson végétale, terminer par le saumon fumé en lamelles.",
+      "Enfourner 20 à 30 min à 180 °C."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "tofu_fume_puree_carottes",
+    "category": "PLAT",
+    "title": "Tofu fumé, purée de carottes et panais",
+    "servings": "2 personnes",
+    "prepMinutes": null,
+    "cookMinutes": 40,
+    "ingredients": [
+      { "quantity": "3", "unit": "pièce", "name": "Carottes", "note": null, "section": null },
+      { "quantity": "2", "unit": "pièce", "name": "Navets", "note": "le titre indique panais — à confirmer", "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Lait de coco", "note": "bombées", "section": null },
+      { "quantity": "0.5", "unit": "c. à café", "name": "Curcuma", "note": null, "section": null },
+      { "quantity": null, "unit": null, "name": "Cumin, sel, poivre", "note": null, "section": null },
+      { "quantity": "200", "unit": "g", "name": "Tofu", "note": "mariné / fumé", "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Sauce soja", "note": null, "section": null }
+    ],
+    "steps": [
+      "Éplucher et couper les légumes en morceaux épais. Cuire à l'eau ~40 min (le couteau doit rentrer facilement).",
+      "Égoutter et écraser les légumes à la fourchette ou au presse-purée.",
+      "Ajouter la crème de coco et l'assaisonnement, réchauffer quelques minutes. Ajouter de la crème de coco si besoin pour une texture onctueuse.",
+      "Couper le tofu en tranches fines et les poêler avec de la sauce soja quelques minutes de chaque côté.",
+      "Dresser la purée et le tofu."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "cake_chocolat_leger",
+    "category": "DESSERT",
+    "title": "Cake au chocolat léger et sans farines",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 30,
+    "ingredients": [
+      { "quantity": "100", "unit": "g", "name": "Chocolat noir", "note": null, "section": null },
+      { "quantity": "100", "unit": "g", "name": "Crème de coco", "note": "+ 1 c. à soupe", "section": null },
+      { "quantity": "50", "unit": "g", "name": "Beurre de cacahuètes", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Levure chimique", "note": null, "section": null },
+      { "quantity": "100", "unit": "g", "name": "Poudre d'amandes", "note": null, "section": null },
+      { "quantity": null, "unit": null, "name": "Œufs", "note": "utilisés dans les étapes, quantité à préciser", "section": null }
+    ],
+    "steps": [
+      "Faire fondre le chocolat avec 1 c. à soupe de crème de coco, réserver.",
+      "Mélanger les œufs et la crème de coco. Ajouter le beurre de cacahuètes et le chocolat, mélanger.",
+      "Ajouter la poudre d'amandes et la levure chimique.",
+      "Préchauffer le four à 180 °C.",
+      "Verser dans un moule chemisé de papier sulfurisé et enfourner 30 min à 180 °C.",
+      "Laisser refroidir. Encore meilleur après une nuit au frais."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "cakes_vapeur_pommes_myrtilles",
+    "category": "DESSERT",
+    "title": "Petits cakes vapeur pommes-myrtilles",
+    "servings": "5 petits cakes",
+    "prepMinutes": 10,
+    "cookMinutes": 45,
+    "ingredients": [
+      { "quantity": "45", "unit": "g", "name": "Farine de sarrasin", "note": null, "section": null },
+      { "quantity": "45", "unit": "g", "name": "Farine de blé T110", "note": "ou petit épeautre ; version sans gluten : farine de riz", "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Œuf", "note": "label bleu-blanc-cœur", "section": null },
+      { "quantity": "15", "unit": "g", "name": "Huile d'olive", "note": "+ un peu pour les moules", "section": null },
+      { "quantity": "2", "unit": "pièce", "name": "Pommes", "note": "Bio", "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Myrtilles", "note": "fraîches ou surgelées", "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Eau", "note": null, "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Sucre complet", "note": "type rapadura", "section": null },
+      { "quantity": "1", "unit": "c. à café", "name": "Cannelle", "note": null, "section": null },
+      { "quantity": "0.5", "unit": "sachet", "name": "Poudre à lever", "note": "avec ou sans gluten", "section": null }
+    ],
+    "steps": [
+      "Laver, sécher et éplucher les pommes (si non bio). Les tailler en quartiers et ôter le cœur.",
+      "Râper les pommes dans un saladier.",
+      "Ajouter les farines, l'œuf, l'huile d'olive, l'eau, le sucre complet, la cannelle et la poudre à lever.",
+      "Mélanger au fouet, puis ajouter les myrtilles et remuer à la spatule.",
+      "Huiler des ramequins individuels et éventuellement les fariner pour faciliter le démoulage.",
+      "Porter à ébullition 1/3 d'eau dans une casserole compatible panier vapeur. Placer les ramequins dans le panier, poser un torchon propre sous le couvercle (évite les gouttes).",
+      "Cuire à feu moyen 45 min (2 fournées pour 5 cakes, ou diviser les quantités par 2)."
+    ],
+    "nutritionTip": "La cuisson vapeur, douce, préserve les micronutriments et évite l'effet pro-inflammatoire des cuissons fortes. La pomme râpée sucre naturellement ; la cannelle aide à réguler la glycémie — utile en cas de SOPK ou d'endométriose.",
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "carres_gourmands",
+    "category": "DESSERT",
+    "title": "Carrés gourmands",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 20,
+    "ingredients": [
+      { "quantity": "100", "unit": "g", "name": "Pois chiches", "note": "en conserve en verre, déjà cuits", "section": null },
+      { "quantity": "30", "unit": "g", "name": "Chocolat noir", "note": null, "section": null },
+      { "quantity": "3", "unit": "pièce", "name": "Dattes Medjool", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Beurre de cacahuètes", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Flocons d'avoine", "note": null, "section": null },
+      { "quantity": "80", "unit": "g", "name": "Boisson végétale", "note": null, "section": null }
+    ],
+    "steps": [
+      "Mixer les pois chiches rincés, les dattes, 1 c. à café de beurre de cacahuètes et les flocons d'avoine au blender.",
+      "Étaler la pâte en carré (ou dans un moule carré). Enfourner 20 min à 180 °C.",
+      "Étaler 1 c. à soupe de beurre de cacahuètes sur le carré, poser 30 g de chocolat noir dessus, remettre au four éteint le temps de faire fondre, puis lisser.",
+      "Décorer éventuellement de graines et de noix de coco râpée."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "creme_chocolat",
+    "category": "DESSERT",
+    "title": "Crème au chocolat",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "1", "unit": "pièce", "name": "Avocat", "note": null, "section": null },
+      { "quantity": "2", "unit": "pièce", "name": "Dattes Medjool", "note": "dénoyautées", "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Crème de coco", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Beurre de cacahuètes", "note": null, "section": null },
+      { "quantity": "1", "unit": "c. à soupe", "name": "Cacao en poudre", "note": "non sucré, bombée", "section": null },
+      { "quantity": "20", "unit": "g", "name": "Chocolat noir", "note": "+ 2 c. à soupe de boisson végétale", "section": null },
+      { "quantity": "100", "unit": "ml", "name": "Boisson végétale", "note": null, "section": null }
+    ],
+    "steps": [
+      "Mixer tous les ingrédients jusqu'à une texture homogène et lisse.",
+      "Verser dans des verrines et réserver 6 h au frais.",
+      "Déguster en dessert ou au petit-déjeuner avec un peu de granola."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "fondant_chocolat",
+    "category": "DESSERT",
+    "title": "Fondant au chocolat",
+    "servings": "2 personnes",
+    "prepMinutes": 10,
+    "cookMinutes": 13,
+    "ingredients": [
+      { "quantity": "50", "unit": "g", "name": "Chocolat noir 70 %", "note": "sans huile de palme", "section": null },
+      { "quantity": "30", "unit": "g", "name": "Poudre d'amande", "note": null, "section": null },
+      { "quantity": "20", "unit": "g", "name": "Beurre", "note": "+ un peu pour les ramequins", "section": null },
+      { "quantity": "15", "unit": "g", "name": "Sucre complet", "note": "type rapadura, 10 à 20 g", "section": null },
+      { "quantity": "7", "unit": "g", "name": "Huile d'olive", "note": null, "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Œuf", "note": "label bleu-blanc-cœur", "section": null },
+      { "quantity": "0.5", "unit": "sachet", "name": "Poudre à lever", "note": "avec ou sans gluten", "section": null },
+      { "quantity": "1", "unit": "pincée", "name": "Sel", "note": null, "section": null }
+    ],
+    "steps": [
+      "Préchauffer le four à 180 °C (chaleur tournante).",
+      "Faire fondre le chocolat et le beurre au bain-marie ou au micro-ondes (par plages de 30 s, entre 350 et 500 W).",
+      "Mélanger au fouet l'œuf, le sucre, la poudre d'amande, l'huile d'olive, la levure et le sel.",
+      "Ajouter le mélange chocolat-beurre tiédi et fouetter jusqu'à homogénéité.",
+      "Beurrer 2 ramequins et éventuellement les fariner.",
+      "Enfourner 13 min : le centre reste légèrement sous-cuit, c'est normal. Déguster tiède."
+    ],
+    "nutritionTip": "Riche en antioxydants et en magnésium, le chocolat noir à plus de 70 % favorise le bien-être et peut agir sur le stress. En cas de reflux, il peut être un aliment sensible selon la quantité consommée.",
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "mini_cake_banane_chocolat",
+    "category": "DESSERT",
+    "title": "Mini cake moelleux express banane et chocolat",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 30,
+    "ingredients": [
+      { "quantity": "2", "unit": "c. à soupe", "name": "Cacao", "note": null, "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Banane", "note": null, "section": null },
+      { "quantity": "0.5", "unit": "c. à café", "name": "Levure chimique", "note": "sans gluten", "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Noix de coco râpée", "note": null, "section": null },
+      { "quantity": "3", "unit": "c. à soupe", "name": "Farine de sarrasin", "note": null, "section": null },
+      { "quantity": "1", "unit": "pièce", "name": "Œuf", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à soupe", "name": "Compote sans sucre", "note": null, "section": null },
+      { "quantity": "100", "unit": "g", "name": "Yaourt de cacao", "note": null, "section": null },
+      { "quantity": "40", "unit": "g", "name": "Pépites de chocolat noir", "note": null, "section": null },
+      { "quantity": "2", "unit": "c. à café", "name": "Cannelle", "note": null, "section": null }
+    ],
+    "steps": [
+      "Écraser la banane, puis mélanger l'œuf, la farine de sarrasin, le cacao, la levure, la cannelle et la compote.",
+      "Ajouter le yaourt et la noix de coco râpée, mélanger.",
+      "Ajouter les pépites de chocolat.",
+      "Enfourner 30 min à 180 °C."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  },
+  {
+    "id": "tartelettes_pomme_express",
+    "category": "DESSERT",
+    "title": "Tartelettes à la pomme express",
+    "servings": null,
+    "prepMinutes": null,
+    "cookMinutes": 20,
+    "ingredients": [
+      { "quantity": "3", "unit": "c. à soupe", "name": "Farine de sarrasin", "note": null, "section": "Pour la pâte à tarte" },
+      { "quantity": "1", "unit": "c. à café", "name": "Psyllium", "note": "tégument", "section": "Pour la pâte à tarte" },
+      { "quantity": null, "unit": null, "name": "Eau", "note": null, "section": "Pour la pâte à tarte" },
+      { "quantity": "60", "unit": "g", "name": "Compote de pommes", "note": null, "section": "Pour la garniture" }
+    ],
+    "steps": [
+      "Mélanger la farine, le psyllium et l'eau (ajoutée progressivement) à la main jusqu'à une pâte malléable qui ne colle pas.",
+      "Étaler la pâte dans un moule à tartelette, ajouter 3 à 4 c. à soupe de compote de pommes.",
+      "Enfourner ~20 min à 180 °C. Laisser refroidir."
+    ],
+    "nutritionTip": null,
+    "phase": [],
+    "tags": []
+  }
+]

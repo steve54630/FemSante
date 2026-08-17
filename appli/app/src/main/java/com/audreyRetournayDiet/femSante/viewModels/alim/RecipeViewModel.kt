@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.audreyRetournayDiet.femSante.data.entities.RecipeOpenRequest
 import com.audreyRetournayDiet.femSante.data.entities.RecipeUiState
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,9 +42,9 @@ class RecipeViewModel @Inject constructor(
     )
     val uiState: StateFlow<RecipeUiState> = internalUiState.asStateFlow()
 
-    // Événement de navigation : émet le chemin du PDF à ouvrir.
-    private val navigationSharedFlow = MutableSharedFlow<String>()
-    val navigationEvent: SharedFlow<String> = navigationSharedFlow.asSharedFlow()
+    // Événement de navigation : émet la recette à ouvrir (fiche native + PDF de repli).
+    private val navigationSharedFlow = MutableSharedFlow<RecipeOpenRequest>()
+    val navigationEvent: SharedFlow<RecipeOpenRequest> = navigationSharedFlow.asSharedFlow()
 
     // Stocke la clé technique de la recette actuellement sélectionnée.
     private var currentSearchKey: String? = null
@@ -79,15 +80,16 @@ class RecipeViewModel @Inject constructor(
     }
 
     /**
-     * Déclenche l'événement pour ouvrir le fichier PDF associé à la recette.
+     * Déclenche l'ouverture de la recette sélectionnée : fiche native si elle existe dans le
+     * catalogue, avec le chemin du PDF d'origine en repli / impression.
      */
-    fun onOpenPdfClicked() {
+    fun onOpenRecipeClicked() {
         currentSearchKey?.let { key ->
             val pdfPath = "$folderPath/$key.pdf"
-            Timber.i("Demande d'ouverture du PDF : $pdfPath")
+            Timber.i("Demande d'ouverture de la recette : $key (PDF de repli : $pdfPath)")
 
             viewModelScope.launch {
-                navigationSharedFlow.emit(pdfPath)
+                navigationSharedFlow.emit(RecipeOpenRequest(recipeId = key, pdfPath = pdfPath))
             }
         } ?: Timber.e("Erreur : Aucune recette n'est sélectionnée.")
     }

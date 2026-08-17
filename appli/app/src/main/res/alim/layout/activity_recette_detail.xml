@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".features.alim.RecetteDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- En-tête coloré : catégorie + titre + chips (temps / portions) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/orange_app"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
+            app:contentPadding="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:alpha="0.9"
+                    tools:text="Entrée" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    style="@style/AppTextAppearance.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:text="Velouté d'épinards, amandes et noisettes" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:chipSpacingVertical="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Ingrédients -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/recipe_ingredients" />
+
+                <View style="@style/SummaryDivider" />
+
+                <LinearLayout
+                    android:id="@+id/llIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Préparation -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/recipe_steps" />
+
+                <View style="@style/SummaryDivider" />
+
+                <LinearLayout
+                    android:id="@+id/llSteps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Conseil nutritionnel (affiché seulement si présent) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/day_medium"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/recipe_tip" />
+
+                <View style="@style/SummaryDivider" />
+
+                <TextView
+                    android:id="@+id/tvTip"
+                    style="@style/SummaryDetailStyle"
+                    android:textColor="@color/black"
+                    tools:text="Anti-inflammatoire puissant, le curcuma…" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Accès à la fiche PDF d'origine (impression / repli) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewPdf"
+            style="@style/Widget.App.Button.Action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/recipe_view_pdf" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

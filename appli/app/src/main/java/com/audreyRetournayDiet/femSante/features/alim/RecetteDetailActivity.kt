@@ -1,0 +1,203 @@
+package com.audreyRetournayDiet.femSante.features.alim
+
+import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Typeface
+import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.recipe.Recipe
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeIngredient
+import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * Fiche recette **native**, à la charte de l'app (par opposition au PDF figé).
+ *
+ * Reçoit l'identifiant de la recette via [RecipeDetailViewModel.EXTRA_RECIPE_ID] et, en option,
+ * le chemin du PDF d'origine via [EXTRA_PDF_PATH] (bouton « Voir la fiche PDF » + repli). Si la
+ * recette est absente du catalogue, l'écran bascule automatiquement sur le PDF : aucune
+ * régression par rapport au comportement précédent.
+ */
+@AndroidEntryPoint
+class RecetteDetailActivity : AppCompatActivity() {
+
+    private val viewModel: RecipeDetailViewModel by viewModels()
+
+    private val dinPro: Typeface? by lazy { ResourcesCompat.getFont(this, R.font.dinpro) }
+    private val accentColor: Int by lazy { ContextCompat.getColor(this, R.color.orange_app) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val recipe = viewModel.recipe
+        val pdfPath = intent.getStringExtra(EXTRA_PDF_PATH)
+
+        // Repli : recette absente du JSON -> on ouvre le PDF d'origine si disponible.
+        if (recipe == null) {
+            if (!pdfPath.isNullOrBlank()) openPdf(pdfPath)
+            finish()
+            return
+        }
+
+        setContentView(R.layout.activity_recette_detail)
+        bindHeader(recipe)
+        bindIngredients(recipe.ingredients)
+        bindSteps(recipe.steps)
+        bindTip(recipe.nutritionTip)
+        bindPdfButton(pdfPath)
+    }
+
+    private fun bindHeader(recipe: Recipe) {
+        findViewById<TextView>(R.id.tvCategory).text = categoryLabel(recipe.category)
+        findViewById<TextView>(R.id.tvTitle).text = recipe.title
+
+        val chips = findViewById<ChipGroup>(R.id.chipGroupMeta)
+        recipe.prepMinutes?.let { addMetaChip(chips, getString(R.string.recipe_meta_prep, it)) }
+        recipe.cookMinutes?.let {
+            val label = if (it <= 0) getString(R.string.recipe_meta_cook_none)
+            else getString(R.string.recipe_meta_cook, it)
+            addMetaChip(chips, label)
+        }
+        recipe.servings?.takeIf { it.isNotBlank() }?.let { addMetaChip(chips, it) }
+    }
+
+    private fun bindIngredients(ingredients: List<RecipeIngredient>) {
+        val container = findViewById<LinearLayout>(R.id.llIngredients)
+        var currentSection: String? = null
+        ingredients.forEach { ingredient ->
+            if (ingredient.section != null && ingredient.section != currentSection) {
+                currentSection = ingredient.section
+                container.addView(sectionHeader(ingredient.section))
+            }
+            container.addView(ingredientRow(ingredient))
+        }
+    }
+
+    private fun bindSteps(steps: List<String>) {
+        val container = findViewById<LinearLayout>(R.id.llSteps)
+        steps.forEachIndexed { index, step ->
+            container.addView(stepRow(index + 1, step))
+        }
+    }
+
+    private fun bindTip(tip: String?) {
+        if (tip.isNullOrBlank()) return
+        findViewById<MaterialCardView>(R.id.cardTip).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.tvTip).text = tip
+    }
+
+    private fun bindPdfButton(pdfPath: String?) {
+        val button = findViewById<View>(R.id.btnViewPdf)
+        if (pdfPath.isNullOrBlank()) {
+            button.visibility = View.GONE
+        } else {
+            button.setOnClickListener { openPdf(pdfPath) }
+        }
+    }
+
+    private fun openPdf(pdfPath: String) {
+        startActivity(Intent(this, PdfActivity::class.java).putExtra("PDF", pdfPath))
+    }
+
+    // --- Construction des vues dynamiques -----------------------------------------------------
+
+    private fun sectionHeader(title: String): TextView = TextView(this).apply {
+        text = title
+        setTypeface(dinPro, Typeface.BOLD)
+        setTextColor(accentColor)
+        textSize = 13f
+        setPadding(0, dp(10), 0, dp(2))
+    }
+
+    private fun ingredientRow(ingredient: RecipeIngredient): TextView {
+        val quantityUnit = listOfNotNull(
+            ingredient.quantity?.takeIf { it.isNotBlank() },
+            ingredient.unit?.takeIf { it.isNotBlank() }
+        ).joinToString(" ")
+
+        val builder = SpannableStringBuilder("•  ")
+        val mainStart = builder.length
+        if (quantityUnit.isNotBlank()) {
+            builder.append(quantityUnit)
+            builder.setSpan(StyleSpan(Typeface.BOLD), mainStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.append(" ")
+        }
+        builder.append(ingredient.name)
+
+        ingredient.note?.takeIf { it.isNotBlank() }?.let { note ->
+            val noteStart = builder.length
+            builder.append("  ").append(note)
+            builder.setSpan(ForegroundColorSpan(0xFF8A8A8A.toInt()), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(StyleSpan(Typeface.ITALIC), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(RelativeSizeSpan(0.9f), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return TextView(this).apply {
+            text = builder
+            typeface = dinPro
+            textSize = 15f
+            setTextColor(0xFF333333.toInt())
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(0, dp(3), 0, dp(3))
+        }
+    }
+
+    private fun stepRow(number: Int, step: String): TextView {
+        val builder = SpannableStringBuilder("$number.  ")
+        builder.setSpan(StyleSpan(Typeface.BOLD), 0, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        builder.setSpan(ForegroundColorSpan(accentColor), 0, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        builder.append(step)
+
+        return TextView(this).apply {
+            text = builder
+            typeface = dinPro
+            textSize = 15f
+            setTextColor(0xFF333333.toInt())
+            setLineSpacing(dp(3).toFloat(), 1f)
+            setPadding(0, dp(5), 0, dp(5))
+        }
+    }
+
+    private fun addMetaChip(group: ChipGroup, label: String) {
+        val chip = Chip(this).apply {
+            text = label
+            isClickable = false
+            isCheckable = false
+            isCloseIconVisible = false
+            setEnsureMinTouchTargetSize(false)
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white))
+            setTextColor(0xFF333333.toInt())
+        }
+        group.addView(chip)
+    }
+
+    private fun categoryLabel(category: RecipeCategory): String = when (category) {
+        RecipeCategory.BREAKFAST -> "Petit-déjeuner"
+        RecipeCategory.ENTREE -> "Entrée"
+        RecipeCategory.PLAT -> "Plat"
+        RecipeCategory.DESSERT -> "Dessert"
+    }
+
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
+
+    companion object {
+        const val EXTRA_PDF_PATH = "PDF"
+    }
+}

@@ -54,6 +54,9 @@
             android:name="com.audreyRetournayDiet.femSante.features.alim.RecetteActivity"
             android:exported="false" />
         <activity
+            android:name="com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity"
+            android:exported="false" />
+        <activity
             android:name="com.audreyRetournayDiet.femSante.features.alim.AlimActivity"
             android:exported="false" />
         <activity

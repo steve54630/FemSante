@@ -292,4 +292,13 @@
     <string name="trend_title">Mon évolution</string>
     <string name="trend_empty">Aucune mesure enregistrée pour l\'instant.</string>
 
+    <!-- Fiche recette native -->
+    <string name="recipe_ingredients">Ingrédients</string>
+    <string name="recipe_steps">Préparation</string>
+    <string name="recipe_tip">Le conseil nutritionnel</string>
+    <string name="recipe_view_pdf">Voir la fiche PDF</string>
+    <string name="recipe_meta_prep">Prépa %1$d min</string>
+    <string name="recipe_meta_cook">Cuisson %1$d min</string>
+    <string name="recipe_meta_cook_none">Sans cuisson</string>
+
 </resources>
