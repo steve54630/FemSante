@@ -33,12 +33,13 @@ class RecommendationEngineTest {
     private fun entry(
         pain: Int,
         zones: List<PainZone> = emptyList(),
-        quality: DayQuality = DayQuality.MOYENNE
+        quality: DayQuality = DayQuality.MOYENNE,
+        painByZone: Map<PainZone, Int> = emptyMap()
     ) = DailyEntryFull(
         dailyEntry = DailyEntryEntity(userId = "u", date = 0L),
         generalState = GeneralStateEntity(entryId = 0L, painLevel = pain),
         psychologicalState = PsychologicalStateEntity(entryId = 0L, dayQuality = quality),
-        symptomsState = SymptomStateEntity(entryId = 0L, localizedPains = zones),
+        symptomsState = SymptomStateEntity(entryId = 0L, localizedPains = zones, painByZone = painByZone),
         contextState = null
     )
 
@@ -79,6 +80,25 @@ class RecommendationEngineTest {
         // pdfDouble a 2 tags communs (Bassin + Mauvaise) -> premier malgré le type PDF
         assertEquals(pdfDouble, result.first().content)
         assertEquals(2, result.first().matchingTagCount)
+    }
+
+    @Test
+    fun `une zone forte pese plus qu'une zone legere`() {
+        val vBassin = ContentRef(ContentType.VIDEO, "v_bassin")
+        val vLombaires = ContentRef(ContentType.VIDEO, "v_lombaires")
+        val cat = mapOf(
+            vBassin to setOf(JournalTag.Zone(PainZone.BASSIN)),
+            vLombaires to setOf(JournalTag.Zone(PainZone.LOMBAIRES))
+        )
+        // Bassin fort (8) vs Lombaires léger (2).
+        val result = RecommendationEngine.recommend(
+            entry(pain = 3, painByZone = mapOf(PainZone.BASSIN to 8, PainZone.LOMBAIRES to 2)),
+            cat
+        )
+
+        assertEquals(vBassin, result.first().content)      // la zone forte remonte en premier
+        assertEquals(3, result.first().matchingTagCount)   // fort => poids 3
+        assertEquals(1, result.first { it.content == vLombaires }.matchingTagCount) // léger => poids 1
     }
 
     @Test

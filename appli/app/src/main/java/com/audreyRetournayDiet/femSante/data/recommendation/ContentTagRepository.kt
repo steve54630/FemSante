@@ -13,14 +13,16 @@ import com.audreyRetournayDiet.femSante.room.type.PainZone
 import com.audreyRetournayDiet.femSante.room.type.PhysicalActivity
 
 /**
- * Table de correspondance contenu <-> tags journal, transcrite du tableau validé avec
- * la diététicienne (`tagging_contenus.csv` à la racine du repo). La colonne Premium du
- * CSV n'est volontairement pas reprise ici (ignorée pour les tests, cf. discussion).
+ * Table de correspondance contenu <-> tags journal, **synchronisée** avec le tableau validé
+ * `tagging_contenus.csv` (racine du repo). Les identifiants de contenu (titres/fichiers) sont
+ * ceux réellement utilisés par l'app ; seuls les tags proviennent du CSV.
  *
- * Stockage statique en code plutôt qu'en table Room : les trois catalogues de contenu
- * (PDF, vidéo, audio) sont déjà entièrement codés en dur ailleurs dans l'app — on garde
- * la même cohérence ici. À migrer vers une table si un besoin de curation à distance
- * apparaît plus tard.
+ * Les zones de douleur taguées ici sont exploitées par [RecommendationEngine] **pondérées par
+ * l'intensité par zone** saisie dans le journal (une zone forte pèse plus qu'une zone légère).
+ * Le CSV contient désormais des colonnes pour toutes les zones (dont Seins, Tête, Bras,
+ * Cuisses, Haut du dos, Jambes) ; celles-ci restent à taguer par la diététicienne.
+ *
+ * La colonne Premium du CSV n'est pas reprise ici (gérée côté abonnement).
  */
 object ContentTagRepository {
 
@@ -36,32 +38,36 @@ object ContentTagRepository {
     val tagsByContent: Map<ContentRef, Set<JournalTag>> = mapOf(
         // --- PDF - Boîte à outils ---
         pdf("automassage_ventre.pdf") to setOf(
-            zone(PainZone.BASSIN), zone(PainZone.ABDOMEN), Digestif,
-            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            zone(PainZone.BASSIN), zone(PainZone.ABDOMEN), Digestif, EmotionallementDifficile,
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         pdf("bouillote.pdf") to setOf(
             zone(PainZone.BASSIN), zone(PainZone.LOMBAIRES), zone(PainZone.ABDOMEN),
-            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
         pdf("douleurs_abdominales.pdf") to setOf(
             zone(PainZone.ABDOMEN), Digestif, EmotionallementDifficile, Sos,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         pdf("emotional_tempest.pdf") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), cause(DifficultyCause.TRISTESSE),
-            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
         pdf("emotional_tempest_oil.pdf") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), cause(DifficultyCause.TRISTESSE),
-            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
         pdf("infusion_digestion.pdf") to setOf(
             zone(PainZone.ABDOMEN), Digestif, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
-            activity(PhysicalActivity.REPOS)
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
         pdf("infusions_menstruations.pdf") to setOf(
             zone(PainZone.BASSIN), zone(PainZone.ABDOMEN), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
 
         // --- PDF - Ressources documentaires ---
@@ -78,14 +84,15 @@ object ContentTagRepository {
         // --- Vidéo - Yoga ---
         video("SOS Douleurs") to setOf(
             zone(PainZone.BASSIN), zone(PainZone.LOMBAIRES), zone(PainZone.ABDOMEN),
-            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
         video("Calme intérieur") to setOf(
-            cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            cause(DifficultyCause.STRESS), EmotionallementDifficile, quality(DayQuality.MOYENNE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
         video("Débutant au Yoga") to setOf(
-            quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
+            quality(DayQuality.MOYENNE), activity(PhysicalActivity.MARCHE), activity(PhysicalActivity.SPORT)
         ),
 
         // --- Vidéo - Corps et Mouvement ---
@@ -98,74 +105,84 @@ object ContentTagRepository {
         // --- Vidéo - Sophrologie dynamique ---
         video("Pompage des épaules") to setOf(
             zone(PainZone.LOMBAIRES), cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
         video("Exercice du miroir") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.TRISTESSE), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.MARCHE)
         ),
         video("Eventails") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.MARCHE)
         ),
         video("Soufflet thoracique") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
 
         // --- Vidéo - Art-thérapie ---
-        video("Joie") to setOf(activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)),
+        video("Joie") to setOf(activity(PhysicalActivity.MARCHE), activity(PhysicalActivity.SPORT)),
         video("Tristesse") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.TRISTESSE), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         video("Colère") to setOf(
             cause(DifficultyCause.COLERE), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         video("Peur") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
 
         // --- Vidéo - directe ---
         video("Intelligence émotionnelle") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), cause(DifficultyCause.TRISTESSE),
-            EmotionallementDifficile, quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
+            EmotionallementDifficile, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.MARCHE)
         ),
 
         // --- Audio - Sophrologie profonde ---
-        audio("Base vivantielle") to setOf(cause(DifficultyCause.STRESS), quality(DayQuality.MAUVAISE)),
+        audio("Base vivantielle") to setOf(
+            cause(DifficultyCause.STRESS), quality(DayQuality.MOYENNE), activity(PhysicalActivity.REPOS)
+        ),
         audio("Déplacement du négatif") to setOf(
             cause(DifficultyCause.STRESS), cause(DifficultyCause.COLERE), cause(DifficultyCause.TRISTESSE),
-            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
 
         // --- Audio - Hypnose ---
         audio("Auto hypnose pour le stress") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         audio("Auto-hypnose pour l'apaisement") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         ),
 
         // --- Audio - Méditation ---
         audio("Calmer la colère") to setOf(
             cause(DifficultyCause.COLERE), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
         ),
         audio("Calmer la douleur") to setOf(
             zone(PainZone.BASSIN), zone(PainZone.LOMBAIRES), zone(PainZone.ABDOMEN),
-            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE)
+            EmotionallementDifficile, Sos, quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS)
         ),
         audio("Confiance en soi") to setOf(
-            cause(DifficultyCause.TRISTESSE), activity(PhysicalActivity.MARCHE), activity(PhysicalActivity.SPORT)
+            cause(DifficultyCause.TRISTESSE), quality(DayQuality.MOYENNE),
+            activity(PhysicalActivity.MARCHE), activity(PhysicalActivity.SPORT)
         ),
         audio("Relaxation") to setOf(
             cause(DifficultyCause.STRESS), EmotionallementDifficile,
-            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE), activity(PhysicalActivity.REPOS)
+            quality(DayQuality.MOYENNE), quality(DayQuality.MAUVAISE),
+            activity(PhysicalActivity.REPOS), activity(PhysicalActivity.MARCHE)
         )
     )
 }
