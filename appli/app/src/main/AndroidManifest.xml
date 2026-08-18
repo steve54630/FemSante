@@ -66,13 +66,7 @@
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity"
             android:exported="false" />
         <activity
-            android:name="com.audreyRetournayDiet.femSante.features.tete.SophroActivity"
-            android:exported="false" />
-        <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.audreyRetournayDiet.femSante.features.tete.ArtTherapieActivity"
             android:exported="false" />
         <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity"

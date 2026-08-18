@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fond_appli"
-    android:fillViewport="true">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".shared.viewers.AudioActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/textTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".shared.viewers.AudioActivity">
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Calmer la douleur" />
 
-        <TextView
-            android:id="@+id/textTitle"
-            style="@style/AppTextAppearance.TitleFancy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:paddingTop="10dp"
-            android:text=""
-            android:textSize="50sp"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="40dp"
+        app:cardBackgroundColor="@color/day_medium"
+        app:cardCornerRadius="90dp"
+        app:cardElevation="0dp">
 
-        <Spinner
-            android:id="@+id/spinnerExercice"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="48dp"
-            android:spinnerMode="dialog"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_headphones"
+            android:tint="@color/orange_app" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <androidx.media3.ui.PlayerView
-            android:id="@+id/audioPlayer"
-            android:layout_width="match_parent"
-            android:layout_height="175dp"
-            android:layout_marginBottom="172dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerExercice" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <androidx.media3.ui.PlayerControlView
+        android:id="@+id/audioControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:show_next_button="false"
+        app:show_previous_button="false"
+        app:show_shuffle_button="false"
+        app:show_timeout="0" />
+</LinearLayout>

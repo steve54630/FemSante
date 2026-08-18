@@ -292,6 +292,12 @@
     <string name="trend_title">Mon évolution</string>
     <string name="trend_empty">Aucune mesure enregistrée pour l\'instant.</string>
 
+    <!-- Contenus bien-être (vidéos / audios) -->
+    <string name="media_videos">Vidéos</string>
+    <string name="media_audios">Audios</string>
+    <string name="media_premium_badge">Contenu premium</string>
+    <string name="media_empty">Aucun contenu pour ce filtre.</string>
+
     <!-- Navigation recettes (écran unifié) -->
     <string name="recipe_browse_all">Tout</string>
     <string name="recipe_browse_my_phase">Ma phase</string>

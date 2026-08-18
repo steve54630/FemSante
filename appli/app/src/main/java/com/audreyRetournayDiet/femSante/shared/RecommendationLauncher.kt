@@ -8,7 +8,6 @@ import com.audreyRetournayDiet.femSante.features.alim.AlimActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
-import timber.log.Timber
 
 /**
  * Ouvre un contenu recommandé en réutilisant les viewers existants, sans modifier leurs
@@ -16,23 +15,11 @@ import timber.log.Timber
  *
  * - **PDF outil / ressource** : [PdfActivity] directement (fichier à la racine des assets).
  * - **Vidéo** : [Utilitaires.videoLaunch] (récupère l'URL via VideoManager, gère le 403).
- * - **Audio** : [AudioActivity] avec la **playlist parente** (le viewer attend une playlist
- *   + un titre, pas un item isolé).
+ * - **Audio** : [AudioActivity] avec la **piste** recommandée (le lecteur joue un contenu unique).
  * - **PDF recette** : le tag cible une catégorie de repas, pas un fichier précis → on ouvre
  *   le hub Nutrition ([AlimActivity]) plutôt qu'un PDF unique.
  */
 object RecommendationLauncher {
-
-    /**
-     * Playlists audio reproduites depuis SophroActivity / BienTeteActivity (données déjà
-     * codées en dur dans l'app). Centralisées ici pour pouvoir ouvrir la playlist parente
-     * d'une piste recommandée sans toucher à ces écrans.
-     */
-    private val audioPlaylists: List<Pair<String, List<String>>> = listOf(
-        "Sophronisations" to listOf("Base vivantielle", "Déplacement du négatif"),
-        "Hypnose" to listOf("Auto hypnose pour le stress", "Auto-hypnose pour l'apaisement"),
-        "Méditations" to listOf("Calmer la colère", "Calmer la douleur", "Confiance en soi", "Relaxation")
-    )
 
     fun launch(context: Context, content: ContentRef) {
         when (content.type) {
@@ -56,14 +43,9 @@ object RecommendationLauncher {
     }
 
     private fun launchAudio(context: Context, trackTitle: String) {
-        val playlist = audioPlaylists.firstOrNull { (_, tracks) -> trackTitle in tracks }
-        if (playlist != null) {
-            context.startActivity(Intent(context, AudioActivity::class.java).apply {
-                putExtra("map", ArrayList(playlist.second))
-                putExtra("Titre", playlist.first)
-            })
-        } else {
-            Timber.w("Aucune playlist parente trouvée pour la piste audio : $trackTitle")
-        }
+        context.startActivity(Intent(context, AudioActivity::class.java).apply {
+            putExtra(AudioActivity.EXTRA_TITLE, trackTitle)
+            putExtra(AudioActivity.EXTRA_TRACK, trackTitle)
+        })
     }
 }

@@ -1,10 +1,6 @@
 package com.audreyRetournayDiet.femSante.shared.viewers
 
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -15,27 +11,28 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.ExoPlayer.Builder
 import androidx.media3.exoplayer.hls.HlsMediaSource
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
-import androidx.media3.ui.PlayerView
+import androidx.media3.ui.PlayerControlView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
-import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.redirectToLoginAfterSessionExpiry
 import com.audreyRetournayDiet.femSante.viewModels.viewers.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Lecteur **audio** d'une séance (HLS/m3u8, streaming), pensé pour l'écoute : gros contrôles
+ * de lecture toujours visibles, titre lisible, artwork. Reçoit **une seule piste** via
+ * [EXTRA_TRACK] (plus de spinner) et démarre directement sa lecture.
+ */
 @AndroidEntryPoint
 class AudioActivity : AppCompatActivity() {
 
-    // Hilt injecte le ViewModel ; les extras "Titre"/"map" sont lus via SavedStateHandle.
+    // Hilt injecte le ViewModel ; l'extra "Titre" est lu via SavedStateHandle pour l'en-tête.
     private val viewModel: AudioViewModel by viewModels()
 
     private lateinit var player: ExoPlayer
-    private lateinit var playerView: PlayerView
-    private lateinit var spinner: Spinner
+    private lateinit var controls: PlayerControlView
     private lateinit var titleTextView: TextView
 
     private val loadingAlert by lazy { LoadingAlert(this) }
@@ -46,42 +43,17 @@ class AudioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio)
 
-        initViews()
-        setupPlayer()
-        setupSpinner()
-        observeState()
-    }
-
-    private fun initViews() {
-        spinner = findViewById(R.id.spinnerExercice)
-        playerView = findViewById(R.id.audioPlayer)
+        controls = findViewById(R.id.audioControls)
         titleTextView = findViewById(R.id.textTitle)
-    }
 
-    private fun setupPlayer() {
-        player = Builder(this)
-            .setMediaSourceFactory(DefaultMediaSourceFactory(this))
-            .build()
-        playerView.player = player
-    }
+        player = ExoPlayer.Builder(this).build()
+        controls.player = player
 
-    private fun setupSpinner() {
-        val exercises = viewModel.uiState.value.exercises
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exercises)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        observeState()
 
-        spinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_exo, this)
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                // position 0 est "nothing selected" dans le décorateur
-                if (p2 > 0) {
-                    viewModel.onExerciseSelected(spinner.selectedItem.toString())
-                }
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                viewModel.onNothingSelected()
-            }
+        // Une piste unique fournie par l'appelant : on lance directement sa lecture.
+        intent.getStringExtra(EXTRA_TRACK)?.takeIf { it.isNotBlank() }?.let {
+            viewModel.onExerciseSelected(it)
         }
     }
 
@@ -89,31 +61,22 @@ class AudioActivity : AppCompatActivity() {
     private fun observeState() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                // 0. Session expirée (refresh impossible) : retour au login.
                 if (state.sessionExpired) {
                     redirectToLoginAfterSessionExpiry()
                     return@collect
                 }
 
-                // 1. UI Simple
                 titleTextView.text = state.mainTitle
-                playerView.visibility = if (state.isPlayerVisible) View.VISIBLE else View.GONE
-
-                // 2. Gestion du Loader
                 handleLoadingDialog(state.isLoading)
 
-                // 3. Gestion d'erreur
                 state.errorMessage?.let {
                     Toast.makeText(this@AudioActivity, it, Toast.LENGTH_LONG).show()
                 }
 
-                // 4. Gestion du Player
                 state.currentAudioUri?.let { uri ->
                     if (player.currentMediaItem?.localConfiguration?.uri != uri) {
-                        val dataSourceFactory = DefaultHttpDataSource.Factory()
-                        val mediaSource = HlsMediaSource.Factory(dataSourceFactory)
+                        val mediaSource = HlsMediaSource.Factory(DefaultHttpDataSource.Factory())
                             .createMediaSource(MediaItem.fromUri(uri))
-
                         player.setMediaSource(mediaSource)
                         player.prepare()
                         player.play()
@@ -133,7 +96,18 @@ class AudioActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() { super.onStart(); player.play() }
-    override fun onStop() { super.onStop(); player.pause() }
-    override fun onDestroy() { super.onDestroy(); player.release() }
+    override fun onStop() {
+        super.onStop()
+        player.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+    }
+
+    companion object {
+        const val EXTRA_TITLE = "Titre"
+        const val EXTRA_TRACK = "Track"
+    }
 }
