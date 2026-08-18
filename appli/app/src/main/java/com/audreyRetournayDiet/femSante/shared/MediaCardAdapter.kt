@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ class MediaCardAdapter(
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) = holder.bind(getItem(position))
 
     inner class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val header: View = itemView.findViewById(R.id.headerMedia)
         private val icon: ImageView = itemView.findViewById(R.id.imageIcon)
         private val lock: ImageView = itemView.findViewById(R.id.imageLock)
         private val title: TextView = itemView.findViewById(R.id.textTitle)
@@ -38,6 +40,10 @@ class MediaCardAdapter(
         fun bind(item: MediaItem) {
             title.text = item.title
             theme.text = item.category.label
+            // Header thématisé : chaque catégorie a sa teinte douce (voir MediaCategoryUi).
+            header.setBackgroundColor(
+                ContextCompat.getColor(itemView.context, MediaCategoryUi.headerColor(item.category))
+            )
             icon.setImageResource(
                 if (item.type == MediaType.VIDEO) R.drawable.ic_play else R.drawable.ic_headphones
             )

@@ -17,6 +17,7 @@
         android:orientation="vertical">
 
         <FrameLayout
+            android:id="@+id/headerMedia"
             android:layout_width="match_parent"
             android:layout_height="82dp"
             android:background="@color/day_medium">
