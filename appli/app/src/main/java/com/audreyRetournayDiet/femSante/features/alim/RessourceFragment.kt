@@ -51,8 +51,7 @@ class RessourceFragment : Fragment() {
     private fun setupRessourceButtons(view: View) {
         val buttons = mapOf(
             R.id.buttonHistamine to "histamine",
-            R.id.buttonGluten to "gluten",
-            R.id.buttonEBook to "ebook"
+            R.id.buttonGluten to "gluten"
         )
 
         buttons.forEach { (resId, key) ->
@@ -60,6 +59,12 @@ class RessourceFragment : Fragment() {
                 Timber.d("Action : Sélection de la ressource '$key'")
                 viewModel.onRessourceClicked(key)
             }
+        }
+
+        // L'ancien e-book PDF « Les secrets des micronutriments » ouvre désormais le module natif.
+        view.findViewById<Button>(R.id.buttonEBook).setOnClickListener {
+            Timber.d("Action : Ouverture du module Micronutriments")
+            startActivity(Intent(requireContext(), MicronutrientsActivity::class.java))
         }
     }
 

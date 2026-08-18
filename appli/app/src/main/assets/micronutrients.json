@@ -1,0 +1,422 @@
+[
+  {
+    "id": "vitamine-a",
+    "name": "Vitamine A",
+    "group": "LIPOSOLUBLE",
+    "unit": "µg ER",
+    "premium": true,
+    "intake": { "women": "650", "men": "750", "pregnant": "700", "breastfeeding": "1300" },
+    "sources": [
+      { "name": "Huile de foie de morue", "amount": "30 000" },
+      { "name": "Patate douce cuite", "amount": "10 500 (provit. A)" },
+      { "name": "Carotte crue", "amount": "8 290" },
+      { "name": "Épinards cuits", "amount": "7 040" },
+      { "name": "Potiron", "amount": "6 020" },
+      { "name": "Chou frisé", "amount": "5 930" },
+      { "name": "Persil", "amount": "5 050" },
+      { "name": "Melon", "amount": "2 500" },
+      { "name": "Jaune d'œuf", "amount": "106 (rétinol)" }
+    ],
+    "cofactors": "lipides, zinc, fer, vitamines C et E",
+    "notes": "Sources végétales = bêta-carotène (provit. A) ; 1 µg ER = 1 µg rétinol = 6 µg bêta-carotène. Éviter les excès de rétinol chez la femme enceinte (risque tératogène)."
+  },
+  {
+    "id": "vitamine-d",
+    "name": "Vitamine D",
+    "group": "LIPOSOLUBLE",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "15", "men": "15", "pregnant": "15", "breastfeeding": "15" },
+    "sources": [
+      { "name": "Huile de foie de morue", "amount": "250" },
+      { "name": "Hareng fumé", "amount": "22" },
+      { "name": "Sardine", "amount": "14" },
+      { "name": "Saumon cuit", "amount": "13" },
+      { "name": "Truite", "amount": "11" },
+      { "name": "Champignons UV", "amount": "2-7" },
+      { "name": "Jaune d'œuf", "amount": "2,5-5" }
+    ],
+    "cofactors": "lipides, magnésium, calcium, phosphore, zinc, vitamine K2",
+    "notes": "15 µg = 600 UI. Synthèse cutanée (20-30 min/j en été). Doser la 25(OH)D avant supplémentation (D3 cholécalciférol)."
+  },
+  {
+    "id": "vitamine-e",
+    "name": "Vitamine E",
+    "group": "LIPOSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "9,9", "men": "10,5", "pregnant": "10,5", "breastfeeding": "11" },
+    "sources": [
+      { "name": "Huile de germe de blé", "amount": "149" },
+      { "name": "Huile de tournesol", "amount": "58" },
+      { "name": "Amandes", "amount": "22" },
+      { "name": "Huile de colza", "amount": "17" },
+      { "name": "Noisettes", "amount": "15" },
+      { "name": "Germe de blé", "amount": "10" },
+      { "name": "Huile de lin", "amount": "9" },
+      { "name": "Avocat", "amount": "2,1" }
+    ],
+    "cofactors": "lipides, vitamine C et sélénium (régénération antioxydante)",
+    "notes": "Exprimé en alpha-tocophérol ; sensible à la chaleur et à l'oxydation."
+  },
+  {
+    "id": "vitamine-k",
+    "name": "Vitamine K",
+    "group": "LIPOSOLUBLE",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "79", "men": "79", "pregnant": "79", "breastfeeding": "79" },
+    "sources": [
+      { "name": "Choucroute", "amount": "1500 (K1)" },
+      { "name": "Persil", "amount": "1220 (K1)" },
+      { "name": "Natto", "amount": "1000 (K2)" },
+      { "name": "Choux de Bruxelles", "amount": "570 (K1)" },
+      { "name": "Épinards", "amount": "350 (K1)" },
+      { "name": "Brocoli", "amount": "130 (K1)" },
+      { "name": "Huile de colza", "amount": "100 (K1)" }
+    ],
+    "cofactors": "lipides et sels biliaires, fibres, calcium",
+    "notes": "Prudence sous anticoagulants antivitamine K (AVK) — régulariser les apports sans les supprimer."
+  },
+  {
+    "id": "vitamine-b1",
+    "name": "Vitamine B1",
+    "otherName": "Thiamine",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "1,2", "men": "1,5", "pregnant": "1,5", "breastfeeding": "1,7" },
+    "sources": [
+      { "name": "Levure alimentaire", "amount": "11,6" },
+      { "name": "Rognons", "amount": "1,8" },
+      { "name": "Purée de sésame", "amount": "1,4" },
+      { "name": "Germe de blé", "amount": "1,3" },
+      { "name": "Noix de macadamia", "amount": "1,2" },
+      { "name": "Porc", "amount": "0,9" },
+      { "name": "Flocons d'avoine", "amount": "0,6" }
+    ],
+    "cofactors": "magnésium (activation en TDP/TPP)",
+    "notes": "Besoins ↑ si beaucoup de glucides, tabac ou alcool."
+  },
+  {
+    "id": "vitamine-b2",
+    "name": "Vitamine B2",
+    "otherName": "Riboflavine",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "1,6", "men": "1,6", "pregnant": "1,9", "breastfeeding": "2" },
+    "sources": [
+      { "name": "Levure maltée", "amount": "3,5" },
+      { "name": "Foie de veau", "amount": "2,6" },
+      { "name": "Pollen frais", "amount": "1,8" },
+      { "name": "Amandes", "amount": "1,1" },
+      { "name": "Fromages à pâte molle", "amount": "0,6" },
+      { "name": "Œuf", "amount": "0,45" },
+      { "name": "Champignons", "amount": "0,4" }
+    ],
+    "cofactors": "autres vitamines B, cuivre, fer",
+    "notes": "Sensible à la lumière (emballages opaques) ; colore les urines en jaune vif en supplémentation."
+  },
+  {
+    "id": "vitamine-b3",
+    "name": "Vitamine B3",
+    "otherName": "Niacine / PP",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "14", "men": "16", "pregnant": "16", "breastfeeding": "16" },
+    "sources": [
+      { "name": "Thon blanc cuit", "amount": "16" },
+      { "name": "Cacahuètes", "amount": "14" },
+      { "name": "Sardines", "amount": "10" },
+      { "name": "Poulet", "amount": "10" },
+      { "name": "Sarrasin", "amount": "7" },
+      { "name": "Pain complet", "amount": "3,5" }
+    ],
+    "cofactors": "vitamine B6, fer, riboflavine (synthèse à partir du tryptophane)",
+    "notes": "Très stable à la cuisson et à la chaleur."
+  },
+  {
+    "id": "vitamine-b5",
+    "name": "Vitamine B5",
+    "otherName": "Acide pantothénique",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "5", "men": "5", "pregnant": "5", "breastfeeding": "7" },
+    "sources": [
+      { "name": "Levure alimentaire", "amount": "13" },
+      { "name": "Foie de volaille", "amount": "7" },
+      { "name": "Graines de tournesol", "amount": "7" },
+      { "name": "Jaune d'œuf", "amount": "4" },
+      { "name": "Champignons shiitake", "amount": "3,6" },
+      { "name": "Avocat", "amount": "1,5" }
+    ],
+    "cofactors": "vitamines B et magnésium",
+    "notes": "Présente dans presque tous les aliments (« pantothen » = partout)."
+  },
+  {
+    "id": "vitamine-b6",
+    "name": "Vitamine B6",
+    "otherName": "Pyridoxine",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "1,6", "men": "1,7", "pregnant": "1,8", "breastfeeding": "1,7" },
+    "sources": [
+      { "name": "Graines de tournesol", "amount": "1,3" },
+      { "name": "Foie de bœuf", "amount": "1,2" },
+      { "name": "Saumon", "amount": "0,8" },
+      { "name": "Banane", "amount": "0,4" },
+      { "name": "Pois chiches cuits", "amount": "0,3" },
+      { "name": "Pommes de terre", "amount": "0,3" }
+    ],
+    "cofactors": "magnésium, zinc, vitamine B2 (conversion enzymatique)",
+    "notes": "Clé du métabolisme des protéines et des neurotransmetteurs."
+  },
+  {
+    "id": "vitamine-b8",
+    "name": "Vitamine B8",
+    "otherName": "Biotine",
+    "group": "HYDROSOLUBLE",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "40", "men": "40", "pregnant": "40", "breastfeeding": "45" },
+    "sources": [
+      { "name": "Foie de bœuf", "amount": "35" },
+      { "name": "Jaune d'œuf cuit", "amount": "30" },
+      { "name": "Noix", "amount": "19" },
+      { "name": "Amandes", "amount": "18" },
+      { "name": "Levure de bière", "amount": "15" },
+      { "name": "Avocat", "amount": "4" }
+    ],
+    "cofactors": "magnésium et flore intestinale saine",
+    "notes": "L'avidine du blanc d'œuf cru inhibe son absorption (détruite à la cuisson)."
+  },
+  {
+    "id": "vitamine-b9",
+    "name": "Vitamine B9",
+    "otherName": "Folates",
+    "group": "HYDROSOLUBLE",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "330", "men": "330", "pregnant": "600", "breastfeeding": "500" },
+    "sources": [
+      { "name": "Levure alimentaire", "amount": "1500" },
+      { "name": "Foie de volaille", "amount": "770" },
+      { "name": "Épinards crus", "amount": "194" },
+      { "name": "Lentilles cuites", "amount": "180" },
+      { "name": "Pois chiches", "amount": "170" },
+      { "name": "Asperges", "amount": "150" }
+    ],
+    "cofactors": "vitamine B12 et zinc",
+    "notes": "Très sensible à la cuisson prolongée. Supplémentation impérative en préconception (400 µg/j) — anomalies de fermeture du tube neural."
+  },
+  {
+    "id": "vitamine-b12",
+    "name": "Vitamine B12",
+    "otherName": "Cobalamine",
+    "group": "HYDROSOLUBLE",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "4", "men": "4", "pregnant": "4,5", "breastfeeding": "5" },
+    "sources": [
+      { "name": "Foie de veau", "amount": "60" },
+      { "name": "Palourdes/Huîtres", "amount": "50-90" },
+      { "name": "Maquereau", "amount": "19" },
+      { "name": "Sardines", "amount": "9" },
+      { "name": "Saumon", "amount": "4" },
+      { "name": "Emmental", "amount": "1,8" },
+      { "name": "Œuf", "amount": "1,3" }
+    ],
+    "cofactors": "facteur intrinsèque gastrique et acidité stomacale adéquate",
+    "notes": "Absente des végétaux non enrichis. Supplémentation obligatoire chez les végétaliens/végétariens stricts."
+  },
+  {
+    "id": "vitamine-c",
+    "name": "Vitamine C",
+    "group": "HYDROSOLUBLE",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "110", "men": "110", "pregnant": "120", "breastfeeding": "170" },
+    "sources": [
+      { "name": "Cassis", "amount": "180" },
+      { "name": "Poivron rouge cru", "amount": "160" },
+      { "name": "Persil", "amount": "130" },
+      { "name": "Kiwi", "amount": "90" },
+      { "name": "Brocoli cuit", "amount": "60" },
+      { "name": "Fraise", "amount": "60" },
+      { "name": "Orange", "amount": "53" }
+    ],
+    "cofactors": "bioflavonoïdes, fer (synergie d'absorption)",
+    "notes": "Sensible à l'air, l'eau et la chaleur. +10 à 20 mg/j chez les fumeurs."
+  },
+  {
+    "id": "calcium",
+    "name": "Calcium",
+    "group": "MINERAL",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "950", "men": "950", "pregnant": "950", "breastfeeding": "950" },
+    "sources": [
+      { "name": "Parmesan", "amount": "1180" },
+      { "name": "Emmental", "amount": "1080" },
+      { "name": "Graines de sésame", "amount": "960" },
+      { "name": "Sardines avec arêtes", "amount": "400" },
+      { "name": "Tofu ferme", "amount": "350" },
+      { "name": "Amandes", "amount": "260" },
+      { "name": "Chou vert", "amount": "150" },
+      { "name": "Lait", "amount": "120" }
+    ],
+    "cofactors": "vitamine D, vitamine K2, magnésium, phosphore (ratio adéquat)",
+    "notes": "Excès de sodium, phytates ou protéines acidifiantes ↑ l'excrétion urinaire."
+  },
+  {
+    "id": "magnesium",
+    "name": "Magnésium",
+    "group": "MINERAL",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "360", "men": "420", "pregnant": "360", "breastfeeding": "360" },
+    "sources": [
+      { "name": "Graines de courge", "amount": "530" },
+      { "name": "Cacao non sucré", "amount": "500" },
+      { "name": "Amandes", "amount": "270" },
+      { "name": "Noix de cajou", "amount": "260" },
+      { "name": "Chocolat noir 70%", "amount": "200" },
+      { "name": "Flocons d'avoine", "amount": "140" },
+      { "name": "Épinards cuits", "amount": "80" }
+    ],
+    "cofactors": "vitamine B6 et vitamine D",
+    "notes": "Alcool, stress chronique, sucres raffinés ↑ pertes. Formes organiques en supplément (bisglycinate, citrate)."
+  },
+  {
+    "id": "phosphore",
+    "name": "Phosphore",
+    "group": "MINERAL",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "550", "men": "550", "pregnant": "550", "breastfeeding": "550" },
+    "sources": [
+      { "name": "Graines de courge", "amount": "1200" },
+      { "name": "Fromages à pâte dure", "amount": "700" },
+      { "name": "Foie de volaille", "amount": "300" },
+      { "name": "Saumon", "amount": "250" },
+      { "name": "Œuf", "amount": "200" },
+      { "name": "Lentilles cuites", "amount": "180" }
+    ],
+    "cofactors": "vitamine D, calcium",
+    "notes": "Excès fréquent dans l'alimentation moderne (additifs polyphosphates)."
+  },
+  {
+    "id": "potassium",
+    "name": "Potassium",
+    "group": "MINERAL",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "3500", "men": "3500", "pregnant": "3500", "breastfeeding": "4000" },
+    "sources": [
+      { "name": "Abricots secs", "amount": "1160" },
+      { "name": "Avocat", "amount": "485" },
+      { "name": "Pomme de terre avec peau", "amount": "430" },
+      { "name": "Banane", "amount": "358" },
+      { "name": "Patate douce", "amount": "340" },
+      { "name": "Tomate", "amount": "240" }
+    ],
+    "cofactors": "magnésium (pompe Na+/K+ ATPase)",
+    "notes": "Contrebalance l'action hypertensive du sodium. Prudence en insuffisance rénale sévère (hyperkaliémie)."
+  },
+  {
+    "id": "sodium",
+    "name": "Sodium",
+    "group": "MINERAL",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "1500", "men": "1500", "pregnant": "1500", "breastfeeding": "1500" },
+    "sources": [
+      { "name": "Sel de table", "amount": "38 700" },
+      { "name": "Olives", "amount": "1500" },
+      { "name": "Charcuterie", "amount": "800-1200" },
+      { "name": "Fromages affinés", "amount": "500-1000" },
+      { "name": "Pain", "amount": "500" }
+    ],
+    "cofactors": "équilibre hydrique avec le potassium et l'eau",
+    "notes": "1500 mg de sodium = 3,8 g de sel. Ne pas dépasser 2000 mg de sodium (5 g de sel/j) — ANSES/OMS."
+  },
+  {
+    "id": "fer",
+    "name": "Fer",
+    "group": "OLIGO",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "16 (11 post-ménopause)", "men": "11", "pregnant": "16 (T1-T2) à 25 (T3)", "breastfeeding": "16" },
+    "sources": [
+      { "name": "Boudin noir", "amount": "22 (héminique)" },
+      { "name": "Graines de sésame", "amount": "14" },
+      { "name": "Cacao pur", "amount": "10" },
+      { "name": "Graines de chia", "amount": "7,7" },
+      { "name": "Foie de bœuf", "amount": "6" },
+      { "name": "Lentilles cuites", "amount": "3,3" },
+      { "name": "Épinards", "amount": "3" },
+      { "name": "Haricots rouges cuits", "amount": "2,9" }
+    ],
+    "cofactors": "vitamine C (↑ absorption du fer végétal), acide citrique",
+    "notes": "Thé, café, calcium et phytates ↓ l'absorption du fer non héminique. Pas de supplémentation sans ferritinémie basse documentée."
+  },
+  {
+    "id": "zinc",
+    "name": "Zinc",
+    "group": "OLIGO",
+    "unit": "mg",
+    "premium": true,
+    "intake": { "women": "7,5 à 11", "men": "9,4 à 14", "pregnant": "10,5 à 15,5", "breastfeeding": "12,5 à 17,5" },
+    "sources": [
+      { "name": "Huîtres", "amount": "40" },
+      { "name": "Germe de blé", "amount": "14" },
+      { "name": "Bœuf cuit", "amount": "8" },
+      { "name": "Graines de courge", "amount": "7,5" },
+      { "name": "Sésame", "amount": "6" },
+      { "name": "Lupin", "amount": "4,8" },
+      { "name": "Lentilles", "amount": "1,3" }
+    ],
+    "cofactors": "protéines animales",
+    "notes": "Antagonisme d'absorption avec fer et cuivre à haute dose. Besoins ↑ si alimentation riche en phytates."
+  },
+  {
+    "id": "iode",
+    "name": "Iode",
+    "group": "OLIGO",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "150", "men": "150", "pregnant": "200", "breastfeeding": "200" },
+    "sources": [
+      { "name": "Sel iodé", "amount": "1800" },
+      { "name": "Algues séchées nori/wakamé", "amount": "100-300 /g" },
+      { "name": "Moules", "amount": "140" },
+      { "name": "Cabillaud/Églefin", "amount": "110" },
+      { "name": "Yaourt", "amount": "50" },
+      { "name": "Œuf", "amount": "30" }
+    ],
+    "cofactors": "sélénium (désiodases thyroïdiennes), fer, zinc",
+    "notes": "Clé de la fonction thyroïdienne. Éviter les excès brutaux (algues brunes / kombu)."
+  },
+  {
+    "id": "selenium",
+    "name": "Sélénium",
+    "group": "OLIGO",
+    "unit": "µg",
+    "premium": true,
+    "intake": { "women": "70", "men": "70", "pregnant": "70", "breastfeeding": "85" },
+    "sources": [
+      { "name": "Algue Kombu séchée", "amount": "500" },
+      { "name": "Noix du Brésil", "amount": "100-250 /noix" },
+      { "name": "Thon cuit", "amount": "80" },
+      { "name": "Fruits de mer", "amount": "50-70" },
+      { "name": "Œuf", "amount": "20" },
+      { "name": "Riz complet", "amount": "15" }
+    ],
+    "cofactors": "vitamine E (synergie antioxydante)",
+    "notes": "Ne pas dépasser 300 µg/j. Une noix du Brésil/jour couvre largement les besoins."
+  }
+]

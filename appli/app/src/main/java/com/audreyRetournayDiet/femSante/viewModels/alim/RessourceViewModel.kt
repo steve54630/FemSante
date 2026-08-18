@@ -28,8 +28,7 @@ class RessourceViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<List<PdfRessource>> = MutableStateFlow(
         listOf(
             PdfRessource("histamine", "histamine.pdf"),
-            PdfRessource("gluten", "gluten.pdf"),
-            PdfRessource("ebook", "ebook.pdf")
+            PdfRessource("gluten", "gluten.pdf")
         )
     )
 

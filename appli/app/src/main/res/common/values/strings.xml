@@ -298,6 +298,20 @@
     <string name="media_premium_badge">Contenu premium</string>
     <string name="media_empty">Aucun contenu pour ce filtre.</string>
 
+    <!-- Micronutriments -->
+    <string name="micronutrients_title">Micronutriments</string>
+    <string name="micronutrients_tab_fiches">Fiches</string>
+    <string name="micronutrients_tab_interactions">Interactions</string>
+    <string name="micronutrient_intake_title">Apports conseillés</string>
+    <string name="micronutrient_intake_women">Femmes</string>
+    <string name="micronutrient_intake_men">Hommes</string>
+    <string name="micronutrient_intake_pregnant">Enceintes</string>
+    <string name="micronutrient_intake_breastfeeding">Allaitantes</string>
+    <string name="micronutrient_sources_title">Sources (pour 100 g)</string>
+    <string name="micronutrient_cofactors_title">Cofacteurs d\'assimilation</string>
+    <string name="micronutrient_notes_title">À savoir</string>
+    <string name="micronutrient_locked">Contenu réservé aux abonnées.</string>
+
     <!-- Navigation recettes (écran unifié) -->
     <string name="recipe_browse_all">Tout</string>
     <string name="recipe_browse_my_phase">Ma phase</string>

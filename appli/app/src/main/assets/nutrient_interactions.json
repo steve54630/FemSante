@@ -1,0 +1,50 @@
+[
+  {
+    "drug": "Anti-acides (IPP, anti-H2)",
+    "nutrients": "Calcium, fer, zinc, vitamines B1, B9, B12 (↓ absorption par baisse d'acidité gastrique)"
+  },
+  {
+    "drug": "Hypotenseurs / antihypertenseurs",
+    "nutrients": "Coenzyme Q10, magnésium, potassium, zinc, calcium, vitamines B1, B6, B9, C"
+  },
+  {
+    "drug": "Anti-inflammatoires (AINS, corticoïdes)",
+    "nutrients": "Vitamines D, B9, B12, calcium, magnésium, potassium, zinc, fer"
+  },
+  {
+    "drug": "Hypocholestérolémiants (statines)",
+    "nutrients": "Coenzyme Q10 (↓ synthèse — supplémentation souvent préconisée)"
+  },
+  {
+    "drug": "Antidépresseurs (ISRS, tricycliques)",
+    "nutrients": "Coenzyme Q10, vitamine B12, folates (B9), sodium"
+  },
+  {
+    "drug": "Antibiotiques et antifongiques",
+    "nutrients": "Vitamines B1, B2, B3, B6, B8, B12, K ; chélation calcium et magnésium (cyclines, fluoroquinolones)"
+  },
+  {
+    "drug": "Analgésiques (paracétamol, aspirine)",
+    "nutrients": "Glutathion ; vitamines C, K, D, complexe B, zinc, sélénium, fer (saignements occultes)"
+  },
+  {
+    "drug": "Contraceptifs oraux (œstroprogestatifs)",
+    "nutrients": "Vitamines B2, B6, B9, B12, C, E, magnésium, zinc"
+  },
+  {
+    "drug": "Modulateurs hormonaux / œstrogènes",
+    "nutrients": "Vitamine B6, magnésium, zinc"
+  },
+  {
+    "drug": "Diurétiques",
+    "nutrients": "Potassium (anse/thiazidiques), magnésium, zinc, calcium, vitamines B1 et B6"
+  },
+  {
+    "drug": "Antihistaminiques",
+    "nutrients": "Vitamine C"
+  },
+  {
+    "drug": "Somnifères / anxiolytiques",
+    "nutrients": "Vitamines du groupe B, vitamine D"
+  }
+]

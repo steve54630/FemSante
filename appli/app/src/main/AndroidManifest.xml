@@ -76,6 +76,12 @@
             android:name="com.audreyRetournayDiet.femSante.features.corps.BienCorpsActivity"
             android:exported="false" />
         <activity
+            android:name="com.audreyRetournayDiet.femSante.features.alim.MicronutrientsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.features.alim.MicronutrientDetailActivity"
+            android:exported="false" />
+        <activity
             android:name="com.audreyRetournayDiet.femSante.features.login.LoginActivity"
             android:exported="true">
             <intent-filter>
