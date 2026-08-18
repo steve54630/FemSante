@@ -13,9 +13,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.recipe.Recipe
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeOfDay
 import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
+import com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
 import com.audreyRetournayDiet.femSante.shared.RecommendationLauncher
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
 import com.audreyRetournayDiet.femSante.viewModels.main.PourToiViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -40,6 +45,11 @@ class PourToiFragment : Fragment() {
         private const val MAX_RECOMMENDATIONS_DISPLAYED = 5
     }
 
+    private lateinit var cardRecipeOfDay: MaterialCardView
+    private lateinit var textRecipeTitle: TextView
+    private lateinit var textRecipeMeta: TextView
+    private lateinit var textRecipePhase: TextView
+    private lateinit var buttonRecipeAction: MaterialButton
     private lateinit var cardGeste: MaterialCardView
     private lateinit var textGesteTitle: TextView
     private lateinit var buttonGesteAction: MaterialButton
@@ -74,6 +84,11 @@ class PourToiFragment : Fragment() {
     }
 
     private fun initViews(view: View) {
+        cardRecipeOfDay = view.findViewById(R.id.cardRecipeOfDay)
+        textRecipeTitle = view.findViewById(R.id.textRecipeTitle)
+        textRecipeMeta = view.findViewById(R.id.textRecipeMeta)
+        textRecipePhase = view.findViewById(R.id.textRecipePhase)
+        buttonRecipeAction = view.findViewById(R.id.buttonRecipeAction)
         cardGeste = view.findViewById(R.id.cardGesteDuJour)
         textGesteTitle = view.findViewById(R.id.textGesteTitle)
         buttonGesteAction = view.findViewById(R.id.buttonGesteAction)
@@ -95,6 +110,7 @@ class PourToiFragment : Fragment() {
                     if (state.isLoading) return@collect
 
                     bannerPourToi.isVisible = !state.hasEntryToday
+                    bindRecipeOfDay(state.recipeOfDay)
                     bindGesteDuJour(state.recommendations.firstOrNull())
                     // Le reste, hors "geste du jour", dans le carrousel.
                     renderRecommendations(state.recommendations.drop(1).take(MAX_RECOMMENDATIONS_DISPLAYED))
@@ -103,6 +119,57 @@ class PourToiFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /** Affiche la recette du jour (selon la phase du cycle), ou masque la carte si indisponible. */
+    private fun bindRecipeOfDay(recipeOfDay: RecipeOfDay?) {
+        if (recipeOfDay == null) {
+            cardRecipeOfDay.isVisible = false
+            return
+        }
+        val recipe = recipeOfDay.recipe
+        cardRecipeOfDay.isVisible = true
+        textRecipeTitle.text = recipe.title
+        textRecipeMeta.text = recipeMeta(recipe)
+
+        val phaseLabel = recipe.phase.firstOrNull()
+        if (recipeOfDay.personalized && phaseLabel != null) {
+            textRecipePhase.isVisible = true
+            textRecipePhase.text = getString(R.string.recipe_of_day_phase, phaseLabel.lowercase())
+        } else {
+            textRecipePhase.isVisible = false
+        }
+
+        buttonRecipeAction.setOnClickListener {
+            Timber.i("Recette du jour ouverte : ${recipe.id}")
+            val intent = Intent(requireContext(), RecetteDetailActivity::class.java).apply {
+                putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
+                putExtra(RecetteDetailActivity.EXTRA_PDF_PATH, "${categoryFolder(recipe.category)}/${recipe.id}.pdf")
+            }
+            startActivity(intent)
+        }
+    }
+
+    /** Ligne « Catégorie · durée totale » de la carte recette. */
+    private fun recipeMeta(recipe: Recipe): String {
+        val category = categoryLabel(recipe.category)
+        val minutes = (recipe.prepMinutes ?: 0) + (recipe.cookMinutes ?: 0)
+        return if (minutes > 0) "$category · $minutes min" else category
+    }
+
+    private fun categoryLabel(category: RecipeCategory): String = when (category) {
+        RecipeCategory.BREAKFAST -> "Petit-déjeuner"
+        RecipeCategory.ENTREE -> "Entrée"
+        RecipeCategory.PLAT -> "Plat"
+        RecipeCategory.DESSERT -> "Dessert"
+    }
+
+    /** Dossier d'assets correspondant à la catégorie (pour retrouver le PDF d'origine). */
+    private fun categoryFolder(category: RecipeCategory): String = when (category) {
+        RecipeCategory.BREAKFAST -> "breakfast"
+        RecipeCategory.ENTREE -> "entries"
+        RecipeCategory.PLAT -> "main_courses"
+        RecipeCategory.DESSERT -> "desserts"
     }
 
     /** Met en avant la recommandation la mieux notée comme "geste du jour". */

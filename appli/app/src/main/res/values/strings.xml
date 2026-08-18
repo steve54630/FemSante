@@ -292,6 +292,11 @@
     <string name="trend_title">Mon évolution</string>
     <string name="trend_empty">Aucune mesure enregistrée pour l\'instant.</string>
 
+    <!-- Recette du jour (Pour toi) -->
+    <string name="recipe_of_day_label">🍽️ Ta recette du jour</string>
+    <string name="recipe_of_day_action">Voir la recette</string>
+    <string name="recipe_of_day_phase">Adaptée à ta phase %1$s</string>
+
     <!-- Fiche recette native -->
     <string name="recipe_ingredients">Ingrédients</string>
     <string name="recipe_steps">Préparation</string>
