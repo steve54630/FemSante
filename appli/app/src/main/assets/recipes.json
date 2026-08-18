@@ -32,8 +32,8 @@
       "Servir les œufs brouillés sur la tartine de pain de lentilles, garnir de graines de courge et de pousses d'épinards ou de tomates cerises selon la saison."
     ],
     "nutritionTip": "L'association lentilles corail–œufs, source de protéines, apporte de l'énergie dès le matin. L'huile de colza et les œufs bleu-blanc-cœur, riches en oméga 3, agissent sur l'inflammation et peuvent aider à réduire l'intensité des douleurs.",
-    "phase": [],
-    "tags": []
+    "phase": ["Menstruelle"],
+    "tags": ["Sans gluten", "Végétarien", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Index Glycémique bas", "Riche en fer"]
   },
   {
     "id": "porridge_sale_amandes",
@@ -59,16 +59,16 @@
       "Dresser dans des bols. Ajouter la purée d'amandes et/ou les amandes concassées et quelques dés de fromage frais."
     ],
     "nutritionTip": "Comme les flocons d'avoine, les amandes sont riches en fibres et favorisent un meilleur transit. Pour le soja, privilégier les références bio françaises.",
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Express", "Végétarien", "Index Glycémique bas", "Confort digestif"]
   },
   {
     "id": "blinis_avocat_saumon",
     "category": "ENTREE",
     "title": "Blinis avocat - saumon",
-    "servings": null,
-    "prepMinutes": null,
-    "cookMinutes": null,
+    "servings": "2 personnes",
+    "prepMinutes": 15,
+    "cookMinutes": 10,
     "ingredients": [
       { "quantity": "80", "unit": "g", "name": "Farine sans gluten", "note": "au choix", "section": "Pour les blinis" },
       { "quantity": "70", "unit": "g", "name": "Farine de pois chiches", "note": null, "section": "Pour les blinis" },
@@ -76,7 +76,7 @@
       { "quantity": "1", "unit": "c. à café", "name": "Huile d'olive", "note": null, "section": "Pour les blinis" },
       { "quantity": null, "unit": null, "name": "Sel", "note": null, "section": "Pour les blinis" },
       { "quantity": "1", "unit": "c. à café", "name": "Bicarbonate", "note": null, "section": "Pour les blinis" },
-      { "quantity": null, "unit": null, "name": "Œufs", "note": "utilisés dans les étapes (jaune + blancs en neige), quantité à préciser", "section": "Pour les blinis" },
+      { "quantity": "2", "unit": "pièce", "name": "Œufs", "note": "jaunes + blancs montés en neige", "section": "Pour les blinis" },
       { "quantity": "0.5", "unit": "pièce", "name": "Avocat", "note": "par personne", "section": "Pour la garniture" },
       { "quantity": "1", "unit": "c. à café", "name": "Moutarde", "note": null, "section": "Pour la garniture" },
       { "quantity": null, "unit": null, "name": "Paprika", "note": null, "section": "Pour la garniture" },
@@ -85,7 +85,7 @@
       { "quantity": "100", "unit": "g", "name": "Saumon fumé", "note": "en courtes tranches", "section": "Pour la garniture" }
     ],
     "steps": [
-      "Dans un saladier, mélanger la farine, le jaune d'œuf et le lait.",
+      "Dans un saladier, mélanger la farine, les jaunes d'œufs et le lait.",
       "Monter les blancs en neige.",
       "Les incorporer délicatement à la préparation.",
       "Préchauffer une poêle avec un peu d'huile de coco et cuire les blinis à feu moyen.",
@@ -94,15 +94,15 @@
       "Option végétale : remplacer le saumon par du tofu à l'ail des ours en fines lamelles légèrement poêlées."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Index Glycémique bas"]
   },
   {
     "id": "houmous_betteraves",
     "category": "ENTREE",
     "title": "Houmous de betteraves",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "4 personnes",
+    "prepMinutes": 10,
     "cookMinutes": 0,
     "ingredients": [
       { "quantity": "250", "unit": "g", "name": "Haricots rouges", "note": "déjà cuits, en boîte", "section": null },
@@ -121,15 +121,15 @@
       "Accompagner de crudités à tremper, de pain des fleurs au sarrasin, ou en accompagnement de salades et toasts."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Sans gluten", "Express", "Végétarien", "Végétalien", "Sans produits laitiers", "Index Glycémique bas", "Riche en fer"]
   },
   {
     "id": "salade_ete",
     "category": "ENTREE",
     "title": "Salade d'été",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "1 personne",
+    "prepMinutes": 10,
     "cookMinutes": 0,
     "ingredients": [
       { "quantity": "1", "unit": "poignée", "name": "Pousses d'épinards", "note": null, "section": "Pour la salade" },
@@ -146,15 +146,15 @@
       "Vinaigrette : un peu de vinaigre balsamique et 1 c. à café de tahini."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Ovulatoire"],
+    "tags": ["Sans gluten", "Express", "Sans produits laitiers", "Sans fruits à coque", "Index Glycémique bas"]
   },
   {
     "id": "tartines_gourmandes_thon",
     "category": "ENTREE",
     "title": "Tartines gourmandes au thon",
     "servings": "2 tartines",
-    "prepMinutes": null,
+    "prepMinutes": 10,
     "cookMinutes": 0,
     "ingredients": [
       { "quantity": "0.5", "unit": "boîte", "name": "Thon", "note": null, "section": null },
@@ -172,8 +172,8 @@
       "Ajouter la préparation au thon et quelques graines (ou graines germées)."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Express", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Index Glycémique bas"]
   },
   {
     "id": "veloute_epinards_amandes",
@@ -207,15 +207,15 @@
       "Servir dans un bol, ajouter un filet de lait de coco (5 cl par bol) et saupoudrer de graines de lin et de curcuma."
     ],
     "nutritionTip": "Anti-inflammatoire puissant, le curcuma combiné aux graines de lin (oméga 3) peut agir sur l'intensité des douleurs. Le citron, alcalinisant, aide à désacidifier l'organisme.",
-    "phase": [],
-    "tags": []
+    "phase": ["Menstruelle"],
+    "tags": ["Sans gluten", "Végétarien", "Végétalien", "Sans produits laitiers", "Index Glycémique bas", "Riche en fer"]
   },
   {
     "id": "cake_sale",
     "category": "PLAT",
     "title": "Cake salé",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "6 personnes",
+    "prepMinutes": 15,
     "cookMinutes": 35,
     "ingredients": [
       { "quantity": "150", "unit": "g", "name": "Farine sans gluten", "note": "sarrasin, riz ou mix de farines", "section": null },
@@ -235,16 +235,16 @@
       "Verser dans un moule huilé et enfourner 30 à 40 min à 180 °C."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Sans gluten", "Sans produits laitiers", "Sans fruits à coque", "Index Glycémique bas"]
   },
   {
     "id": "crepes_salees_houmous_rose",
     "category": "PLAT",
     "title": "Crêpes salées au houmous rose",
-    "servings": null,
-    "prepMinutes": null,
-    "cookMinutes": null,
+    "servings": "2 personnes",
+    "prepMinutes": 20,
+    "cookMinutes": 10,
     "ingredients": [
       { "quantity": "100", "unit": "g", "name": "Haricots rouges", "note": "en conserve", "section": "Pour le houmous" },
       { "quantity": "1", "unit": "pièce", "name": "Betterave cuite", "note": null, "section": "Pour le houmous" },
@@ -271,15 +271,15 @@
       "Garnir chaque crêpe de houmous rose, de salade, de tofu fumé et de crudités."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Sans gluten", "Végétarien", "Végétalien", "Sans produits laitiers", "Sans fruits à coque", "Confort digestif"]
   },
   {
     "id": "polenta_champignons",
     "category": "PLAT",
     "title": "Polenta aux champignons",
     "servings": "1 personne",
-    "prepMinutes": null,
+    "prepMinutes": 10,
     "cookMinutes": 30,
     "ingredients": [
       { "quantity": "50", "unit": "g", "name": "Semoule de maïs", "note": "pour polenta", "section": null },
@@ -298,15 +298,15 @@
       "Verser la polenta dans un bol, garnir des oignons et champignons poêlés."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Végétarien", "Végétalien", "Sans produits laitiers", "Sans fruits à coque", "Confort digestif"]
   },
   {
     "id": "tarte_epinards",
     "category": "PLAT",
     "title": "Tarte aux épinards",
     "servings": "2 à 3 personnes",
-    "prepMinutes": null,
+    "prepMinutes": 15,
     "cookMinutes": 35,
     "ingredients": [
       { "quantity": "3", "unit": "poignée", "name": "Épinards", "note": null, "section": null },
@@ -323,15 +323,15 @@
       "Enfourner 30 à 40 min à 180 °C."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Menstruelle"],
+    "tags": ["Végétarien", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Riche en fer"]
   },
   {
     "id": "tartelettes_saumon_champignons",
     "category": "PLAT",
     "title": "Tartelettes saumon et champignons",
     "servings": "5 tartelettes",
-    "prepMinutes": null,
+    "prepMinutes": 20,
     "cookMinutes": 25,
     "ingredients": [
       { "quantity": "90", "unit": "g", "name": "Farine de riz complet", "note": null, "section": "Pour la pâte" },
@@ -353,19 +353,19 @@
       "Enfourner 20 à 30 min à 180 °C."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Ovulatoire"],
+    "tags": ["Sans gluten", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Index Glycémique bas"]
   },
   {
     "id": "tofu_fume_puree_carottes",
     "category": "PLAT",
     "title": "Tofu fumé, purée de carottes et panais",
     "servings": "2 personnes",
-    "prepMinutes": null,
+    "prepMinutes": 15,
     "cookMinutes": 40,
     "ingredients": [
       { "quantity": "3", "unit": "pièce", "name": "Carottes", "note": null, "section": null },
-      { "quantity": "2", "unit": "pièce", "name": "Navets", "note": "le titre indique panais — à confirmer", "section": null },
+      { "quantity": "2", "unit": "pièce", "name": "Panais", "note": null, "section": null },
       { "quantity": "3", "unit": "c. à soupe", "name": "Lait de coco", "note": "bombées", "section": null },
       { "quantity": "0.5", "unit": "c. à café", "name": "Curcuma", "note": null, "section": null },
       { "quantity": null, "unit": null, "name": "Cumin, sel, poivre", "note": null, "section": null },
@@ -380,15 +380,15 @@
       "Dresser la purée et le tofu."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Végétarien", "Végétalien", "Sans produits laitiers", "Sans fruits à coque", "Riche en protéines", "Index Glycémique bas", "Confort digestif"]
   },
   {
     "id": "cake_chocolat_leger",
     "category": "DESSERT",
     "title": "Cake au chocolat léger et sans farines",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "6 personnes",
+    "prepMinutes": 15,
     "cookMinutes": 30,
     "ingredients": [
       { "quantity": "100", "unit": "g", "name": "Chocolat noir", "note": null, "section": null },
@@ -396,7 +396,7 @@
       { "quantity": "50", "unit": "g", "name": "Beurre de cacahuètes", "note": null, "section": null },
       { "quantity": "1", "unit": "c. à café", "name": "Levure chimique", "note": null, "section": null },
       { "quantity": "100", "unit": "g", "name": "Poudre d'amandes", "note": null, "section": null },
-      { "quantity": null, "unit": null, "name": "Œufs", "note": "utilisés dans les étapes, quantité à préciser", "section": null }
+      { "quantity": "2", "unit": "pièce", "name": "Œufs", "note": null, "section": null }
     ],
     "steps": [
       "Faire fondre le chocolat avec 1 c. à soupe de crème de coco, réserver.",
@@ -407,8 +407,8 @@
       "Laisser refroidir. Encore meilleur après une nuit au frais."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Végétarien", "Sans produits laitiers", "Index Glycémique bas"]
   },
   {
     "id": "cakes_vapeur_pommes_myrtilles",
@@ -439,15 +439,15 @@
       "Cuire à feu moyen 45 min (2 fournées pour 5 cakes, ou diviser les quantités par 2)."
     ],
     "nutritionTip": "La cuisson vapeur, douce, préserve les micronutriments et évite l'effet pro-inflammatoire des cuissons fortes. La pomme râpée sucre naturellement ; la cannelle aide à réguler la glycémie — utile en cas de SOPK ou d'endométriose.",
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Végétarien", "Sans produits laitiers", "Sans fruits à coque", "Confort digestif"]
   },
   {
     "id": "carres_gourmands",
     "category": "DESSERT",
     "title": "Carrés gourmands",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "4 personnes",
+    "prepMinutes": 15,
     "cookMinutes": 20,
     "ingredients": [
       { "quantity": "100", "unit": "g", "name": "Pois chiches", "note": "en conserve en verre, déjà cuits", "section": null },
@@ -464,15 +464,15 @@
       "Décorer éventuellement de graines et de noix de coco râpée."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Végétarien", "Végétalien", "Sans produits laitiers", "Index Glycémique bas", "Riche en fer"]
   },
   {
     "id": "creme_chocolat",
     "category": "DESSERT",
     "title": "Crème au chocolat",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "2 personnes",
+    "prepMinutes": 10,
     "cookMinutes": 0,
     "ingredients": [
       { "quantity": "1", "unit": "pièce", "name": "Avocat", "note": null, "section": null },
@@ -489,8 +489,8 @@
       "Déguster en dessert ou au petit-déjeuner avec un peu de granola."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Ovulatoire"],
+    "tags": ["Sans gluten", "Express", "Végétarien", "Végétalien", "Sans produits laitiers", "Index Glycémique bas"]
   },
   {
     "id": "fondant_chocolat",
@@ -518,15 +518,15 @@
       "Enfourner 13 min : le centre reste légèrement sous-cuit, c'est normal. Déguster tiède."
     ],
     "nutritionTip": "Riche en antioxydants et en magnésium, le chocolat noir à plus de 70 % favorise le bien-être et peut agir sur le stress. En cas de reflux, il peut être un aliment sensible selon la quantité consommée.",
-    "phase": [],
-    "tags": []
+    "phase": ["Menstruelle"],
+    "tags": ["Sans gluten", "Végétarien", "Index Glycémique bas"]
   },
   {
     "id": "mini_cake_banane_chocolat",
     "category": "DESSERT",
     "title": "Mini cake moelleux express banane et chocolat",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "2 personnes",
+    "prepMinutes": 10,
     "cookMinutes": 30,
     "ingredients": [
       { "quantity": "2", "unit": "c. à soupe", "name": "Cacao", "note": null, "section": null },
@@ -547,15 +547,15 @@
       "Enfourner 30 min à 180 °C."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Lutéale"],
+    "tags": ["Sans gluten", "Végétarien", "Sans fruits à coque"]
   },
   {
     "id": "tartelettes_pomme_express",
     "category": "DESSERT",
     "title": "Tartelettes à la pomme express",
-    "servings": null,
-    "prepMinutes": null,
+    "servings": "2 personnes",
+    "prepMinutes": 10,
     "cookMinutes": 20,
     "ingredients": [
       { "quantity": "3", "unit": "c. à soupe", "name": "Farine de sarrasin", "note": null, "section": "Pour la pâte à tarte" },
@@ -569,7 +569,7 @@
       "Enfourner ~20 min à 180 °C. Laisser refroidir."
     ],
     "nutritionTip": null,
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Sans gluten", "Express", "Végétarien", "Végétalien", "Sans produits laitiers", "Sans fruits à coque", "Index Glycémique bas", "Confort digestif"]
   }
 ]
