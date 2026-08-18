@@ -26,19 +26,14 @@ data class RecipeOfDay(val recipe: Recipe, val personalized: Boolean)
  */
 object DailyRecipeSelector {
 
-    /** Libellé de phase « fourre-tout » : une recette ainsi taguée convient à toutes les phases. */
-    private const val ALL_PHASES = "Toutes"
-
     fun select(recipes: List<Recipe>, phase: CyclePhase?, date: LocalDate): RecipeOfDay? {
         if (recipes.isEmpty()) return null
 
-        val label = phaseLabel(phase)
+        val label = phase.toRecipePhaseLabel()
         val candidates = if (label == null) {
             emptyList()
         } else {
-            recipes.filter { recipe ->
-                recipe.phase.any { it.equals(label, ignoreCase = true) || it.equals(ALL_PHASES, ignoreCase = true) }
-            }
+            recipes.filter { it.matchesPhaseLabel(label) }
         }
 
         val personalized = candidates.isNotEmpty()
@@ -46,14 +41,5 @@ object DailyRecipeSelector {
         val index = date.toEpochDay().mod(pool.size) // mod(Int) renvoie toujours un index positif
 
         return RecipeOfDay(pool[index], personalized)
-    }
-
-    /** Traduit la phase du cycle en libellé de recette, ou `null` si la phase n'est pas exploitable. */
-    private fun phaseLabel(phase: CyclePhase?): String? = when (phase) {
-        CyclePhase.MENSTRUELLE -> "Menstruelle"
-        CyclePhase.FOLLICULAIRE -> "Folliculaire"
-        CyclePhase.OVULATION -> "Ovulatoire"
-        CyclePhase.LUTEALE -> "Lutéale"
-        CyclePhase.INDETERMINEE, null -> null
     }
 }

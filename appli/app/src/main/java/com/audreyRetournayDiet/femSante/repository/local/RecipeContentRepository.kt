@@ -13,9 +13,9 @@ import javax.inject.Singleton
  * Fournit le contenu structuré des recettes (fiches natives), lu une seule fois depuis
  * `assets/recipes.json`.
  *
- * À la différence de [RecipeRepository] (qui liste les fichiers PDF d'un dossier), ce
- * repository expose des objets [Recipe] exploitables par l'UI. L'[Recipe.id] correspond au
- * nom de fichier PDF sans extension : c'est la clé de jointure avec le flux existant.
+ * Ce repository expose des objets [Recipe] exploitables par l'UI (fiche native, filtres,
+ * recette du jour). L'[Recipe.id] correspond au nom de fichier PDF sans extension : c'est la
+ * clé de jointure avec les photos (drawables) et les PDF d'origine.
  *
  * Injecté par constructeur (`@Inject`) et unique (`@Singleton`) : le JSON n'est parsé qu'à la
  * première utilisation grâce au chargement paresseux.

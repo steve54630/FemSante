@@ -1,8 +1,8 @@
 package com.audreyRetournayDiet.femSante.viewModels.main
 
+import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
 import com.audreyRetournayDiet.femSante.repository.ApiResult
-import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.repository.local.RecipeContentRepository
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
@@ -10,7 +10,6 @@ import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
 import com.audreyRetournayDiet.femSante.room.entity.GeneralStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.PsychologicalStateEntity
 import com.audreyRetournayDiet.femSante.room.entity.SymptomStateEntity
-import com.audreyRetournayDiet.femSante.room.type.CycleProfile
 import com.audreyRetournayDiet.femSante.room.type.PainZone
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.util.MainDispatcherRule
@@ -30,8 +29,8 @@ class PourToiViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val repository = mockk<DailyRepository>()
-    private val cycleRepository = mockk<CycleRepository>()
     private val recipeRepository = mockk<RecipeContentRepository>()
+    private val phaseProvider = mockk<CurrentCyclePhaseProvider>()
     private val userStore = mockk<UserStore>()
 
     private fun stubUser() {
@@ -39,14 +38,11 @@ class PourToiViewModelTest {
     }
 
     /**
-     * Neutralise la « recette du jour » (profil sans cycle -> phase nulle, catalogue vide ->
-     * aucune recette) : ces tests ne portent que sur les recommandations de contenu.
+     * Neutralise la « recette du jour » (phase nulle, catalogue vide -> aucune recette) : ces
+     * tests ne portent que sur les recommandations de contenu.
      */
     private fun stubRecipeOfDayDeps() {
-        coEvery { cycleRepository.getPeriodDates(any()) } returns ApiResult.Success(emptySet<java.time.LocalDate>(), "ok")
-        every { userStore.getCycleProfile() } returns CycleProfile.ABSENT_OU_PILULE
-        every { userStore.getCycleLength() } returns 28
-        every { userStore.getPeriodLength() } returns 5
+        coEvery { phaseProvider.currentPhase(any()) } returns null
         every { recipeRepository.getAll() } returns emptyList()
     }
 
@@ -64,7 +60,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
 
-        val vm = PourToiViewModel(repository, cycleRepository, recipeRepository, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)
@@ -77,7 +73,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(entryToday(), "ok")
 
-        val vm = PourToiViewModel(repository, cycleRepository, recipeRepository, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertTrue(state.hasEntryToday)
@@ -91,7 +87,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Failure("erreur")
 
-        val vm = PourToiViewModel(repository, cycleRepository, recipeRepository, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)

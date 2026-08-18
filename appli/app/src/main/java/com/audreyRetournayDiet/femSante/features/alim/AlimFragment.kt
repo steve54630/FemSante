@@ -5,91 +5,162 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.viewModels.alim.AlimViewModel
+import com.audreyRetournayDiet.femSante.data.recipe.Recipe
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
+import com.audreyRetournayDiet.femSante.data.recipe.RecipeTags
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeBrowseViewModel
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeBrowseUiState
+import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
- * Fragment gérant la sélection des catégories de recettes (Petit-déjeuner, Entrées, etc.).
- * * Ce fragment délègue la logique de chargement des données au [AlimViewModel]
- * et observe les événements de navigation pour lancer la [RecetteActivity].
+ * Écran de navigation des recettes.
+ *
+ * Remplace l'ancienne navigation par catégories + spinner : une **grille de cartes photo**
+ * filtrable en direct par catégorie, par « Ma phase » (phase du cycle) et par tags diététiques
+ * (feuille du bas). Un tap sur une carte ouvre la fiche recette native.
  */
 @AndroidEntryPoint
 class AlimFragment : Fragment() {
 
-    // Hilt fournit AlimViewModel et son RecipeRepository.
-    private val viewModel: AlimViewModel by viewModels()
+    private val viewModel: RecipeBrowseViewModel by viewModels()
+    private val adapter = RecipeCardAdapter(::openRecipe)
+
+    private lateinit var chipMaPhase: Chip
+    private lateinit var buttonFilters: MaterialButton
+    private lateinit var textEmpty: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_alim, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_alim, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialisation des catégories de recettes
-        setupButton(view, R.id.buttonBreakfirst, "breakfast", "Petit-déjeuner")
-        setupButton(view, R.id.buttonEntry, "entries", "Entrées")
-        setupButton(view, R.id.buttonPlat, "main_courses", "Plats")
-        setupButton(view, R.id.buttonEBook, "desserts", "Desserts")
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerRecipes)
+        recycler.layoutManager = GridLayoutManager(requireContext(), 2)
+        recycler.adapter = adapter
 
-        observeViewModel()
+        chipMaPhase = view.findViewById(R.id.chipMaPhase)
+        buttonFilters = view.findViewById(R.id.buttonFilters)
+        textEmpty = view.findViewById(R.id.textEmpty)
+
+        setupCategoryChips(view.findViewById(R.id.chipGroupCategory))
+        chipMaPhase.setOnCheckedChangeListener { _, checked -> viewModel.setPhaseOnly(checked) }
+        buttonFilters.setOnClickListener { showFiltersSheet() }
+
+        observeState()
     }
 
-    /**
-     * Configure un bouton de catégorie et lie son clic au ViewModel.
-     * * @param view Vue parente contenant le bouton.
-     * @param buttonId ID de la ressource du bouton.
-     * @param folder Nom du dossier technique contenant les recettes.
-     * @param title Titre affiché à l'utilisateur dans l'écran suivant.
-     */
-    private fun setupButton(view: View, buttonId: Int, folder: String, title: String) {
-        view.findViewById<Button>(buttonId).setOnClickListener {
-            Timber.d("Sélection catégorie : $title")
-            viewModel.onCategorySelected(folder, title, requireContext())
+    private fun setupCategoryChips(group: ChipGroup) {
+        group.setOnCheckedStateChangeListener { _, checkedIds ->
+            val category = when (checkedIds.firstOrNull()) {
+                R.id.chipCatBreakfast -> RecipeCategory.BREAKFAST
+                R.id.chipCatEntree -> RecipeCategory.ENTREE
+                R.id.chipCatPlat -> RecipeCategory.PLAT
+                R.id.chipCatDessert -> RecipeCategory.DESSERT
+                else -> null // "Tout"
+            }
+            viewModel.setCategory(category)
         }
     }
 
-    /**
-     * Observe les flux (Flows) du ViewModel pour la navigation et la gestion des erreurs.
-     * Utilise [repeatOnLifecycle] pour garantir une collecte sécurisée durant le cycle de vie.
-     */
-    private fun observeViewModel() {
+    private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                // Collecte des événements de navigation vers le détail des recettes
-                launch {
-                    viewModel.navigationEvent.collect { event ->
-                        Timber.i("Navigation : Ouverture de la catégorie ${event.title}")
-                        val intent = Intent(activity, RecetteActivity::class.java).apply {
-                            putExtra("Title", event.title)
-                            putExtra("map", event.recipeMap)
-                            putExtra("FOLDER_PATH", event.folderPath)
-                        }
-                        startActivity(intent)
-                    }
-                }
-
-                // Collecte et affichage des messages d'erreur via Toast
-                launch {
-                    viewModel.errorEvent.collect { errorMessage ->
-                        Timber.e("Erreur ViewModel : $errorMessage")
-                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
-                    }
-                }
+                viewModel.uiState.collect { render(it) }
             }
         }
     }
+
+    private fun render(state: RecipeBrowseUiState) {
+        adapter.submitList(state.recipes)
+        textEmpty.isVisible = state.recipes.isEmpty()
+
+        chipMaPhase.isVisible = state.phaseAvailable
+        if (chipMaPhase.isChecked != state.phaseOnly) chipMaPhase.isChecked = state.phaseOnly
+
+        buttonFilters.text = if (state.selectedTags.isEmpty()) {
+            getString(R.string.recipe_browse_filters)
+        } else {
+            getString(R.string.recipe_browse_filters_count, state.selectedTags.size)
+        }
+    }
+
+    /** Ouvre la fiche recette native (avec le chemin PDF pour le bouton de repli). */
+    private fun openRecipe(recipe: Recipe) {
+        Timber.i("Ouverture de la recette : ${recipe.id}")
+        val intent = Intent(requireContext(), RecetteDetailActivity::class.java).apply {
+            putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
+            putExtra(RecetteDetailActivity.EXTRA_PDF_PATH, "${categoryFolder(recipe.category)}/${recipe.id}.pdf")
+        }
+        startActivity(intent)
+    }
+
+    /** Feuille du bas : liste à cocher des tags diététiques, aperçu du nombre de résultats. */
+    private fun showFiltersSheet() {
+        val dialog = BottomSheetDialog(requireContext())
+        val sheet = layoutInflater.inflate(R.layout.bottom_sheet_recipe_filters, null)
+        val container = sheet.findViewById<LinearLayout>(R.id.containerTags)
+        val buttonApply = sheet.findViewById<MaterialButton>(R.id.buttonApplyFilters)
+        val buttonReset = sheet.findViewById<MaterialButton>(R.id.buttonResetFilters)
+
+        val pending = viewModel.uiState.value.selectedTags.toMutableSet()
+        val checkBoxes = mutableListOf<CheckBox>()
+
+        fun refreshApply() {
+            buttonApply.text = getString(R.string.recipe_browse_apply, viewModel.previewCount(pending))
+        }
+
+        RecipeTags.ALL.forEach { tag ->
+            val checkBox = CheckBox(requireContext()).apply {
+                text = tag
+                isChecked = tag in pending
+                setPadding(0, dp(6), 0, dp(6))
+                setOnCheckedChangeListener { _, checked ->
+                    if (checked) pending.add(tag) else pending.remove(tag)
+                    refreshApply()
+                }
+            }
+            checkBoxes.add(checkBox)
+            container.addView(checkBox)
+        }
+        refreshApply()
+
+        buttonReset.setOnClickListener { checkBoxes.forEach { it.isChecked = false } }
+        buttonApply.setOnClickListener {
+            viewModel.setSelectedTags(pending.toSet())
+            dialog.dismiss()
+        }
+
+        dialog.setContentView(sheet)
+        dialog.show()
+    }
+
+    private fun categoryFolder(category: RecipeCategory): String = when (category) {
+        RecipeCategory.BREAKFAST -> "breakfast"
+        RecipeCategory.ENTREE -> "entries"
+        RecipeCategory.PLAT -> "main_courses"
+        RecipeCategory.DESSERT -> "desserts"
+    }
+
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }

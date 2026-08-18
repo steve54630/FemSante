@@ -292,6 +292,15 @@
     <string name="trend_title">Mon évolution</string>
     <string name="trend_empty">Aucune mesure enregistrée pour l\'instant.</string>
 
+    <!-- Navigation recettes (écran unifié) -->
+    <string name="recipe_browse_all">Tout</string>
+    <string name="recipe_browse_my_phase">Ma phase</string>
+    <string name="recipe_browse_filters">Filtres</string>
+    <string name="recipe_browse_filters_count">Filtres (%1$d)</string>
+    <string name="recipe_browse_reset">Réinitialiser</string>
+    <string name="recipe_browse_apply">Voir les résultats (%1$d)</string>
+    <string name="recipe_browse_empty">Aucune recette ne correspond à ta sélection.</string>
+
     <!-- Recette du jour (Pour toi) -->
     <string name="recipe_of_day_label">🍽️ Ta recette du jour</string>
     <string name="recipe_of_day_action">Voir la recette</string>

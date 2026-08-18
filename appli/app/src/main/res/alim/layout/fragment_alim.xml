@@ -1,68 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fond_appli"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    tools:context=".features.alim.AlimFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        style="@style/AppTextAppearance.TitleFancy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".features.alim.AlimFragment">
+        android:paddingTop="16dp"
+        android:paddingBottom="4dp"
+        android:text="@string/recipe"
+        android:textSize="44sp" />
+
+    <!-- Catégorie : choix unique, "Tout" par défaut -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="6dp"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCatAll"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/recipe_browse_all" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCatBreakfast"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/breakfeast" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCatEntree"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/entry" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCatPlat"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/plats" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCatDessert"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dessert" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Filtres : "Ma phase" (si cycle connu) + bouton ouvrant la feuille du bas -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        android:paddingTop="2dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMaPhase"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_browse_my_phase"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonFilters"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_browse_filters"
+            app:icon="@android:drawable/ic_menu_sort_by_size"
+            app:iconSize="18dp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp" />
 
         <TextView
-            android:id="@+id/textViewTitre"
-            style="@style/AppTextAppearance.TitleFancy"
+            android:id="@+id/textEmpty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:text="@string/recipe"
-            android:textSize="70sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/buttonBreakfirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="@string/breakfeast"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitre" />
-
-        <Button
-            android:id="@+id/buttonEntry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/entry"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonBreakfirst" />
-
-        <Button
-            android:id="@+id/buttonPlat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/plats"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonEntry" />
-
-        <Button
-            android:id="@+id/buttonEBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/dessert"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonPlat" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="32dp"
+            android:text="@string/recipe_browse_empty"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="15sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+</LinearLayout>

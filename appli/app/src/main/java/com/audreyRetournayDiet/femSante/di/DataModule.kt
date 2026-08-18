@@ -3,7 +3,6 @@ package com.audreyRetournayDiet.femSante.di
 import android.content.Context
 import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
-import com.audreyRetournayDiet.femSante.repository.local.RecipeRepository
 import com.audreyRetournayDiet.femSante.room.dao.CycleDayDao
 import com.audreyRetournayDiet.femSante.room.dao.DailyEntryDao
 import com.audreyRetournayDiet.femSante.room.database.AppDatabase
@@ -49,9 +48,6 @@ object DataModule {
 
     @Provides
     fun provideCycleRepository(dao: CycleDayDao): CycleRepository = CycleRepository(dao)
-
-    @Provides
-    fun provideRecipeRepository(): RecipeRepository = RecipeRepository()
 
     @Provides
     @Singleton

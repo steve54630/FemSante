@@ -2,13 +2,12 @@ package com.audreyRetournayDiet.femSante.viewModels.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.audreyRetournayDiet.femSante.data.cycle.CyclePhaseCalculator
+import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
 import com.audreyRetournayDiet.femSante.data.recipe.DailyRecipeSelector
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeOfDay
 import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.data.recommendation.RecommendationEngine
 import com.audreyRetournayDiet.femSante.repository.ApiResult
-import com.audreyRetournayDiet.femSante.repository.local.CycleRepository
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.repository.local.RecipeContentRepository
 import com.audreyRetournayDiet.femSante.shared.UserStore
@@ -43,8 +42,8 @@ data class PourToiUiState(
 @HiltViewModel
 class PourToiViewModel @Inject constructor(
     private val repository: DailyRepository,
-    private val cycleRepository: CycleRepository,
     private val recipeRepository: RecipeContentRepository,
+    private val phaseProvider: CurrentCyclePhaseProvider,
     private val userStore: UserStore // L'injecter en private val pour y accéder dans refresh()
 ) : ViewModel() {
 
@@ -70,7 +69,8 @@ class PourToiViewModel @Inject constructor(
             val recos = entry?.let { RecommendationEngine.recommend(it) } ?: emptyList()
 
             // 4. Recette du jour, basée sur la phase du cycle (indépendante de la saisie du jour)
-            val recipeOfDay = selectRecipeOfDay(currentUserId, today)
+            val phase = phaseProvider.currentPhase(today)
+            val recipeOfDay = DailyRecipeSelector.select(recipeRepository.getAll(), phase, today)
 
             // 5. Émission du nouvel état
             internalState.value = PourToiUiState(
@@ -80,18 +80,5 @@ class PourToiViewModel @Inject constructor(
                 isLoading = false
             )
         }
-    }
-
-    /** Calcule la phase du jour puis choisit la recette correspondante (ou un repli). */
-    private suspend fun selectRecipeOfDay(userId: String, today: LocalDate): RecipeOfDay? {
-        val periodDates = (cycleRepository.getPeriodDates(userId) as? ApiResult.Success)?.data ?: emptySet()
-        val phase = CyclePhaseCalculator.calculate(
-            periodDates = periodDates,
-            target = today,
-            profile = userStore.getCycleProfile(),
-            cycleLength = userStore.getCycleLength(),
-            periodLength = userStore.getPeriodLength()
-        )
-        return DailyRecipeSelector.select(recipeRepository.getAll(), phase, today)
     }
 }
