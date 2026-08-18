@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.features.alim
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
@@ -24,7 +23,6 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.recipe.Recipe
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeIngredient
-import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -36,10 +34,8 @@ import kotlinx.coroutines.launch
 /**
  * Fiche recette **native**, à la charte de l'app (par opposition au PDF figé).
  *
- * Reçoit l'identifiant de la recette via [RecipeDetailViewModel.EXTRA_RECIPE_ID] et, en option,
- * le chemin du PDF d'origine via [EXTRA_PDF_PATH] (bouton « Voir la fiche PDF » + repli). Si la
- * recette est absente du catalogue, l'écran bascule automatiquement sur le PDF : aucune
- * régression par rapport au comportement précédent.
+ * Reçoit l'identifiant de la recette via [RecipeDetailViewModel.EXTRA_RECIPE_ID]. Le contenu est
+ * affiché directement dans l'app — plus de lien vers le PDF d'origine.
  */
 @AndroidEntryPoint
 class RecetteDetailActivity : AppCompatActivity() {
@@ -53,11 +49,7 @@ class RecetteDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val recipe = viewModel.recipe
-        val pdfPath = intent.getStringExtra(EXTRA_PDF_PATH)
-
-        // Repli : recette absente du JSON -> on ouvre le PDF d'origine si disponible.
         if (recipe == null) {
-            if (!pdfPath.isNullOrBlank()) openPdf(pdfPath)
             finish()
             return
         }
@@ -68,7 +60,6 @@ class RecetteDetailActivity : AppCompatActivity() {
         bindIngredients(recipe.ingredients)
         bindSteps(recipe.steps)
         bindTip(recipe.nutritionTip)
-        bindPdfButton(pdfPath)
     }
 
     /** Bouton « Ajouter à ma liste » : reflète l'appartenance à la liste et la bascule. */
@@ -128,19 +119,6 @@ class RecetteDetailActivity : AppCompatActivity() {
         if (tip.isNullOrBlank()) return
         findViewById<MaterialCardView>(R.id.cardTip).visibility = View.VISIBLE
         findViewById<TextView>(R.id.tvTip).text = tip
-    }
-
-    private fun bindPdfButton(pdfPath: String?) {
-        val button = findViewById<View>(R.id.btnViewPdf)
-        if (pdfPath.isNullOrBlank()) {
-            button.visibility = View.GONE
-        } else {
-            button.setOnClickListener { openPdf(pdfPath) }
-        }
-    }
-
-    private fun openPdf(pdfPath: String) {
-        startActivity(Intent(this, PdfActivity::class.java).putExtra("PDF", pdfPath))
     }
 
     // --- Construction des vues dynamiques -----------------------------------------------------
@@ -223,8 +201,4 @@ class RecetteDetailActivity : AppCompatActivity() {
     }
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
-
-    companion object {
-        const val EXTRA_PDF_PATH = "PDF"
-    }
 }

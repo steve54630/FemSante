@@ -142,10 +142,8 @@ class PourToiFragment : Fragment() {
 
         buttonRecipeAction.setOnClickListener {
             Timber.i("Recette du jour ouverte : ${recipe.id}")
-            val intent = Intent(requireContext(), RecetteDetailActivity::class.java).apply {
-                putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
-                putExtra(RecetteDetailActivity.EXTRA_PDF_PATH, "${categoryFolder(recipe.category)}/${recipe.id}.pdf")
-            }
+            val intent = Intent(requireContext(), RecetteDetailActivity::class.java)
+                .putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
             startActivity(intent)
         }
     }
@@ -162,14 +160,6 @@ class PourToiFragment : Fragment() {
         RecipeCategory.ENTREE -> "Entrée"
         RecipeCategory.PLAT -> "Plat"
         RecipeCategory.DESSERT -> "Dessert"
-    }
-
-    /** Dossier d'assets correspondant à la catégorie (pour retrouver le PDF d'origine). */
-    private fun categoryFolder(category: RecipeCategory): String = when (category) {
-        RecipeCategory.BREAKFAST -> "breakfast"
-        RecipeCategory.ENTREE -> "entries"
-        RecipeCategory.PLAT -> "main_courses"
-        RecipeCategory.DESSERT -> "desserts"
     }
 
     /** Met en avant la recommandation la mieux notée comme "geste du jour". */

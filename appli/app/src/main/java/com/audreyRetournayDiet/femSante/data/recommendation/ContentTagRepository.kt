@@ -83,7 +83,6 @@ object ContentTagRepository {
         // --- PDF - Ressources documentaires ---
         pdf("histamine.pdf") to setOf(zone(PainZone.ABDOMEN), zone(PainZone.TETE), Digestif),
         pdf("gluten.pdf") to setOf(zone(PainZone.ABDOMEN), Digestif),
-        pdf("ebook.pdf") to emptySet(),
 
         // --- PDF - Recettes (par catégorie de dossier) ---
         pdf("breakfast") to setOf(Digestif),

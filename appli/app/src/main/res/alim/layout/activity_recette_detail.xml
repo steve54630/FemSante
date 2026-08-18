@@ -156,15 +156,5 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Accès à la fiche PDF d'origine (impression / repli) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnViewPdf"
-            style="@style/Widget.App.Button.Action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/recipe_view_pdf" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

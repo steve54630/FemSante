@@ -105,13 +105,11 @@ class AlimFragment : Fragment() {
         }
     }
 
-    /** Ouvre la fiche recette native (avec le chemin PDF pour le bouton de repli). */
+    /** Ouvre la fiche recette native. */
     private fun openRecipe(recipe: Recipe) {
         Timber.i("Ouverture de la recette : ${recipe.id}")
-        val intent = Intent(requireContext(), RecetteDetailActivity::class.java).apply {
-            putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
-            putExtra(RecetteDetailActivity.EXTRA_PDF_PATH, "${categoryFolder(recipe.category)}/${recipe.id}.pdf")
-        }
+        val intent = Intent(requireContext(), RecetteDetailActivity::class.java)
+            .putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)
         startActivity(intent)
     }
 
@@ -153,13 +151,6 @@ class AlimFragment : Fragment() {
 
         dialog.setContentView(sheet)
         dialog.show()
-    }
-
-    private fun categoryFolder(category: RecipeCategory): String = when (category) {
-        RecipeCategory.BREAKFAST -> "breakfast"
-        RecipeCategory.ENTREE -> "entries"
-        RecipeCategory.PLAT -> "main_courses"
-        RecipeCategory.DESSERT -> "desserts"
     }
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
