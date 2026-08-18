@@ -53,26 +53,14 @@ android {
     }
     sourceSets {
         main {
-            def resDir = 'src/main/res'
-            def layoutsDir = new File(projectDir, "src/main/res")
-
-            // Dossiers standards déjà couverts par resDir : les déclarer en plus comme
-            // racines séparées fait planter la compilation incrémentale des ressources
-            // (AAPT2 ne retrouve pas les fichiers nouvellement ajoutés dans values/ ou
-            // drawable/). On ne garde le hack que pour les noms de dossiers non
-            // standards (ex: "main"), qui en ont réellement besoin.
-            def standardResFolderPrefixes = [
-                "values", "drawable", "mipmap", "layout", "menu", "anim", "animator",
-                "color", "font", "interpolator", "raw", "transition", "xml"
-            ]
-
-            def layoutSets = layoutsDir.listFiles().findAll { dir ->
-                dir.isDirectory() && standardResFolderPrefixes.every { prefix -> !dir.name.startsWith(prefix) }
-            }.collect {
+            // Ressources réparties par fonctionnalité : chaque sous-dossier de res/ est une
+            // racine de ressources distincte (dont "common/" pour les ressources partagées).
+            // Aucune racine ne doit en contenir une autre : l'imbrication (res/ + res/xxx)
+            // est dépréciée et devient une erreur à partir de Gradle 9.
+            def resRoot = new File(projectDir, "src/main/res")
+            res.srcDirs = resRoot.listFiles().findAll { it.isDirectory() }.collect {
                 "src/main/res/${it.name}"
             }
-
-            res.srcDirs = [resDir, *layoutSets]
         }
     }
     buildTypes {
