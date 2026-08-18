@@ -27,6 +27,7 @@ class UserStore(context: Context) {
             putString("user_email", user.email)
             putString("user_password", user.password)
             putBoolean("user_avie", user.lifetimeAccess)
+            putBoolean("user_access", user.hasAccess)
             apply()
         }
     }
@@ -36,9 +37,19 @@ class UserStore(context: Context) {
         val email = sharedPreferences.getString("user_email", "") ?: ""
         val password = sharedPreferences.getString("user_password", "") ?: ""
         val aVie = sharedPreferences.getBoolean("user_avie", false)
+        // Repli sur « à vie » si l'accès n'a pas encore été enregistré (sessions antérieures).
+        val hasAccess = sharedPreferences.getBoolean("user_access", aVie)
 
-        return AppUser(id, aVie, email, password)
+        return AppUser(id, aVie, email, password, hasAccess)
     }
+
+    /**
+     * **Point unique** de vérification d'accès aux contenus premium (cadenas, gating).
+     *
+     * Basé sur [AppUser.hasAccess] (statut d'abonnement/accès renvoyé par l'API, distinct de
+     * l'abonnement à vie) : c'est le seul endroit à faire évoluer si la logique freemium change.
+     */
+    fun hasContentAccess(): Boolean = getUser()?.hasAccess ?: false
 
     fun clearSession() {
         sharedPreferences.edit { clear() }
