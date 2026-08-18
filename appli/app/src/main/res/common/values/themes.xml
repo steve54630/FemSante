@@ -1,10 +1,19 @@
 <resources>
     <style name="Theme.FemSante" parent="Theme.Material3.Light.NoActionBar">
 
+        <!-- Rôles M3 mappés sur la charte (fini les défauts violet/teal du template). -->
         <item name="colorPrimary">@color/yellow_app</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorPrimaryContainer">@color/yellow_soft</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+
+        <item name="colorSecondary">@color/blue_app</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/blue_soft</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <item name="colorTertiary">@color/orange_app</item>
+        <item name="colorOnTertiary">@color/black</item>
 
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Fond jaune clair : on force les icônes système en sombre (sinon blanches = illisibles). -->
