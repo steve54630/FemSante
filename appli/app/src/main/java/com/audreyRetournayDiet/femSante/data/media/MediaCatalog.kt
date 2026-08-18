@@ -2,9 +2,12 @@ package com.audreyRetournayDiet.femSante.data.media
 
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory.ART_THERAPIE
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory.EMOTIONS
+import com.audreyRetournayDiet.femSante.data.media.MediaCategory.FITNESS
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory.HYPNOSE
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory.MEDITATION
+import com.audreyRetournayDiet.femSante.data.media.MediaCategory.PILATES
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory.SOPHROLOGIE
+import com.audreyRetournayDiet.femSante.data.media.MediaCategory.YOGA
 import com.audreyRetournayDiet.femSante.data.media.MediaType.AUDIO
 import com.audreyRetournayDiet.femSante.data.media.MediaType.VIDEO
 
@@ -37,5 +40,22 @@ object MediaCatalog {
         MediaItem("Relaxation", AUDIO, MEDITATION, premium = false),
         MediaItem("Auto hypnose pour le stress", AUDIO, HYPNOSE, premium = false),
         MediaItem("Auto-hypnose pour l'apaisement", AUDIO, HYPNOSE, premium = true)
+    )
+
+    /**
+     * Contenus du module « Bien dans ton corps » (vidéos uniquement).
+     *
+     * Les titres sont les clés réelles attendues par le lecteur (`videoLaunch`). « Débutant au
+     * Yoga » est le contenu gratuit d'appel ; les autres séances sont premium (réglage à
+     * confirmer avec la diététicienne).
+     */
+    val corps: List<MediaItem> = listOf(
+        // --- Yoga ---
+        MediaItem("Débutant au Yoga", VIDEO, YOGA, premium = false),
+        MediaItem("SOS Douleurs", VIDEO, YOGA, premium = true),
+        MediaItem("Calme intérieur", VIDEO, YOGA, premium = true),
+        // --- Pilates / Fitness ---
+        MediaItem("Pilates", VIDEO, PILATES, premium = true),
+        MediaItem("Fitness", VIDEO, FITNESS, premium = true)
     )
 }

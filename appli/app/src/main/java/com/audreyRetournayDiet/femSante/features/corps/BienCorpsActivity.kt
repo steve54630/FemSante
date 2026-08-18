@@ -2,109 +2,98 @@ package com.audreyRetournayDiet.femSante.features.corps
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import androidx.activity.viewModels
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.data.entities.BodyNavigationEvent
+import com.audreyRetournayDiet.femSante.data.media.MediaCatalog
+import com.audreyRetournayDiet.femSante.data.media.MediaCategory
+import com.audreyRetournayDiet.femSante.data.media.MediaFilter
+import com.audreyRetournayDiet.femSante.data.media.MediaItem
+import com.audreyRetournayDiet.femSante.data.media.MediaType
+import com.audreyRetournayDiet.femSante.shared.MediaCardAdapter
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
-import com.audreyRetournayDiet.femSante.viewModels.body.BodyViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import timber.log.Timber
 
 /**
- * Activité principale du module "Bien-être & Corps".
- * * Ce menu permet à l'utilisatrice de naviguer vers les différentes disciplines
- * physiques (Yoga, Pilates, Fitness). La logique de navigation est pilotée par
- * le [BodyViewModel] via un flux d'événements unique ([BodyNavigationEvent]).
- * * ### Fonctionnement :
- * 1. L'utilisatrice clique sur une discipline.
- * 2. Le ViewModel traite la demande (vérification des droits, type de contenu).
- * 3. L'activité reçoit un événement et lance soit une activité spécifique,
- * soit le lecteur vidéo via [Utilitaires].
+ * Écran « Bien dans ton corps » unifié : des chips de thème (Yoga / Pilates / Fitness) et une
+ * **grille de cartes** que l'on lance en un tap. Remplace l'ancien menu de boutons + le sous-écran
+ * Yoga (navigation à deux niveaux), pour rester sur du **2 clics max**.
+ *
+ * Le module ne contient que des vidéos : pas de sélecteur Vidéos/Audios (contrairement à
+ * « Bien dans ta tête »).
  */
-@AndroidEntryPoint
 class BienCorpsActivity : AppCompatActivity() {
 
-    private val viewModel: BodyViewModel by viewModels()
+    private val catalog = MediaCatalog.corps
+    private var category: MediaCategory? = null
+
+    private lateinit var adapter: MediaCardAdapter
+    private lateinit var chipGroupTheme: ChipGroup
+    private lateinit var textEmpty: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bien_corps)
-        Timber.d("onCreate : Initialisation du menu Bien-être & Corps")
 
-        setupButtons()
-        observeNavigation()
+        // Le cadenas premium ne s'affiche qu'aux utilisatrices sans accès. Vérification
+        // centralisée (voir UserStore.hasContentAccess) → prête pour le futur statut freemium.
+        val hasAccess = UserStore(this).hasContentAccess()
+        adapter = MediaCardAdapter(hasAccess, ::onMediaClick)
+
+        findViewById<RecyclerView>(R.id.recyclerMedia).apply {
+            layoutManager = GridLayoutManager(this@BienCorpsActivity, 2)
+            adapter = this@BienCorpsActivity.adapter
+        }
+        chipGroupTheme = findViewById(R.id.chipGroupTheme)
+        textEmpty = findViewById(R.id.textEmpty)
+
+        buildThemeChips()
+        refresh()
     }
 
-    /**
-     * Initialise les listeners des boutons de l'interface.
-     * Les clics sont immédiatement transmis au ViewModel pour traitement.
-     */
-    private fun setupButtons() {
-        findViewById<Button>(R.id.buttonYoga).setOnClickListener {
-            Timber.v("Clic : Sélection Yoga")
-            viewModel.onYogaClicked()
-        }
-        findViewById<Button>(R.id.buttonPilates).setOnClickListener {
-            Timber.v("Clic : Sélection Pilates")
-            viewModel.onPilatesClicked()
-        }
-        findViewById<Button>(R.id.buttonFitness).setOnClickListener {
-            Timber.v("Clic : Sélection Fitness")
-            viewModel.onFitnessClicked()
-        }
-    }
+    /** Construit les chips de thème du corps ; « Tout » sélectionné par défaut. */
+    private fun buildThemeChips() {
+        chipGroupTheme.setOnCheckedStateChangeListener(null)
+        chipGroupTheme.removeAllViews()
 
-    /**
-     * Observe le SharedFlow de navigation du ViewModel.
-     * Utilise [repeatOnLifecycle] pour garantir une consommation sécurisée des événements
-     * uniquement lorsque l'UI est au premier plan.
-     */
-    private fun observeNavigation() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.navigationEvent.collect { event ->
-                    handleNavigationEvent(event)
-                }
-            }
+        chipGroupTheme.addView(themeChip(getString(R.string.recipe_browse_all), category = null, checked = true))
+        MediaFilter.categoriesFor(catalog, MediaType.VIDEO).forEach { cat ->
+            chipGroupTheme.addView(themeChip(cat.label, category = cat, checked = false))
+        }
+
+        chipGroupTheme.setOnCheckedStateChangeListener { group, checkedIds ->
+            val chip = checkedIds.firstOrNull()?.let { group.findViewById<Chip>(it) }
+            category = chip?.tag as? MediaCategory
+            refresh()
         }
     }
 
-    /**
-     * Traite les différents types d'événements de navigation.
-     * * @param event L'événement émis par le ViewModel (Yoga ou Lancement Vidéo).
-     */
-    private fun handleNavigationEvent(event: BodyNavigationEvent) {
-        Timber.i("Événement de navigation reçu : ${event::class.simpleName}")
+    private fun themeChip(label: String, category: MediaCategory?, checked: Boolean): Chip {
+        val chip = layoutInflater.inflate(R.layout.item_theme_chip, chipGroupTheme, false) as Chip
+        chip.id = View.generateViewId()
+        chip.text = label
+        chip.tag = category
+        chip.isChecked = checked
+        return chip
+    }
 
-        when (event) {
-            is BodyNavigationEvent.NavigateToYoga -> {
-                Timber.d("Navigation : Lancement de YogaActivity")
-                startActivity(Intent(this, YogaActivity::class.java))
-            }
+    private fun refresh() {
+        val items = MediaFilter.filter(catalog, MediaType.VIDEO, category)
+        adapter.submitList(items)
+        textEmpty.isVisible = items.isEmpty()
+    }
 
-            is BodyNavigationEvent.LaunchVideo -> {
-                Timber.d("Navigation : Lancement Vidéo (Catégorie: ${event.category}, Premium: ${event.isPremium})")
-                val intentVideo = Intent(this, VideoActivity::class.java)
-
-                try {
-                    // Utilisation de la classe utilitaire centralisée pour configurer l'Intent vidéo
-                    Utilitaires.videoLaunch(
-                        event.category,
-                        event.isPremium,
-                        intentVideo,
-                        this
-                    )
-                } catch (e: Exception) {
-                    Timber.e(e, "Erreur lors du lancement de la vidéo via Utilitaires")
-                }
-            }
-        }
+    private fun onMediaClick(item: MediaItem) {
+        Timber.i("Lecture vidéo : ${item.title}")
+        val pdfFlag = if (item.pdf) "oui" else "non"
+        Utilitaires.videoLaunch(item.title, pdfFlag, Intent(this, VideoActivity::class.java), this)
     }
 }

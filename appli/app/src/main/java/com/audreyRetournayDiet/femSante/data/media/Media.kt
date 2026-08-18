@@ -5,11 +5,16 @@ enum class MediaType { VIDEO, AUDIO }
 
 /** Thème d'un contenu (sert de chips de filtre). L'ordre de déclaration = ordre d'affichage. */
 enum class MediaCategory(val label: String) {
+    // Module « Bien dans ta tête »
     ART_THERAPIE("Art-thérapie"),
     SOPHROLOGIE("Sophrologie"),
     MEDITATION("Méditation"),
     HYPNOSE("Hypnose"),
-    EMOTIONS("Émotions")
+    EMOTIONS("Émotions"),
+    // Module « Bien dans ton corps »
+    YOGA("Yoga"),
+    PILATES("Pilates"),
+    FITNESS("Fitness")
 }
 
 /**
