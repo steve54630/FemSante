@@ -571,5 +571,27 @@
     "nutritionTip": null,
     "phase": ["Folliculaire"],
     "tags": ["Sans gluten", "Express", "Végétarien", "Végétalien", "Sans produits laitiers", "Sans fruits à coque", "Index Glycémique bas", "Confort digestif"]
+  },
+  {
+    "id": "pudding_chia",
+    "category": "BREAKFAST",
+    "title": "Pudding de chia",
+    "servings": "1 personne",
+    "prepMinutes": 5,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "30", "unit": "g", "name": "Graines de chia", "note": null, "section": null },
+      { "quantity": "150", "unit": "ml", "name": "Lait", "note": "végétal ou animal", "section": null },
+      { "quantity": null, "unit": null, "name": "Fruits rouges", "note": "en topping, optionnel", "section": null }
+    ],
+    "steps": [
+      "Dans un bol, mélanger les graines de chia et le lait.",
+      "Remuer 2 à 3 minutes pour éviter les grumeaux.",
+      "Laisser reposer 30 minutes minimum, idéalement une nuit au frais.",
+      "Au moment de servir, agrémenter de fruits rouges."
+    ],
+    "nutritionTip": "Riche en oméga-3 végétaux (ALA), fibres solubles, calcium et magnésium. Les fruits rouges (vitamine C) optimisent l'absorption du fer végétal.",
+    "phase": [],
+    "tags": []
   }
 ]

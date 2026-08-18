@@ -28,8 +28,8 @@ class RecipeJsonParsingTest {
     private val recipes: List<Recipe> by lazy { RecipeJsonParser.parse(loadRecipesJson()) }
 
     @Test
-    fun `le fichier contient les 20 recettes`() {
-        assertEquals(20, recipes.size)
+    fun `le fichier contient les 21 recettes`() {
+        assertEquals(21, recipes.size)
     }
 
     @Test
@@ -60,7 +60,7 @@ class RecipeJsonParsingTest {
         // l'enum ; on vérifie donc à la fois qu'aucune n'est nulle et la répartition attendue.
         assertTrue(recipes.all { it.category != null })
         val countByCategory = recipes.groupingBy { it.category }.eachCount()
-        assertEquals(2, countByCategory[RecipeCategory.BREAKFAST])
+        assertEquals(3, countByCategory[RecipeCategory.BREAKFAST])
         assertEquals(5, countByCategory[RecipeCategory.ENTREE])
         assertEquals(6, countByCategory[RecipeCategory.PLAT])
         assertEquals(7, countByCategory[RecipeCategory.DESSERT])
