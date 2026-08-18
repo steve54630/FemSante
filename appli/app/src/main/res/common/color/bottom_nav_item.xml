@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    État sélectionné de la bottom nav. On reste dans la palette : uniquement du blanc,
+    plein pour l'onglet actif, translucide (70 %) pour les onglets inactifs — ce qui crée
+    enfin une distinction visuelle sans introduire de nouvelle couleur.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/white" android:state_checked="true" />
+    <item android:color="#B3FFFFFF" />
+</selector>

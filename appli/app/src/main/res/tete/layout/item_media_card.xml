@@ -27,7 +27,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:contentDescription="@null"
-                android:tint="@color/orange_app"
+                app:tint="?attr/colorOnSurface"
                 tools:src="@drawable/ic_play" />
 
             <ImageView
@@ -38,7 +38,7 @@
                 android:layout_margin="6dp"
                 android:contentDescription="@string/media_premium_badge"
                 android:src="@drawable/ic_lock"
-                android:tint="@color/orange_app"
+                app:tint="?attr/colorOnSurface"
                 android:visibility="gone"
                 tools:visibility="visible" />
         </FrameLayout>
