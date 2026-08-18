@@ -591,7 +591,7 @@
       "Au moment de servir, agrémenter de fruits rouges."
     ],
     "nutritionTip": "Riche en oméga-3 végétaux (ALA), fibres solubles, calcium et magnésium. Les fruits rouges (vitamine C) optimisent l'absorption du fer végétal.",
-    "phase": [],
-    "tags": []
+    "phase": ["Folliculaire"],
+    "tags": ["Express", "Sans cuisson", "Sans produits laitiers", "Végétarien", "Végétalien", "Sans gluten", "Confort digestif"]
   }
 ]

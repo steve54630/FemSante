@@ -10,6 +10,7 @@ object RecipeTags {
     val ALL: List<String> = listOf(
         "Sans gluten",
         "Express",
+        "Sans cuisson",
         "Végétarien",
         "Végétalien",
         "Sans produits laitiers",
