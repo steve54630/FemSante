@@ -24,7 +24,7 @@ object Utilitaires {
      * Lance le lecteur vidéo pour un titre donné.
      *
      * On ne récupère plus l'URL ici : on transmet seulement le titre (et le flag PDF),
-     * et c'est le [com.audreyRetournayDiet.femSante.viewModels.viewers.VideoViewModel] qui
+     * et c'est le [com.audreyRetournayDiet.femSante.viewmodels.viewers.VideoViewModel] qui
      * appelle l'API — ainsi la gestion du token et le rafraîchissement de session (401)
      * s'appliquent à TOUS les lancements vidéo, par un seul chemin.
      */

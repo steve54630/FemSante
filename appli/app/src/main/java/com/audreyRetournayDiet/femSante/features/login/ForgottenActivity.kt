@@ -10,7 +10,7 @@ import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
-import com.audreyRetournayDiet.femSante.viewModels.login.ForgottenViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.login.ForgottenViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber

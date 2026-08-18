@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.calendar
+package com.audreyRetournayDiet.femSante.viewmodels.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +13,7 @@ import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.FlowLevel
 import com.audreyRetournayDiet.femSante.shared.UserStore
-import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.event.CalendarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow

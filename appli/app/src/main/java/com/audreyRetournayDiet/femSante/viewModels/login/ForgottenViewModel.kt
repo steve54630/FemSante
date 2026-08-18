@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.login
+package com.audreyRetournayDiet.femSante.viewmodels.login
 
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager

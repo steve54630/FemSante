@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.type.PainZone
-import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.EntryViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup

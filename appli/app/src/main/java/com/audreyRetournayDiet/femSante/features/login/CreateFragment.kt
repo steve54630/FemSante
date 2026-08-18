@@ -17,7 +17,7 @@ import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
-import com.audreyRetournayDiet.femSante.viewModels.login.CreateViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.login.CreateViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber

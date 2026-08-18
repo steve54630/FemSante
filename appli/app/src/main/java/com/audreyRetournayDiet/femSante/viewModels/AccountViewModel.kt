@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels
+package com.audreyRetournayDiet.femSante.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
@@ -36,7 +36,7 @@ class AccountViewModel @Inject constructor(
 
     /**
      * Charge les données de l'utilisatrice.
-     * Si aucune donnée n'est trouvée, déclenche l'état [com.audreyRetournayDiet.femSante.viewModels.AccountViewModel.AccountState.LoggedOut].
+     * Si aucune donnée n'est trouvée, déclenche l'état [com.audreyRetournayDiet.femSante.viewmodels.AccountViewModel.AccountState.LoggedOut].
      */
     fun loadUserProfile() {
         Timber.d("Tentative de chargement du profil utilisateur depuis le UserStore")

@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.login
+package com.audreyRetournayDiet.femSante.viewmodels.login
 
 import com.audreyRetournayDiet.femSante.features.login.LoginActivity
 import com.audreyRetournayDiet.femSante.features.login.PaymentActivity

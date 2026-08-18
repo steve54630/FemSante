@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.calendar.event
+package com.audreyRetournayDiet.femSante.viewmodels.calendar.event
 
 sealed class EntryEvent {
     object Success : EntryEvent()

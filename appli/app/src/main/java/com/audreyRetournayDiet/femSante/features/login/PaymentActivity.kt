@@ -24,7 +24,7 @@ import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
-import com.audreyRetournayDiet.femSante.viewModels.login.PaymentViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.login.PaymentViewModel
 import com.paypal.android.cardpayments.Card
 import com.paypal.android.paymentbuttons.PayPalButton
 import kotlinx.coroutines.launch

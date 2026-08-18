@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.viewers
+package com.audreyRetournayDiet.femSante.viewmodels.viewers
 
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle

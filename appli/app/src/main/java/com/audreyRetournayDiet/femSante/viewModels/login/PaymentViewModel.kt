@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.login
+package com.audreyRetournayDiet.femSante.viewmodels.login
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope

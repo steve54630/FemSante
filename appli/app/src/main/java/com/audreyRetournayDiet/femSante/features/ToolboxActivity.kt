@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.entities.PdfNavigationEvent
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
-import com.audreyRetournayDiet.femSante.viewModels.ToolboxViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.ToolboxViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber

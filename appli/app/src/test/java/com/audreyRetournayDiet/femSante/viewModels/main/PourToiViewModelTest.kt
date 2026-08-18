@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.main
+package com.audreyRetournayDiet.femSante.viewmodels.main
 
 import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
 import com.audreyRetournayDiet.femSante.data.entities.AppUser

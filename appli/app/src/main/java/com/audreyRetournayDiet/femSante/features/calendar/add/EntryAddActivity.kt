@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.UserStore
-import com.audreyRetournayDiet.femSante.viewModels.calendar.EntryViewModel
-import com.audreyRetournayDiet.femSante.viewModels.calendar.event.EntryEvent
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.EntryViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.event.EntryEvent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
-import com.audreyRetournayDiet.femSante.viewModels.alim.RessourceViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.alim.RessourceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber

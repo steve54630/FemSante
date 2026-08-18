@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels
+package com.audreyRetournayDiet.femSante.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

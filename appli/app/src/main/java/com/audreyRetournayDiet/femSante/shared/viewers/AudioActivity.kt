@@ -16,7 +16,7 @@ import androidx.media3.ui.PlayerControlView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.redirectToLoginAfterSessionExpiry
-import com.audreyRetournayDiet.femSante.viewModels.viewers.AudioViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.viewers.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -23,7 +23,7 @@ import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.CycleDayEntity
 import com.audreyRetournayDiet.femSante.room.type.FlowLevel
 import com.audreyRetournayDiet.femSante.shared.UserStore
-import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.CalendarViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch

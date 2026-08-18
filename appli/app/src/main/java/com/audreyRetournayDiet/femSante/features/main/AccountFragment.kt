@@ -13,7 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.viewModels.AccountViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.AccountViewModel
 import com.audreyRetournayDiet.femSante.features.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.features.login.PaymentActivity
 import com.audreyRetournayDiet.femSante.features.login.LoginActivity

@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.report.MeasurementMetric
 import com.audreyRetournayDiet.femSante.room.dto.MeasurementHistoryRow
-import com.audreyRetournayDiet.femSante.viewModels.calendar.MeasureTrendViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.MeasureTrendViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint

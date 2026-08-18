@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.calendar.event
+package com.audreyRetournayDiet.femSante.viewmodels.calendar.event
 
 import com.audreyRetournayDiet.femSante.data.report.MedicalReport
 import com.audreyRetournayDiet.femSante.data.report.ReportFormat

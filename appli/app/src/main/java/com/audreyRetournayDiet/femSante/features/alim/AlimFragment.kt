@@ -20,9 +20,9 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.recipe.Recipe
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeTags
-import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeBrowseViewModel
-import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeBrowseUiState
-import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeBrowseViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeBrowseUiState
+import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeDetailViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip

@@ -33,8 +33,8 @@ import com.audreyRetournayDiet.femSante.data.report.ReportFormat
 import com.audreyRetournayDiet.femSante.data.report.ReportPeriod
 import com.audreyRetournayDiet.femSante.features.main.PreferencesActivity
 import com.audreyRetournayDiet.femSante.shared.UserStore
-import com.audreyRetournayDiet.femSante.viewModels.calendar.CalendarViewModel
-import com.audreyRetournayDiet.femSante.viewModels.calendar.event.CalendarEvent
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.CalendarViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.calendar.event.CalendarEvent
 import com.google.android.material.button.MaterialButton
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition

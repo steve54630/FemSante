@@ -1,4 +1,4 @@
-package com.audreyRetournayDiet.femSante.viewModels.calendar
+package com.audreyRetournayDiet.femSante.viewmodels.calendar
 
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
 import com.audreyRetournayDiet.femSante.repository.ApiResult

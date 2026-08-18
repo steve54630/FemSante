@@ -19,9 +19,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.recipe.Rayon
 import com.audreyRetournayDiet.femSante.data.recipe.ShoppingItem
-import com.audreyRetournayDiet.femSante.viewModels.alim.ShoppingListUiState
-import com.audreyRetournayDiet.femSante.viewModels.alim.ShoppingListViewModel
-import com.audreyRetournayDiet.femSante.viewModels.alim.ShoppingRecipe
+import com.audreyRetournayDiet.femSante.viewmodels.alim.ShoppingListUiState
+import com.audreyRetournayDiet.femSante.viewmodels.alim.ShoppingListViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.alim.ShoppingRecipe
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

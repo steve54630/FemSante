@@ -20,8 +20,8 @@ import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
 import com.audreyRetournayDiet.femSante.shared.RecommendationLauncher
-import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
-import com.audreyRetournayDiet.femSante.viewModels.main.PourToiViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeDetailViewModel
+import com.audreyRetournayDiet.femSante.viewmodels.main.PourToiViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
