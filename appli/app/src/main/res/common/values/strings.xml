@@ -306,6 +306,17 @@
     <string name="recipe_of_day_action">Voir la recette</string>
     <string name="recipe_of_day_phase">Adaptée à ta phase %1$s</string>
 
+    <!-- Liste de courses -->
+    <string name="recipe_add_to_list">Ajouter à ma liste</string>
+    <string name="recipe_remove_from_list">Retirer de ma liste</string>
+    <string name="recipe_added_to_list">Ajouté à ta liste de courses</string>
+    <string name="shopping_list_tab">Ma liste</string>
+    <string name="shopping_list_title">Ma liste de courses</string>
+    <string name="shopping_list_recipes_count">%1$d recette(s)</string>
+    <string name="shopping_list_progress">%1$d / %2$d pris</string>
+    <string name="shopping_list_empty">Ta liste est vide.\nAjoute des recettes depuis leur fiche 🛒</string>
+    <string name="shopping_list_clear">Vider la liste</string>
+
     <!-- Fiche recette native -->
     <string name="recipe_ingredients">Ingrédients</string>
     <string name="recipe_steps">Préparation</string>

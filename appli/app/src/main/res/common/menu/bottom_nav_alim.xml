@@ -5,6 +5,10 @@
         android:icon="@drawable/baseline_list_recette"
         android:title="@string/recipe"/>
 
+    <item android:id="@+id/shopping_list"
+        android:icon="@drawable/ic_shopping_cart"
+        android:title="@string/shopping_list_tab"/>
+
     <item android:id="@+id/pdf"
         android:icon="@drawable/baseline_pdf"
         android:title="@string/ressources"/>

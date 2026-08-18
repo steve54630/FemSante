@@ -58,6 +58,16 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Ajout à la liste de courses -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddToList"
+            style="@style/Widget.App.Button.Main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/recipe_add_to_list"
+            app:icon="@android:drawable/ic_input_add" />
+
         <!-- Ingrédients -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

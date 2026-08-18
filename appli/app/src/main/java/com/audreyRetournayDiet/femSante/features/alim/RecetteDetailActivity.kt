@@ -12,20 +12,26 @@ import android.text.style.StyleSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.recipe.Recipe
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeIngredient
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewModels.alim.RecipeDetailViewModel
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 /**
  * Fiche recette **native**, à la charte de l'app (par opposition au PDF figé).
@@ -58,10 +64,31 @@ class RecetteDetailActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_recette_detail)
         bindHeader(recipe)
+        bindAddButton()
         bindIngredients(recipe.ingredients)
         bindSteps(recipe.steps)
         bindTip(recipe.nutritionTip)
         bindPdfButton(pdfPath)
+    }
+
+    /** Bouton « Ajouter à ma liste » : reflète l'appartenance à la liste et la bascule. */
+    private fun bindAddButton() {
+        val button = findViewById<MaterialButton>(R.id.btnAddToList)
+        button.setOnClickListener {
+            viewModel.toggleInShoppingList { added ->
+                if (added) Toast.makeText(this, R.string.recipe_added_to_list, Toast.LENGTH_SHORT).show()
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.inShoppingList.collect { inList ->
+                    button.setText(if (inList) R.string.recipe_remove_from_list else R.string.recipe_add_to_list)
+                    button.setIconResource(
+                        if (inList) android.R.drawable.ic_menu_close_clear_cancel else android.R.drawable.ic_input_add
+                    )
+                }
+            }
+        }
     }
 
     private fun bindHeader(recipe: Recipe) {
