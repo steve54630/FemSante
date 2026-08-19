@@ -163,30 +163,17 @@ class VideoActivity : AppCompatActivity() {
     private fun applyFullscreen(fullscreen: Boolean) {
         if (appliedFullscreen == fullscreen) return
         appliedFullscreen = fullscreen
-        val lp = videoFrame.layoutParams as ConstraintLayout.LayoutParams
-        if (fullscreen) {
-            titleText.isVisible = false
-            applyImmersive(true)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            lp.dimensionRatio = null
-            lp.topToBottom = ConstraintLayout.LayoutParams.UNSET
-            lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-            lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-            lp.topMargin = 0
-        } else {
-            titleText.isVisible = true
-            applyImmersive(false)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            lp.dimensionRatio = videoRatio
-            lp.topToTop = ConstraintLayout.LayoutParams.UNSET
-            lp.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
-            lp.topToBottom = R.id.textVid
-            lp.topMargin = resources.getDimensionPixelSize(R.dimen.space_m)
-        }
-        videoFrame.layoutParams = lp
+        titleText.isVisible = !fullscreen
+        applyImmersive(fullscreen)
+        requestedOrientation =
+            if (fullscreen) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        // Le cadre est contraint haut ET bas au parent : sans ratio il remplit l'écran (plein
+        // écran), avec le ratio réel il forme la vignette centrée verticalement.
+        applyVideoRatio(if (fullscreen) null else videoRatio)
     }
 
-    private fun applyVideoRatio(ratio: String) {
+    private fun applyVideoRatio(ratio: String?) {
         val lp = videoFrame.layoutParams as ConstraintLayout.LayoutParams
         lp.dimensionRatio = ratio
         videoFrame.layoutParams = lp

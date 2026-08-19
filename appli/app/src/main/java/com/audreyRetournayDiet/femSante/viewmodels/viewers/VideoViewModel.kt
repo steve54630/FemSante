@@ -21,7 +21,7 @@ import javax.inject.Inject
  *
  * ### Fonctionnalités :
  * 1. **Récupération hybride** : Supporte les URLs directes ou les appels API dynamiques.
- * 2. **Gestion d'état (UI State)** : Gère le plein écran, l'orientation et le chargement.
+ * 2. **Gestion d'état (UI State)** : Gère le plein écran et le chargement.
  * 3. **Support PDF** : Détecte si un document d'accompagnement doit être proposé à l'utilisatrice.
  */
 @HiltViewModel
@@ -130,13 +130,4 @@ class VideoViewModel @Inject constructor(
         Timber.v("Mode plein écran : $newState")
         internalUiState.value = internalUiState.value.copy(isFullScreen = newState)
     }
-
-    /**
-     * Définit si la vidéo doit être affichée en format portrait (ex : format réseaux sociaux).
-     */
-    fun setPortraitMode(isPortrait: Boolean) {
-        Timber.v("Orientation portrait forcée : $isPortrait")
-        internalUiState.value = internalUiState.value.copy(isPortraitVideo = isPortrait)
-    }
-
 }

@@ -5,7 +5,6 @@ data class VideoUiState(
     val videoUri: android.net.Uri? = null,
     val isPdfVisible: Boolean = false,
     val isFullScreen: Boolean = false,
-    val isPortraitVideo: Boolean = true,
     val isLoading: Boolean = false,
     val pdfFileName: String = "",
     /** Message d'erreur à afficher (ex : abonnement requis, vidéo introuvable). */
