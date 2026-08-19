@@ -173,7 +173,10 @@
             android:id="@+id/scrollRecommendations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/space_s"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/space_m"
+            android:paddingVertical="@dimen/space_xs"
             android:scrollbars="none">
 
             <LinearLayout

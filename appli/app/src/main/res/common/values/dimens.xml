@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Échelle d'espacement générale -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+
+    <!-- Cartes (source unique : corner, élévation, gouttière) -->
+    <dimen name="card_corner">14dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <!-- Marge autour d'une carte ; la gouttière entre deux cartes vaut le double. -->
+    <dimen name="card_gutter">6dp</dimen>
+</resources>
