@@ -28,10 +28,10 @@ import java.time.LocalDate
  * - [ContextFragment] : Mode de vie (activité, alimentation, médicaments).
  * - [MeasuresFragment] : Mesures (poids, tours).
  * * ### Fonctionnement :
- * L'activité initialise un [EntryViewModel] partagé par tous les fragments. Elle gère
- * l'ID de l'entrée en cas d'édition et déclenche la sauvegarde globale des données.
- * * @property fragments Map associant les IDs du menu aux instances de fragments.
- * @property id ID de l'entrée en base de données (uniquement en mode édition).
+ * L'activité initialise un [EntryViewModel] partagé par tous les fragments. La navigation se fait
+ * en **add/hide/show** (et non `replace()` sur instances réutilisées) : chaque onglet conserve sa
+ * vue et sa saisie en cours quand on passe à un autre — sinon le formulaire du journal se
+ * réinitialisait au changement d'onglet (même correctif que `HomeActivity`/`AlimActivity`).
  */
 @AndroidEntryPoint
 class EntryAddActivity : AppCompatActivity() {
@@ -41,33 +41,31 @@ class EntryAddActivity : AppCompatActivity() {
     private lateinit var btnSaveEntry: Button
 
     private lateinit var fragments: Map<Int, Fragment>
-    private var id : Long? = null
+    private lateinit var activeFragment: Fragment
+    private var id: Long? = null
 
     // Hilt injecte le ViewModel (et son DailyRepository) — plus de Factory manuelle.
     private val viewModel: EntryViewModel by viewModels()
+
+    private companion object {
+        val TAGS = mapOf(
+            R.id.nav_symptoms to "entry_symptoms",
+            R.id.nav_psych to "entry_psych",
+            R.id.nav_context to "entry_context",
+            R.id.nav_measures to "entry_measures"
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_add)
 
-        initializeFragments()
         setupViews()
+        initializeFragments(savedInstanceState)
         handleIntentData()
         setupNavigation()
         observeEvents()
         setupSaveListener()
-    }
-
-    /**
-     * Prépare les instances de fragments pour la navigation.
-     */
-    private fun initializeFragments() {
-        fragments = mapOf(
-            R.id.nav_symptoms to SymptomsFragment(),
-            R.id.nav_psych to PsychologicalFragment(),
-            R.id.nav_context to ContextFragment(),
-            R.id.nav_measures to MeasuresFragment()
-        )
     }
 
     private fun setupViews() {
@@ -76,9 +74,38 @@ class EntryAddActivity : AppCompatActivity() {
         btnSaveEntry = findViewById(R.id.btnSaveEntry)
     }
 
+    /** Fabrique un fragment neuf pour un onglet donné. */
+    private fun newFragment(menuId: Int): Fragment = when (menuId) {
+        R.id.nav_symptoms -> SymptomsFragment()
+        R.id.nav_psych -> PsychologicalFragment()
+        R.id.nav_context -> ContextFragment()
+        else -> MeasuresFragment()
+    }
+
+    /**
+     * Prépare les instances de fragments. Au premier lancement, ajoute l'onglet initial ; après
+     * une rotation, récupère les instances déjà recréées par le FragmentManager (via leur tag).
+     */
+    private fun initializeFragments(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            fragments = TAGS.mapValues { (menuId, _) -> newFragment(menuId) }
+            val first = fragments.getValue(R.id.nav_symptoms)
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, first, TAGS.getValue(R.id.nav_symptoms))
+                .commit()
+            activeFragment = first
+        } else {
+            fragments = TAGS.mapValues { (menuId, tag) ->
+                supportFragmentManager.findFragmentByTag(tag) ?: newFragment(menuId)
+            }
+            activeFragment = supportFragmentManager.fragments.lastOrNull { !it.isHidden }
+                ?: fragments.getValue(R.id.nav_symptoms)
+        }
+    }
+
     /**
      * Analyse les données reçues via l'Intent pour configurer le ViewModel.
-     * Gère la récupération de la date sélectionnée et le chargement des données existantes si [isEditMode] est vrai.
+     * Gère la récupération de la date sélectionnée et le chargement des données existantes en édition.
      */
     private fun handleIntentData() {
         val dateString = intent.getStringExtra("selectedDate")
@@ -88,7 +115,7 @@ class EntryAddActivity : AppCompatActivity() {
         viewModel.setEdit(isEdit)
         viewModel.setDate(selectedDate)
 
-        if(isEdit) {
+        if (isEdit) {
             id = intent.getLongExtra("ID", 0)
             val userId = UserStore(this).getUser()?.id
 
@@ -104,22 +131,32 @@ class EntryAddActivity : AppCompatActivity() {
     }
 
     /**
-     * Configure la navigation entre les fragments avec une animation de fondu.
+     * Configure la navigation entre les fragments (add/hide/show + fondu) et synchronise la
+     * surbrillance de la barre avec l'onglet actif.
      */
     private fun setupNavigation() {
         navBar.setOnItemSelectedListener { item ->
-            fragments[item.itemId]?.let { fragment ->
-                supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .replace(R.id.container, fragment)
-                    .commit()
-                true
-            } ?: false
+            val target = fragments[item.itemId] ?: return@setOnItemSelectedListener false
+            showFragment(target, TAGS.getValue(item.itemId))
+            true
         }
+        // Surbrillance alignée sur l'onglet actif (la navigation associée est un no-op).
+        fragments.entries.firstOrNull { it.value === activeFragment }?.let {
+            navBar.selectedItemId = it.key
+        }
+    }
 
-        if (supportFragmentManager.findFragmentById(R.id.container) == null) {
-            navBar.selectedItemId = R.id.nav_symptoms
-        }
+    /** Affiche l'onglet demandé sans détruire les autres (conserve vue + saisie en cours). */
+    private fun showFragment(target: Fragment, tag: String) {
+        if (target === activeFragment) return
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            .apply {
+                hide(activeFragment)
+                if (target.isAdded) show(target) else add(R.id.container, target, tag)
+            }
+            .commit()
+        activeFragment = target
     }
 
     /**
