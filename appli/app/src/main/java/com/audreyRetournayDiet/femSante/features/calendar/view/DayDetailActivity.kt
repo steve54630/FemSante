@@ -1,6 +1,5 @@
 package com.audreyRetournayDiet.femSante.features.calendar.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -42,7 +41,6 @@ import java.util.Locale
  * prévisionnel opt-out), phase estimée, et résumé du jour (ou état vide → [EntryAddActivity]).
  * Réutilise [CalendarViewModel] pour lire/écrire les données de la date reçue en extra.
  */
-@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class DayDetailActivity : AppCompatActivity() {
 
@@ -250,7 +248,7 @@ class DayDetailActivity : AppCompatActivity() {
             switcher.displayedChild = 0
             val formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRANCE)
             findViewById<TextView>(R.id.tvEmptyDate)?.text =
-                "Pas de suivi le ${selectedDate.format(formatter)}"
+                getString(R.string.day_no_tracking, selectedDate.format(formatter))
 
             findViewById<Button>(R.id.btnCreateEntry)?.setOnClickListener {
                 startActivity(Intent(this, EntryAddActivity::class.java).apply {

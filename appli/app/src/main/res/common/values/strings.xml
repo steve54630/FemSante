@@ -221,6 +221,7 @@
     <string name="cycle_invite_configure">Configurer</string>
     <string name="cycle_invite_later">Plus tard</string>
     <string name="cycle_phase_label">Phase estimée : %1$s</string>
+    <string name="day_no_tracking">Pas de suivi le %1$s</string>
     <string name="cycle_phase_menstruelle">Menstruelle</string>
     <string name="cycle_phase_folliculaire">Folliculaire</string>
     <string name="cycle_phase_ovulation">Ovulation</string>

@@ -38,7 +38,6 @@ import java.util.Locale
  * Les options sont générées dynamiquement à partir des Enums pour garantir la cohérence
  * avec la base de données Room.
  */
-@Suppress("UNCHECKED_CAST")
 @AndroidEntryPoint
 class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
 
