@@ -1,24 +1,27 @@
 package com.audreyRetournayDiet.femSante.shared.viewers
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.WindowManager.LayoutParams
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
@@ -26,7 +29,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
@@ -35,27 +37,48 @@ import com.audreyRetournayDiet.femSante.viewmodels.viewers.VideoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@Suppress("DEPRECATION")
+/**
+ * Lecteur vidéo (flux HLS sécurisé). Deux modes :
+ * - **Fenêtré** (portrait) : titre + cadre vidéo à ratio réel + bouton PDF éventuel.
+ * - **Plein écran** (paysage immersif) : la barre système disparaît, le cadre remplit l'écran.
+ *
+ * Le basculement se fait via un unique [applyFullscreen] (l'état vient du [VideoViewModel]), et le
+ * mode immersif via [WindowInsetsControllerCompat] (API non dépréciée).
+ */
 @OptIn(UnstableApi::class)
 @AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
-    // Hilt injecte le ViewModel ; l'extra "map" est lu via SavedStateHandle.
     private val viewModel: VideoViewModel by viewModels()
 
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView
-    private lateinit var layoutVideo: FrameLayout
+    private lateinit var videoFrame: FrameLayout
     private lateinit var fullScreenButton: ImageButton
     private lateinit var titleText: TextView
+    private lateinit var pdfButton: Button
+
     private val loadingAlert by lazy { LoadingAlert(this) }
     private var isLoaderShowing = false
+    private var lastError: String? = null
+
+    /** Ratio réel de la vidéo courante (mis à jour au premier rendu), pour un cadre sans marge noire. */
+    private var videoRatio: String = "16:9"
+
+    /** Dernier mode appliqué : évite de re-layouter à chaque émission d'état. */
+    private var appliedFullscreen: Boolean? = null
+
+    private val insetsController by lazy {
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
-        // Sécurité contre les captures d'écran
-        window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
+        // Contenu protégé : pas de capture d'écran ni d'aperçu multitâche.
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         initViews()
         setupPlayer()
@@ -65,146 +88,119 @@ class VideoActivity : AppCompatActivity() {
 
     private fun initViews() {
         playerView = findViewById(R.id.videoView)
-        layoutVideo = findViewById(R.id.videoViewLayout)
+        videoFrame = findViewById(R.id.videoViewLayout)
         titleText = findViewById(R.id.textVid)
-
-        // Le bouton est dans le controller de PlayerView ou le FrameLayout
+        pdfButton = findViewById(R.id.pdfButton)
         fullScreenButton = findViewById(R.id.fullscreen)
 
         fullScreenButton.setOnClickListener { viewModel.toggleFullScreen() }
-
-        findViewById<Button>(R.id.pdfButton).setOnClickListener {
-            val state = viewModel.uiState.value
-            val intentTarget = Intent(this, PdfActivity::class.java).apply {
-                putExtra("PDF", state.pdfFileName)
-            }
-            startActivity(intentTarget)
+        pdfButton.setOnClickListener {
+            startActivity(
+                Intent(this, PdfActivity::class.java)
+                    .putExtra("PDF", viewModel.uiState.value.pdfFileName)
+            )
         }
     }
 
     private fun setupPlayer() {
-        player = ExoPlayer.Builder(this)
-            .setMediaSourceFactory(DefaultMediaSourceFactory(this))
-            .build()
+        player = ExoPlayer.Builder(this).build()
         playerView.player = player
 
-        playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
-            val state = viewModel.uiState.value
-            fullScreenButton.visibility =
-                if (visibility == View.VISIBLE && !state.isPortraitVideo) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
-        })
+        // Le bouton plein écran suit la visibilité des contrôles du lecteur.
+        playerView.setControllerVisibilityListener(
+            PlayerView.ControllerVisibilityListener { visibility ->
+                fullScreenButton.isVisible = visibility == View.VISIBLE
+            }
+        )
 
+        // Ajuste le cadre au format réel de la vidéo (évite les bandes noires).
         player.addListener(object : Player.Listener {
             override fun onVideoSizeChanged(videoSize: VideoSize) {
-                viewModel.setPortraitMode(videoSize.height > videoSize.width)
+                if (videoSize.width <= 0 || videoSize.height <= 0) return
+                videoRatio = "${videoSize.width}:${videoSize.height}"
+                if (!viewModel.uiState.value.isFullScreen) applyVideoRatio(videoRatio)
             }
         })
     }
 
     private fun observeState() {
         lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                // Session expirée (refresh impossible) : retour au login.
-                if (state.sessionExpired) {
-                    redirectToLoginAfterSessionExpiry()
-                    return@collect
-                }
-
-                titleText.text = state.title
-                findViewById<Button>(R.id.pdfButton).visibility =
-                    if (state.isPdfVisible) View.VISIBLE else View.GONE
-
-                state.errorMessage?.let {
-                    android.widget.Toast.makeText(this@VideoActivity, it, android.widget.Toast.LENGTH_LONG).show()
-                }
-
-                handleLoadingDialog(state.isLoading)
-
-                when {
-                    state.isFullScreen -> enterFullScreen()
-                    state.isPortraitVideo -> applyPortraitStyle()
-                    else -> exitFullScreen()
-                }
-
-                state.videoUri?.let { uri ->
-                    if (player.currentMediaItem?.localConfiguration?.uri != uri) {
-                        val mediaSource = HlsMediaSource.Factory(DefaultHttpDataSource.Factory())
-                            .createMediaSource(MediaItem.fromUri(uri))
-                        player.setMediaSource(mediaSource)
-                        player.prepare()
-                        player.play()
-                        playerView.showController()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    // Session expirée (refresh impossible) : retour au login.
+                    if (state.sessionExpired) {
+                        redirectToLoginAfterSessionExpiry()
+                        return@collect
                     }
+
+                    titleText.text = state.title
+                    pdfButton.isVisible = state.isPdfVisible && !state.isFullScreen
+                    handleLoadingDialog(state.isLoading)
+                    showErrorOnce(state.errorMessage)
+                    applyFullscreen(state.isFullScreen)
+                    prepareIfNeeded(state.videoUri)
                 }
             }
         }
     }
 
-    private fun enterFullScreen() {
-        supportActionBar?.hide()
-        layoutVideo.setBackgroundColor(Color.BLACK)
-        titleText.visibility = View.GONE
-        setImmersiveMode()
-
-        val params = layoutVideo.layoutParams as ConstraintLayout.LayoutParams
-        params.width = MATCH_PARENT
-        params.height = MATCH_PARENT
-        layoutVideo.layoutParams = params
-
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    /** Prépare la source HLS une seule fois par URL. */
+    private fun prepareIfNeeded(uri: android.net.Uri?) {
+        uri ?: return
+        if (player.currentMediaItem?.localConfiguration?.uri == uri) return
+        val source = HlsMediaSource.Factory(DefaultHttpDataSource.Factory())
+            .createMediaSource(MediaItem.fromUri(uri))
+        player.setMediaSource(source)
+        player.prepare()
+        player.play()
+        playerView.showController()
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun exitFullScreen() {
-        supportActionBar?.show()
-        layoutVideo.setBackgroundColor(Color.TRANSPARENT)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-
-        // Reset exact du XML (ConstraintLayout)
-        val params = layoutVideo.layoutParams as ConstraintLayout.LayoutParams
-        params.width = 0
-        params.height = WRAP_CONTENT
-        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-        params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-        params.verticalBias = 0.4f
-        layoutVideo.layoutParams = params
-
-        titleText.visibility = View.VISIBLE
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    /**
+     * Bascule fenêtré ⇄ plein écran en une seule passe : orientation, mode immersif, visibilité du
+     * titre/PDF et dimensionnement du cadre (ratio réel ↔ plein écran).
+     */
+    private fun applyFullscreen(fullscreen: Boolean) {
+        if (appliedFullscreen == fullscreen) return
+        appliedFullscreen = fullscreen
+        val lp = videoFrame.layoutParams as ConstraintLayout.LayoutParams
+        if (fullscreen) {
+            titleText.isVisible = false
+            applyImmersive(true)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            lp.dimensionRatio = null
+            lp.topToBottom = ConstraintLayout.LayoutParams.UNSET
+            lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.topMargin = 0
+        } else {
+            titleText.isVisible = true
+            applyImmersive(false)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            lp.dimensionRatio = videoRatio
+            lp.topToTop = ConstraintLayout.LayoutParams.UNSET
+            lp.bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+            lp.topToBottom = R.id.textVid
+            lp.topMargin = resources.getDimensionPixelSize(R.dimen.space_m)
+        }
+        videoFrame.layoutParams = lp
     }
 
-    private fun applyPortraitStyle() {
-        setImmersiveMode()
-        titleText.visibility = View.GONE
-
-        val params = layoutVideo.layoutParams as ConstraintLayout.LayoutParams
-        params.width = MATCH_PARENT
-        params.height = WRAP_CONTENT
-        layoutVideo.layoutParams = params
+    private fun applyVideoRatio(ratio: String) {
+        val lp = videoFrame.layoutParams as ConstraintLayout.LayoutParams
+        lp.dimensionRatio = ratio
+        videoFrame.layoutParams = lp
     }
 
-    private fun setImmersiveMode() {
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                )
+    private fun applyImmersive(enabled: Boolean) {
+        if (enabled) insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        else insetsController.show(WindowInsetsCompat.Type.systemBars())
     }
 
     private fun setupBackHandler() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.uiState.value.isFullScreen) {
-                    viewModel.toggleFullScreen()
-                } else {
-                    finish()
-                }
+                if (viewModel.uiState.value.isFullScreen) viewModel.toggleFullScreen() else finish()
             }
         })
     }
@@ -219,17 +215,26 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
+    /** N'affiche un message d'erreur qu'une fois (le state peut ré-émettre). */
+    private fun showErrorOnce(message: String?) {
+        if (message == null || message == lastError) return
+        lastError = message
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
     override fun onResume() {
-        super.onResume(); player.play()
+        super.onResume()
+        player.play()
     }
 
     override fun onPause() {
-        super.onPause(); player.pause()
+        super.onPause()
+        player.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        window.clearFlags(LayoutParams.FLAG_SECURE)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         player.release()
     }
 }

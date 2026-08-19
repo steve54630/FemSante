@@ -5,33 +5,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fond_appli">
+    android:background="?attr/colorSurface">
 
-    <FrameLayout
-        android:id="@+id/videoViewLayout"
+    <!-- Titre du contenu (masqué en plein écran). -->
+    <TextView
+        android:id="@+id/textVid"
+        style="@style/AppTextAppearance.HeadlineSmall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="@dimen/space_l"
+        android:layout_marginTop="@dimen/space_l"
+        android:gravity="center"
+        android:textColor="?attr/colorOnSurface"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4">
+        tools:text="Joie" />
+
+    <!-- Cadre vidéo à ratio stable (16:9 par défaut, ajusté au format réel de la vidéo). -->
+    <FrameLayout
+        android:id="@+id/videoViewLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_m"
+        android:background="@android:color/black"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textVid">
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/videoView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:keepScreenOn="true"
-            app:controller_layout_id="@layout/custom_playback_control_view" />
+            app:controller_layout_id="@layout/custom_playback_control_view"
+            app:resize_mode="fit" />
 
         <ImageButton
             android:id="@+id/fullscreen"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/space_m"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/exo_fullscreen"
             android:src="@drawable/baseline_fullscreen_24"
@@ -39,28 +56,18 @@
             app:tint="@color/white" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/textVid"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoViewLayout" />
-
+    <!-- Support PDF associé (art-thérapie) : masqué en plein écran. -->
     <Button
         android:id="@+id/pdfButton"
+        style="@style/Widget.App.Button.Action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/space_l"
         android:text="@string/pdf"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVid" />
+        app:layout_constraintTop_toBottomOf="@+id/videoViewLayout"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
