@@ -53,7 +53,8 @@ class PourToiFragment : Fragment() {
     private lateinit var cardGeste: MaterialCardView
     private lateinit var textGesteTitle: TextView
     private lateinit var buttonGesteAction: MaterialButton
-    private lateinit var bannerPourToi: TextView
+    private lateinit var bannerPourToi: View
+    private lateinit var btnFillJournal: MaterialButton
     private lateinit var textRecoMoreTitle: TextView
     private lateinit var containerRecommendations: ViewGroup
     private lateinit var layoutEmpty: View
@@ -92,12 +93,13 @@ class PourToiFragment : Fragment() {
         cardGeste = view.findViewById(R.id.cardGesteDuJour)
         textGesteTitle = view.findViewById(R.id.textGesteTitle)
         buttonGesteAction = view.findViewById(R.id.buttonGesteAction)
-        bannerPourToi = view.findViewById(R.id.textPourToiBanner)
+        bannerPourToi = view.findViewById(R.id.layoutPourToiBanner)
+        btnFillJournal = view.findViewById(R.id.btnFillJournal)
         textRecoMoreTitle = view.findViewById(R.id.textRecoMoreTitle)
         containerRecommendations = view.findViewById(R.id.containerRecommendations)
         layoutEmpty = view.findViewById(R.id.layoutPourToiEmpty)
 
-        bannerPourToi.setOnClickListener {
+        btnFillJournal.setOnClickListener {
             Timber.i("Navigation: Vers le journal (EntryAddActivity) depuis le bandeau incitatif")
             startActivity(Intent(activity, EntryAddActivity::class.java))
         }

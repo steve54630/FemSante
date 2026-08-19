@@ -146,16 +146,31 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Bandeau incitatif : affiché uniquement s'il n'y a pas de saisie du jour -->
-        <TextView
-            android:id="@+id/textPourToiBanner"
+        <LinearLayout
+            android:id="@+id/layoutPourToiBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_banner_incitatif"
+            android:orientation="vertical"
             android:padding="12dp"
-            android:text="@string/pour_toi_banner_incitatif"
-            android:textSize="13sp"
-            android:visibility="gone" />
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pour_toi_banner_incitatif"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFillJournal"
+                style="@style/Widget.App.Button.Main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="@string/pour_toi_banner_action" />
+        </LinearLayout>
 
         <!-- Reste des recommandations -->
         <TextView

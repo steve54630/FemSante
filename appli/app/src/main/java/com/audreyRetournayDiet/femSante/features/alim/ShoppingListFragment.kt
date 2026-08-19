@@ -42,6 +42,7 @@ class ShoppingListFragment : Fragment() {
     private lateinit var tvProgress: TextView
     private lateinit var tvEmpty: TextView
     private lateinit var btnClear: MaterialButton
+    private lateinit var btnBrowseRecipes: MaterialButton
 
     private val accent by lazy { requireContext().getColor(R.color.orange_app) }
     private val onSurface = 0xFF222222.toInt()
@@ -59,8 +60,11 @@ class ShoppingListFragment : Fragment() {
         tvProgress = view.findViewById(R.id.tvProgress)
         tvEmpty = view.findViewById(R.id.tvEmpty)
         btnClear = view.findViewById(R.id.btnClear)
+        btnBrowseRecipes = view.findViewById(R.id.btnBrowseRecipes)
 
         btnClear.setOnClickListener { confirmClear() }
+        // État vide : CTA direct vers les recettes (le texte seul n'était pas actionnable).
+        btnBrowseRecipes.setOnClickListener { (activity as? AlimActivity)?.showRecipesTab() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -71,6 +75,7 @@ class ShoppingListFragment : Fragment() {
 
     private fun render(state: ShoppingListUiState) {
         tvEmpty.isVisible = state.isEmpty
+        btnBrowseRecipes.isVisible = state.isEmpty
         btnClear.isVisible = !state.isEmpty
         tvRecipesCount.isVisible = !state.isEmpty
         tvRecipesCount.text = getString(R.string.shopping_list_recipes_count, state.recipes.size)

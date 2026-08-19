@@ -75,10 +75,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingVertical="56dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="16dp"
             android:text="@string/shopping_list_empty"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="15sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBrowseRecipes"
+            style="@style/Widget.App.Button.Main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/shopping_list_browse_recipes"
             android:visibility="gone"
             tools:visibility="visible" />
     </LinearLayout>

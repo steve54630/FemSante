@@ -344,6 +344,7 @@
     <string name="shopping_list_recipes_count">%1$d recette(s)</string>
     <string name="shopping_list_progress">%1$d / %2$d pris</string>
     <string name="shopping_list_empty">Ta liste est vide.\nAjoute des recettes depuis leur fiche 🛒</string>
+    <string name="shopping_list_browse_recipes">Parcourir les recettes</string>
     <string name="shopping_list_clear">Vider la liste</string>
 
     <!-- Fiche recette native -->

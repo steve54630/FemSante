@@ -100,6 +100,11 @@ class AlimActivity : AppCompatActivity() {
         activeFragment = target
     }
 
+    /** Revenir à l'onglet Recettes (ex. depuis le CTA de l'état vide de la liste de courses). */
+    fun showRecipesTab() {
+        menu.selectedItemId = R.id.alim
+    }
+
     /** Badge de l'onglet « Ma liste » : nombre de recettes retenues (masqué si vide). */
     private fun observeShoppingBadge() {
         lifecycleScope.launch {
