@@ -222,6 +222,14 @@
     <string name="cycle_invite_later">Plus tard</string>
     <string name="cycle_phase_label">Phase estimée : %1$s</string>
     <string name="day_no_tracking">Pas de suivi le %1$s</string>
+    <string name="shopping_step_add">Ajouter une part</string>
+    <string name="shopping_step_remove">Retirer une part</string>
+    <!-- Descriptions accessibles des cases du calendrier -->
+    <string name="day_quality_good">bonne journée</string>
+    <string name="day_quality_medium">journée moyenne</string>
+    <string name="day_quality_bad">journée difficile</string>
+    <string name="day_cd_period">règles</string>
+    <string name="day_cd_period_predicted">règles prévues</string>
     <string name="cycle_phase_menstruelle">Menstruelle</string>
     <string name="cycle_phase_folliculaire">Folliculaire</string>
     <string name="cycle_phase_ovulation">Ovulation</string>

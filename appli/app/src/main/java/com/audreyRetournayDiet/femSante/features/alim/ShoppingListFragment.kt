@@ -116,19 +116,21 @@ class ShoppingListFragment : Fragment() {
             setTextColor(onSurface)
         }
         row.addView(title)
-        row.addView(stepButton("–") { viewModel.decrement(shoppingRecipe.recipe.id, shoppingRecipe.count) })
+        row.addView(stepButton("–", getString(R.string.shopping_step_remove)) { viewModel.decrement(shoppingRecipe.recipe.id, shoppingRecipe.count) })
         row.addView(count)
-        row.addView(stepButton("+") { viewModel.increment(shoppingRecipe.recipe.id, shoppingRecipe.count) })
+        row.addView(stepButton("+", getString(R.string.shopping_step_add)) { viewModel.increment(shoppingRecipe.recipe.id, shoppingRecipe.count) })
         return row
     }
 
-    private fun stepButton(label: String, onClick: () -> Unit): TextView = TextView(requireContext()).apply {
+    /** Bouton `−`/`+` : zone tactile de 48dp (loi de Fitts) et libellé pour lecteur d'écran. */
+    private fun stepButton(label: String, description: String, onClick: () -> Unit): TextView = TextView(requireContext()).apply {
         text = label
+        contentDescription = description
         textSize = 20f
         gravity = Gravity.CENTER
         setTextColor(accent)
-        minWidth = dp(36)
-        minHeight = dp(36)
+        minWidth = dp(48)
+        minHeight = dp(48)
         isClickable = true
         isFocusable = true
         setOnClickListener { onClick() }

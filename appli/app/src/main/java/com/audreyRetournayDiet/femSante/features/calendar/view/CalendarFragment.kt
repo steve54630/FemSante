@@ -285,6 +285,11 @@ class CalendarFragment : Fragment() {
                 container.tile.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(requireContext(), tintRes))
 
+                // Description pour lecteur d'écran : numéro + qualité + règles (sinon TalkBack ne
+                // lit que le numéro, et l'info portée par la couleur est perdue).
+                container.view.contentDescription =
+                    buildDayDescription(date, inMonth, painLevel, realPeriod, predictedPeriod)
+
                 // Contour du jour courant (plus de sélection persistante : le tap ouvre l'écran détail)
                 val isToday = inMonth && date == LocalDate.now()
                 container.tile.foreground =
@@ -324,6 +329,33 @@ class CalendarFragment : Fragment() {
             }
             titlesContainer.addView(textView)
         }
+    }
+
+    /** Description accessible d'une case : « 12, journée difficile, règles ». */
+    private fun buildDayDescription(
+        date: LocalDate,
+        inMonth: Boolean,
+        painLevel: Int?,
+        realPeriod: Boolean,
+        predictedPeriod: Boolean
+    ): String {
+        val parts = mutableListOf(date.dayOfMonth.toString())
+        if (inMonth && painLevel != null) {
+            parts.add(
+                getString(
+                    when {
+                        painLevel >= 7 -> R.string.day_quality_bad
+                        painLevel >= 4 -> R.string.day_quality_medium
+                        else -> R.string.day_quality_good
+                    }
+                )
+            )
+        }
+        when {
+            realPeriod -> parts.add(getString(R.string.day_cd_period))
+            predictedPeriod -> parts.add(getString(R.string.day_cd_period_predicted))
+        }
+        return parts.joinToString(", ")
     }
 
     private fun updateMonthTitle(yearMonth: YearMonth) {
