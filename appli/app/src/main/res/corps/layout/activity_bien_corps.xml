@@ -9,13 +9,12 @@
     tools:context=".features.corps.BienCorpsActivity">
 
     <TextView
-        style="@style/AppTextAppearance.TitleFancy"
+        style="@style/AppTextAppearance.TitleFancy.Compact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
-        android:text="@string/option_corps"
-        android:textSize="38sp" />
+        android:text="@string/option_corps" />
 
     <!-- Thèmes : Tout / Yoga / Pilates / Fitness -->
     <HorizontalScrollView

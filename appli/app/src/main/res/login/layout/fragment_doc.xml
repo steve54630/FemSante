@@ -14,11 +14,10 @@
 
         <TextView
             android:id="@+id/textView2"
-            style="@style/AppTextAppearance.TitleFancy"
+            style="@style/AppTextAppearance.TitleFancy.Hero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/documents"
-            android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

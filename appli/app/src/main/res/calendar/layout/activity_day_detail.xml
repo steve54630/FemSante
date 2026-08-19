@@ -21,12 +21,12 @@
 
         <TextView
             android:id="@+id/textDayTitle"
-            style="@style/AppTextAppearance.TitleFancy"
+            style="@style/AppTextAppearance.TitleFancy.Compact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
-            android:textSize="30sp" />
+            />
 
         <include layout="@layout/view_cycle_input" />
 

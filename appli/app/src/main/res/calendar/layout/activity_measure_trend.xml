@@ -14,12 +14,12 @@
         android:padding="20dp">
 
         <TextView
-            style="@style/AppTextAppearance.TitleFancy"
+            style="@style/AppTextAppearance.TitleFancy.Compact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/trend_title"
-            android:textSize="30sp" />
+            />
 
         <HorizontalScrollView
             android:layout_width="match_parent"

@@ -20,14 +20,14 @@
 
         <TextView
             android:id="@+id/tvSummaryTitle"
-            style="@style/AppTextAppearance.TitleFancy"
+            style="@style/AppTextAppearance.TitleFancy.Compact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/containerActions"
             android:text="@string/daily_resume"
-            android:textSize="26sp" />
+            />
 
         <LinearLayout
             android:id="@+id/containerActions"

@@ -9,13 +9,12 @@
     tools:context=".features.alim.AlimFragment">
 
     <TextView
-        style="@style/AppTextAppearance.TitleFancy"
+        style="@style/AppTextAppearance.TitleFancy.Compact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="4dp"
-        android:text="@string/recipe"
-        android:textSize="44sp" />
+        android:text="@string/recipe" />
 
     <!-- Catégorie : choix unique, "Tout" par défaut -->
     <HorizontalScrollView

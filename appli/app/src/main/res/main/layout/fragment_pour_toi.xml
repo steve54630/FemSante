@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nav_pour_toi"
-            android:textSize="46sp" />
+            />
 
         <!-- Ta recette du jour : proposée selon la phase du cycle (indépendante du journal) -->
         <com.google.android.material.card.MaterialCardView

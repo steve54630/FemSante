@@ -14,12 +14,11 @@
 
         <TextView
             android:id="@+id/textViewTitleLogin"
-            style="@style/AppTextAppearance.TitleFancy"
+            style="@style/AppTextAppearance.TitleFancy.Hero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/register"
-            android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

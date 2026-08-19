@@ -39,13 +39,28 @@
         <item name="textAppearanceButton">@style/AppTextAppearance.LabelLarge</item>
     </style>
 
+    <!--
+      Titre manuscrit. Échelle unifiée à 3 niveaux qui ne diffèrent QUE par la taille
+      (police, couleur, centrage inchangés) : base 40sp, .Compact 32sp, .Hero 52sp.
+      Les layouts ne surchargent plus `android:textSize` : ils choisissent le style.
+    -->
     <style name="AppTextAppearance.TitleFancy" parent="TextAppearance.Material3.DisplayMedium">
         <item name="android:fontFamily">@font/nothing_you_could_do</item>
         <item name="fontFamily">@font/nothing_you_could_do</item>
-        <item name="android:textSize">60sp</item>
+        <item name="android:textSize">40sp</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textAlignment">center</item>
         <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- Titre + contenu immédiat (grille/liste/chips). -->
+    <style name="AppTextAppearance.TitleFancy.Compact">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <!-- Écrans accueil / formulaire, avec de l'espace. -->
+    <style name="AppTextAppearance.TitleFancy.Hero">
+        <item name="android:textSize">52sp</item>
     </style>
 
     <style name="AppTextAppearance.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">

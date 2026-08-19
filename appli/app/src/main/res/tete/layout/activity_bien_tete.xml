@@ -9,13 +9,12 @@
     tools:context=".features.tete.BienTeteActivity">
 
     <TextView
-        style="@style/AppTextAppearance.TitleFancy"
+        style="@style/AppTextAppearance.TitleFancy.Compact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
-        android:text="@string/option_tete"
-        android:textSize="38sp" />
+        android:text="@string/option_tete" />
 
     <!-- Sélecteur Vidéos / Audios -->
     <com.google.android.material.button.MaterialButtonToggleGroup
