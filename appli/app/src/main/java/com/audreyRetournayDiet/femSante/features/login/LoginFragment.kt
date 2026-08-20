@@ -21,6 +21,7 @@ import com.audreyRetournayDiet.femSante.room.database.AppDatabase
 import com.audreyRetournayDiet.femSante.room.database.DatabaseProvider
 import com.audreyRetournayDiet.femSante.room.entity.UserEntity
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
+import com.audreyRetournayDiet.femSante.shared.optBooleanFlexible
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber
@@ -150,10 +151,11 @@ class LoginFragment : Fragment() {
     ) {
         // Extraction des droits d'accès. La clé JSON renvoyée par l'API est "A vie"
         // (booléen = is_null(VALID_DATE) côté serveur), pas "lifetimeAccess".
-        val lifetimeAccess = apiResult.data?.optBoolean("A vie", false) ?: false
-        // Accès aux contenus (freemium) : clé API "acces" (true = abonnée active / essai ;
-        // false = gratuit). Repli sur l'abonnement à vie tant que le backend ne renvoie pas la clé.
-        val hasAccess = (apiResult.data?.optBoolean("acces", false) ?: false) || lifetimeAccess
+        // Lecture *tolérante* au type (booléen / tinyint 1-0 / chaîne "1") : cf. FlexibleBoolean.
+        val lifetimeAccess = apiResult.data?.optBooleanFlexible("A vie") ?: false
+        // Accès aux contenus (freemium) : clé API "acces", calculée côté serveur
+        // (VALID_DATE null = à vie, OU VALID_DATE >= aujourd'hui) — inclut donc déjà l'à-vie.
+        val hasAccess = apiResult.data?.optBooleanFlexible("acces") ?: false
         Timber.v("Droits d'accès : à vie=$lifetimeAccess, accès contenu=$hasAccess")
 
         // 1️⃣ Synchronisation Locale (Room)
