@@ -1,0 +1,27 @@
+[
+  {
+    "id": "sample_breakfast",
+    "category": "BREAKFAST",
+    "title": "Petit-déjeuner test",
+    "servings": "1 personne",
+    "prepMinutes": 5,
+    "cookMinutes": 0,
+    "ingredients": [
+      { "quantity": "30", "unit": "g", "name": "Graines de chia", "note": "ou surgelées", "section": "Base" },
+      { "quantity": null, "unit": null, "name": "Fruits rouges", "note": null, "section": "Topping" }
+    ],
+    "steps": [ "Mélanger.", "Laisser reposer." ],
+    "nutritionTip": "Riche en fibres.",
+    "phase": ["Folliculaire"],
+    "tags": ["Express", "Sans gluten"]
+  },
+  {
+    "id": "sample_dessert",
+    "category": "DESSERT",
+    "title": "Dessert test",
+    "ingredients": [ { "name": "Pomme" } ],
+    "steps": [ "Couper." ],
+    "phase": [],
+    "tags": []
+  }
+]

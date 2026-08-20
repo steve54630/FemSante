@@ -1,0 +1,24 @@
+[
+  {
+    "id": "s-liposoluble", "name": "Vitamine test", "otherName": "Alias", "group": "LIPOSOLUBLE",
+    "unit": "µg", "premium": true,
+    "intake": { "women": "1", "men": "1", "pregnant": "1", "breastfeeding": "1" },
+    "sources": [ { "name": "Source A", "amount": "100" } ],
+    "cofactors": "cofacteur", "notes": "note"
+  },
+  {
+    "id": "s-hydrosoluble", "name": "Vitamine C test", "group": "HYDROSOLUBLE", "unit": "mg", "premium": true,
+    "intake": { "women": "1", "men": "1", "pregnant": "1", "breastfeeding": "1" },
+    "sources": [ { "name": "Source B", "amount": "200" } ]
+  },
+  {
+    "id": "s-mineral", "name": "Minéral test", "group": "MINERAL", "unit": "mg", "premium": false,
+    "intake": { "women": "1", "men": "1", "pregnant": "1", "breastfeeding": "1" },
+    "sources": [ { "name": "Source C", "amount": "300" } ]
+  },
+  {
+    "id": "s-oligo", "name": "Oligo test", "group": "OLIGO", "unit": "mg", "premium": true,
+    "intake": { "women": "1", "men": "1", "pregnant": "1", "breastfeeding": "1" },
+    "sources": [ { "name": "Source D", "amount": "400" } ]
+  }
+]

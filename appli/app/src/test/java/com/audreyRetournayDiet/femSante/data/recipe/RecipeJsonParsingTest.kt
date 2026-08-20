@@ -3,33 +3,26 @@ package com.audreyRetournayDiet.femSante.data.recipe
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /**
- * Valide le fichier réellement livré `assets/recipes.json` (pas un échantillon).
+ * Teste la **logique de parsing** des recettes sur un mini-fixture dédié
+ * (`test/resources/recipes_sample.json`).
  *
- * Le test lit le fichier directement sur le disque (le répertoire de travail des tests
- * unitaires Android est le dossier du module) puis le parse via [RecipeJsonParser], sans
- * dépendre d'un `Context`/`AssetManager`. Objectif : détecter au plus tôt une faute de frappe,
- * une virgule manquante ou une catégorie invalide, avant même de brancher l'UI.
+ * On ne parse **pas** le vrai `assets/recipes.json` : c'est de la donnée (susceptible de passer
+ * côté API), la coupler aux tests les rendrait fragiles. Le fixture ne valide que le parseur :
+ * champs obligatoires, résolution de l'enum de catégorie, unicité des identifiants.
  */
 class RecipeJsonParsingTest {
 
-    private fun loadRecipesJson(): String {
-        val candidates = listOf(
-            "src/main/assets/recipes.json",
-            "app/src/main/assets/recipes.json"
-        )
-        val file = candidates.map(::File).firstOrNull { it.exists() }
-            ?: error("recipes.json introuvable (répertoire courant : ${File("").absolutePath})")
-        return file.readText()
+    private val recipes: List<Recipe> by lazy {
+        val json = javaClass.getResourceAsStream("/recipes_sample.json")!!
+            .bufferedReader().use { it.readText() }
+        RecipeJsonParser.parse(json)
     }
 
-    private val recipes: List<Recipe> by lazy { RecipeJsonParser.parse(loadRecipesJson()) }
-
     @Test
-    fun `le fichier contient les 21 recettes`() {
-        assertEquals(21, recipes.size)
+    fun `parse toutes les recettes du fixture`() {
+        assertEquals(2, recipes.size)
     }
 
     @Test
@@ -39,30 +32,22 @@ class RecipeJsonParsingTest {
             assertTrue("titre vide pour '${recipe.id}'", recipe.title.isNotBlank())
             assertTrue("aucun ingrédient pour '${recipe.id}'", recipe.ingredients.isNotEmpty())
             assertTrue("aucune étape pour '${recipe.id}'", recipe.steps.isNotEmpty())
-            recipe.ingredients.forEach { ingredient ->
-                assertTrue("nom d'ingrédient vide dans '${recipe.id}'", ingredient.name.isNotBlank())
-            }
-            recipe.steps.forEach { step ->
-                assertTrue("étape vide dans '${recipe.id}'", step.isNotBlank())
-            }
+            recipe.ingredients.forEach { assertTrue("nom d'ingrédient vide dans '${recipe.id}'", it.name.isNotBlank()) }
+            recipe.steps.forEach { assertTrue("étape vide dans '${recipe.id}'", it.isNotBlank()) }
         }
+    }
+
+    @Test
+    fun `les categories sont resolues par nom`() {
+        // Gson mettrait la catégorie à null si le libellé ne correspondait à aucune valeur d'enum.
+        assertTrue(recipes.all { it.category != null })
+        assertEquals(RecipeCategory.BREAKFAST, recipes.first { it.id == "sample_breakfast" }.category)
+        assertEquals(RecipeCategory.DESSERT, recipes.first { it.id == "sample_dessert" }.category)
     }
 
     @Test
     fun `les identifiants sont uniques`() {
         val ids = recipes.map { it.id }
         assertEquals("des identifiants sont dupliqués", ids.size, ids.toSet().size)
-    }
-
-    @Test
-    fun `les categories sont valides et correctement reparties`() {
-        // Gson mettrait la catégorie à null si le libellé ne correspondait à aucune valeur de
-        // l'enum ; on vérifie donc à la fois qu'aucune n'est nulle et la répartition attendue.
-        assertTrue(recipes.all { it.category != null })
-        val countByCategory = recipes.groupingBy { it.category }.eachCount()
-        assertEquals(3, countByCategory[RecipeCategory.BREAKFAST])
-        assertEquals(5, countByCategory[RecipeCategory.ENTREE])
-        assertEquals(6, countByCategory[RecipeCategory.PLAT])
-        assertEquals(7, countByCategory[RecipeCategory.DESSERT])
     }
 }
