@@ -49,6 +49,7 @@ class FodmapActivity : AppCompatActivity() {
         textEmpty = findViewById(R.id.textEmpty)
         chipGroupStatus = findViewById(R.id.chipGroupStatus)
         buildStatusChips()
+        setupInfoToggle()
 
         findViewById<EditText>(R.id.editSearch).addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -72,6 +73,17 @@ class FodmapActivity : AppCompatActivity() {
             val chip = checkedIds.firstOrNull()?.let { group.findViewById<Chip>(it) }
             status = chip?.tag as? FodmapStatus
             render()
+        }
+    }
+
+    /** Bloc explicatif « Qu'est-ce que le FODMAP ? », replié par défaut pour privilégier la recherche. */
+    private fun setupInfoToggle() {
+        val toggle = findViewById<TextView>(R.id.textFodmapInfoToggle)
+        val body = findViewById<View>(R.id.containerFodmapInfo)
+        toggle.setOnClickListener {
+            val expand = !body.isVisible
+            body.isVisible = expand
+            toggle.setText(if (expand) R.string.fodmap_info_toggle_open else R.string.fodmap_info_toggle_closed)
         }
     }
 

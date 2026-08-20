@@ -45,6 +45,12 @@
     <string name="ebook">Les secrets des micronutriments</string>
     <string name="ressources">Ressources nutrition</string>
     <string name="fodmap_title">Guide FODMAP</string>
+    <string name="fodmap_info_toggle_closed">Qu\'est-ce que le FODMAP ? ⌄</string>
+    <string name="fodmap_info_toggle_open">Qu\'est-ce que le FODMAP ? ⌃</string>
+    <string name="fodmap_info_intro">Les FODMAPs sont des sucres et glucides fermentescibles que l\'intestin grêle absorbe mal. Chez les personnes sensibles (syndrome de l\'intestin irritable, ballonnements chroniques), ils descendent dans le côlon où ils fermentent rapidement et peuvent provoquer gaz et inconfort.</string>
+    <string name="fodmap_info_families_title">Les 4 familles</string>
+    <string name="fodmap_info_families">• Oligosaccharides : ail, oignon, blé, légumineuses…\n• Disaccharides : lactose (lait, yaourts classiques…)\n• Monosaccharides : fructose en excès (miel, pommes…)\n• Polyols : sorbitol, mannitol (champignons, prunes, édulcorants…)</string>
+    <string name="fodmap_info_dose">La plupart des aliments ne sont pas interdits, mais limités à une dose : une petite quantité peut être tolérée là où une portion plus généreuse devient un problème. C\'est pourquoi chaque fiche indique une portion-limite plutôt qu\'un simple interdit.</string>
     <string name="fodmap_food_meta">%1$s · %2$s</string>
     <string name="fodmap_search_hint">Rechercher un aliment</string>
     <string name="fodmap_status_all">Tout</string>
