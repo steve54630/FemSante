@@ -9,7 +9,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
-import com.audreyRetournayDiet.femSante.data.media.MediaCatalog
+import com.audreyRetournayDiet.femSante.data.media.MediaModule
+import com.audreyRetournayDiet.femSante.repository.local.MediaContentRepository
 import com.audreyRetournayDiet.femSante.data.media.MediaCategory
 import com.audreyRetournayDiet.femSante.data.media.MediaFilter
 import com.audreyRetournayDiet.femSante.data.media.MediaItem
@@ -32,7 +33,7 @@ import timber.log.Timber
  */
 class BienTeteActivity : AppCompatActivity() {
 
-    private val catalog = MediaCatalog.tete
+    private val catalog by lazy { MediaContentRepository(applicationContext).forModule(MediaModule.TETE) }
     private var type = MediaType.VIDEO
     private var category: MediaCategory? = null
 

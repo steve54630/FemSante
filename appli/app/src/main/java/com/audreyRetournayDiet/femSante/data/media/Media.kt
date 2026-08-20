@@ -3,6 +3,9 @@ package com.audreyRetournayDiet.femSante.data.media
 /** Nature d'un contenu de bien-être : à écouter ou à regarder. */
 enum class MediaType { VIDEO, AUDIO }
 
+/** Module auquel appartient le contenu (« Bien dans ta tête » / « Bien dans ton corps »). */
+enum class MediaModule { TETE, CORPS }
+
 /** Thème d'un contenu (sert de chips de filtre). L'ordre de déclaration = ordre d'affichage. */
 enum class MediaCategory(val label: String) {
     // Module « Bien dans ta tête »
@@ -31,6 +34,7 @@ data class MediaItem(
     val title: String,
     val type: MediaType,
     val category: MediaCategory,
+    val module: MediaModule,
     val premium: Boolean,
     val pdf: Boolean = false
 )

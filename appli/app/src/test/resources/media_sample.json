@@ -1,0 +1,8 @@
+[
+  { "title": "Sample Art vidéo", "type": "VIDEO", "category": "ART_THERAPIE", "module": "TETE", "premium": false, "pdf": true },
+  { "title": "Sample Sophro vidéo", "type": "VIDEO", "category": "SOPHROLOGIE", "module": "TETE", "premium": true },
+  { "title": "Sample Sophro audio", "type": "AUDIO", "category": "SOPHROLOGIE", "module": "TETE", "premium": false },
+  { "title": "Sample Méditation audio", "type": "AUDIO", "category": "MEDITATION", "module": "TETE", "premium": true },
+  { "title": "Sample Yoga vidéo", "type": "VIDEO", "category": "YOGA", "module": "CORPS", "premium": false },
+  { "title": "Sample Pilates vidéo", "type": "VIDEO", "category": "PILATES", "module": "CORPS", "premium": true }
+]
