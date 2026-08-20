@@ -2,6 +2,10 @@ package com.audreyRetournayDiet.femSante.viewmodels.main
 
 import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
+import com.audreyRetournayDiet.femSante.data.recommendation.ContentRef
+import com.audreyRetournayDiet.femSante.data.recommendation.ContentTagRepository
+import com.audreyRetournayDiet.femSante.data.recommendation.ContentType
+import com.audreyRetournayDiet.femSante.data.recommendation.JournalTag
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
 import com.audreyRetournayDiet.femSante.repository.local.RecipeContentRepository
@@ -30,11 +34,19 @@ class PourToiViewModelTest {
 
     private val repository = mockk<DailyRepository>()
     private val recipeRepository = mockk<RecipeContentRepository>()
+    private val contentTagRepository = mockk<ContentTagRepository>()
     private val phaseProvider = mockk<CurrentCyclePhaseProvider>()
     private val userStore = mockk<UserStore>()
 
     private fun stubUser() {
         every { userStore.getUser() } returns AppUser("u1", false, "a@b.c", "pwd")
+    }
+
+    /** Catalogue minimal : un contenu tagué douleur au bassin, pour la reco basée sur la saisie. */
+    private fun stubTagCatalog() {
+        every { contentTagRepository.tagsByContent() } returns mapOf(
+            ContentRef(ContentType.VIDEO, "SOS Douleurs") to setOf(JournalTag.Zone(PainZone.BASSIN))
+        )
     }
 
     /**
@@ -60,7 +72,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
 
-        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)
@@ -71,9 +83,10 @@ class PourToiViewModelTest {
     fun `avec saisie aujourd'hui des recommandations sont proposees`() = runTest {
         stubUser()
         stubRecipeOfDayDeps()
+        stubTagCatalog()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(entryToday(), "ok")
 
-        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertTrue(state.hasEntryToday)
@@ -87,7 +100,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Failure("erreur")
 
-        val vm = PourToiViewModel(repository, recipeRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)
