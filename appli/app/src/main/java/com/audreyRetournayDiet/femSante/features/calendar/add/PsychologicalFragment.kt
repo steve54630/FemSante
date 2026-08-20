@@ -14,8 +14,12 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.type.DayQuality
 import com.audreyRetournayDiet.femSante.room.type.DifficultyCause
 import com.audreyRetournayDiet.femSante.viewmodels.calendar.EntryViewModel
+import com.audreyRetournayDiet.femSante.shared.addTagChips
+import com.audreyRetournayDiet.femSante.shared.checkChipByTag
+import com.audreyRetournayDiet.femSante.shared.checkChipsByTags
+import com.audreyRetournayDiet.femSante.shared.selectedTag
+import com.audreyRetournayDiet.femSante.shared.selectedTags
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
@@ -64,8 +68,8 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         // Génération dynamique des options pour éviter la maintenance manuelle du XML
         if (chipGroupQuality.isEmpty()) {
             Timber.d("Génération des Chips pour Qualité et Causes")
-            setupChips(chipGroupQuality, DayQuality.entries)
-            setupChips(chipGroupCauses, DifficultyCause.entries)
+            chipGroupQuality.addTagChips(DayQuality.entries)
+            chipGroupCauses.addTagChips(DifficultyCause.entries)
         }
 
         observePsychologicalState(chipGroupQuality, chipGroupCauses, layoutAutres, etAutres)
@@ -88,8 +92,8 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
                     Timber.v("Sync UI : Qualité=${state.dayQuality}, Nb Causes=${state.difficultyCauses.size}")
 
                     // Synchronisation des sélections (VM -> UI)
-                    selectChipByTag(groupQuality, state.dayQuality)
-                    selectChipsByTags(groupCauses, state.difficultyCauses)
+                    groupQuality.checkChipByTag(state.dayQuality)
+                    groupCauses.checkChipsByTags(state.difficultyCauses)
 
                     // Gestion de la visibilité du champ "Autre"
                     val hasOther = state.difficultyCauses.contains(DifficultyCause.AUTRE)
@@ -117,8 +121,8 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
     ) {
         /** Envoie l'état actuel des vues vers le ViewModel */
         fun pushUpdate() {
-            val quality = getSelectedTag<DayQuality>(groupQuality) ?: DayQuality.MOYENNE
-            val causes = getSelectedTags<DifficultyCause>(groupCauses)
+            val quality = groupQuality.selectedTag<DayQuality>() ?: DayQuality.MOYENNE
+            val causes = groupCauses.selectedTags<DifficultyCause>()
             val notes = etAutres.text?.toString()
 
             Timber.d("Action : pushUpdate -> Qualité: $quality, Causes: $causes")
@@ -221,85 +225,4 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         return "${minutes / 60} h ${String.format(Locale.FRANCE, "%02d", minutes % 60)}"
     }
 
-    // --- HELPERS UTILITAIRES ---
-
-    /**
-     * Génère dynamiquement des [Chip] à partir d'une liste d'Enum.
-     *
-     * Chaque Chip reçoit l'objet Enum dans sa propriété `tag` pour faciliter
-     * la récupération de la valeur sélectionnée sans conversion de String.
-     *
-     * @param T Le type de l'Enum (ex: [DayQuality] ou [DifficultyCause]).
-     * @param group Le [ChipGroup] où injecter les vues.
-     * @param entries La liste des valeurs possibles.
-     */
-    private fun <T : Enum<T>> setupChips(group: ChipGroup, entries: List<T>) {
-        entries.forEach { entry ->
-            val chip = Chip(requireContext()).apply {
-                text = entry.name
-                isCheckable = true
-                this.tag = entry
-                id = View.generateViewId()
-            }
-            group.addView(chip)
-        }
-    }
-
-    /**
-     * Coche un [Chip] unique au sein d'un groupe en fonction de son Tag (Enum).
-     *
-     * @param group Le groupe contenant les Chips.
-     * @param tagToSelect L'objet (Enum) correspondant à la sélection actuelle.
-     */
-    private fun selectChipByTag(group: ChipGroup, tagToSelect: Any?) {
-        for (i in 0 until group.childCount) {
-            val chip = group.getChildAt(i) as Chip
-            if (chip.tag == tagToSelect) {
-                if (!chip.isChecked) {
-                    chip.isChecked = true
-                }
-                return
-            }
-        }
-    }
-
-    /**
-     * Met à jour l'état de sélection multiple des Chips pour les causes de difficulté.
-     *
-     * @param group Le groupe de sélection multiple.
-     * @param tagsToSelect La liste des causes actuellement enregistrées dans le ViewModel.
-     */
-    private fun selectChipsByTags(group: ChipGroup, tagsToSelect: List<DifficultyCause>) {
-        for (i in 0 until group.childCount) {
-            val chip = group.getChildAt(i) as Chip
-            val shouldBeChecked = tagsToSelect.contains(chip.tag)
-            // On ne change l'état que si nécessaire pour éviter des triggers inutiles
-            if (chip.isChecked != shouldBeChecked) {
-                chip.isChecked = shouldBeChecked
-            }
-        }
-    }
-
-    /**
-     * Récupère la valeur Enum du Chip actuellement sélectionné (Sélection Unique).
-     *
-     * @param group Le [ChipGroup] concerné.
-     * @return La valeur de l'Enum castée au type [T], ou null si rien n'est coché.
-     */
-    private fun <T> getSelectedTag(group: ChipGroup): T? {
-        val selectedId = group.checkedChipId
-        return group.findViewById<Chip>(selectedId)?.tag as? T
-    }
-
-    /**
-     * Récupère la liste des valeurs Enum des Chips cochés (Sélection Multiple).
-     *
-     * @param group Le [ChipGroup] concerné.
-     * @return Une liste d'objets [T] correspondant aux tags des Chips sélectionnés.
-     */
-    private fun <T> getSelectedTags(group: ChipGroup): List<T> {
-        return group.checkedChipIds.mapNotNull { id ->
-            group.findViewById<Chip>(id)?.tag as? T
-        }
-    }
 }

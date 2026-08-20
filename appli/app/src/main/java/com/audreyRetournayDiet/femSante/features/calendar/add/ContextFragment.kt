@@ -13,14 +13,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.room.type.PhysicalActivity
 import com.audreyRetournayDiet.femSante.viewmodels.calendar.EntryViewModel
-import com.google.android.material.chip.Chip
+import com.audreyRetournayDiet.femSante.shared.addTagChips
+import com.audreyRetournayDiet.femSante.shared.checkChipByTag
+import com.audreyRetournayDiet.femSante.shared.selectedTag
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Fragment de saisie du contexte quotidien pour une entrée du calendrier.
@@ -47,27 +48,11 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
 
         // Génération des options d'activité physique à partir de l'Enum PhysicalActivity
         if (chipGroupActivity.isEmpty()) {
-            setupPhysicalActivityChips(chipGroupActivity)
+            chipGroupActivity.addTagChips(PhysicalActivity.entries)
         }
 
         observeState(chipGroupActivity, switchMedication, layoutMedicationList, etMedicationList, etDietNotes)
         setupInputListeners(chipGroupActivity, switchMedication, etMedicationList, etDietNotes)
-    }
-
-    /**
-     * Génère dynamiquement les Chips basés sur l'énumération [PhysicalActivity].
-     */
-    private fun setupPhysicalActivityChips(group: ChipGroup) {
-        Timber.d("Initialisation : Génération des Chips d'activité")
-        PhysicalActivity.entries.forEach { activity ->
-            val chip = Chip(requireContext()).apply {
-                text = activity.name
-                isCheckable = true
-                this.tag = activity
-                id = View.generateViewId()
-            }
-            group.addView(chip)
-        }
     }
 
     /**
@@ -85,7 +70,7 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contextState.collect { state ->
                     // Synchronisation de l'activité sélectionnée
-                    selectChipByTag(group, state.physicalActivity ?: PhysicalActivity.REPOS)
+                    group.checkChipByTag(state.physicalActivity ?: PhysicalActivity.REPOS)
 
                     // État des médicaments
                     if (switch.isChecked != state.medecineTaken) {
@@ -117,8 +102,7 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
     ) {
         // Fonction locale pour centraliser l'envoi des données vers le ViewModel
         fun pushUpdate() {
-            val selectedChipId = group.checkedChipId
-            val activity = group.findViewById<Chip>(selectedChipId)?.tag as? PhysicalActivity ?: PhysicalActivity.REPOS
+            val activity = group.selectedTag<PhysicalActivity>() ?: PhysicalActivity.REPOS
 
             viewModel.updateContextState(
                 activity = activity,
@@ -145,17 +129,4 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         }
     }
 
-    /**
-     * Parcourt les enfants du [ChipGroup] pour cocher celui correspondant au tag cible.
-     * @param targetTag La valeur de l'énumération à sélectionner.
-     */
-    private fun selectChipByTag(group: ChipGroup, targetTag: PhysicalActivity) {
-        for (i in 0 until group.childCount) {
-            val chip = group.getChildAt(i) as Chip
-            if (chip.tag == targetTag) {
-                if (!chip.isChecked) chip.isChecked = true
-                break
-            }
-        }
-    }
 }
