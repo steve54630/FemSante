@@ -69,6 +69,15 @@ viewers), `di/`.
 - **Bottom-nav hosts use add/hide/show**, never `replace()` on reused fragment instances — the
   latter silently breaks state retention and Flow reactivity (fixed in `HomeActivity`,
   `AlimActivity`, `EntryAddActivity`).
+- **Content is data-driven (JSON assets), not hard-coded.** Catalogue content lives in
+  `assets/*.json` — `recipes.json`, `media.json`, `micronutrients.json` +
+  `nutrient_interactions.json`, and `content_tags.json` (the journal↔content tagging table for the
+  "Pour toi" recommendation engine). Each has an **isolated pure parser** (`*JsonParser`, Gson +
+  `TypeToken`) feeding a **`@Singleton` repository** that lazy-loads the asset once. Pure logic
+  (`RecommendationEngine`, `*Filter`, `DailyRecipeSelector`) takes the catalogue **as a parameter**
+  — it never reaches into a hard-coded table. Goal: the app skeleton runs without data (empty
+  catalogue = graceful fallback), and the source can move to the API by swapping only the repository.
+  When adding catalogue content, extend the JSON — do not reintroduce Kotlin `object` tables.
 - **Privacy / RGPD — local-first.** Journal, cycle and medical data stay **strictly on-device**
   (Room + SQLCipher). Never send personal health data to a server. Only streaming media and
   auth/subscription go through the API.
@@ -96,9 +105,11 @@ viewers), `di/`.
    - `JFROG_USER` / `JFROG_PASSWORD` (private Cardinal/PayPal SDK Maven repo; can also be env vars)
 2. Build/run from Android Studio, or `./gradlew :app:assembleDebug` in `appli/`.
 3. **Tests**: pure-logic objects (`RecipeFilter`, `*JsonParser`, `DailyRecipeSelector`,
-   `ShoppingListBuilder`, `MediaFilter`, `MicronutrientFilter`…) are unit-tested on the JVM; the
-   parsing tests read the real `assets/*.json` from disk. **The developer (Steve) runs the tests
-   himself — do not run `gradle test` on their behalf.**
+   `ShoppingListBuilder`, `MediaFilter`, `MicronutrientFilter`, `RecommendationEngine`…) are
+   unit-tested on the JVM. Tests load **dedicated mini-fixtures** from `src/test/resources/`
+   (`*_sample.json`, via `javaClass.getResourceAsStream("/…")`) — **never** the production
+   `assets/*.json`, so the skeleton stays testable when the data eventually moves to the API.
+   **The developer (Steve) runs the tests himself — do not run `gradle test` on their behalf.**
 
 ## Recommendations if you relocate / clone the project elsewhere
 
