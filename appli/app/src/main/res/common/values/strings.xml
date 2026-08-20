@@ -7,8 +7,6 @@
     <string name="connect">Connexion</string>
     <string name="e_mail_demand">Saisissez votre e-mail</string>
     <string name="password_demand">Saissisez votre mot de passe</string>
-    <string name="bonjour">Menu principal</string>
-
     <!-- Ecran d'inscription -->
     <string name="secret_answer">Réponse à la question secrète</string>
     <string name="register_price">Cliquez pour choisir un abonnement</string>
@@ -19,34 +17,13 @@
 
     <!-- Option du menu -->
 
-    <string name="option_calendar">Calendrier des symptômes</string>
     <string name="option_alim">Nutrition</string>
     <string name="option_tete">Bien dans ta tête</string>
     <string name="option_corps">Bien dans ton corps</string>
     <string name="option_outils">Boîte à outils</string>
-    <string name="option_meditaion">Méditations</string>
-    <string name="option_sophrologie">Sophrologie</string>
-    <string name="option_therapieart">Art-thérapie</string>
-    <string name="option_yoga">Yoga</string>
-    <string name="option_fitness">Fitness</string>
-    <string name="option_pilates">Pilates</string>
-    <string name="option_danse">Danse</string>
     <string name="pdf">A explorer</string>
 
     <!-- Art-thérapie -->
-    <string name="joy">Joie</string>
-    <string name="anger">Colère</string>
-    <string name="fear">Peur</string>
-    <string name="sadness">Tristesse</string>
-
-    <string name="fans">Eventails</string>
-    <string name="Mirror_exercice">Exercice du miroir</string>
-    <string name="shoulder">Pompage des épaules</string>
-    <string name="audio_exercise">Sophronisations</string>
-    <string name="emotional_intelligence">Intelligence émotionnelle</string>
-    <string name="thoracic">Soufflet thoracique</string>
-    <string name="hypnosis">Hypnose</string>
-
     <!-- Exo Player -->
 
     <string name="exo_prev">Précédent</string>
@@ -63,25 +40,10 @@
     <string name="exo_fullscreen">Plein écran</string>
 
     <!-- boîte à outils -->
-    <string name="outils1">Automassage du ventre</string>
-    <string name="outils2">Les vertus de la bouillotte</string>
-    <string name="outils3">Huiles essentielles pour apaiser les douleurs abdominales</string>
-    <string name="outils4">Huiles essentielles pour apaiser les tempêtes émotionelles</string>
-    <string name="outils5">Infusions pour apaiser les tempêtes émotionelles</string>
-    <string name="outils6">Infusions et digestion</string>
-    <string name="outils7">Infusions pour apaiser les menstruations</string>
-
     <!--Yoga -->
-    <string name="beginner">Débutant en yoga</string>
-    <string name="calm">Retrouver son calme intérieur</string>
-    <string name="flow">SOS Douleurs</string>
     <string name="icone_description">Icône de l\'application</string>
-    <string name="error_recette">Problème d\'affichage</string>
-    <string name="help">Cliquez sur l\'image pour afficher la recette</string>
     <string name="ebook">Les secrets des micronutriments</string>
     <string name="ressources">Ressources nutrition</string>
-    <string name="intolerence">Intolérance à l\'histamine</string>
-    <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
     <string name="fodmap_title">Guide FODMAP</string>
     <string name="fodmap_food_meta">%1$s · %2$s</string>
     <string name="fodmap_search_hint">Rechercher un aliment</string>
@@ -118,11 +80,7 @@
     <string name="plats">Plats</string>
     <string name="dessert">Desserts</string>
 
-    <string name="audio_choice">Cliquez pour choisir un exercice</string>
-    <string name="liste_des_recettes">Cliquez pour choisir une recette</string>
-
     <string name="price">Prix à payer:</string>
-    <string name="main_menu">Menu principal</string>
     <string name="account">Mon compte</string>
     <string name="account_preferences">Mes préférences</string>
     <string name="preferences_title">Mes préférences</string>
@@ -138,7 +96,6 @@
     <string name="subscribe_update">Mise à jour de l\'abonnement</string>
     <string name="login_name">Login</string>
     <string name="password_help">Le mot de passe est composé d\'au moins 8 caractères contenant au moins 1 majuscule, 1 caractère spécial et 1 minuscule</string>
-    <string name="facebook">Communauté Facebook</string>
     <string name="loading">En attente de la réponse Internet…</string>
 
     <string name="facebook_app_id">24442016295389259</string>
@@ -154,34 +111,17 @@
     <string name="quality_day">Qualité de la journée</string>
     <string name="causes_quality_day">Quelles sont les causes ?</string>
     <string name="other_details">Autres précisions…</string>
-    <string name="quality_day_causes">Raisons de la mauvaise journée</string>
-    <string name="calendar_general">Général</string>
-    <string name="calendar_moral">Moral</string>
-    <string name="calendar_symptom">Symptômes</string>
-    <string name="calendar_context">Contexte</string>
-    <string name="dolor_symptom">Zones de douleur</string>
-    <string name="zone_pelvis">Bassin</string>
-    <string name="zone_back">Lombaires</string>
-    <string name="zone_breasts">Seins</string>
-    <string name="zone_head">Tête</string>
-    <string name="zone_abdomen">Abdomen</string>
     <string name="symptom_nausea">Nausées</string>
     <string name="others_symptoms">Autres observations</string>
     <string name="others_symptom_hint">Décrivez d\'autres symptômes…</string>
     <string name="action_save_entry">Enregistrer les choix</string>
     <string name="msg_save_success">Entrée enregistré avec succés</string>
-    <string name="placeholder">Titre Section</string>
     <string name="entry_remove">Supprimer l\'entrée</string>
     <string name="entry_modify">Modifier l\'entrée</string>
     <string name="daily_resume">Résumé du jour</string>
-    <string name="general">Général</string>
-    <string name="psychological">Psychologique</string>
-    <string name="symptom">Symptômes</string>
-    <string name="context">Contexte</string>
     <string name="logout">Se déconnecter</string>
 
     <!-- Section "Pour toi aujourd'hui" -->
-    <string name="pour_toi_title">Pour toi aujourd\'hui</string>
     <string name="pour_toi_banner_incitatif">Pour des recommandations plus personnalisées, renseigne ton ressenti du jour dans ton journal.</string>
     <string name="pour_toi_banner_action">Remplir mon journal</string>
     <string name="badge_recommande">Recommandé pour toi</string>
@@ -267,7 +207,6 @@
     <string name="pain_map_face">Face</string>
     <string name="pain_map_back">Dos</string>
     <string name="pain_map_hint">Touche une zone, puis règle l\'intensité. Une zone non touchée = aucune douleur.</string>
-    <string name="pain_intensity_value">%1$d / 10</string>
     <string name="pain_remove_zone">Retirer cette zone</string>
     <string name="pain_validate">Valider</string>
     <string name="pain_level_low">1 · léger</string>
@@ -357,7 +296,6 @@
     <string name="recipe_ingredients">Ingrédients</string>
     <string name="recipe_steps">Préparation</string>
     <string name="recipe_tip">Le conseil nutritionnel</string>
-    <string name="recipe_view_pdf">Voir la fiche PDF</string>
     <string name="recipe_meta_prep">Prépa %1$d min</string>
     <string name="recipe_meta_cook">Cuisson %1$d min</string>
     <string name="recipe_meta_cook_none">Sans cuisson</string>
