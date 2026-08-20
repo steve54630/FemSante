@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
 import com.audreyRetournayDiet.femSante.data.recipe.DailyRecipeSelector
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeOfDay
+import com.audreyRetournayDiet.femSante.data.recommendation.ContentTagRepository
 import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.data.recommendation.RecommendationEngine
 import com.audreyRetournayDiet.femSante.repository.ApiResult
@@ -43,6 +44,7 @@ data class PourToiUiState(
 class PourToiViewModel @Inject constructor(
     private val repository: DailyRepository,
     private val recipeRepository: RecipeContentRepository,
+    private val contentTagRepository: ContentTagRepository,
     private val phaseProvider: CurrentCyclePhaseProvider,
     private val userStore: UserStore // L'injecter en private val pour y accéder dans refresh()
 ) : ViewModel() {
@@ -66,7 +68,9 @@ class PourToiViewModel @Inject constructor(
 
             // 3. Recommandations de contenu, basées sur la saisie du jour (si elle existe)
             val entry = (repository.getDailyEntryByDate(currentUserId, today) as? ApiResult.Success)?.data
-            val recos = entry?.let { RecommendationEngine.recommend(it) } ?: emptyList()
+            val recos = entry?.let {
+                RecommendationEngine.recommend(it, contentTagRepository.tagsByContent())
+            } ?: emptyList()
 
             // 4. Recette du jour, basée sur la phase du cycle (indépendante de la saisie du jour)
             val phase = phaseProvider.currentPhase(today)

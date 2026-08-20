@@ -1,0 +1,47 @@
+[
+  { "type": "PDF", "id": "automassage_ventre.pdf", "zones": ["ABDOMEN", "BASSIN", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "PDF", "id": "bouillote.pdf", "zones": ["ABDOMEN", "BASSIN", "HAUT_DOS", "TETE", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "PDF", "id": "douleurs_abdominales.pdf", "zones": ["ABDOMEN"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "PDF", "id": "emotional_tempest.pdf", "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "PDF", "id": "emotional_tempest_oil.pdf", "zones": ["SEINS"], "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "PDF", "id": "infusion_digestion.pdf", "zones": ["ABDOMEN", "JAMBES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["DIGESTIF"] },
+  { "type": "PDF", "id": "infusions_menstruations.pdf", "zones": ["ABDOMEN", "BASSIN", "SEINS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+
+  { "type": "PDF", "id": "histamine.pdf", "zones": ["ABDOMEN", "TETE"], "flags": ["DIGESTIF"] },
+  { "type": "PDF", "id": "gluten.pdf", "zones": ["ABDOMEN"], "flags": ["DIGESTIF"] },
+
+  { "type": "PDF", "id": "breakfast", "flags": ["DIGESTIF"] },
+  { "type": "PDF", "id": "entries", "flags": ["DIGESTIF"] },
+  { "type": "PDF", "id": "main_courses", "flags": ["DIGESTIF"] },
+  { "type": "PDF", "id": "desserts", "flags": ["DIGESTIF"] },
+
+  { "type": "VIDEO", "id": "SOS Douleurs", "zones": ["ABDOMEN", "BASSIN", "LOMBAIRES", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "VIDEO", "id": "Calme intérieur", "causes": ["STRESS"], "qualities": ["MOYENNE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Débutant au Yoga", "qualities": ["MOYENNE"], "activities": ["MARCHE", "SPORT"] },
+
+  { "type": "VIDEO", "id": "Pilates", "zones": ["BASSIN", "LOMBAIRES", "JAMBES"], "qualities": ["MOYENNE"], "activities": ["SPORT"] },
+  { "type": "VIDEO", "id": "Fitness", "activities": ["SPORT"] },
+
+  { "type": "VIDEO", "id": "Pompage des épaules", "zones": ["HAUT_DOS", "BRAS"], "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Exercice du miroir", "zones": ["HAUT_DOS"], "causes": ["STRESS", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Eventails", "zones": ["BRAS"], "causes": ["STRESS", "COLERE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Soufflet thoracique", "zones": ["SEINS"], "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+
+  { "type": "VIDEO", "id": "Joie", "activities": ["MARCHE", "SPORT"] },
+  { "type": "VIDEO", "id": "Tristesse", "causes": ["STRESS", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Colère", "causes": ["COLERE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "VIDEO", "id": "Peur", "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+
+  { "type": "VIDEO", "id": "Intelligence émotionnelle", "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+
+  { "type": "AUDIO", "id": "Base vivantielle", "zones": ["BRAS"], "causes": ["STRESS"], "qualities": ["MOYENNE"], "activities": ["REPOS"] },
+  { "type": "AUDIO", "id": "Déplacement du négatif", "zones": ["HAUT_DOS"], "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+
+  { "type": "AUDIO", "id": "Auto hypnose pour le stress", "zones": ["TETE"], "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "AUDIO", "id": "Auto-hypnose pour l'apaisement", "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+
+  { "type": "AUDIO", "id": "Calmer la colère", "causes": ["COLERE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "AUDIO", "id": "Calmer la douleur", "zones": ["ABDOMEN", "BASSIN", "LOMBAIRES", "TETE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "AUDIO", "id": "Confiance en soi", "causes": ["TRISTESSE"], "qualities": ["MOYENNE"], "activities": ["MARCHE", "SPORT"] },
+  { "type": "AUDIO", "id": "Relaxation", "zones": ["JAMBES"], "causes": ["STRESS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] }
+]

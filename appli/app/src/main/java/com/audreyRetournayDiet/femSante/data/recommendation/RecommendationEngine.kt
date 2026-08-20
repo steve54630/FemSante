@@ -38,7 +38,7 @@ object RecommendationEngine {
 
     fun recommend(
         latestEntry: DailyEntryFull?,
-        catalog: Map<ContentRef, Set<JournalTag>> = ContentTagRepository.tagsByContent
+        catalog: Map<ContentRef, Set<JournalTag>>
     ): List<Recommendation> {
         if (latestEntry == null) {
             // Aucune saisie : on affiche tout, sans note de pertinence ni tri imposé.
