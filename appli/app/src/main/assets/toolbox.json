@@ -1,0 +1,333 @@
+[
+  {
+    "id": "automassage_ventre",
+    "title": "AUTOMASSAGE DU VENTRE",
+    "category": "MASSAGE",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "L'automassage est un outil simple, accessible et facile à intégrer au quotidien pour réharmoniser le transit et apaiser la sphère digestive.",
+    "items": [
+      {
+        "name": "Huile de sésame",
+        "latin_name": null,
+        "properties": ["Stimulante pour transit lent"],
+        "contraindications": []
+      },
+      {
+        "name": "Huile de coco",
+        "latin_name": null,
+        "properties": ["Calmante pour transit rapide"],
+        "contraindications": []
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Usage quotidien / Matin à jeun",
+        "application_site": "Ventre / Côlon",
+        "steps": [
+          "Se réchauffer les mains en les frottant l'une contre l'autre.",
+          "Faire des reptations douces au-dessus puis en-dessous du nombril (3 passages).",
+          "Masser dans le sens du transit sur la zone du côlon pendant 2 minutes."
+        ]
+      }
+    ],
+    "precautions": []
+  },
+  {
+    "id": "bouillotte",
+    "title": "LES VERTUS DE LA BOUILLOTTE",
+    "category": "THERMOTHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "La bouillotte est une alliée précieuse au quotidien pour apaiser les douleurs digestives, les crampes et le stress.",
+    "items": [
+      {
+        "name": "Bouillotte à eau",
+        "latin_name": null,
+        "properties": ["Chaleur constante"],
+        "contraindications": []
+      },
+      {
+        "name": "Bouillotte sèche garnie",
+        "latin_name": null,
+        "properties": ["Garnie de graines de lin, lavande ou noyaux de cerises"],
+        "contraindications": []
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Lourdeur digestive",
+        "application_site": "Région du foie (à droite en bas des côtes)",
+        "steps": ["Appliquer la bouillotte pour stimuler les fonctions hépatiques."]
+      },
+      {
+        "indication": "Douleur au ventre / Crampes",
+        "application_site": "Région des intestins (sous le nombril)",
+        "steps": ["Appliquer la bouillotte pour apaiser les spasmes et colites."]
+      },
+      {
+        "indication": "Douleur de règles",
+        "application_site": "Bas ventre",
+        "steps": ["Appliquer la bouillotte pour calmer la douleur."]
+      },
+      {
+        "indication": "Stress",
+        "application_site": "Plexus solaire",
+        "steps": ["Appliquer la bouillotte pour apaiser et favoriser le sommeil."]
+      },
+      {
+        "indication": "Douleur au dos",
+        "application_site": "Zone douloureuse / Lombaires / Cervicales",
+        "steps": ["Appliquer la bouillotte pour soulager les maux de dos."]
+      }
+    ],
+    "precautions": [
+      "Ne jamais appliquer sur le cœur et sur la tête.",
+      "Ne pas appliquer sur le foie en cas d'hépatite."
+    ]
+  },
+  {
+    "id": "douleurs_abdominales_he",
+    "title": "HUILES ESSENTIELLES ET DOULEURS ABDOMINALES",
+    "category": "AROMATHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Les huiles essentielles peuvent aider à apaiser les douleurs abdominales liées aux troubles digestifs.",
+    "items": [
+      {
+        "name": "Menthe poivrée",
+        "latin_name": "Mentha x piperita",
+        "properties": ["Digestive"],
+        "contraindications": [
+          "Femmes enceintes ou allaitantes",
+          "Enfants",
+          "Personnes âgées",
+          "Personnes cardiaques, épileptiques, asthmatiques",
+          "Hypertension"
+        ]
+      },
+      {
+        "name": "Basilic exotique / tropical",
+        "latin_name": "Ocimum basilicum ssp basilicum",
+        "properties": ["Antispasmodique", "Tonique digestive", "Anti-inflammatoire"],
+        "contraindications": [
+          "Dermocaustique (à diluer)",
+          "Cancer ou antécédent",
+          "Maladie dégénérative",
+          "3 premiers mois de grossesse",
+          "Enfants de moins de 12 ans / moins de 40kg"
+        ]
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Douleurs digestives (crampes, spasmes)",
+        "application_site": "Ventre / Côlon",
+        "steps": [
+          "Diluer 1 goutte d'huile essentielle dans un peu d'huile végétale.",
+          "Masser une main dans le sens du transit sur la zone du côlon pendant 2 minutes."
+        ]
+      }
+    ],
+    "precautions": [
+      "Usage externe uniquement.",
+      "Réaliser un test de tolérance dans le creux du coude 24h avant.",
+      "Ne jamais appliquer sur les muqueuses, yeux, nez, oreilles.",
+      "Se laver les mains après utilisation."
+    ]
+  },
+  {
+    "id": "tempetes_emotionnelles_he",
+    "title": "HUILES ESSENTIELLES POUR APAISER LES TEMPÊTES ÉMOTIONNELLES",
+    "category": "AROMATHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Les huiles essentielles peuvent contribuer à apaiser le système nerveux en cas de stress, d'irritabilité ou d'agitation mentale.",
+    "items": [
+      {
+        "name": "Lavande vraie ou officinale",
+        "latin_name": "Lavandula angustifolia ssp angustifolia",
+        "properties": ["Apaisante", "Régulatrice du système nerveux"],
+        "contraindications": ["3 premiers mois de grossesse", "Enfants de moins de 6 ans"]
+      },
+      {
+        "name": "Orange douce",
+        "latin_name": "Citrus sinensis",
+        "properties": ["Calmante", "Sédative"],
+        "contraindications": ["3 premiers mois de grossesse", "Enfants de moins de 6 ans", "Photosensibilisante"]
+      },
+      {
+        "name": "Petit grain de bigarade",
+        "latin_name": "Citrus aurantium ssp aurantium",
+        "properties": ["Relaxante", "Sédative", "Régulatrice du système nerveux"],
+        "contraindications": ["3 premiers mois de grossesse", "Enfants de moins de 6 ans"]
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Inhalation sèche",
+        "application_site": "Mouchoir",
+        "steps": ["Verser 2 gouttes sur un mouchoir et respirer profondément quelques secondes."]
+      },
+      {
+        "indication": "Diffusion atmosphérique",
+        "application_site": "Air ambiant",
+        "steps": ["Mélanger 3 à 5 gouttes pour 100ml d'eau.", "Diffuser 5 minutes par heure."]
+      }
+    ],
+    "precautions": [
+      "Ne pas diffuser en présence de personnes qui dorment, asthmatiques, épileptiques, enfants ou animaux.",
+      "Ne jamais appliquer pure sur la peau."
+    ]
+  },
+  {
+    "id": "tempetes_emotionnelles_infusions",
+    "title": "INFUSIONS POUR APAISER LES TEMPÊTES ÉMOTIONNELLES",
+    "category": "PHYTOTHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Les plantes peuvent accompagner les périodes de tempêtes émotionnelles ou de stress.",
+    "items": [
+      {
+        "name": "Basilic sacré",
+        "latin_name": "Ocimum sanctum",
+        "properties": ["Adaptogène", "Agit sur l'anxiété et l'agitation mentale"],
+        "contraindications": ["Grossesse", "Allaitement", "Diabète"]
+      },
+      {
+        "name": "Tilleul",
+        "latin_name": "Tilia vulgaris",
+        "properties": ["Calmante", "Anti-insomnie", "Anti-irritabilité"],
+        "contraindications": []
+      },
+      {
+        "name": "Lavande vraie ou officinale",
+        "latin_name": "Lavandula angustifolia",
+        "properties": ["Calmante", "Facilite l'endormissement"],
+        "contraindications": []
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Préparation d'une infusion",
+        "application_site": "Voie orale",
+        "steps": [
+          "Mettre 1 c.à.c (tasse) ou 1 c.à.s (bol) de plante.",
+          "Verser l'eau frémissante à 95°C.",
+          "Couvrir et laisser infuser 10 minutes.",
+          "Filtrer et consommer."
+        ]
+      }
+    ],
+    "precautions": [
+      "Privilégier les plantes en vrac et bio.",
+      "Ne remplace pas un traitement médical ou une psychothérapie."
+    ]
+  },
+  {
+    "id": "infusions_digestion",
+    "title": "INFUSIONS ET DIGESTION",
+    "category": "PHYTOTHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Les plantes peuvent accompagner les lourdeurs digestives, les crampes ou les maux de ventre.",
+    "items": [
+      {
+        "name": "Menthe poivrée",
+        "latin_name": "Mentha x piperita",
+        "properties": ["Stimulante digestive", "Antispasmodique", "Soulage les ballonnements"],
+        "contraindications": ["Supplémentation en fer", "Traitements antiacides", "Traitements immunosuppresseurs"]
+      },
+      {
+        "name": "Mélisse",
+        "latin_name": "Melissa officinalis",
+        "properties": ["Digestive", "Antispasmodique", "Calmante"],
+        "contraindications": ["Grossesse", "Troubles de la thyroïde"]
+      },
+      {
+        "name": "Camomille noble / romaine",
+        "latin_name": "Chamaemelum nobile / Anthemis nobilis",
+        "properties": ["Digestive", "Antispasmodique", "Calmante"],
+        "contraindications": ["Asthme", "Allergie aux pollens d'armoise", "Grossesse", "Traitement anticoagulant"]
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Préparation d'une infusion (2 à 3 tasses/jour)",
+        "application_site": "Voie orale",
+        "steps": [
+          "Mettre 1 c.à.c (tasse) ou 1 c.à.s (bol) de plante.",
+          "Verser l'eau frémissante à 95°C.",
+          "Couvrir et laisser infuser 10 minutes.",
+          "Filtrer."
+        ]
+      }
+    ],
+    "precautions": [
+      "Consulter un médecin si les symptômes persistent ou s'aggravent."
+    ]
+  },
+  {
+    "id": "infusions_menstruations",
+    "title": "INFUSIONS ET MENSTRUATIONS",
+    "category": "PHYTOTHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Les plantes peuvent accompagner la période des règles.",
+    "items": [
+      {
+        "name": "Feuilles de framboisier",
+        "latin_name": "Rubus idaeus",
+        "properties": ["Antispasmodique", "Soulage les crampes"],
+        "contraindications": ["Problèmes hépatiques", "8 premiers mois de grossesse"]
+      },
+      {
+        "name": "Ortie piquante",
+        "latin_name": "Urtica dioica",
+        "properties": ["Reminéralisante", "Rebooste le corps"],
+        "contraindications": [
+          "Traitement anticoagulant",
+          "Supplémentation en fer",
+          "Grossesse et allaitement",
+          "Moins de 12 ans",
+          "Asthme, troubles cardiaques ou rénaux"
+        ]
+      },
+      {
+        "name": "Camomille matricaire / allemande",
+        "latin_name": "Matricaria chamomilla",
+        "properties": ["Relaxante", "Anti-inflammatoire", "Antispasmodique"],
+        "contraindications": ["Traitement anticoagulant", "Allergie aux Astéracées"]
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Préparation d'une infusion (2 à 3 tasses/jour)",
+        "application_site": "Voie orale",
+        "steps": [
+          "Mettre 1 c.à.c (tasse) ou 1 c.à.s (bol) de plante.",
+          "Verser l'eau frémissante à 95°C.",
+          "Couvrir et laisser infuser 10 minutes.",
+          "Filtrer."
+        ]
+      }
+    ],
+    "precautions": [
+      "Consulter un médecin ou gynécologue en cas de douleur inhabituelle."
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+[
+  {
+    "id": "massage_test",
+    "title": "AUTOMASSAGE TEST",
+    "category": "MASSAGE",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Résumé court.",
+    "items": [
+      {
+        "name": "Huile de sésame",
+        "latin_name": null,
+        "properties": ["Stimulante"],
+        "contraindications": []
+      }
+    ],
+    "protocols": [
+      {
+        "indication": "Transit lent",
+        "application_site": "Ventre",
+        "steps": ["Etape 1", "Etape 2"]
+      }
+    ],
+    "precautions": ["Usage externe uniquement."]
+  },
+  {
+    "id": "phyto_test",
+    "title": "INFUSION TEST",
+    "category": "PHYTOTHERAPY",
+    "author": {
+      "name": "Priscillia Devaux",
+      "role": "Naturopathe certifiée"
+    },
+    "summary": "Résumé phyto.",
+    "items": [
+      {
+        "name": "Menthe poivrée",
+        "latin_name": "Mentha x piperita",
+        "properties": ["Digestive"],
+        "contraindications": ["Grossesse"]
+      }
+    ],
+    "protocols": [],
+    "precautions": []
+  },
+  {
+    "id": "invalid_category",
+    "title": "Titre Valide",
+    "category": "UNKNOWN_CATEGORY",
+    "author": { "name": "Auteur", "role": "Role" }
+  },
+  {
+    "id": "missing_title",
+    "category": "AROMATHERAPY",
+    "author": { "name": "Auteur", "role": "Role" }
+  }
+]

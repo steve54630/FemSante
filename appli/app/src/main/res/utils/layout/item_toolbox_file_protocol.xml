@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/tvIndication"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/orange_app"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Douleurs digestives (crampes, spasmes)" />
+
+    <TextView
+        android:id="@+id/tvSite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:textStyle="italic"
+        tools:text="Zone : Ventre / Côlon" />
+
+    <TextView
+        android:id="@+id/tvSteps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        tools:text="1. Diluer 1 goutte d'huile essentielle dans de l'huile végétale.\n2. Masser pendant 2 minutes." />
+
+</LinearLayout>
