@@ -1,0 +1,5 @@
+[
+  { "id": "sample_a", "pdf": "sample_a.pdf", "title": "Fiche A" },
+  { "pdf": "sample_b.pdf", "title": "Fiche B sans id" },
+  { "pdf": "sample_bad.pdf" }
+]

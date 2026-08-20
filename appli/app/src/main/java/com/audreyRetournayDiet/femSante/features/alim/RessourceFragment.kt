@@ -5,91 +5,63 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.resource.ResourceDocument
+import com.audreyRetournayDiet.femSante.repository.local.ResourceContentRepository
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
-import com.audreyRetournayDiet.femSante.viewmodels.alim.RessourceViewModel
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
- * Fragment gérant la bibliothèque de ressources documentaires (PDF).
- * * Il permet d'accéder à des guides spécifiques (Histamine, Gluten, E-book) via des boutons.
- * La logique de sélection du fichier est gérée par le [RessourceViewModel], et l'affichage
- * est délégué à la [PdfActivity].
+ * Écran « Ressources » (nutrition) : fiches PDF (intolérances, sensibilités) issues de
+ * `assets/resources.json`, plus un raccourci fixe vers le module Micronutriments.
+ *
+ * Le raccourci Micronutriments n'est pas un onglet de nav à part : le placer ici évite d'alourdir
+ * une navigation déjà imbriquée sur 3 niveaux (Accueil → Découvrir → AlimActivity), et le rend
+ * même plus direct qu'avant (une carte au lieu d'un bouton dédié).
  */
-@AndroidEntryPoint
 class RessourceFragment : Fragment() {
 
-    private val viewModel: RessourceViewModel by viewModels()
+    private val repository by lazy { ResourceContentRepository(requireContext().applicationContext) }
+    private val adapter = ResourceCardAdapter(::onRowClicked)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_ressource, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_ressource, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRessourceButtons(view)
-        collectNavigationEvents()
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerRessources)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = adapter
+
+        val rows = repository.getAll().map { ResourceRow.Document(it) } +
+            ResourceRow.MicronutrientsShortcut +
+            ResourceRow.FodmapShortcut
+        adapter.submitList(rows)
     }
 
-    /**
-     * Initialise les listeners des boutons de ressources.
-     * @param view La vue racine du fragment.
-     */
-    private fun setupRessourceButtons(view: View) {
-        val buttons = mapOf(
-            R.id.buttonHistamine to "histamine",
-            R.id.buttonGluten to "gluten"
-        )
-
-        buttons.forEach { (resId, key) ->
-            view.findViewById<Button>(resId).setOnClickListener {
-                Timber.d("Action : Sélection de la ressource '$key'")
-                viewModel.onRessourceClicked(key)
-            }
-        }
-
-        // L'ancien e-book PDF « Les secrets des micronutriments » ouvre désormais le module natif.
-        view.findViewById<Button>(R.id.buttonEBook).setOnClickListener {
-            Timber.d("Action : Ouverture du module Micronutriments")
-            startActivity(Intent(requireContext(), MicronutrientsActivity::class.java))
+    private fun onRowClicked(row: ResourceRow) {
+        when (row) {
+            is ResourceRow.Document -> openPdf(row.document)
+            ResourceRow.MicronutrientsShortcut -> openMicronutrients()
+            ResourceRow.FodmapShortcut -> startActivity(Intent(requireContext(), FodmapActivity::class.java))
         }
     }
 
-    /**
-     * Écoute le flux de navigation du ViewModel pour ouvrir les documents PDF.
-     * Utilise [repeatOnLifecycle] pour garantir que la collecte ne se produit
-     * que lorsque l'UI est visible.
-     */
-    private fun collectNavigationEvents() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.navigationEvent.collect { pdfName ->
-                    Timber.i("Navigation : Lancement du lecteur PDF pour $pdfName")
+    private fun openPdf(document: ResourceDocument) {
+        Timber.i("Ressources : ouverture du PDF %s", document.pdf)
+        val intent = Intent(requireActivity(), PdfActivity::class.java).putExtra("PDF", document.pdf)
+        startActivity(intent)
+    }
 
-                    val intentTarget = Intent(requireActivity(), PdfActivity::class.java).apply {
-                        putExtra("PDF", pdfName)
-                    }
-
-                    try {
-                        startActivity(intentTarget)
-                    } catch (e: Exception) {
-                        Timber.e(e, "Erreur critique : Impossible d'ouvrir le PDF $pdfName")
-                    }
-                }
-            }
-        }
+    private fun openMicronutrients() {
+        Timber.i("Ressources : ouverture du module Micronutriments")
+        startActivity(Intent(requireContext(), MicronutrientsActivity::class.java))
     }
 }

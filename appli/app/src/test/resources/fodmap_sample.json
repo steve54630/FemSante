@@ -1,0 +1,7 @@
+[
+  { "id": "sample_pauvre", "name": "Carotte", "category": "LEGUMES", "status": "PAUVRE", "portion": "Libre", "notes": "À privilégier" },
+  { "id": "sample_modere", "name": "Aubergine", "category": "LEGUMES", "status": "MODERE", "portion": "75g", "notes": "Blanchir réduit les FODMAPs" },
+  { "id": "sample_riche", "name": "Oignon", "category": "LEGUMES", "status": "RICHE", "portion": "0g", "notes": "À supprimer" },
+  { "id": "sample_bad_category", "name": "Mystère", "category": "INCONNU", "status": "PAUVRE" },
+  { "id": "sample_bad_status", "name": "Mystère 2", "category": "LEGUMES", "status": "INCONNU" }
+]

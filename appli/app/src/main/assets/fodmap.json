@@ -1,0 +1,1954 @@
+[
+  {
+    "id": "fodmap_001",
+    "name": "Abricot",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1 (fruits à noyau)"
+  },
+  {
+    "id": "fodmap_002",
+    "name": "Banane bien mûre",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_003",
+    "name": "Cachiman (annona)",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_004",
+    "name": "Cerise",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_005",
+    "name": "Figue",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_006",
+    "name": "Kakis",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_007",
+    "name": "Litchi",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_008",
+    "name": "Longane",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_009",
+    "name": "Mangue",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_010",
+    "name": "Melon",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_011",
+    "name": "Mûres",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_012",
+    "name": "Nashi",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_013",
+    "name": "Nectarine",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1 (fruits à noyau)"
+  },
+  {
+    "id": "fodmap_014",
+    "name": "Noix de coco",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer sous forme brute"
+  },
+  {
+    "id": "fodmap_015",
+    "name": "Pamplemousse",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_016",
+    "name": "Pastèque",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_017",
+    "name": "Pêche",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1 (fruits à noyau)"
+  },
+  {
+    "id": "fodmap_018",
+    "name": "Poire",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Très riche en FODMAPs, à supprimer"
+  },
+  {
+    "id": "fodmap_019",
+    "name": "Pomme",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Très riche en FODMAPs, à supprimer"
+  },
+  {
+    "id": "fodmap_020",
+    "name": "Prune",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1 (fruits à noyau)"
+  },
+  {
+    "id": "fodmap_021",
+    "name": "Ramboutan (litchi poilu)",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer sous forme libre"
+  },
+  {
+    "id": "fodmap_022",
+    "name": "Fruits en conserve dans leur jus",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_023",
+    "name": "Jus des fruits riches",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Jus de pomme, poire, etc. à proscrire"
+  },
+  {
+    "id": "fodmap_024",
+    "name": "Abricots secs",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Fruits séchés riches à supprimer"
+  },
+  {
+    "id": "fodmap_025",
+    "name": "Banane séchée",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Fruits séchés riches à supprimer"
+  },
+  {
+    "id": "fodmap_026",
+    "name": "Canneberges séchées",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Fruits séchés riches à supprimer"
+  },
+  {
+    "id": "fodmap_027",
+    "name": "Pruneaux",
+    "category": "FRUITS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Fruits séchés riches à supprimer"
+  },
+  {
+    "id": "fodmap_028",
+    "name": "Ananas",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "1 petite tranche",
+    "notes": "À consommer sans excès"
+  },
+  {
+    "id": "fodmap_029",
+    "name": "Canneberge fraîche",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_030",
+    "name": "Carambole",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_031",
+    "name": "Clémentine",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "2 unités",
+    "notes": "Agrume pauvre en FODMAPs"
+  },
+  {
+    "id": "fodmap_032",
+    "name": "Citron jaune",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "En jus dilué ou sur les plats pour la vitamine C"
+  },
+  {
+    "id": "fodmap_033",
+    "name": "Citron vert",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_034",
+    "name": "Durian",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_035",
+    "name": "Figue de Barbarie",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_036",
+    "name": "Fraise",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier sans excès"
+  },
+  {
+    "id": "fodmap_037",
+    "name": "Fruit de la passion",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "1 unité",
+    "notes": "Limiter à un seul fruit"
+  },
+  {
+    "id": "fodmap_038",
+    "name": "Fruit du dragon",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_039",
+    "name": "Goyave mûre",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_040",
+    "name": "Kiwi",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "1 unité",
+    "notes": "Limiter à un seul fruit"
+  },
+  {
+    "id": "fodmap_041",
+    "name": "Mandarine",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_042",
+    "name": "Mangoustan",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_043",
+    "name": "Melon d'Espagne (ovale)",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_044",
+    "name": "Orange",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "1 unité",
+    "notes": "Agrume pauvre en FODMAPs"
+  },
+  {
+    "id": "fodmap_045",
+    "name": "Papaye",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_046",
+    "name": "Rhubarbe",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_047",
+    "name": "Tangerine",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_048",
+    "name": "Jus de fruits pauvres",
+    "category": "FRUITS",
+    "status": "PAUVRE",
+    "portion": "10-15 cL",
+    "notes": "Limiter à 1 petit verre par jour (ex: orange)"
+  },
+  {
+    "id": "fodmap_049",
+    "name": "Banane peu mûre",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "100g",
+    "notes": "Sans point noir sur la peau ni la chair (1/2 banane), espacer de 5h"
+  },
+  {
+    "id": "fodmap_050",
+    "name": "Framboises",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "45g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_051",
+    "name": "Grenade",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "38g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_052",
+    "name": "Kumquats",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "80g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_053",
+    "name": "Melon jaune / cantaloup / charentais",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "90g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_054",
+    "name": "Myrtilles",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "28g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_055",
+    "name": "Noix de coco râpée",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "18g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_056",
+    "name": "Ramboutan",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "30g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_057",
+    "name": "Tamarin",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "8g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_058",
+    "name": "Raisin",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "10 à 15 grains",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_059",
+    "name": "Raisins secs",
+    "category": "FRUITS",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "10 grains maximum, espacer de 5h"
+  },
+  {
+    "id": "fodmap_060",
+    "name": "Noix de cajou",
+    "category": "FRUITS_A_COQUE",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_061",
+    "name": "Pistaches",
+    "category": "FRUITS_A_COQUE",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_062",
+    "name": "Noix de macadamia",
+    "category": "FRUITS_A_COQUE",
+    "status": "PAUVRE",
+    "portion": "20 unités",
+    "notes": "Toléré librement pour les régimes végétaliens"
+  },
+  {
+    "id": "fodmap_063",
+    "name": "Cacahuètes et beurre de cacahuète",
+    "category": "FRUITS_A_COQUE",
+    "status": "PAUVRE",
+    "portion": "30 unités",
+    "notes": "Toléré sans ajout de fructose"
+  },
+  {
+    "id": "fodmap_064",
+    "name": "Poudre d'amande",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "25g",
+    "notes": "À associer uniquement aux aliments pauvres, espacer de 5h"
+  },
+  {
+    "id": "fodmap_065",
+    "name": "Amandes",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_066",
+    "name": "Noix",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_067",
+    "name": "Noisettes",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_068",
+    "name": "Noix de pécan",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_069",
+    "name": "Noix du Brésil",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_070",
+    "name": "Châtaigne grillée",
+    "category": "FRUITS_A_COQUE",
+    "status": "MODERE",
+    "portion": "10 unités",
+    "notes": "Limiter à 10 unités par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_071",
+    "name": "Ail",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer sous toutes ses formes"
+  },
+  {
+    "id": "fodmap_072",
+    "name": "Artichaut (feuille et cœur)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_073",
+    "name": "Asperges",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_074",
+    "name": "Avocat (portion classique)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Toléré uniquement à hauteur de 1/8e (ou 1/4 max)"
+  },
+  {
+    "id": "fodmap_075",
+    "name": "Betterave",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_076",
+    "name": "Brocoli (tige et pied)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Les têtes seules sont tolérées à 75g"
+  },
+  {
+    "id": "fodmap_077",
+    "name": "Céleri branche",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_078",
+    "name": "Champignons frais et surgelés",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riches en FODMAPs (seule la conserve est pauvre)"
+  },
+  {
+    "id": "fodmap_079",
+    "name": "Choucroute",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_080",
+    "name": "Chou de Bruxelles",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_081",
+    "name": "Chou vert",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_082",
+    "name": "Chou-fleur",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_083",
+    "name": "Échalote",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_084",
+    "name": "Fenouil (branches et feuilles)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Le bulbe est toléré à 50g"
+  },
+  {
+    "id": "fodmap_085",
+    "name": "Oignon (toutes les variétés)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer sous toutes ses formes"
+  },
+  {
+    "id": "fodmap_086",
+    "name": "Oignon nouveau (partie blanche)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Utiliser uniquement la partie verte"
+  },
+  {
+    "id": "fodmap_087",
+    "name": "Poireau (partie blanche)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Utiliser uniquement la partie verte"
+  },
+  {
+    "id": "fodmap_088",
+    "name": "Petits pois (portion classique)",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Toléré uniquement à 45g"
+  },
+  {
+    "id": "fodmap_089",
+    "name": "Pois gourmands",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_090",
+    "name": "Pois mange-tout",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_091",
+    "name": "Salsifis",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_092",
+    "name": "Topinambour",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_093",
+    "name": "Jus de légumes riches",
+    "category": "LEGUMES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_094",
+    "name": "Bette / Côtes de blette",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier à chaque repas"
+  },
+  {
+    "id": "fodmap_095",
+    "name": "Carotte",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Légume de base à privilégier"
+  },
+  {
+    "id": "fodmap_096",
+    "name": "Champignons en conserve",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Pauvres en FODMAPs grâce au trempage (bien rincer)"
+  },
+  {
+    "id": "fodmap_097",
+    "name": "Chicorée (feuille)",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier (limiter à 70g si sensibilité)"
+  },
+  {
+    "id": "fodmap_098",
+    "name": "Chou kale",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_099",
+    "name": "Citrouille",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_100",
+    "name": "Concombre",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_101",
+    "name": "Courge / Courge spaghetti",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_102",
+    "name": "Endive",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Légume de base très pauvre en FODMAPs"
+  },
+  {
+    "id": "fodmap_103",
+    "name": "Épinard",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_104",
+    "name": "Laitue / Salade",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Attention aux crudités en excès"
+  },
+  {
+    "id": "fodmap_105",
+    "name": "Luzerne",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_106",
+    "name": "Oignons nouveaux (partie verte)",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Substitut idéal à l'oignon classique"
+  },
+  {
+    "id": "fodmap_107",
+    "name": "Olives",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_108",
+    "name": "Poireau (partie verte)",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Substitut idéal au blanc de poireau"
+  },
+  {
+    "id": "fodmap_109",
+    "name": "Poivron rouge",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_110",
+    "name": "Pousses de bambou",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_111",
+    "name": "Radis",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_112",
+    "name": "Roquette",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_113",
+    "name": "Tomate (fraîche ou en sauce)",
+    "category": "LEGUMES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Légume de base pauvre en FODMAPs"
+  },
+  {
+    "id": "fodmap_114",
+    "name": "Aubergine",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "75g",
+    "notes": "Blanchir 3 min à l'eau bouillante réduit les FODMAPs"
+  },
+  {
+    "id": "fodmap_115",
+    "name": "Avocat",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "1/8e",
+    "notes": "1/8e d'avocat par prise (tolérance max : 1/4)"
+  },
+  {
+    "id": "fodmap_116",
+    "name": "Tête de brocoli",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "75g",
+    "notes": "Têtes uniquement, blanchir recommandé"
+  },
+  {
+    "id": "fodmap_117",
+    "name": "Céleri rave",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_118",
+    "name": "Chou chinois",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "85g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_119",
+    "name": "Chou blanc",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "90g",
+    "notes": "80-90g par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_120",
+    "name": "Chou rouge",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "90g",
+    "notes": "90g cru ou 70g fermenté, espacer de 5h"
+  },
+  {
+    "id": "fodmap_121",
+    "name": "Choy sum",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "60g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_122",
+    "name": "Courge butternut",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "30g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_123",
+    "name": "Courgette",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "65g",
+    "notes": "À associer à un légume pauvre (carotte, endive)"
+  },
+  {
+    "id": "fodmap_124",
+    "name": "Fenouil bulbe",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "50g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_125",
+    "name": "Haricots verts",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "75g",
+    "notes": "Teneur moyenne, blanchir recommandé"
+  },
+  {
+    "id": "fodmap_126",
+    "name": "Maïs en épi",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_127",
+    "name": "Navet",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "65g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_128",
+    "name": "Oignons marinés au vinaigre",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "45g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_129",
+    "name": "Poivron vert",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "50g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_130",
+    "name": "Germe de soja / Haricot mungo",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "50g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_131",
+    "name": "Tomates cerise",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "68g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_132",
+    "name": "Tomates séchées",
+    "category": "LEGUMES",
+    "status": "MODERE",
+    "portion": "8g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_133",
+    "name": "Blé (pain, semoule, pâtes, biscuits)",
+    "category": "FECULENTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1 (biscottes, cracottes, céréales blé)"
+  },
+  {
+    "id": "fodmap_134",
+    "name": "Seigle",
+    "category": "FECULENTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_135",
+    "name": "Épeautre et petit épeautre",
+    "category": "FECULENTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Sauf véritable pain au levain de petit épeautre (80g max)"
+  },
+  {
+    "id": "fodmap_136",
+    "name": "Maïs en conserve",
+    "category": "FECULENTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_137",
+    "name": "Riz et pâtes de riz",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Féculent de base à privilégier"
+  },
+  {
+    "id": "fodmap_138",
+    "name": "Quinoa et pâtes de quinoa",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Féculent de base à privilégier"
+  },
+  {
+    "id": "fodmap_139",
+    "name": "Polenta",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_140",
+    "name": "Tapioca",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_141",
+    "name": "Millet",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Grains, farine ou pain de millet"
+  },
+  {
+    "id": "fodmap_142",
+    "name": "Pâtes sans gluten",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Vérifier l'absence de farine de légumineuses"
+  },
+  {
+    "id": "fodmap_143",
+    "name": "Pain sans gluten",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Vérifier l'absence de fructose ajouté"
+  },
+  {
+    "id": "fodmap_144",
+    "name": "Galette / Tortilla de maïs",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Substitut de pain idéal"
+  },
+  {
+    "id": "fodmap_145",
+    "name": "Galette de riz et de sarrasin",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Substitut de pain idéal"
+  },
+  {
+    "id": "fodmap_146",
+    "name": "Amidon et farine de maïs",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Pour la cuisine et la pâtisserie"
+  },
+  {
+    "id": "fodmap_147",
+    "name": "Fécule de pomme de terre",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Pour la cuisine et la pâtisserie"
+  },
+  {
+    "id": "fodmap_148",
+    "name": "Farines (riz, sarrasin, teff, igname)",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Farine d'arrow-root et de sorghum tolérées"
+  },
+  {
+    "id": "fodmap_149",
+    "name": "Corn flakes sans blé",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Céréales petit-déjeuner sans gluten"
+  },
+  {
+    "id": "fodmap_150",
+    "name": "Gruau de sarrasin et flocons de riz",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_151",
+    "name": "Levure alimentaire",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_152",
+    "name": "Pomme de terre",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Féculent d'accompagnement idéal"
+  },
+  {
+    "id": "fodmap_153",
+    "name": "Rutabaga et panais",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_154",
+    "name": "Fruit à pain",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À privilégier"
+  },
+  {
+    "id": "fodmap_155",
+    "name": "Châtaignes cuites",
+    "category": "FECULENTS",
+    "status": "PAUVRE",
+    "portion": "20 unités",
+    "notes": "Maximum 20 unités cuites"
+  },
+  {
+    "id": "fodmap_156",
+    "name": "Flocons d'avoine",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "50g",
+    "notes": "50-60g par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_157",
+    "name": "Son d'avoine complet",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "20g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_158",
+    "name": "Son de riz complet",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "15g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_159",
+    "name": "Pain au levain de blé / petit épeautre",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "80g",
+    "notes": "Fermentation longue artisanale obligatoire (digère les FODMAPs)"
+  },
+  {
+    "id": "fodmap_160",
+    "name": "Pain sans gluten riche en fibres",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "30-40g",
+    "notes": "Pain aux céréales sans gluten, espacer de 5h"
+  },
+  {
+    "id": "fodmap_161",
+    "name": "Pâtes aux œufs",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_162",
+    "name": "Maïs doux frais",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "38g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_163",
+    "name": "Mini maïs jeune en conserve",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "80g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_164",
+    "name": "Petits pois",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "45g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_165",
+    "name": "Igname",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "165g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_166",
+    "name": "Manioc",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "70g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_167",
+    "name": "Patate douce",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "70g",
+    "notes": "Ne pas dépasser 70g par prise"
+  },
+  {
+    "id": "fodmap_168",
+    "name": "Châtaigne d'eau",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "55g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_169",
+    "name": "Chayotte / Christophine",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "85g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_170",
+    "name": "Racine de taro",
+    "category": "FECULENTS",
+    "status": "MODERE",
+    "portion": "80g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_171",
+    "name": "Légumineuses sèches (fèves, flageolets)",
+    "category": "LEGUMINEUSES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Haricots rouges, pois chiches secs à supprimer"
+  },
+  {
+    "id": "fodmap_172",
+    "name": "Tofu soyeux",
+    "category": "LEGUMINEUSES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer (seul le tofu ferme est toléré)"
+  },
+  {
+    "id": "fodmap_173",
+    "name": "Tofu ferme nature",
+    "category": "LEGUMINEUSES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Source majeure de protéines végétales sans restriction"
+  },
+  {
+    "id": "fodmap_174",
+    "name": "Edamame",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "50g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_175",
+    "name": "Haricots blancs en conserve",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "35-45g",
+    "notes": "Conserve égouttée et rincée obligatoire"
+  },
+  {
+    "id": "fodmap_176",
+    "name": "Pois chiches en conserve",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "35-45g",
+    "notes": "Conserve égouttée et rincée obligatoire (idéal salade)"
+  },
+  {
+    "id": "fodmap_177",
+    "name": "Lentilles en conserve",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "35-45g",
+    "notes": "Conserve égouttée et rincée obligatoire"
+  },
+  {
+    "id": "fodmap_178",
+    "name": "Haricot de lima",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_179",
+    "name": "Lentilles vertes / corail cuites",
+    "category": "LEGUMINEUSES",
+    "status": "MODERE",
+    "portion": "20g",
+    "notes": "Lentilles cuites maison limitées à 20g"
+  },
+  {
+    "id": "fodmap_180",
+    "name": "Lait animal (vache, chèvre, brebis)",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en lactose (supprimer en phase 1)"
+  },
+  {
+    "id": "fodmap_181",
+    "name": "Fromage blanc, yaourt, faisselle",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Produits frais riches en lactose à supprimer"
+  },
+  {
+    "id": "fodmap_182",
+    "name": "Fromage frais et fromage à tartiner",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riches en lactose"
+  },
+  {
+    "id": "fodmap_183",
+    "name": "Crème fraîche et crème fouettée",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riches en lactose"
+  },
+  {
+    "id": "fodmap_184",
+    "name": "Crème glacée",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en lactose"
+  },
+  {
+    "id": "fodmap_185",
+    "name": "Lait et jus de soja",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en FODMAPs"
+  },
+  {
+    "id": "fodmap_186",
+    "name": "Yaourt au soja",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en FODMAPs"
+  },
+  {
+    "id": "fodmap_187",
+    "name": "Lait d'avoine (portion classique)",
+    "category": "PRODUITS_LAITIERS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Toléré uniquement à hauteur de 30 ml max"
+  },
+  {
+    "id": "fodmap_188",
+    "name": "Lait et yaourts sans lactose",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Type Matin Léger ou maison avec lactase"
+  },
+  {
+    "id": "fodmap_189",
+    "name": "Yaourt au lait de coco",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Alternative végétale pauvre en FODMAPs"
+  },
+  {
+    "id": "fodmap_190",
+    "name": "Fromages à pâte dure / secs",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Naturellement sans lactose (Comté, Parmesan, Emmental, etc.)"
+  },
+  {
+    "id": "fodmap_191",
+    "name": "Fromages à pâte molle",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Brie, Camembert, Chaource, Chèvre, Bleu, Feta, Mozzarella"
+  },
+  {
+    "id": "fodmap_192",
+    "name": "Lait végétal (riz, amande, quinoa)",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Lait de chanvre et macadamia ok (sans fructose ajouté)"
+  },
+  {
+    "id": "fodmap_193",
+    "name": "Beurre",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Pauvre en lactose (consommation modérée)"
+  },
+  {
+    "id": "fodmap_194",
+    "name": "Sorbet",
+    "category": "PRODUITS_LAITIERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "À base de fruits tolérés sans sirop de fructose"
+  },
+  {
+    "id": "fodmap_195",
+    "name": "Fromage à tartiner (Philadelphia)",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "40g max par prise, espacer de 5h"
+  },
+  {
+    "id": "fodmap_196",
+    "name": "Fromage à base de soja",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_197",
+    "name": "Fromage fondu pour sandwich",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_198",
+    "name": "Ricotta",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "40g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_199",
+    "name": "Lait d'avoine",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "30 ml",
+    "notes": "30 ml maximum par prise"
+  },
+  {
+    "id": "fodmap_200",
+    "name": "Lait de coco",
+    "category": "PRODUITS_LAITIERS",
+    "status": "MODERE",
+    "portion": "100 ml",
+    "notes": "En brique ou conserve, 100 ml max"
+  },
+  {
+    "id": "fodmap_201",
+    "name": "Miel",
+    "category": "SUCRES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en fructose, à supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_202",
+    "name": "Fructose et sirop de glucose-fructose",
+    "category": "SUCRES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À traquer sur les étiquettes industrielles"
+  },
+  {
+    "id": "fodmap_203",
+    "name": "Sucre de coco",
+    "category": "SUCRES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_204",
+    "name": "Sirop d'agave",
+    "category": "SUCRES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en fructose, à supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_205",
+    "name": "Confiture classique et sans sucre",
+    "category": "SUCRES",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À base de fruits riches ou édulcorants"
+  },
+  {
+    "id": "fodmap_206",
+    "name": "Sucre blanc, roux, complet (saccharose)",
+    "category": "SUCRES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Pauvre en FODMAPs (consommer sans excès)"
+  },
+  {
+    "id": "fodmap_207",
+    "name": "Sirop d'érable",
+    "category": "SUCRES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Édulcorant naturel de choix"
+  },
+  {
+    "id": "fodmap_208",
+    "name": "Sirop de malt de riz et sucre de palme",
+    "category": "SUCRES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Toléré"
+  },
+  {
+    "id": "fodmap_209",
+    "name": "Confiture autorisée",
+    "category": "SUCRES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Sans fructose ajouté et aux fruits pauvres"
+  },
+  {
+    "id": "fodmap_210",
+    "name": "Chocolat noir",
+    "category": "SUCRES",
+    "status": "MODERE",
+    "portion": "30g",
+    "notes": "Excellente source de polyols, 30g max toutes les 5h"
+  },
+  {
+    "id": "fodmap_211",
+    "name": "Chocolat au lait et chocolat blanc",
+    "category": "SUCRES",
+    "status": "MODERE",
+    "portion": "15g",
+    "notes": "Limiter à 15g par prise"
+  },
+  {
+    "id": "fodmap_212",
+    "name": "Mélasse de coco",
+    "category": "SUCRES",
+    "status": "MODERE",
+    "portion": "14g",
+    "notes": "14g maximum par prise"
+  },
+  {
+    "id": "fodmap_213",
+    "name": "Polyols (Isomalt, Maltitol, Mannitol)",
+    "category": "EDULCORANTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Sorbitol, Xylitol (bonbons/chewing-gums sans sucre)"
+  },
+  {
+    "id": "fodmap_214",
+    "name": "Aspartame et Stévia",
+    "category": "EDULCORANTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Édulcorants de synthèse tolérés"
+  },
+  {
+    "id": "fodmap_215",
+    "name": "Piment rouge fort",
+    "category": "CONDIMENTS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Irritant intestinal et source de FODMAPs"
+  },
+  {
+    "id": "fodmap_216",
+    "name": "Herbes aromatiques (toutes)",
+    "category": "CONDIMENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Basilic, coriandre, persil, romarin, thym, menthe, etc."
+  },
+  {
+    "id": "fodmap_217",
+    "name": "Épices pures",
+    "category": "CONDIMENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Cannelle, curcuma, gingembre, cumin, curry, paprika, poivre"
+  },
+  {
+    "id": "fodmap_218",
+    "name": "Moutarde, câpres, cornichons",
+    "category": "CONDIMENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Vérifier l'absence d'ail/oignon ajouté"
+  },
+  {
+    "id": "fodmap_219",
+    "name": "Graines de pavot et pâte miso",
+    "category": "CONDIMENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Toléré"
+  },
+  {
+    "id": "fodmap_220",
+    "name": "Vinaigres et sauces",
+    "category": "CONDIMENTS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Mayo, ketchup sans HFCS, sauce soja, nuoc mam"
+  },
+  {
+    "id": "fodmap_221",
+    "name": "Graines de citrouille / courge",
+    "category": "CONDIMENTS",
+    "status": "MODERE",
+    "portion": "20g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_222",
+    "name": "Pignons de pin",
+    "category": "CONDIMENTS",
+    "status": "MODERE",
+    "portion": "15g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_223",
+    "name": "Graines de sésame",
+    "category": "CONDIMENTS",
+    "status": "MODERE",
+    "portion": "10g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_224",
+    "name": "Graines de tournesol",
+    "category": "CONDIMENTS",
+    "status": "MODERE",
+    "portion": "6g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_225",
+    "name": "Vinaigre balsamique",
+    "category": "CONDIMENTS",
+    "status": "MODERE",
+    "portion": "20g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_226",
+    "name": "Chicorée et café-chicorée (Ricorée)",
+    "category": "BOISSONS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riche en inuline (FODMAPs), à supprimer"
+  },
+  {
+    "id": "fodmap_227",
+    "name": "Thé chaï et thé oolong",
+    "category": "BOISSONS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "À supprimer en phase 1"
+  },
+  {
+    "id": "fodmap_228",
+    "name": "Infusions (camomille, fenouil, pissenlit)",
+    "category": "BOISSONS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riches en FODMAPs, à proscrire en phase 1"
+  },
+  {
+    "id": "fodmap_229",
+    "name": "Alcools forts en excès",
+    "category": "BOISSONS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Irritants pour la muqueuse intestinale"
+  },
+  {
+    "id": "fodmap_230",
+    "name": "Sodas classiques et jus industriels",
+    "category": "BOISSONS",
+    "status": "RICHE",
+    "portion": "0g",
+    "notes": "Riches en sirop de glucose-fructose"
+  },
+  {
+    "id": "fodmap_231",
+    "name": "Eau plate et infusions autorisées",
+    "category": "BOISSONS",
+    "status": "PAUVRE",
+    "portion": "1.5 à 2L",
+    "notes": "Attention aux eaux trop minéralisées (Hépar)"
+  },
+  {
+    "id": "fodmap_232",
+    "name": "Thé peu infusé et café noir",
+    "category": "BOISSONS",
+    "status": "PAUVRE",
+    "portion": "Modéré",
+    "notes": "Limiter les excès pour éviter l'irritation du transit"
+  },
+  {
+    "id": "fodmap_233",
+    "name": "Vins, Gin, Vodka, Whisky",
+    "category": "BOISSONS",
+    "status": "PAUVRE",
+    "portion": "Modéré",
+    "notes": "Tolérés avec grande modération"
+  },
+  {
+    "id": "fodmap_234",
+    "name": "Poudre de cacao amer / chocolat poudre",
+    "category": "BOISSONS",
+    "status": "MODERE",
+    "portion": "20g",
+    "notes": "20g maximum par prise"
+  },
+  {
+    "id": "fodmap_235",
+    "name": "Thé très infusé",
+    "category": "BOISSONS",
+    "status": "MODERE",
+    "portion": "180 ml",
+    "notes": "180 ml maximum par prise"
+  },
+  {
+    "id": "fodmap_236",
+    "name": "Kombucha",
+    "category": "BOISSONS",
+    "status": "MODERE",
+    "portion": "180 ml",
+    "notes": "180 ml maximum par prise"
+  },
+  {
+    "id": "fodmap_237",
+    "name": "Eau de coco fraîche ou bouteille",
+    "category": "BOISSONS",
+    "status": "MODERE",
+    "portion": "100 ml",
+    "notes": "100 ml maximum par prise"
+  },
+  {
+    "id": "fodmap_238",
+    "name": "Bière et panaché",
+    "category": "BOISSONS",
+    "status": "MODERE",
+    "portion": "33 cL",
+    "notes": "Pauvre en FODMAPs mais gazogènes si excès"
+  },
+  {
+    "id": "fodmap_239",
+    "name": "Viandes, poissons, œufs (bruts)",
+    "category": "PROTEINES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Sans FODMAPs (attention à la cuisson trop grasse)"
+  },
+  {
+    "id": "fodmap_240",
+    "name": "Substituts végétaux (seitan, tempeh)",
+    "category": "PROTEINES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Quorn haché et steaks végétaux tolérés"
+  },
+  {
+    "id": "fodmap_241",
+    "name": "Algues séchées (Dulse, Nori) et agar-agar",
+    "category": "DIVERS",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Sans FODMAPs"
+  },
+  {
+    "id": "fodmap_242",
+    "name": "Huiles végétales (colza, olive, lin)",
+    "category": "MATIERES_GRASSES",
+    "status": "PAUVRE",
+    "portion": "Libre",
+    "notes": "Source d'oméga-3 sans FODMAPs (éviter graisses cuites)"
+  },
+  {
+    "id": "fodmap_243",
+    "name": "Wakamé",
+    "category": "DIVERS",
+    "status": "MODERE",
+    "portion": "10g",
+    "notes": "Espacer les prises de 5h"
+  },
+  {
+    "id": "fodmap_244",
+    "name": "Graines de chia",
+    "category": "DIVERS",
+    "status": "MODERE",
+    "portion": "24g",
+    "notes": "24g maximum par prise"
+  }
+]

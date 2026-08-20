@@ -82,6 +82,12 @@
     <string name="ressources">Ressources nutrition</string>
     <string name="intolerence">Intolérance à l\'histamine</string>
     <string name="sensibilit_au_gluten">Sensibilité au gluten</string>
+    <string name="fodmap_title">Guide FODMAP</string>
+    <string name="fodmap_food_meta">%1$s · %2$s</string>
+    <string name="fodmap_search_hint">Rechercher un aliment</string>
+    <string name="fodmap_status_all">Tout</string>
+    <string name="fodmap_portion_value">Portion limite : %1$s</string>
+    <string name="fodmap_empty">Aucun aliment trouvé</string>
 
     <!-- Connexion/Inscription -->
 
