@@ -3,6 +3,9 @@ package com.audreyRetournayDiet.femSante.viewmodels.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePhase
+import com.audreyRetournayDiet.femSante.data.micronutrient.Micronutrient
+import com.audreyRetournayDiet.femSante.data.micronutrient.MicronutrientsForPhase
 import com.audreyRetournayDiet.femSante.data.recipe.DailyRecipeSelector
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeOfDay
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentTagRepository
@@ -10,6 +13,7 @@ import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.data.recommendation.RecommendationEngine
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
+import com.audreyRetournayDiet.femSante.repository.local.MicronutrientContentRepository
 import com.audreyRetournayDiet.femSante.repository.local.RecipeContentRepository
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +30,8 @@ import javax.inject.Inject
 data class PourToiUiState(
     val recommendations: List<Recommendation> = emptyList(),
     val recipeOfDay: RecipeOfDay? = null,
+    val currentPhase: CyclePhase? = null,
+    val phaseMicronutrients: List<Micronutrient> = emptyList(),
     val hasEntryToday: Boolean = false,
     val isLoading: Boolean = true
 )
@@ -45,6 +51,7 @@ class PourToiViewModel @Inject constructor(
     private val repository: DailyRepository,
     private val recipeRepository: RecipeContentRepository,
     private val contentTagRepository: ContentTagRepository,
+    private val micronutrientRepository: MicronutrientContentRepository,
     private val phaseProvider: CurrentCyclePhaseProvider,
     private val userStore: UserStore // L'injecter en private val pour y accéder dans refresh()
 ) : ViewModel() {
@@ -76,10 +83,16 @@ class PourToiViewModel @Inject constructor(
             val phase = phaseProvider.currentPhase(today)
             val recipeOfDay = DailyRecipeSelector.select(recipeRepository.getAll(), phase, today)
 
-            // 5. Émission du nouvel état
+            // 5. Micronutriments adaptés à la phase (aucun repli : phase inconnue -> liste vide,
+            // cf. MicronutrientsForPhase)
+            val phaseMicronutrients = MicronutrientsForPhase.select(micronutrientRepository.getAll(), phase)
+
+            // 6. Émission du nouvel état
             internalState.value = PourToiUiState(
                 recommendations = recos,
                 recipeOfDay = recipeOfDay,
+                currentPhase = phase,
+                phaseMicronutrients = phaseMicronutrients,
                 hasEntryToday = entry != null,
                 isLoading = false
             )

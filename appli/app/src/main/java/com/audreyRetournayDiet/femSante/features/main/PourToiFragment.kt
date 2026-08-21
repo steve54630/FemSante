@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,17 +14,24 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePhase
+import com.audreyRetournayDiet.femSante.data.micronutrient.Micronutrient
+import com.audreyRetournayDiet.femSante.data.micronutrient.toMicronutrientPhaseLabel
 import com.audreyRetournayDiet.femSante.data.recipe.Recipe
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeOfDay
 import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
+import com.audreyRetournayDiet.femSante.features.alim.MicronutrientDetailActivity
 import com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
 import com.audreyRetournayDiet.femSante.shared.RecommendationLauncher
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeDetailViewModel
 import com.audreyRetournayDiet.femSante.viewmodels.main.PourToiViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -50,6 +58,9 @@ class PourToiFragment : Fragment() {
     private lateinit var textRecipeMeta: TextView
     private lateinit var textRecipePhase: TextView
     private lateinit var buttonRecipeAction: MaterialButton
+    private lateinit var cardPhaseMicronutrients: MaterialCardView
+    private lateinit var textPhaseMicronutrientsLabel: TextView
+    private lateinit var chipGroupPhaseMicronutrients: ChipGroup
     private lateinit var cardGeste: MaterialCardView
     private lateinit var textGesteTitle: TextView
     private lateinit var buttonGesteAction: MaterialButton
@@ -90,6 +101,9 @@ class PourToiFragment : Fragment() {
         textRecipeMeta = view.findViewById(R.id.textRecipeMeta)
         textRecipePhase = view.findViewById(R.id.textRecipePhase)
         buttonRecipeAction = view.findViewById(R.id.buttonRecipeAction)
+        cardPhaseMicronutrients = view.findViewById(R.id.cardPhaseMicronutrients)
+        textPhaseMicronutrientsLabel = view.findViewById(R.id.textPhaseMicronutrientsLabel)
+        chipGroupPhaseMicronutrients = view.findViewById(R.id.chipGroupPhaseMicronutrients)
         cardGeste = view.findViewById(R.id.cardGesteDuJour)
         textGesteTitle = view.findViewById(R.id.textGesteTitle)
         buttonGesteAction = view.findViewById(R.id.buttonGesteAction)
@@ -113,6 +127,7 @@ class PourToiFragment : Fragment() {
 
                     bannerPourToi.isVisible = !state.hasEntryToday
                     bindRecipeOfDay(state.recipeOfDay)
+                    bindPhaseMicronutrients(state.phaseMicronutrients, state.currentPhase)
                     bindGesteDuJour(state.recommendations.firstOrNull())
                     // Le reste, hors "geste du jour", dans le carrousel.
                     renderRecommendations(state.recommendations.drop(1).take(MAX_RECOMMENDATIONS_DISPLAYED))
@@ -162,6 +177,46 @@ class PourToiFragment : Fragment() {
         RecipeCategory.ENTREE -> "Entrée"
         RecipeCategory.PLAT -> "Plat"
         RecipeCategory.DESSERT -> "Dessert"
+    }
+
+    /**
+     * Micronutriments adaptés à la phase du cycle : la carte reste masquée si la phase est
+     * inconnue ou qu'aucune fiche n'est taguée (pas de repli, contrairement à la recette du jour
+     * — cf. MicronutrientsForPhase).
+     */
+    private fun bindPhaseMicronutrients(nutrients: List<Micronutrient>, phase: CyclePhase?) {
+        val phaseLabel = phase.toMicronutrientPhaseLabel()
+        if (nutrients.isEmpty() || phaseLabel == null) {
+            cardPhaseMicronutrients.isVisible = false
+            return
+        }
+        cardPhaseMicronutrients.isVisible = true
+        textPhaseMicronutrientsLabel.text = getString(R.string.micronutrients_phase_label, phaseLabel.lowercase())
+
+        chipGroupPhaseMicronutrients.removeAllViews()
+        val hasAccess = UserStore(requireContext()).hasContentAccess()
+        nutrients.forEach { nutrient ->
+            chipGroupPhaseMicronutrients.addView(nutrientChip(nutrient, hasAccess))
+        }
+    }
+
+    private fun nutrientChip(nutrient: Micronutrient, hasAccess: Boolean): Chip {
+        val chip = layoutInflater.inflate(R.layout.item_theme_chip, chipGroupPhaseMicronutrients, false) as Chip
+        chip.id = View.generateViewId()
+        chip.text = nutrient.name
+        chip.isCheckable = false
+        chip.setOnClickListener {
+            if (nutrient.premium && !hasAccess) {
+                Toast.makeText(requireContext(), R.string.micronutrient_locked, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            Timber.i("Micronutriment (Pour toi) ouvert : ${nutrient.id}")
+            startActivity(
+                Intent(requireContext(), MicronutrientDetailActivity::class.java)
+                    .putExtra(MicronutrientDetailActivity.EXTRA_NUTRIENT_ID, nutrient.id)
+            )
+        }
+        return chip
     }
 
     /** Met en avant la recommandation la mieux notée comme "geste du jour". */

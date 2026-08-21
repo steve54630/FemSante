@@ -18,7 +18,8 @@
       { "name": "Jaune d'œuf", "amount": "106 (rétinol)" }
     ],
     "cofactors": "lipides, zinc, fer, vitamines C et E",
-    "notes": "Sources végétales = bêta-carotène (provit. A) ; 1 µg ER = 1 µg rétinol = 6 µg bêta-carotène. Éviter les excès de rétinol chez la femme enceinte (risque tératogène)."
+    "notes": "Sources végétales = bêta-carotène (provit. A) ; 1 µg ER = 1 µg rétinol = 6 µg bêta-carotène. Éviter les excès de rétinol chez la femme enceinte (risque tératogène).",
+    "phase": []
   },
   {
     "id": "vitamine-d",
@@ -37,7 +38,8 @@
       { "name": "Jaune d'œuf", "amount": "2,5-5" }
     ],
     "cofactors": "lipides, magnésium, calcium, phosphore, zinc, vitamine K2",
-    "notes": "15 µg = 600 UI. Synthèse cutanée (20-30 min/j en été). Doser la 25(OH)D avant supplémentation (D3 cholécalciférol)."
+    "notes": "15 µg = 600 UI. Synthèse cutanée (20-30 min/j en été). Doser la 25(OH)D avant supplémentation (D3 cholécalciférol).",
+    "phase": []
   },
   {
     "id": "vitamine-e",
@@ -57,7 +59,8 @@
       { "name": "Avocat", "amount": "2,1" }
     ],
     "cofactors": "lipides, vitamine C et sélénium (régénération antioxydante)",
-    "notes": "Exprimé en alpha-tocophérol ; sensible à la chaleur et à l'oxydation."
+    "notes": "Exprimé en alpha-tocophérol ; sensible à la chaleur et à l'oxydation.",
+    "phase": []
   },
   {
     "id": "vitamine-k",
@@ -76,7 +79,8 @@
       { "name": "Huile de colza", "amount": "100 (K1)" }
     ],
     "cofactors": "lipides et sels biliaires, fibres, calcium",
-    "notes": "Prudence sous anticoagulants antivitamine K (AVK) — régulariser les apports sans les supprimer."
+    "notes": "Prudence sous anticoagulants antivitamine K (AVK) — régulariser les apports sans les supprimer.",
+    "phase": []
   },
   {
     "id": "vitamine-b1",
@@ -96,7 +100,8 @@
       { "name": "Flocons d'avoine", "amount": "0,6" }
     ],
     "cofactors": "magnésium (activation en TDP/TPP)",
-    "notes": "Besoins ↑ si beaucoup de glucides, tabac ou alcool."
+    "notes": "Besoins ↑ si beaucoup de glucides, tabac ou alcool.",
+    "phase": []
   },
   {
     "id": "vitamine-b2",
@@ -116,7 +121,8 @@
       { "name": "Champignons", "amount": "0,4" }
     ],
     "cofactors": "autres vitamines B, cuivre, fer",
-    "notes": "Sensible à la lumière (emballages opaques) ; colore les urines en jaune vif en supplémentation."
+    "notes": "Sensible à la lumière (emballages opaques) ; colore les urines en jaune vif en supplémentation.",
+    "phase": []
   },
   {
     "id": "vitamine-b3",
@@ -135,7 +141,8 @@
       { "name": "Pain complet", "amount": "3,5" }
     ],
     "cofactors": "vitamine B6, fer, riboflavine (synthèse à partir du tryptophane)",
-    "notes": "Très stable à la cuisson et à la chaleur."
+    "notes": "Très stable à la cuisson et à la chaleur.",
+    "phase": []
   },
   {
     "id": "vitamine-b5",
@@ -154,7 +161,8 @@
       { "name": "Avocat", "amount": "1,5" }
     ],
     "cofactors": "vitamines B et magnésium",
-    "notes": "Présente dans presque tous les aliments (« pantothen » = partout)."
+    "notes": "Présente dans presque tous les aliments (« pantothen » = partout).",
+    "phase": []
   },
   {
     "id": "vitamine-b6",
@@ -173,7 +181,8 @@
       { "name": "Pommes de terre", "amount": "0,3" }
     ],
     "cofactors": "magnésium, zinc, vitamine B2 (conversion enzymatique)",
-    "notes": "Clé du métabolisme des protéines et des neurotransmetteurs."
+    "notes": "Clé du métabolisme des protéines et des neurotransmetteurs.",
+    "phase": []
   },
   {
     "id": "vitamine-b8",
@@ -192,7 +201,8 @@
       { "name": "Avocat", "amount": "4" }
     ],
     "cofactors": "magnésium et flore intestinale saine",
-    "notes": "L'avidine du blanc d'œuf cru inhibe son absorption (détruite à la cuisson)."
+    "notes": "L'avidine du blanc d'œuf cru inhibe son absorption (détruite à la cuisson).",
+    "phase": []
   },
   {
     "id": "vitamine-b9",
@@ -211,7 +221,8 @@
       { "name": "Asperges", "amount": "150" }
     ],
     "cofactors": "vitamine B12 et zinc",
-    "notes": "Très sensible à la cuisson prolongée. Supplémentation impérative en préconception (400 µg/j) — anomalies de fermeture du tube neural."
+    "notes": "Très sensible à la cuisson prolongée. Supplémentation impérative en préconception (400 µg/j) — anomalies de fermeture du tube neural.",
+    "phase": []
   },
   {
     "id": "vitamine-b12",
@@ -231,7 +242,8 @@
       { "name": "Œuf", "amount": "1,3" }
     ],
     "cofactors": "facteur intrinsèque gastrique et acidité stomacale adéquate",
-    "notes": "Absente des végétaux non enrichis. Supplémentation obligatoire chez les végétaliens/végétariens stricts."
+    "notes": "Absente des végétaux non enrichis. Supplémentation obligatoire chez les végétaliens/végétariens stricts.",
+    "phase": []
   },
   {
     "id": "vitamine-c",
@@ -250,7 +262,8 @@
       { "name": "Orange", "amount": "53" }
     ],
     "cofactors": "bioflavonoïdes, fer (synergie d'absorption)",
-    "notes": "Sensible à l'air, l'eau et la chaleur. +10 à 20 mg/j chez les fumeurs."
+    "notes": "Sensible à l'air, l'eau et la chaleur. +10 à 20 mg/j chez les fumeurs.",
+    "phase": []
   },
   {
     "id": "calcium",
@@ -270,7 +283,8 @@
       { "name": "Lait", "amount": "120" }
     ],
     "cofactors": "vitamine D, vitamine K2, magnésium, phosphore (ratio adéquat)",
-    "notes": "Excès de sodium, phytates ou protéines acidifiantes ↑ l'excrétion urinaire."
+    "notes": "Excès de sodium, phytates ou protéines acidifiantes ↑ l'excrétion urinaire.",
+    "phase": []
   },
   {
     "id": "magnesium",
@@ -289,7 +303,8 @@
       { "name": "Épinards cuits", "amount": "80" }
     ],
     "cofactors": "vitamine B6 et vitamine D",
-    "notes": "Alcool, stress chronique, sucres raffinés ↑ pertes. Formes organiques en supplément (bisglycinate, citrate)."
+    "notes": "Alcool, stress chronique, sucres raffinés ↑ pertes. Formes organiques en supplément (bisglycinate, citrate).",
+    "phase": []
   },
   {
     "id": "phosphore",
@@ -307,7 +322,8 @@
       { "name": "Lentilles cuites", "amount": "180" }
     ],
     "cofactors": "vitamine D, calcium",
-    "notes": "Excès fréquent dans l'alimentation moderne (additifs polyphosphates)."
+    "notes": "Excès fréquent dans l'alimentation moderne (additifs polyphosphates).",
+    "phase": []
   },
   {
     "id": "potassium",
@@ -325,7 +341,8 @@
       { "name": "Tomate", "amount": "240" }
     ],
     "cofactors": "magnésium (pompe Na+/K+ ATPase)",
-    "notes": "Contrebalance l'action hypertensive du sodium. Prudence en insuffisance rénale sévère (hyperkaliémie)."
+    "notes": "Contrebalance l'action hypertensive du sodium. Prudence en insuffisance rénale sévère (hyperkaliémie).",
+    "phase": []
   },
   {
     "id": "sodium",
@@ -342,7 +359,8 @@
       { "name": "Pain", "amount": "500" }
     ],
     "cofactors": "équilibre hydrique avec le potassium et l'eau",
-    "notes": "1500 mg de sodium = 3,8 g de sel. Ne pas dépasser 2000 mg de sodium (5 g de sel/j) — ANSES/OMS."
+    "notes": "1500 mg de sodium = 3,8 g de sel. Ne pas dépasser 2000 mg de sodium (5 g de sel/j) — ANSES/OMS.",
+    "phase": []
   },
   {
     "id": "fer",
@@ -362,7 +380,8 @@
       { "name": "Haricots rouges cuits", "amount": "2,9" }
     ],
     "cofactors": "vitamine C (↑ absorption du fer végétal), acide citrique",
-    "notes": "Thé, café, calcium et phytates ↓ l'absorption du fer non héminique. Pas de supplémentation sans ferritinémie basse documentée."
+    "notes": "Thé, café, calcium et phytates ↓ l'absorption du fer non héminique. Pas de supplémentation sans ferritinémie basse documentée.",
+    "phase": []
   },
   {
     "id": "zinc",
@@ -381,7 +400,8 @@
       { "name": "Lentilles", "amount": "1,3" }
     ],
     "cofactors": "protéines animales",
-    "notes": "Antagonisme d'absorption avec fer et cuivre à haute dose. Besoins ↑ si alimentation riche en phytates."
+    "notes": "Antagonisme d'absorption avec fer et cuivre à haute dose. Besoins ↑ si alimentation riche en phytates.",
+    "phase": []
   },
   {
     "id": "iode",
@@ -399,7 +419,8 @@
       { "name": "Œuf", "amount": "30" }
     ],
     "cofactors": "sélénium (désiodases thyroïdiennes), fer, zinc",
-    "notes": "Clé de la fonction thyroïdienne. Éviter les excès brutaux (algues brunes / kombu)."
+    "notes": "Clé de la fonction thyroïdienne. Éviter les excès brutaux (algues brunes / kombu).",
+    "phase": []
   },
   {
     "id": "selenium",
@@ -417,6 +438,7 @@
       { "name": "Riz complet", "amount": "15" }
     ],
     "cofactors": "vitamine E (synergie antioxydante)",
-    "notes": "Ne pas dépasser 300 µg/j. Une noix du Brésil/jour couvre largement les besoins."
+    "notes": "Ne pas dépasser 300 µg/j. Une noix du Brésil/jour couvre largement les besoins.",
+    "phase": []
   }
 ]

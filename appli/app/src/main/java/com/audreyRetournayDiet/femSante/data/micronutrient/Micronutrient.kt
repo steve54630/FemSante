@@ -12,6 +12,12 @@ package com.audreyRetournayDiet.femSante.data.micronutrient
  * « 100-300 /g »). On préserve la nuance plutôt que d'inventer une précision inexistante.
  *
  * [premium] : contenu réservé aux abonnées (gating via `UserStore.hasContentAccess`).
+ *
+ * [phase] : phases du cycle pour lesquelles la diététicienne recommande ce micronutriment (même
+ * vocabulaire que [com.audreyRetournayDiet.femSante.data.recipe.Recipe.phase] — « Menstruelle »,
+ * « Folliculaire », « Ovulatoire », « Lutéale », ou « Toutes »). Vide tant que le tagging n'est
+ * pas fait : la liste "Pour toi" reste alors invisible plutôt que d'afficher une sélection non
+ * validée par la diététicienne.
  */
 data class Micronutrient(
     val id: String,
@@ -23,7 +29,8 @@ data class Micronutrient(
     val intake: NutrientIntake,
     val sources: List<NutrientSource> = emptyList(),
     val cofactors: String? = null,
-    val notes: String? = null
+    val notes: String? = null,
+    val phase: List<String> = emptyList()
 )
 
 /** Apports nutritionnels conseillés selon le profil (valeurs en [Micronutrient.unit]). */

@@ -285,6 +285,7 @@
     <string name="recipe_of_day_label">🍽️ Ta recette du jour</string>
     <string name="recipe_of_day_action">Voir la recette</string>
     <string name="recipe_of_day_phase">Adaptée à ta phase %1$s</string>
+    <string name="micronutrients_phase_label">🌿 Pour ta phase %1$s</string>
 
     <!-- Liste de courses -->
     <string name="recipe_add_to_list">Ajouter à ma liste</string>

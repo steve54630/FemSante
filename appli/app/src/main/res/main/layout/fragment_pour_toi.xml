@@ -92,6 +92,41 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Micronutriments adaptés à ta phase : masqué si la phase est inconnue (pas de repli,
+             contrairement à la recette du jour — cf. MicronutrientsForPhase) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPhaseMicronutrients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textPhaseMicronutrientsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/orange_app"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="🌿 Pour ta phase folliculaire" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupPhaseMicronutrients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Ton geste du jour : une seule action douce, la mieux notée -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardGesteDuJour"

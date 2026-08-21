@@ -1,13 +1,18 @@
 package com.audreyRetournayDiet.femSante.viewmodels.main
 
 import com.audreyRetournayDiet.femSante.data.cycle.CurrentCyclePhaseProvider
+import com.audreyRetournayDiet.femSante.data.cycle.CyclePhase
 import com.audreyRetournayDiet.femSante.data.entities.AppUser
+import com.audreyRetournayDiet.femSante.data.micronutrient.Micronutrient
+import com.audreyRetournayDiet.femSante.data.micronutrient.NutrientGroup
+import com.audreyRetournayDiet.femSante.data.micronutrient.NutrientIntake
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentRef
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentTagRepository
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentType
 import com.audreyRetournayDiet.femSante.data.recommendation.JournalTag
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.local.DailyRepository
+import com.audreyRetournayDiet.femSante.repository.local.MicronutrientContentRepository
 import com.audreyRetournayDiet.femSante.repository.local.RecipeContentRepository
 import com.audreyRetournayDiet.femSante.room.dto.DailyEntryFull
 import com.audreyRetournayDiet.femSante.room.entity.DailyEntryEntity
@@ -21,6 +26,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -35,6 +41,7 @@ class PourToiViewModelTest {
     private val repository = mockk<DailyRepository>()
     private val recipeRepository = mockk<RecipeContentRepository>()
     private val contentTagRepository = mockk<ContentTagRepository>()
+    private val micronutrientRepository = mockk<MicronutrientContentRepository>()
     private val phaseProvider = mockk<CurrentCyclePhaseProvider>()
     private val userStore = mockk<UserStore>()
 
@@ -56,6 +63,7 @@ class PourToiViewModelTest {
     private fun stubRecipeOfDayDeps() {
         coEvery { phaseProvider.currentPhase(any()) } returns null
         every { recipeRepository.getAll() } returns emptyList()
+        every { micronutrientRepository.getAll() } returns emptyList()
     }
 
     private fun entryToday() = DailyEntryFull(
@@ -72,7 +80,7 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
 
-        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)
@@ -86,7 +94,7 @@ class PourToiViewModelTest {
         stubTagCatalog()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(entryToday(), "ok")
 
-        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertTrue(state.hasEntryToday)
@@ -100,10 +108,43 @@ class PourToiViewModelTest {
         stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Failure("erreur")
 
-        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, phaseProvider, userStore)
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)
         val state = vm.uiState.value
 
         assertFalse(state.hasEntryToday)
         assertTrue(state.recommendations.isEmpty())
+    }
+
+    @Test
+    fun `phase inconnue aucun micronutriment propose`() = runTest {
+        stubUser()
+        stubRecipeOfDayDeps() // phase = null
+        coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
+
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)
+
+        assertTrue(vm.uiState.value.phaseMicronutrients.isEmpty())
+    }
+
+    @Test
+    fun `phase connue les micronutriments tagues pour cette phase sont proposes`() = runTest {
+        stubUser()
+        every { recipeRepository.getAll() } returns emptyList()
+        coEvery { phaseProvider.currentPhase(any()) } returns CyclePhase.FOLLICULAIRE
+        every { micronutrientRepository.getAll() } returns listOf(
+            Micronutrient(
+                id = "vitamine-b9",
+                name = "Vitamine B9",
+                group = NutrientGroup.HYDROSOLUBLE,
+                unit = "µg",
+                intake = NutrientIntake("0", "0", "0", "0"),
+                phase = listOf("Folliculaire")
+            )
+        )
+        coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
+
+        val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)
+
+        assertEquals(listOf("vitamine-b9"), vm.uiState.value.phaseMicronutrients.map { it.id })
     }
 }
