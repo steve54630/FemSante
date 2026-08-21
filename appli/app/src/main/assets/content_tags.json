@@ -1,11 +1,11 @@
 [
-  { "type": "PDF", "id": "automassage_ventre.pdf", "zones": ["ABDOMEN", "BASSIN", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE"] },
-  { "type": "PDF", "id": "bouillote.pdf", "zones": ["ABDOMEN", "BASSIN", "HAUT_DOS", "TETE", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
-  { "type": "PDF", "id": "douleurs_abdominales.pdf", "zones": ["ABDOMEN"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
-  { "type": "PDF", "id": "emotional_tempest.pdf", "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
-  { "type": "PDF", "id": "emotional_tempest_oil.pdf", "zones": ["SEINS"], "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
-  { "type": "PDF", "id": "infusion_digestion.pdf", "zones": ["ABDOMEN", "JAMBES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["DIGESTIF"] },
-  { "type": "PDF", "id": "infusions_menstruations.pdf", "zones": ["ABDOMEN", "BASSIN", "SEINS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "TOOLBOX", "id": "automassage_ventre", "zones": ["ABDOMEN", "BASSIN", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "TOOLBOX", "id": "bouillotte", "zones": ["ABDOMEN", "BASSIN", "HAUT_DOS", "TETE", "CUISSES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "TOOLBOX", "id": "douleurs_abdominales_he", "zones": ["ABDOMEN"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["DIGESTIF", "EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
+  { "type": "TOOLBOX", "id": "tempetes_emotionnelles_he", "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "TOOLBOX", "id": "tempetes_emotionnelles_infusions", "zones": ["SEINS"], "causes": ["STRESS", "COLERE", "TRISTESSE"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
+  { "type": "TOOLBOX", "id": "infusions_digestion", "zones": ["ABDOMEN", "JAMBES"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["DIGESTIF"] },
+  { "type": "TOOLBOX", "id": "infusions_menstruations", "zones": ["ABDOMEN", "BASSIN", "SEINS"], "qualities": ["MOYENNE", "MAUVAISE"], "activities": ["REPOS", "MARCHE"], "flags": ["EMOTIONNELLEMENT_DIFFICILE"] },
 
   { "type": "PDF", "id": "histamine.pdf", "zones": ["ABDOMEN", "TETE"], "flags": ["DIGESTIF"] },
   { "type": "PDF", "id": "gluten.pdf", "zones": ["ABDOMEN"], "flags": ["DIGESTIF"] },

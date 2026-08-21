@@ -1,5 +1,6 @@
 [
   { "type": "PDF", "id": "sample_pdf", "zones": ["ABDOMEN"], "flags": ["DIGESTIF"] },
   { "type": "VIDEO", "id": "sample_video", "causes": ["STRESS"], "qualities": ["MOYENNE"], "activities": ["REPOS"], "flags": ["EMOTIONNELLEMENT_DIFFICILE", "SOS"] },
-  { "type": "AUDIO", "id": "sample_audio" }
+  { "type": "AUDIO", "id": "sample_audio" },
+  { "type": "TOOLBOX", "id": "sample_toolbox", "zones": ["BASSIN"], "flags": ["SOS"] }
 ]

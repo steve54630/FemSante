@@ -24,7 +24,7 @@ class ContentTagJsonParserTest {
 
     @Test
     fun `parse toutes les entrees du fixture`() {
-        assertEquals(3, catalog.size)
+        assertEquals(4, catalog.size)
     }
 
     @Test
@@ -32,6 +32,13 @@ class ContentTagJsonParserTest {
         assertTrue(ContentRef(ContentType.PDF, "sample_pdf") in catalog)
         assertTrue(ContentRef(ContentType.VIDEO, "sample_video") in catalog)
         assertTrue(ContentRef(ContentType.AUDIO, "sample_audio") in catalog)
+        assertTrue(ContentRef(ContentType.TOOLBOX, "sample_toolbox") in catalog)
+    }
+
+    @Test
+    fun `zones et flags reconstruits pour la fiche outil`() {
+        val tags = catalog.getValue(ContentRef(ContentType.TOOLBOX, "sample_toolbox"))
+        assertEquals(setOf(JournalTag.Zone(PainZone.BASSIN), JournalTag.Sos), tags)
     }
 
     @Test

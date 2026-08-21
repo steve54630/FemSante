@@ -10,7 +10,8 @@ private const val SOS_PAIN_THRESHOLD = 6
 private val TYPE_PRIORITY = mapOf(
     ContentType.AUDIO to 0,
     ContentType.VIDEO to 1,
-    ContentType.PDF to 2
+    ContentType.PDF to 2,
+    ContentType.TOOLBOX to 3
 )
 
 /**

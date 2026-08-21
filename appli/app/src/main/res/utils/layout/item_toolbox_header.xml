@@ -16,7 +16,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:importantForAccessibility="no"
-        tools:src="@drawable/ic_toolbox_infusion" />
+        tools:src="@drawable/ic_toolbox_phyto" />
 
     <TextView
         android:id="@+id/textThemeLabel"
@@ -26,5 +26,5 @@
         android:textColor="?attr/colorPrimary"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:text="Infusions" />
+        tools:text="Phytothérapie" />
 </LinearLayout>

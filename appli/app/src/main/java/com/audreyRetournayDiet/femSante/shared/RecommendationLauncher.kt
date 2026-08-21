@@ -5,6 +5,7 @@ import android.content.Intent
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentRef
 import com.audreyRetournayDiet.femSante.data.recommendation.ContentType
 import com.audreyRetournayDiet.femSante.features.alim.AlimActivity
+import com.audreyRetournayDiet.femSante.features.toolbox.ToolboxFileDetailActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
@@ -13,11 +14,13 @@ import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
  * Ouvre un contenu recommandé en réutilisant les viewers existants, sans modifier leurs
  * internes. Les contrats de lancement diffèrent selon le type :
  *
- * - **PDF outil / ressource** : [PdfActivity] directement (fichier à la racine des assets).
+ * - **PDF ressource** : [PdfActivity] directement (fichier à la racine des assets).
  * - **Vidéo** : [Utilitaires.videoLaunch] (récupère l'URL via VideoManager, gère le 403).
  * - **Audio** : [AudioActivity] avec la **piste** recommandée (le lecteur joue un contenu unique).
  * - **PDF recette** : le tag cible une catégorie de repas, pas un fichier précis → on ouvre
  *   le hub Nutrition ([AlimActivity]) plutôt qu'un PDF unique.
+ * - **Boîte à outils** : [ToolboxFileDetailActivity] (fiche native, plus de PDF depuis la
+ *   refonte — voir [com.audreyRetournayDiet.femSante.data.toolbox.ToolboxAdvice]).
  */
 object RecommendationLauncher {
 
@@ -28,7 +31,15 @@ object RecommendationLauncher {
                 content.id, "non", Intent(context, VideoActivity::class.java), context
             )
             ContentType.AUDIO -> launchAudio(context, content.id)
+            ContentType.TOOLBOX -> launchToolbox(context, content.id)
         }
+    }
+
+    private fun launchToolbox(context: Context, adviceId: String) {
+        context.startActivity(
+            Intent(context, ToolboxFileDetailActivity::class.java)
+                .putExtra(ToolboxFileDetailActivity.EXTRA_FILE_ID, adviceId)
+        )
     }
 
     private fun launchPdf(context: Context, id: String) {
