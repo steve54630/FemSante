@@ -34,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate : Démarrage de l'application")
 
-        // --- 1. GESTION DE LA SESSION ---
         val userStore = UserStore(this)
         val savedUser = userStore.getUser()
 
@@ -49,14 +48,11 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        // --- 2. VÉRIFICATION DES MISES À JOUR ---
         checkInAppUpdate()
 
-        // --- 3. INITIALISATION DE L'INTERFACE ---
         setContentView(R.layout.activity_login)
         menu = findViewById(R.id.bottom_navigation_menu)
 
-        // Affichage du fragment par défaut au lancement
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, loginFragment)
@@ -66,10 +62,6 @@ class LoginActivity : AppCompatActivity() {
         setupNavigation()
     }
 
-    /**
-     * Configure la navigation via la BottomNavigationView.
-     * Remplace dynamiquement le fragment affiché dans le conteneur principal.
-     */
     private fun setupNavigation() {
         menu.setOnItemSelectedListener { item ->
             val fragment = when (item.itemId) {
@@ -114,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo,
-                        // Nouveau contrat ActivityResult pour remplacer startActivityForResult (obsolète)
                         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
                             if (result.resultCode != RESULT_OK) {
                                 Timber.e("Échec ou annulation de la mise à jour obligatoire")

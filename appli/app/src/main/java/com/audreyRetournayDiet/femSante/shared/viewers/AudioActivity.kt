@@ -51,7 +51,6 @@ class AudioActivity : AppCompatActivity() {
 
         observeState()
 
-        // Une piste unique fournie par l'appelant : on lance directement sa lecture.
         intent.getStringExtra(EXTRA_TRACK)?.takeIf { it.isNotBlank() }?.let {
             viewModel.onExerciseSelected(it)
         }

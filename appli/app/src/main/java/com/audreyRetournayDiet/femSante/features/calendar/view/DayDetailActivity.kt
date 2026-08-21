@@ -37,8 +37,8 @@ import java.util.Locale
 /**
  * Écran détail d'une journée (calendrier classique : tap sur un jour → cet écran).
  *
- * Héberge ce qui était auparavant intégré sous la grille : saisie cycle (avec pré-cochage
- * prévisionnel opt-out), phase estimée, et résumé du jour (ou état vide → [EntryAddActivity]).
+ * Écran détail d'une journée : saisie cycle (avec pré-cochage prévisionnel opt-out), phase
+ * estimée, et résumé du jour (ou état vide → [EntryAddActivity]).
  * Réutilise [CalendarViewModel] pour lire/écrire les données de la date reçue en extra.
  */
 @AndroidEntryPoint
@@ -165,7 +165,7 @@ class DayDetailActivity : AppCompatActivity() {
             FlowLevel.LEGER -> chipGroupFlow.check(R.id.chipFlowLight)
             FlowLevel.MOYEN -> chipGroupFlow.check(R.id.chipFlowMedium)
             FlowLevel.ABONDANT -> chipGroupFlow.check(R.id.chipFlowHeavy)
-            null -> { /* aucun flux sélectionné */ }
+            null -> { }
         }
 
         isBindingCycle = false
@@ -201,7 +201,6 @@ class DayDetailActivity : AppCompatActivity() {
         CyclePhase.INDETERMINEE -> getString(R.string.cycle_phase_indeterminee)
     }
 
-    /** Récupère l'état des contrôles et enregistre l'observation pour la journée. */
     private fun saveCycleInputs() {
         val flow = when (chipGroupFlow.checkedChipId) {
             R.id.chipFlowLight -> FlowLevel.LEGER
@@ -272,7 +271,6 @@ class DayDetailActivity : AppCompatActivity() {
     companion object {
         private const val EXTRA_DATE = "selectedDate"
 
-        /** Ouvre l'écran détail pour la [date] donnée. */
         fun intent(context: Context, date: LocalDate): Intent =
             Intent(context, DayDetailActivity::class.java).putExtra(EXTRA_DATE, date.toString())
     }

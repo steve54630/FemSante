@@ -24,8 +24,7 @@ import timber.log.Timber
  * Navigation en **add/hide/show** (et non `replace()` sur instances réutilisées) : l'état est
  * conservé et, surtout, chaque onglet reste `STARTED` en arrière-plan — sa collecte de flux
  * continue de tourner, donc la liste de courses reste **réactive** au store même cachée. Le
- * `replace()` sur instance réutilisée ne rafraîchissait pas la vue de façon fiable (cf. le même
- * correctif dans `HomeActivity`).
+ * `replace()` sur instance réutilisée ne rafraîchissait pas la vue de façon fiable.
  */
 @AndroidEntryPoint
 class AlimActivity : AppCompatActivity() {

@@ -106,7 +106,6 @@ class VideoActivity : AppCompatActivity() {
         player = ExoPlayer.Builder(this).build()
         playerView.player = player
 
-        // Le bouton plein écran suit la visibilité des contrôles du lecteur.
         playerView.setControllerVisibilityListener(
             PlayerView.ControllerVisibilityListener { visibility ->
                 fullScreenButton.isVisible = visibility == View.VISIBLE
@@ -127,7 +126,6 @@ class VideoActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    // Session expirée (refresh impossible) : retour au login.
                     if (state.sessionExpired) {
                         redirectToLoginAfterSessionExpiry()
                         return@collect

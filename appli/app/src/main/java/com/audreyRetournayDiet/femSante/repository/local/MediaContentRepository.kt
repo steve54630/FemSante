@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 /**
  * Fournit le catalogue des contenus bien-être (vidéos/audios), lu une seule fois depuis
- * `assets/media.json`. Remplace l'ancien objet codé en dur `MediaCatalog`.
+ * `assets/media.json`.
  *
  * **Point de bascule serveur** : la source des données est isolée dans [load]. Pour passer à un
  * contenu piloté par l'API (ajouter une vidéo sans republier l'app), il suffira de remplacer la

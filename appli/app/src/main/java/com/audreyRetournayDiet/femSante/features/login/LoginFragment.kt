@@ -63,9 +63,6 @@ class LoginFragment : Fragment() {
         return view
     }
 
-    /**
-     * Initialise les instances des composants UI et les accès aux données (DB & Repository).
-     */
     private fun initViews(view: View) {
         db = DatabaseProvider.getDatabase(view.context)
         password = view.findViewById(R.id.Password)
@@ -78,9 +75,6 @@ class LoginFragment : Fragment() {
         userRepository = UserRepository(db.userDao())
     }
 
-    /**
-     * Configure les actions de clics sur les boutons de connexion et de récupération.
-     */
     private fun setupListeners() {
         connect.setOnClickListener {
             Timber.v("Clic : Tentative de connexion")
@@ -93,10 +87,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    /**
-     * Gère la logique de clic sur le bouton de connexion.
-     * Effectue une validation locale simple avant de lancer l'appel API via une Coroutine.
-     */
     private fun onConnectClicked() {
         val emailText = email.text.toString().trim()
         val passwordText = password.text.toString().trim()
@@ -158,7 +148,6 @@ class LoginFragment : Fragment() {
         val hasAccess = apiResult.data?.optBooleanFlexible("acces") ?: false
         Timber.v("Droits d'accès : à vie=$lifetimeAccess, accès contenu=$hasAccess")
 
-        // 1️⃣ Synchronisation Locale (Room)
         // Recherche de l'utilisateur ou création s'il se connecte pour la première fois sur ce device
         Timber.d("Room : Recherche de l'utilisateur en local")
         val userId: String? = when (val userResult = userRepository.getUser(emailText)) {
@@ -190,7 +179,6 @@ class LoginFragment : Fragment() {
             return
         }
 
-        // 2️⃣ Mise à jour du UserStore (SharedPreferences)
         val newUser = AppUser(
             id = userId,
             lifetimeAccess = lifetimeAccess,
@@ -212,13 +200,9 @@ class LoginFragment : Fragment() {
         }
         Timber.i("Session : Utilisateur $emailText sauvegardé dans le Store")
 
-        // 3️⃣ Navigation finale
         navigateToHome()
     }
 
-    /**
-     * Redirige l'utilisateur vers l'écran d'accueil et ferme l'activité de login.
-     */
     private fun navigateToHome() {
         Timber.d("Navigation -> HomeActivity")
         val intent = Intent(requireActivity(), HomeActivity::class.java)
@@ -228,9 +212,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    /**
-     * Affiche un message d'erreur via un Toast.
-     */
     private fun showError(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }

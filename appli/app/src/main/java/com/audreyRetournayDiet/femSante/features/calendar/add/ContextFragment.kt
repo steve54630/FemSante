@@ -46,7 +46,6 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         val etMedicationList = view.findViewById<TextInputEditText>(R.id.etMedicationList)
         val etDietNotes = view.findViewById<TextInputEditText>(R.id.etDietNotes)
 
-        // Génération des options d'activité physique à partir de l'Enum PhysicalActivity
         if (chipGroupActivity.isEmpty()) {
             chipGroupActivity.addTagChips(PhysicalActivity.entries)
         }
@@ -69,10 +68,8 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contextState.collect { state ->
-                    // Synchronisation de l'activité sélectionnée
                     group.checkChipByTag(state.physicalActivity ?: PhysicalActivity.REPOS)
 
-                    // État des médicaments
                     if (switch.isChecked != state.medecineTaken) {
                         switch.isChecked = state.medecineTaken
                     }
@@ -100,7 +97,6 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         etMed: TextInputEditText,
         etDiet: TextInputEditText
     ) {
-        // Fonction locale pour centraliser l'envoi des données vers le ViewModel
         fun pushUpdate() {
             val activity = group.selectedTag<PhysicalActivity>() ?: PhysicalActivity.REPOS
 

@@ -118,7 +118,7 @@ class PourToiViewModelTest {
     @Test
     fun `phase inconnue aucun micronutriment propose`() = runTest {
         stubUser()
-        stubRecipeOfDayDeps() // phase = null
+        stubRecipeOfDayDeps()
         coEvery { repository.getDailyEntryByDate(any(), any<LocalDate>()) } returns ApiResult.Success(null, "ok")
 
         val vm = PourToiViewModel(repository, recipeRepository, contentTagRepository, micronutrientRepository, phaseProvider, userStore)

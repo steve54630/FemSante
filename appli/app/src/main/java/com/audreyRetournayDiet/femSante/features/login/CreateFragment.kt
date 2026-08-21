@@ -68,9 +68,6 @@ class CreateFragment : Fragment() {
         setupListeners(view)
     }
 
-    /**
-     * Lie les composants du layout XML aux propriétés de la classe.
-     */
     private fun initViews(view: View) {
         name = view.findViewById(R.id.Name)
         email = view.findViewById(R.id.Login)
@@ -81,9 +78,6 @@ class CreateFragment : Fragment() {
         alert = LoadingAlert(requireActivity())
     }
 
-    /**
-     * Initialise le ViewModel avec ses callbacks de gestion d'état.
-     */
     private fun setupViewModel() {
         createViewModel = CreateViewModel(
             userManager = UserManager(requireContext()),
@@ -134,9 +128,6 @@ class CreateFragment : Fragment() {
         }
     }
 
-    /**
-     * Définit les actions au clic sur les boutons du formulaire.
-     */
     private fun setupListeners(view: View) {
         view.findViewById<Button>(R.id.buttonConnect).setOnClickListener {
             Timber.d("Clic : Bouton Inscription")
@@ -156,9 +147,6 @@ class CreateFragment : Fragment() {
         }
     }
 
-    /**
-     * Gère la transition vers l'activité suivante après succès.
-     */
     private fun navigateTo(cls: Class<*>, extras: HashMap<String, String>?) {
         val intent = Intent(requireContext(), cls).apply {
             extras?.let { putExtra("map", it) }
@@ -166,9 +154,6 @@ class CreateFragment : Fragment() {
         startActivity(intent)
     }
 
-    /**
-     * Construit la structure de données utilisateur pour l'envoi API.
-     */
     private fun buildUserMap() = hashMapOf(
         "email" to email.text.toString(),
         "password" to password.text.toString(),

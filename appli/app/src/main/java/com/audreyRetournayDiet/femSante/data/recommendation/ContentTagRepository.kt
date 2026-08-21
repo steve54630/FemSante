@@ -11,9 +11,8 @@ import javax.inject.Singleton
  * `assets/content_tags.json` via [ContentTagJsonParser].
  *
  * La table (identifiants de contenu + tags issus du tableau de tagging validé par la
- * diététicienne) n'est plus codée en dur : le squelette de l'app fonctionne sans elle (catalogue
- * vide → [RecommendationEngine] laisse tout le contenu affiché), et la source pourra passer côté
- * API sans toucher au moteur.
+ * diététicienne) reste optionnelle : catalogue vide → [RecommendationEngine] laisse tout le
+ * contenu affiché, et la source pourra passer côté API sans toucher au moteur.
  *
  * Injecté par constructeur (`@Inject`) et unique (`@Singleton`) : le JSON n'est parsé qu'à la
  * première utilisation grâce au chargement paresseux.

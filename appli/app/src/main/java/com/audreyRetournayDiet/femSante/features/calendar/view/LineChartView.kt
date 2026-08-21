@@ -76,13 +76,11 @@ class LineChartView @JvmOverloads constructor(
         fun yAt(v: Double): Float =
             topPad + plotH - ((v - minV) / (maxV - minV) * plotH).toFloat()
 
-        // Lignes de repère haute/basse + valeurs
         canvas.drawLine(leftPad, yAt(maxV), w - rightPad, yAt(maxV), gridPaint)
         canvas.drawLine(leftPad, yAt(minV), w - rightPad, yAt(minV), gridPaint)
         canvas.drawText(num(maxV), 12f, yAt(maxV) + 9f, axisTextPaint)
         canvas.drawText(num(minV), 12f, yAt(minV) + 9f, axisTextPaint)
 
-        // Courbe
         if (points.size > 1) {
             val path = Path()
             points.forEachIndexed { i, p ->
@@ -93,7 +91,6 @@ class LineChartView @JvmOverloads constructor(
         }
         points.forEachIndexed { i, p -> canvas.drawCircle(xAt(i), yAt(p.value), 6f, dotPaint) }
 
-        // Dates aux extrémités
         val baseY = h - 10f
         canvas.drawText(points.first().label, leftPad, baseY, axisTextPaint)
         if (points.size > 1) {

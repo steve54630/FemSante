@@ -36,7 +36,6 @@ class VideoViewModel @Inject constructor(
     private val videoData: HashMap<*, *> =
         savedStateHandle.get<HashMap<*, *>>("map") ?: hashMapOf<String, String>()
 
-    // État réactif de l'écran vidéo
     private val internalUiState = MutableStateFlow(VideoUiState())
     val uiState: StateFlow<VideoUiState> = internalUiState.asStateFlow()
 
@@ -54,7 +53,6 @@ class VideoViewModel @Inject constructor(
 
         Timber.d("Initialisation vidéo : '$title' | PDF requis : $pdfParam")
 
-        // Configuration de l'état initial (avec ou sans bouton PDF)
         internalUiState.value = VideoUiState(
             title = title,
             isLoading = true,

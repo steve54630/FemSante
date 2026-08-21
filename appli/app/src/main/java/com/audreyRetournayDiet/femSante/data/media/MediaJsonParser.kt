@@ -10,8 +10,7 @@ import com.google.gson.reflect.TypeToken
  * lui passe le flux des assets, et les tests unitaires (JVM) valident directement le fichier livré
  * sans émulateur. Même patron que `RecipeJsonParser` / `MicronutrientJsonParser`.
  *
- * Objectif : la liste des vidéos/audios n'est plus codée en dur (fini `MediaCatalog`), ce qui
- * ouvre la voie à un contenu piloté par le serveur (il suffira de changer la source dans le repo).
+ * Objectif : permettre un contenu piloté par le serveur (il suffira de changer la source dans le repo).
  */
 object MediaJsonParser {
 

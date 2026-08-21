@@ -11,10 +11,8 @@ class FemSanteApp : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            // On crée un "Arbre" personnalisé pour ajouter un préfixe à TOUS tes logs
             Timber.plant(object : Timber.DebugTree() {
                 override fun createStackElementTag(element: StackTraceElement): String {
-                    // Ajoute un préfixe fixe + le nom de la classe (ex: 🌸_PaymentActivity)
                     return "FEM_SANTE_${super.createStackElementTag(element)}"
                 }
             })

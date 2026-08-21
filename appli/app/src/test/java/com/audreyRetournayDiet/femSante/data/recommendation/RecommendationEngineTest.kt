@@ -67,7 +67,6 @@ class RecommendationEngineTest {
         assertTrue(videoBassin in contents)
         assertTrue(pdfMauvaise in contents)
         assertTrue(pdfDouble in contents)
-        // Contenu sans tag commun exclu
         assertTrue(pdfNeutre !in contents)
     }
 
@@ -90,7 +89,6 @@ class RecommendationEngineTest {
             vBassin to setOf(JournalTag.Zone(PainZone.BASSIN)),
             vLombaires to setOf(JournalTag.Zone(PainZone.LOMBAIRES))
         )
-        // Bassin fort (8) vs Lombaires léger (2).
         val result = RecommendationEngine.recommend(
             entry(pain = 3, painByZone = mapOf(PainZone.BASSIN to 8, PainZone.LOMBAIRES to 2)),
             cat
@@ -110,7 +108,6 @@ class RecommendationEngineTest {
         )
         // À 1 tag commun : audioSos (Bassin), videoBassin (Bassin), pdfDouble (Bassin) ; mauvaise non
         val oneMatch = result.filter { it.matchingTagCount == 1 }.map { it.content }
-        // L'audio doit précéder la vidéo, qui précède le PDF
         assertTrue(oneMatch.indexOf(audioSos) < oneMatch.indexOf(videoBassin))
         assertTrue(oneMatch.indexOf(videoBassin) < oneMatch.indexOf(pdfDouble))
     }

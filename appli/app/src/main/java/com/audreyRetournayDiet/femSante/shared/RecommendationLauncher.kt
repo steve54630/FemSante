@@ -19,8 +19,7 @@ import com.audreyRetournayDiet.femSante.shared.viewers.VideoActivity
  * - **Audio** : [AudioActivity] avec la **piste** recommandée (le lecteur joue un contenu unique).
  * - **PDF recette** : le tag cible une catégorie de repas, pas un fichier précis → on ouvre
  *   le hub Nutrition ([AlimActivity]) plutôt qu'un PDF unique.
- * - **Boîte à outils** : [ToolboxFileDetailActivity] (fiche native, plus de PDF depuis la
- *   refonte — voir [com.audreyRetournayDiet.femSante.data.toolbox.ToolboxAdvice]).
+ * - **Boîte à outils** : [ToolboxFileDetailActivity] (fiche native, pas de PDF).
  */
 object RecommendationLauncher {
 

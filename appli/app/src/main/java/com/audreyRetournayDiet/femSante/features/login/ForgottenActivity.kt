@@ -56,9 +56,6 @@ class ForgottenActivity : AppCompatActivity() {
         setupListeners()
     }
 
-    /**
-     * Initialise les références des composants UI.
-     */
     private fun initViews() {
         password = findViewById(R.id.Password)
         confirm = findViewById(R.id.ChangePassword)
@@ -69,9 +66,6 @@ class ForgottenActivity : AppCompatActivity() {
         alert = LoadingAlert(this)
     }
 
-    /**
-     * Configure le ViewModel et ses interactions avec l'UI (Loading, Error, Success).
-     */
     private fun setupViewModel() {
         forgottenViewModel = ForgottenViewModel(
             userManager = UserManager(applicationContext),
@@ -86,7 +80,6 @@ class ForgottenActivity : AppCompatActivity() {
             onSuccess = { msg ->
                 Timber.i("Succès : Mot de passe réinitialisé")
                 Utilitaires.showToast(msg, this)
-                // Redirection vers l'écran de connexion après succès
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
@@ -111,22 +104,17 @@ class ForgottenActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * Définit les listeners d'actions.
-     */
     private fun setupListeners() {
         changePasswordBtn.setOnClickListener {
             Timber.d("Clic : Bouton de réinitialisation")
 
             if (validateFields()) {
-                // Recherche de la clé (ID) correspondant à la question sélectionnée
                 val selectedKey = questionsMap.entries.find {
                     it.value == questionSpinner.selectedItem?.toString()
                 }?.key?.toString() ?: ""
 
                 Timber.d("Tentative de réinitialisation avec question ID : $selectedKey")
 
-                // Construction de l'objet JSON pour l'API
                 val params = JSONObject().apply {
                     put("email", email.text.toString().trim())
                     put("password", password.text.toString())
@@ -134,7 +122,6 @@ class ForgottenActivity : AppCompatActivity() {
                     put("id", selectedKey)
                 }
 
-                // Appel coroutine sécurisé via lifecycleScope
                 lifecycleScope.launch {
                     forgottenViewModel.changePassword(params)
                 }

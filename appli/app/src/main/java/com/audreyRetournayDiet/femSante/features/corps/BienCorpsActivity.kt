@@ -24,9 +24,8 @@ import com.google.android.material.chip.ChipGroup
 import timber.log.Timber
 
 /**
- * Écran « Bien dans ton corps » unifié : des chips de thème (Yoga / Pilates / Fitness) et une
- * **grille de cartes** que l'on lance en un tap. Remplace l'ancien menu de boutons + le sous-écran
- * Yoga (navigation à deux niveaux), pour rester sur du **2 clics max**.
+ * Écran « Bien dans ton corps » unifié : des chips de thème et une grille de cartes que l'on
+ * lance en un tap, pour rester sur du 2 clics max.
  *
  * Le module ne contient que des vidéos : pas de sélecteur Vidéos/Audios (contrairement à
  * « Bien dans ta tête »).

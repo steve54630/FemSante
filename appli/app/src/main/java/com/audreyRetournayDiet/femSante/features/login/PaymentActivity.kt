@@ -120,7 +120,6 @@ class PaymentActivity : AppCompatActivity() {
 
         Timber.i("Contexte de paiement: Repay=$repay, Update=$update")
 
-        // Récupération sécurisée des paramètres d'inscription
         parametersMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("map", HashMap::class.java)!!
         } else {
@@ -128,9 +127,6 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Initialise le ViewModel avec les callbacks de mise à jour d'interface et de navigation.
-     */
     private fun setupViewModel() {
         paymentViewModel = PaymentViewModel(
             context = this,
@@ -148,7 +144,6 @@ class PaymentActivity : AppCompatActivity() {
                 Utilitaires.showToast(msg, this)
             },
             onPriceCalculated = { price ->
-                // Mise à jour du prix final affiché (après réduction éventuelle)
                 valueSubscription = price
                 buyout.text = "$price €"
                 Timber.d("UI: Prix mis à jour = $price €")
@@ -181,11 +176,7 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Définit les listeners pour le switch de mode de paiement et les validations de formulaire.
-     */
     private fun setupListeners() {
-        // Bascule entre l'interface PayPal et l'interface Carte Bancaire
         switchPay.setOnCheckedChangeListener { _, isChecked ->
             val mode = if (isChecked) "CARTE" else "PAYPAL"
             Timber.d("Changement de mode : $mode")
@@ -193,7 +184,6 @@ class PaymentActivity : AppCompatActivity() {
             paypalLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
         }
 
-        // Gestion du code promo
         reductionButton.setOnClickListener {
             val code = reductionValue.text.toString().trim()
             if (registerSpinner.selectedItemId == -1L) {
@@ -203,7 +193,6 @@ class PaymentActivity : AppCompatActivity() {
             applyReductionFromApi(code)
         }
 
-        // Paiement PayPal Native
         payPal.setOnClickListener {
             if (validateForm()) {
                 Timber.i("Lancement PayPal : $valueSubscription €")
@@ -211,7 +200,6 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
-        // Paiement Carte Bancaire
         payPalCard.setOnClickListener {
             if (validateForm()) {
                 Timber.i("Lancement Paiement Carte : $valueSubscription €")
@@ -226,7 +214,6 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
-        // Consultation des CGV (obligatoire pour le paiement)
         findViewById<Button>(R.id.buttonCGV).setOnClickListener {
             startActivity(Intent(this, PdfActivity::class.java).apply {
                 putExtra("PDF", "Conditions Générales de Vente.pdf")
@@ -234,10 +221,6 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Interroge l'API pour vérifier la validité d'un code de réduction.
-     * En cas de succès, demande au ViewModel de recalculer le prix final.
-     */
     private fun applyReductionFromApi(code: String) {
         if (code.isEmpty()) return
         alert.start()
@@ -279,9 +262,6 @@ class PaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    /**
-     * Vérifie les pré-requis métier avant de déclencher une transaction.
-     */
     private fun validateForm(): Boolean {
         return when {
             registerSpinner.selectedItemId == -1L -> {

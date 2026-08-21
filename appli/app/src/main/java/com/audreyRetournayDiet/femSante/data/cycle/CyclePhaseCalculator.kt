@@ -41,7 +41,6 @@ object CyclePhaseCalculator {
         cycleLength: Int = DEFAULT_CYCLE_LENGTH,
         periodLength: Int = DEFAULT_PERIOD_LENGTH
     ): CyclePhase? {
-        // Profil sans cycle exploitable : pas d'affichage de phase.
         if (profile == CycleProfile.ABSENT_OU_PILULE) return null
 
         val starts = periodStarts(periodDates)

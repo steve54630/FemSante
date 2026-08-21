@@ -14,8 +14,8 @@ import com.audreyRetournayDiet.femSante.shared.UserStore
  * Écran "Mes préférences" accessible depuis Mon compte.
  *
  * Regroupe le paramétrage du suivi de cycle (profil + durée moyenne du cycle + durée des
- * règles), auparavant saisi via un dialog dans le calendrier. Les valeurs sont stockées
- * localement dans [UserStore] (prefs chiffrées) et ne quittent jamais l'appareil (RGPD).
+ * règles). Les valeurs sont stockées localement dans [UserStore] (prefs chiffrées) et ne
+ * quittent jamais l'appareil (RGPD).
  *
  * Conçu pour accueillir d'autres préférences utilisateur par la suite.
  */

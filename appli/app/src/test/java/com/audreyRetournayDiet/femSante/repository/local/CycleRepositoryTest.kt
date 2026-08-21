@@ -67,7 +67,6 @@ class CycleRepositoryTest {
 
     @Test
     fun `le flux est ignore si pas de regles`() = runTest {
-        // L'utilisatrice n'a pas ses règles mais un flux est passé : il doit être annulé.
         repository.saveCycleDay(userId, date, isPeriod = false, flow = FlowLevel.ABONDANT, spotting = true)
 
         val day = (repository.getCycleDay(userId, date) as ApiResult.Success).data!!

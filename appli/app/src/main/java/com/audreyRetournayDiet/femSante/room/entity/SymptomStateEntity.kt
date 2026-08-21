@@ -61,7 +61,7 @@ data class SymptomStateEntity(
 
     /**
      * Douleur **par zone** : zone → intensité (1 à 10), saisie via la carte du corps.
-     * Remplace progressivement [localizedPains] (présence binaire) en apportant l'intensité.
+     * Capture l'intensité (1–10) en plus de la simple présence enregistrée par [localizedPains].
      * Sérialisé par [com.audreyRetournayDiet.femSante.room.converter.PainZoneLevelConverter].
      */
     @ColumnInfo(name = "pain_by_zone", defaultValue = "")

@@ -11,11 +11,6 @@ import com.audreyRetournayDiet.femSante.room.type.PhysicalActivity
  */
 class ActivityConverter {
 
-    /**
-     * Transforme une instance de l'énumération en sa représentation textuelle (Nom de la constante).
-     * @param value L'activité physique à convertir (ex: LOW, MODERATE, HIGH).
-     * @return Le nom de l'énumération sous forme de chaîne de caractères.
-     */
     @TypeConverter
     fun fromPhysicalActivity(value: PhysicalActivity): String = value.name
 

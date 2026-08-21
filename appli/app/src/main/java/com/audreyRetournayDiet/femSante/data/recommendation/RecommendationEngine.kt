@@ -42,7 +42,6 @@ object RecommendationEngine {
         catalog: Map<ContentRef, Set<JournalTag>>
     ): List<Recommendation> {
         if (latestEntry == null) {
-            // Aucune saisie : on affiche tout, sans note de pertinence ni tri imposé.
             return catalog.keys.map { Recommendation(it, matchingTagCount = 0) }
         }
 
@@ -50,7 +49,6 @@ object RecommendationEngine {
         val entryTags = latestEntry.toJournalTags()
         val entryNonZoneTags = entryTags.filterNot { it is JournalTag.Zone }.toSet()
 
-        // Zones douloureuses + leur intensité (nouveau système de douleur par zone).
         val painByZone = latestEntry.symptomsState?.painByZone ?: emptyMap()
         val painfulZones = painByZone.keys + (latestEntry.symptomsState?.localizedPains ?: emptyList())
 

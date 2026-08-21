@@ -32,11 +32,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
- * Écran de navigation des recettes.
- *
- * Remplace l'ancienne navigation par catégories + spinner : une **grille de cartes photo**
- * filtrable en direct par catégorie, par « Ma phase » (phase du cycle) et par tags diététiques
- * (feuille du bas). Un tap sur une carte ouvre la fiche recette native.
+ * Écran de navigation des recettes : une grille de cartes photo filtrable en direct par
+ * catégorie, par « Ma phase » et par tags diététiques.
  */
 @AndroidEntryPoint
 class AlimFragment : Fragment() {

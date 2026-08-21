@@ -6,8 +6,7 @@ import com.google.android.material.chip.ChipGroup
 
 /**
  * Helpers génériques **ChipGroup ↔ Enum** : chaque [Chip] porte sa valeur dans son `tag`, ce qui
- * évite de jongler avec des `String`. Factorisé depuis les fragments de saisie du journal
- * (`PsychologicalFragment`, `ContextFragment`…), où la même logique était dupliquée.
+ * évite de jongler avec des `String`.
  */
 
 /** Ajoute un [Chip] cochable par valeur d'enum (libellé = `name`, valeur portée par `tag`). */

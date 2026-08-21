@@ -91,11 +91,9 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
                 viewModel.psychologicalState.collect { state ->
                     Timber.v("Sync UI : Qualité=${state.dayQuality}, Nb Causes=${state.difficultyCauses.size}")
 
-                    // Synchronisation des sélections (VM -> UI)
                     groupQuality.checkChipByTag(state.dayQuality)
                     groupCauses.checkChipsByTags(state.difficultyCauses)
 
-                    // Gestion de la visibilité du champ "Autre"
                     val hasOther = state.difficultyCauses.contains(DifficultyCause.AUTRE)
                     if (layoutAutres.isVisible != hasOther) {
                         layoutAutres.isVisible = hasOther
@@ -119,7 +117,6 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         groupCauses: ChipGroup,
         etAutres: TextInputEditText
     ) {
-        /** Envoie l'état actuel des vues vers le ViewModel */
         fun pushUpdate() {
             val quality = groupQuality.selectedTag<DayQuality>() ?: DayQuality.MOYENNE
             val causes = groupCauses.selectedTags<DifficultyCause>()
@@ -141,9 +138,7 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
     }
 
     /**
-     * Fatigue du jour (déplacée depuis l'ancien onglet « Général »). Observe l'état général
-     * (l'intensité de douleur y est désormais dérivée de la carte du corps) et ne remonte que
-     * la fatigue au ViewModel.
+     * Fatigue du jour : observe l'état général et ne remonte que la fatigue au ViewModel.
      */
     private fun setupFatigue(switchTired: MaterialSwitch) {
         viewLifecycleOwner.lifecycleScope.launch {

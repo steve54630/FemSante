@@ -6,9 +6,9 @@ import com.audreyRetournayDiet.femSante.R
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Hôte fin de [CalendarFragment]. Toute la logique du calendrier vit désormais dans le
- * fragment, réutilisé par l'onglet "Calendrier" de [com.audreyRetournayDiet.femSante.features.main.HomeActivity].
- * Cette activité reste un point d'entrée de secours (deep link, notification…).
+ * Hôte fin de [CalendarFragment], réutilisé par l'onglet Calendrier de
+ * [com.audreyRetournayDiet.femSante.features.main.HomeActivity]. Reste un point d'entrée de
+ * secours (deep link, notification…).
  */
 @AndroidEntryPoint
 class CalendarActivity : AppCompatActivity() {

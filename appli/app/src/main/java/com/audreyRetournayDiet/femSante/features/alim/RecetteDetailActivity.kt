@@ -32,10 +32,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
- * Fiche recette **native**, à la charte de l'app (par opposition au PDF figé).
- *
- * Reçoit l'identifiant de la recette via [RecipeDetailViewModel.EXTRA_RECIPE_ID]. Le contenu est
- * affiché directement dans l'app — plus de lien vers le PDF d'origine.
+ * Fiche recette native, à la charte de l'app. Reçoit l'identifiant via
+ * [RecipeDetailViewModel.EXTRA_RECIPE_ID].
  */
 @AndroidEntryPoint
 class RecetteDetailActivity : AppCompatActivity() {
@@ -120,8 +118,6 @@ class RecetteDetailActivity : AppCompatActivity() {
         findViewById<MaterialCardView>(R.id.cardTip).visibility = View.VISIBLE
         findViewById<TextView>(R.id.tvTip).text = tip
     }
-
-    // --- Construction des vues dynamiques -----------------------------------------------------
 
     private fun sectionHeader(title: String): TextView = TextView(this).apply {
         text = title

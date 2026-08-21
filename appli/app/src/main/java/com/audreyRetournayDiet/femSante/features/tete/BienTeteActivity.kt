@@ -26,10 +26,8 @@ import com.google.android.material.chip.ChipGroup
 import timber.log.Timber
 
 /**
- * Écran « Bien dans ta tête » unifié : un sélecteur **Vidéos / Audios**, des chips de thème (qui
- * dépendent du type choisi), et une **grille de cartes** que l'on lance en un tap. Remplace
- * l'ancien menu de boutons + les sous-écrans Art-thérapie / Sophrologie, et supprime le spinner
- * audio.
+ * Écran « Bien dans ta tête » unifié : un sélecteur Vidéos / Audios, des chips de thème (qui
+ * dépendent du type choisi), et une grille de cartes que l'on lance en un tap.
  */
 class BienTeteActivity : AppCompatActivity() {
 

@@ -31,13 +31,11 @@ class CreateViewModel(
         val email = params.optString("email")
         val emailJson = JSONObject().apply { put("email", email) }
 
-        // 1. Vérification de la disponibilité de l'email
         Timber.d("Vérification disponibilité email : $email")
         when (val emailCheck = userManager.verifyEmail(emailJson)) {
             is ApiResult.Success -> {
                 Timber.i("Email disponible. Tentative de création...")
 
-                // 2. Création effective de l'utilisateur
                 when (val createCheck = userManager.createUser(params)) {
                     is ApiResult.Success -> {
                         Timber.i("Compte créé avec succès pour : $email")

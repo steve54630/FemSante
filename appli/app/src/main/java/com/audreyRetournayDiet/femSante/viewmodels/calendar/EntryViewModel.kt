@@ -44,8 +44,6 @@ class EntryViewModel @Inject constructor(
 
     private val _selectedDate = MutableStateFlow(LocalDate.now())
 
-    // --- États du Formulaire (Un StateFlow par section de l'entité DailyEntryFull) ---
-
     private val _generalState = MutableStateFlow(GeneralStateEntity(entryId = 0L))
     val generalState = _generalState.asStateFlow()
 
@@ -70,8 +68,6 @@ class EntryViewModel @Inject constructor(
     private val _measurementState = MutableStateFlow(BodyMeasurementEntity(entryId = 0L))
     val measurementState = _measurementState.asStateFlow()
 
-    // --- setters de configuration ---
-
     fun setDate(date: LocalDate) {
         Timber.d("Date du formulaire fixée sur : $date")
         _selectedDate.value = date
@@ -81,8 +77,6 @@ class EntryViewModel @Inject constructor(
         Timber.d("Mode édition activé : $edit")
         _editChannel.value = edit
     }
-
-    // --- Fonctions de mise à jour des états (Appelées par l'UI via Listeners/Binding) ---
 
     fun updateGeneralState(pain: Int, tired: Boolean) {
         _generalState.value = _generalState.value.copy(painLevel = pain, isTired = tired)
@@ -133,7 +127,7 @@ class EntryViewModel @Inject constructor(
         _symptomState.value = _symptomState.value.copy(hasNausea = nausea, others = notes)
     }
 
-    /** Fatigue du jour (déplacée dans l'onglet « Moral & sommeil »). */
+    /** Fatigue du jour. */
     fun updateTired(tired: Boolean) {
         _generalState.value = _generalState.value.copy(isTired = tired)
     }
@@ -170,7 +164,6 @@ class EntryViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Conversion de la date locale en timestamp pour Room
                 val dateMillis = _selectedDate.value
                     .atStartOfDay(ZoneId.systemDefault())
                     .toInstant()
@@ -231,7 +224,6 @@ class EntryViewModel @Inject constructor(
 
             if (result is ApiResult.Success && result.data != null) {
                 val data = result.data
-                // Mapping des données récupérées vers les StateFlow locaux
                 _generalState.value = data.generalState ?: GeneralStateEntity(entryId = 0L)
                 _psychologicalState.value = data.psychologicalState ?: PsychologicalStateEntity(entryId = 0L)
                 _symptomState.value = data.symptomsState ?: SymptomStateEntity(entryId = 0L)
@@ -246,9 +238,6 @@ class EntryViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Réinitialise tous les champs du formulaire aux valeurs par défaut.
-     */
     private fun resetStates() {
         Timber.d("Reset complet des états du formulaire")
         _generalState.value = GeneralStateEntity(entryId = 0L)

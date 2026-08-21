@@ -129,7 +129,6 @@ class PourToiFragment : Fragment() {
                     bindRecipeOfDay(state.recipeOfDay)
                     bindPhaseMicronutrients(state.phaseMicronutrients, state.currentPhase)
                     bindGesteDuJour(state.recommendations.firstOrNull())
-                    // Le reste, hors "geste du jour", dans le carrousel.
                     renderRecommendations(state.recommendations.drop(1).take(MAX_RECOMMENDATIONS_DISPLAYED))
                     // Rien à proposer : message doux plutôt qu'un écran vide.
                     layoutEmpty.isVisible = state.recommendations.isEmpty()

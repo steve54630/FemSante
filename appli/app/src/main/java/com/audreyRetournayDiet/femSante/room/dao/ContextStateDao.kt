@@ -17,24 +17,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContextStateDao {
 
-    /**
-     * Insère un nouvel état de contexte en base de données.
-     * @param state L'entité contenant les données contextuelles.
-     * @return L'identifiant unique (Row ID) généré pour cette insertion.
-     */
     @Insert
     suspend fun insert(state: ContextStateEntity): Long
 
-    /**
-     * Met à jour les informations d'un contexte existant.
-     * @param state L'entité mise à jour (identifiée par sa clé primaire).
-     */
     @Update
     suspend fun update(state: ContextStateEntity)
 
-    /**
-     * Supprime définitivement un contexte de la base de données.
-     */
     @Delete
     suspend fun delete(state: ContextStateEntity)
 

@@ -59,8 +59,8 @@ import java.util.Locale
  * affiche la qualité des journées (cases teintées) et les règles (réelles / prévues),
  * et un tap sur un jour ouvre [DayDetailActivity].
  *
- * Le fragment ne porte plus de fiche intégrée : toute la saisie et le résumé du jour
- * vivent dans l'écran détail, ce qui garde la grille simple et sans état de sélection.
+ * Toute la saisie et le résumé du jour vivent dans l'écran détail, ce qui garde la grille
+ * simple et sans état de sélection.
  */
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
@@ -290,7 +290,7 @@ class CalendarFragment : Fragment() {
                 container.view.contentDescription =
                     buildDayDescription(date, inMonth, painLevel, realPeriod, predictedPeriod)
 
-                // Contour du jour courant (plus de sélection persistante : le tap ouvre l'écran détail)
+                // Contour du jour courant : le tap ouvre l'écran détail (pas de sélection persistante)
                 val isToday = inMonth && date == LocalDate.now()
                 container.tile.foreground =
                     if (isToday) ContextCompat.getDrawable(requireContext(), R.drawable.bg_ring_today) else null

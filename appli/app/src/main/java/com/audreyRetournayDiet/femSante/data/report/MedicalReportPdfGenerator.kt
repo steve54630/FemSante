@@ -54,8 +54,6 @@ class MedicalReportPdfGenerator {
         return outputFile
     }
 
-    // --- Sections ---
-
     private fun drawHeader(w: PageWriter, report: MedicalReport) {
         w.text("Récap de suivi", titlePaint)
         w.gap(4f)

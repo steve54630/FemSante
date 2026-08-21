@@ -50,21 +50,18 @@ class ToolboxFileDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvAuthor).text = "Par ${file.author.name} — ${file.author.role}"
         findViewById<TextView>(R.id.tvSummary).text = file.summary
 
-        // 1. Ingrédients / Éléments
         val llItems = findViewById<LinearLayout>(R.id.llItems)
         llItems.removeAllViews()
         file.items.forEach { item ->
             llItems.addView(createItemView(item))
         }
 
-        // 2. Protocoles
         val llProtocols = findViewById<LinearLayout>(R.id.llProtocols)
         llProtocols.removeAllViews()
         file.protocols.forEach { protocol ->
             llProtocols.addView(createProtocolView(protocol))
         }
 
-        // 3. Précautions (Masqué si vide)
         val cardPrecautions = findViewById<View>(R.id.cardPrecautions)
         val llPrecautions = findViewById<LinearLayout>(R.id.llPrecautions)
         llPrecautions.removeAllViews()

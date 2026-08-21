@@ -30,8 +30,7 @@ import java.time.LocalDate
  * * ### Fonctionnement :
  * L'activité initialise un [EntryViewModel] partagé par tous les fragments. La navigation se fait
  * en **add/hide/show** (et non `replace()` sur instances réutilisées) : chaque onglet conserve sa
- * vue et sa saisie en cours quand on passe à un autre — sinon le formulaire du journal se
- * réinitialisait au changement d'onglet (même correctif que `HomeActivity`/`AlimActivity`).
+ * vue et sa saisie en cours quand on passe à un autre.
  */
 @AndroidEntryPoint
 class EntryAddActivity : AppCompatActivity() {
@@ -44,7 +43,7 @@ class EntryAddActivity : AppCompatActivity() {
     private lateinit var activeFragment: Fragment
     private var id: Long? = null
 
-    // Hilt injecte le ViewModel (et son DailyRepository) — plus de Factory manuelle.
+    // Hilt injecte le ViewModel et son DailyRepository.
     private val viewModel: EntryViewModel by viewModels()
 
     private companion object {

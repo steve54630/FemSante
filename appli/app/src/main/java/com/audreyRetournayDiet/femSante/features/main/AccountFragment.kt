@@ -34,7 +34,6 @@ import timber.log.Timber
 @AndroidEntryPoint
 class AccountFragment : Fragment() {
 
-    // Hilt fournit AccountViewModel et son UserStore.
     private val viewModel: AccountViewModel by viewModels()
     private lateinit var cgu: Button
     private lateinit var cgv: Button
@@ -57,15 +56,11 @@ class AccountFragment : Fragment() {
         setupObservers()
         setupStaticListeners()
 
-        // Déclenchement du chargement initial du profil
         viewModel.loadUserProfile()
 
         return view
     }
 
-    /**
-     * Lie les composants du layout aux propriétés de la classe.
-     */
     private fun initViews(view: View) {
         login = view.findViewById(R.id.textViewLogin)
         cgu = view.findViewById(R.id.buttonCGU)
@@ -78,10 +73,6 @@ class AccountFragment : Fragment() {
         logout = view.findViewById(R.id.buttonLogout)
     }
 
-    /**
-     * Observe l'état du ViewModel (StateFlow) pour mettre à jour l'UI en temps réel.
-     * Utilise [repeatOnLifecycle] pour garantir une collecte sécurisée liée au cycle de vie.
-     */
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -92,10 +83,6 @@ class AccountFragment : Fragment() {
         }
     }
 
-    /**
-     * Traite les différents états émis par le ViewModel.
-     * * @param state L'état actuel du compte utilisateur.
-     */
     private fun handleAccountState(state: AccountViewModel.AccountState) {
         when (state) {
             is AccountViewModel.AccountState.Success -> {
@@ -126,11 +113,7 @@ class AccountFragment : Fragment() {
         }
     }
 
-    /**
-     * Configure les clics sur les boutons dont la logique est indépendante de l'état utilisateur.
-     */
     private fun setupStaticListeners() {
-        // Gestion de la déconnexion
         logout.setOnClickListener {
             Timber.d("Action : Demande de déconnexion")
             viewModel.logout()
@@ -153,13 +136,11 @@ class AccountFragment : Fragment() {
             }
         }
 
-        // Redirection vers l'écran de changement de mot de passe
         passwordChange.setOnClickListener {
             Timber.d("Navigation : Écran de modification du mot de passe")
             startActivity(Intent(activity, ForgottenActivity::class.java))
         }
 
-        // Redirection vers les préférences utilisateur (dont le paramétrage du cycle)
         preferences.setOnClickListener {
             Timber.d("Navigation : Écran des préférences utilisateur")
             startActivity(Intent(activity, PreferencesActivity::class.java))

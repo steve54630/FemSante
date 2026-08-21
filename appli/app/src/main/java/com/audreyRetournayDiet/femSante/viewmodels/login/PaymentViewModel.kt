@@ -48,15 +48,12 @@ class PaymentViewModel(
     // Configuration du SDK Core (Environnement LIVE pour la mise en production)
     private val config = CoreConfig(PAYPAL_CLIENT_ID, Environment.LIVE)
 
-    // Clients spécifiques pour les deux modes de paiement
     private val cardClient = CardClient(context, config)
     private val payPalNativeClient = PayPalNativeCheckoutClient(context.application, config, RETURN_URL_PAYPAL)
 
     init {
         setupPayPalListeners()
     }
-
-    // --- LOGIQUE MÉTIER DES PRIX ---
 
     /**
      * Met à jour la sélection de l'utilisatrice depuis le Spinner/UI.
@@ -96,10 +93,7 @@ class PaymentViewModel(
         onPriceCalculated(formattedPrice)
     }
 
-    // --- LOGIQUE DE PAIEMENT (FLUX SDK) ---
-
     private fun setupPayPalListeners() {
-        // Listener pour le bouton "PayPal" (Application Native)
         payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
             override fun onPayPalCheckoutStart() {
                 onLoading(false)
@@ -116,7 +110,6 @@ class PaymentViewModel(
             }
         }
 
-        // Listener pour le formulaire de Carte Bancaire
         cardClient.approveOrderListener = object : ApproveOrderListener {
             override fun onApproveOrderSuccess(result: CardResult) {
                 validateOrder(result.orderId)
@@ -133,14 +126,12 @@ class PaymentViewModel(
         }
     }
 
-    /** Lancement du paiement via l'App PayPal */
     fun startPayPalPayment(price: String) {
         initiatePayment(price) { orderId ->
             payPalNativeClient.startCheckout(PayPalNativeCheckoutRequest(orderId))
         }
     }
 
-    /** Lancement du paiement par saisie de Carte Bancaire */
     fun startCardPayment(card: Card, price: String) {
         initiatePayment(price) { orderId ->
             val request = CardRequest(orderId, card, RETURN_URL_CARD, SCA.SCA_ALWAYS)

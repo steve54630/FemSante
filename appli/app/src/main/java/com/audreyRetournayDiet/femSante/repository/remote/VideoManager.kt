@@ -28,7 +28,6 @@ class VideoManager @Inject constructor(
     private val userStore: UserStore
 ) {
 
-    // Initialisation de la file de requêtes Volley pour le réseau
     private val volley = Volley.newRequestQueue(this.context)
 
     /**
@@ -47,7 +46,6 @@ class VideoManager @Inject constructor(
         // Création d'une requête personnalisée pour inclure les Headers d'authentification
         val request : JsonObjectRequest = object : JsonObjectRequest(Method.GET, url, null, { res ->
             try {
-                // Extraction de l'URL brute depuis la réponse JSON du serveur
                 val videoUrl = res.getString("url")
                 val json = JSONObject().apply { put("url", videoUrl) }
 

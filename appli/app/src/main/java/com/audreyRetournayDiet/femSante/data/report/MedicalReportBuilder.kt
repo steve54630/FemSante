@@ -32,7 +32,6 @@ object MedicalReportBuilder {
         val journalByDate = entries.associateBy { toDate(it.dailyEntry.date) }
         val cycleByDate = cycleDays.associateBy { toDate(it.date) }
 
-        // --- Synthèse symptômes ---
         val pains = entries.mapNotNull { it.generalState?.painLevel }
         val zoneCounts = entries
             .flatMap { it.symptomsState?.localizedPains ?: emptyList() }
@@ -49,7 +48,6 @@ object MedicalReportBuilder {
             medicationDaysCount = entries.count { it.contextState?.medecineTaken == true }
         )
 
-        // --- Synthèse cycle ---
         val periodDates = cycleDays.filter { it.isPeriod }.map { toDate(it.date) }.toSortedSet()
         val periodStarts = periodDates.filter { it.minusDays(1) !in periodDates }.sorted()
         val averageCycleLength = if (periodStarts.size >= 2) {
@@ -63,7 +61,6 @@ object MedicalReportBuilder {
             periodStartsCount = periodStarts.size
         )
 
-        // --- Synthèse sommeil ---
         val sleepDurations = entries.mapNotNull {
             sleepMinutes(it.generalState?.bedTimeMinutes, it.generalState?.wakeTimeMinutes)
         }
@@ -72,7 +69,6 @@ object MedicalReportBuilder {
             averageDurationMinutes = if (sleepDurations.isEmpty()) null else sleepDurations.average().toInt()
         )
 
-        // --- Évolution des mesures (première -> dernière valeur de la période) ---
         val trends = MeasurementMetric.values().mapNotNull { metric ->
             val samples = entries
                 .mapNotNull { e -> metricValue(e.measurement, metric)?.let { toDate(e.dailyEntry.date) to it } }

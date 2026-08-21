@@ -34,7 +34,6 @@ class ToolboxFileJsonParserTest {
         assertEquals("Naturopathe certifiée", massage.author.role)
         assertEquals("Résumé court.", massage.summary)
 
-        // Items
         assertEquals(1, massage.items.size)
         val item = massage.items.first()
         assertEquals("Huile de sésame", item.name)
@@ -42,14 +41,12 @@ class ToolboxFileJsonParserTest {
         assertEquals(listOf("Stimulante"), item.properties)
         assertTrue(item.contraindications.isEmpty())
 
-        // Protocols
         assertEquals(1, massage.protocols.size)
         val protocol = massage.protocols.first()
         assertEquals("Transit lent", protocol.indication)
         assertEquals("Ventre", protocol.applicationSite)
         assertEquals(listOf("Etape 1", "Etape 2"), protocol.steps)
 
-        // Precautions
         assertEquals(listOf("Usage externe uniquement."), massage.precautions)
     }
 

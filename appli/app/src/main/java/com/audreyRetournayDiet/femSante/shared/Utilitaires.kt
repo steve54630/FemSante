@@ -23,10 +23,9 @@ object Utilitaires {
     /**
      * Lance le lecteur vidéo pour un titre donné.
      *
-     * On ne récupère plus l'URL ici : on transmet seulement le titre (et le flag PDF),
-     * et c'est le [com.audreyRetournayDiet.femSante.viewmodels.viewers.VideoViewModel] qui
-     * appelle l'API — ainsi la gestion du token et le rafraîchissement de session (401)
-     * s'appliquent à TOUS les lancements vidéo, par un seul chemin.
+     * Ne transmet que le titre (et le flag PDF) : c'est le VideoViewModel qui appelle l'API,
+     * pour que la gestion du token et le refresh de session (401) s'appliquent à tous les
+     * lancements vidéo, par un seul chemin.
      */
     fun videoLaunch(
         titre: String?,
@@ -37,7 +36,6 @@ object Utilitaires {
         val map = HashMap<String, String>()
         map["Title"] = titre ?: ""
         map["PDF"] = pdf ?: "non"
-        // Pas d'URL : VideoViewModel la récupère via l'API (avec gestion 401 / refresh).
 
         intent.putExtra("map", map)
         context.startActivity(intent)

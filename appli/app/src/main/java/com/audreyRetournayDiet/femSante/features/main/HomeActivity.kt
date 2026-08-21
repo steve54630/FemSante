@@ -60,15 +60,10 @@ class HomeActivity : AppCompatActivity() {
             Timber.i("Affichage du message de bienvenue pour : $userEmail")
             Toast.makeText(this, "Connectée en tant que : $userEmail", Toast.LENGTH_LONG).show()
 
-            // Consommation de l'extra pour garantir l'unicité de l'affichage
             intent.removeExtra("SHOW_WELCOME_MESSAGE")
         }
     }
 
-    /**
-     * Initialise la BottomNavigationView et le fragment par défaut.
-     * * @param savedInstanceState Si null, on charge le fragment initial.
-     */
     private fun initNavigation(savedInstanceState: Bundle?) {
         menu = findViewById(R.id.bottom_navigation_menu)
 
@@ -114,8 +109,8 @@ class HomeActivity : AppCompatActivity() {
     /**
      * Affiche l'onglet demandé sans détruire les autres (add/hide/show). L'état est conservé,
      * et surtout [androidx.fragment.app.Fragment.onHiddenChanged] se déclenche de façon fiable
-     * au retour sur un onglet — ce que `replace()` sur instance réutilisée ne garantissait pas
-     * (d'où "Pour toi" qui ne se rafraîchissait plus). Les onglets sont ajoutés à la demande.
+     * au retour sur un onglet — ce que `replace()` sur instance réutilisée ne garantissait pas.
+     * Les onglets sont ajoutés à la demande.
      */
     private fun showFragment(target: androidx.fragment.app.Fragment, tag: String) {
         if (target === activeFragment) return

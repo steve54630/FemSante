@@ -36,7 +36,6 @@ class AudioViewModel @Inject constructor(
     private val exerciseMap: List<String> =
         savedStateHandle.get<ArrayList<String>>("map")?.map { it.toString() } ?: emptyList()
 
-    // État unique de l'interface (Source de vérité)
     private val internalUiState = MutableStateFlow(
         AudioUiState(mainTitle = initialTitle, exercises = exerciseMap)
     )

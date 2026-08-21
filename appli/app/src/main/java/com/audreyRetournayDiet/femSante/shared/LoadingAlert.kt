@@ -26,7 +26,6 @@ class LoadingAlert(myActivity: Activity) {
     fun start() {
         val builder = AlertDialog.Builder(activity)
 
-        // Utilisation du layout personnalisé pour le design de l'application
         builder.setView(activity.layoutInflater.inflate(R.layout.alert_internet_dialog, null))
         builder.setCancelable(false)
 
@@ -38,7 +37,6 @@ class LoadingAlert(myActivity: Activity) {
      * Ferme proprement la boîte de dialogue une fois le traitement terminé.
      */
     fun close() {
-        // Sécurité : on vérifie que le dialogue a bien été initialisé avant de tenter la fermeture
         if (::dialog.isInitialized && dialog.isShowing) {
             dialog.dismiss()
         }

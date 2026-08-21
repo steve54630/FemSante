@@ -27,7 +27,6 @@ class ForgottenViewModel(
         val email = parameters.optString("email", "Inconnu")
         Timber.d("Tentative de changement de mot de passe pour : $email")
 
-        // Active l'indicateur visuel de chargement sur l'UI
         onLoading(true)
 
         when (val result = userManager.changePassword(parameters)) {

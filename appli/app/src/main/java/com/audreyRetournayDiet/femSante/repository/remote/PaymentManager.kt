@@ -21,7 +21,6 @@ import timber.log.Timber
  */
 class PaymentManager(private val context: AppCompatActivity) {
 
-    // Initialisation de la file de requêtes Volley liée au contexte de l'activité
     private val volley = Volley.newRequestQueue(this.context)
 
     /**

@@ -53,7 +53,7 @@ class PourToiViewModel @Inject constructor(
     private val contentTagRepository: ContentTagRepository,
     private val micronutrientRepository: MicronutrientContentRepository,
     private val phaseProvider: CurrentCyclePhaseProvider,
-    private val userStore: UserStore // L'injecter en private val pour y accéder dans refresh()
+    private val userStore: UserStore
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(PourToiUiState())
@@ -87,7 +87,6 @@ class PourToiViewModel @Inject constructor(
             // cf. MicronutrientsForPhase)
             val phaseMicronutrients = MicronutrientsForPhase.select(micronutrientRepository.getAll(), phase)
 
-            // 6. Émission du nouvel état
             internalState.value = PourToiUiState(
                 recommendations = recos,
                 recipeOfDay = recipeOfDay,

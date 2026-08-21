@@ -26,9 +26,9 @@ class AccountViewModel @Inject constructor(
      * Représente les différents états possibles de l'écran Mon Compte.
      */
     sealed class AccountState {
-        object Idle : AccountState() // État initial au chargement
-        data class Success(val user: AppUser) : AccountState() // Profil prêt à l'affichage
-        object LoggedOut : AccountState() // Signal pour quitter l'écran
+        object Idle : AccountState()
+        data class Success(val user: AppUser) : AccountState()
+        object LoggedOut : AccountState()
     }
 
     private val _state = MutableStateFlow<AccountState>(AccountState.Idle)

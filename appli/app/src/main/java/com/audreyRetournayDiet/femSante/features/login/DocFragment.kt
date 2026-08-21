@@ -41,9 +41,6 @@ class DocFragment : Fragment() {
         return view
     }
 
-    /**
-     * Initialise les références des boutons à partir du layout.
-     */
     private fun initViews(view: View) {
         cgu = view.findViewById(R.id.buttonCGU)
         cgv = view.findViewById(R.id.buttonCGV)

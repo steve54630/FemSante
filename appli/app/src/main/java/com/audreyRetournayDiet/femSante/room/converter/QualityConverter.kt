@@ -13,19 +13,9 @@ import com.audreyRetournayDiet.femSante.room.type.DayQuality
  */
 class QualityConverter {
 
-    /**
-     * Convertit l'objet [DayQuality] en son nom de constante String pour le stockage SQL.
-     * @param value L'état qualitatif sélectionné (ex: DayQuality.TOP).
-     * @return Le nom de l'énumération (ex: "TOP").
-     */
     @TypeConverter
     fun fromDayQuality(value: DayQuality): String = value.name
 
-    /**
-     * Reconstruit l'objet [DayQuality] à partir de la valeur textuelle lue en base de données.
-     * @param value La chaîne de caractères stockée (ex: "MEDIUM").
-     * @return L'instance correspondante de l'énumération [DayQuality].
-     */
     @TypeConverter
     fun toDayQuality(value: String): DayQuality = DayQuality.valueOf(value)
 }

@@ -37,7 +37,6 @@ object CyclePeriodForecaster {
         periodLength: Int = DEFAULT_PERIOD_LENGTH,
         horizonCycles: Int = DEFAULT_HORIZON_CYCLES
     ): Set<LocalDate> {
-        // Garde-fou : prévisions uniquement pour les cycles réguliers.
         if (profile != CycleProfile.REGULIER) return emptySet()
 
         val starts = periodStarts(periodDates)

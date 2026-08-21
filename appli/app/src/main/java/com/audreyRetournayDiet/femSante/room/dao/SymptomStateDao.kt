@@ -19,23 +19,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SymptomStateDao {
 
-    /**
-     * Enregistre les symptômes d'une journée en base de données.
-     * @param state L'entité regroupant la liste des symptômes identifiés.
-     * @return L'ID unique généré pour cette ligne de symptômes.
-     */
     @Insert
     suspend fun insert(state: SymptomStateEntity): Long
 
-    /**
-     * Met à jour la liste ou l'intensité des symptômes d'une entrée existante.
-     */
     @Update
     suspend fun update(state: SymptomStateEntity)
 
-    /**
-     * Supprime les données de symptômes associées.
-     */
     @Delete
     suspend fun delete(state: SymptomStateEntity)
 

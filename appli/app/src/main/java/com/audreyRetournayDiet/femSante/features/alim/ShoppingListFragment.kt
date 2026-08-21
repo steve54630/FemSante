@@ -63,7 +63,7 @@ class ShoppingListFragment : Fragment() {
         btnBrowseRecipes = view.findViewById(R.id.btnBrowseRecipes)
 
         btnClear.setOnClickListener { confirmClear() }
-        // État vide : CTA direct vers les recettes (le texte seul n'était pas actionnable).
+        // CTA direct vers les recettes depuis l'état vide.
         btnBrowseRecipes.setOnClickListener { (activity as? AlimActivity)?.showRecipesTab() }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -83,7 +83,6 @@ class ShoppingListFragment : Fragment() {
         llRecipes.removeAllViews()
         state.recipes.forEach { llRecipes.addView(recipeRow(it)) }
 
-        // Compteur de progression (articles déjà pris / total).
         val allItems = state.sections.flatMap { it.items }
         val taken = allItems.count { it.name in state.checked }
         tvProgress.isVisible = allItems.isNotEmpty()

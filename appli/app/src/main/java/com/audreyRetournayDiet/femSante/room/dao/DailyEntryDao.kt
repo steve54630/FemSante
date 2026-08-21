@@ -26,8 +26,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class DailyEntryDao {
 
-    // --- LECTURE ---
-
     /**
      * Récupère l'intégralité des données d'une journée via son ID.
      * @return Un [DailyEntryFull] (DTO) qui contient l'objet parent et ses 4 enfants.
@@ -95,10 +93,7 @@ abstract class DailyEntryDao {
     """)
     abstract suspend fun getLatestEntry(userId: String, upToTimestamp: Long): DailyEntryFull?
 
-    /**
-     * Extrait les informations minimales pour l'affichage visuel du calendrier.
-     * Effectue une jointure SQL pour corréler la date et le niveau de douleur.
-     */
+    // Extrait date + niveau de douleur pour la coloration du calendrier.
     @Query("""
         SELECT de.date as date, gs.pain_level as painLevel
         FROM daily_entry de
@@ -107,7 +102,6 @@ abstract class DailyEntryDao {
     """)
     abstract suspend fun getCalendarStatus(userId: String): List<DatePainStatus>
 
-    // --- INSERTIONS DE BASE ---
     // On utilise REPLACE pour écraser automatiquement les données si un ID identique existe.
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -128,8 +122,6 @@ abstract class DailyEntryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertMeasurement(measurement: BodyMeasurementEntity)
 
-    // --- LOGIQUE MÉTIER (TRANSACTIONS) ---
-
     /**
      * Insère une journée complète de manière atomique.
      * Si une seule des insertions échoue, toute la transaction est annulée.
@@ -144,10 +136,8 @@ abstract class DailyEntryDao {
         context: ContextStateEntity,
         measurement: BodyMeasurementEntity
     ) {
-        // 1. On crée le parent (DailyEntryEntity) et on récupère son ID auto-généré
         val newId = insertDailyEntry(DailyEntryEntity(userId = userId, date = date))
 
-        // 2. On injecte cet ID dans tous les sous-états avant de les sauvegarder
         saveSubStates(newId, general, psy, symptom, context, measurement)
     }
 
@@ -188,8 +178,6 @@ abstract class DailyEntryDao {
         insertContext(context.copy(entryId = entryId))
         insertMeasurement(measurement.copy(entryId = entryId))
     }
-
-    // --- SUPPRESSION ---
 
     /**
      * Supprime l'entrée parente.

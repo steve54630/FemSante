@@ -48,7 +48,6 @@ class UserRepository(private val userDao: UserDao) {
         return try {
             Timber.d("Recherche de l'utilisateur en BDD locale : $login")
 
-            // On récupère le premier élément du Flow ou null s'il n'y a pas de correspondance
             val user = userDao.getByLogin(login).firstOrNull()
 
             if (user != null) {
