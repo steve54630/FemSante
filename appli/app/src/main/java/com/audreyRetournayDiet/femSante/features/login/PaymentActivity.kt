@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -21,7 +20,6 @@ import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.PaymentManager
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
-import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewmodels.login.PaymentViewModel
@@ -47,7 +45,7 @@ import timber.log.Timber
 class PaymentActivity : AppCompatActivity() {
 
     private lateinit var alert: LoadingAlert
-    private lateinit var registerSpinner: Spinner
+    private lateinit var offerDropdown: AutoCompleteTextView
     private lateinit var userManager: UserManager
     private lateinit var payPal: PayPalButton
     private lateinit var payPalCard: Button
@@ -67,6 +65,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var parametersMap: HashMap<*, *>
 
     private var valueSubscription: String = ""
+    private var selectedOfferKey: String? = null
     private var update: Boolean = false
     private var repay: Boolean = false
 
@@ -87,7 +86,7 @@ class PaymentActivity : AppCompatActivity() {
         Timber.d("onCreate: Initialisation de l'écran de paiement")
 
         initViews()
-        setupSpinner()
+        setupOfferDropdown()
         setupViewModel()
         setupListeners()
     }
@@ -107,7 +106,7 @@ class PaymentActivity : AppCompatActivity() {
         check = findViewById(R.id.checkBoxPayment)
         payPal = findViewById(R.id.buttonPayPal)
         payPalCard = findViewById(R.id.buttonCreditCard)
-        registerSpinner = findViewById(R.id.spinnerPrix)
+        offerDropdown = findViewById(R.id.dropdownOffer)
         switchPay = findViewById(R.id.switch1)
         cardLayout = findViewById(R.id.cardLayout)
         paypalLayout = findViewById(R.id.paypalLayout)
@@ -155,24 +154,16 @@ class PaymentActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * Configure le Spinner de sélection des offres.
-     * Utilise un adaptateur spécial pour forcer l'utilisatrice à faire un choix explicite.
-     */
-    private fun setupSpinner() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mapPrice.values.toList())
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        registerSpinner.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.spinner_choice_paiement, this)
+    /** Configure le menu déroulant de sélection des offres. */
+    private fun setupOfferDropdown() {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, mapPrice.values.toList())
+        offerDropdown.setAdapter(adapter)
 
-        registerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (p2 > 0) { // Index 0 réservé au placeholder
-                    val label = registerSpinner.selectedItem.toString()
-                    Timber.v("Offre choisie : $label")
-                    paymentViewModel.updateSelection(label)
-                }
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        offerDropdown.setOnItemClickListener { _, _, _, _ ->
+            val label = offerDropdown.text.toString()
+            selectedOfferKey = mapPrice.entries.find { it.value == label }?.key
+            Timber.v("Offre choisie : $label")
+            paymentViewModel.updateSelection(label)
         }
     }
 
@@ -186,7 +177,7 @@ class PaymentActivity : AppCompatActivity() {
 
         reductionButton.setOnClickListener {
             val code = reductionValue.text.toString().trim()
-            if (registerSpinner.selectedItemId == -1L) {
+            if (selectedOfferKey == null) {
                 Utilitaires.showToast("Veuillez d'abord sélectionner un abonnement", this)
                 return@setOnClickListener
             }
@@ -216,7 +207,7 @@ class PaymentActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.buttonCGV).setOnClickListener {
             startActivity(Intent(this, PdfActivity::class.java).apply {
-                putExtra("PDF", "Conditions Générales de Vente.pdf")
+                putExtra("PDF", "Conditions générales de vente.pdf")
             })
         }
     }
@@ -264,7 +255,7 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun validateForm(): Boolean {
         return when {
-            registerSpinner.selectedItemId == -1L -> {
+            selectedOfferKey == null -> {
                 Utilitaires.showToast("Veuillez choisir une offre d'abonnement", this)
                 false
             }

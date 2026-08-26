@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
-import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.viewmodels.login.ForgottenViewModel
 import kotlinx.coroutines.launch
@@ -31,9 +30,11 @@ class ForgottenActivity : AppCompatActivity() {
     private lateinit var email: EditText
     private lateinit var answer: EditText
     private lateinit var changePasswordBtn: Button
-    private lateinit var questionSpinner: Spinner
+    private lateinit var questionDropdown: AutoCompleteTextView
     private lateinit var alert: LoadingAlert
     private lateinit var forgottenViewModel: ForgottenViewModel
+
+    private var selectedQuestionKey: String? = null
 
     /**
      * Map des questions de sécurité.
@@ -51,7 +52,7 @@ class ForgottenActivity : AppCompatActivity() {
         Timber.d("onCreate : Initialisation de la récupération de mot de passe")
 
         initViews()
-        setupSpinner()
+        setupQuestionDropdown()
         setupViewModel()
         setupListeners()
     }
@@ -62,7 +63,7 @@ class ForgottenActivity : AppCompatActivity() {
         email = findViewById(R.id.Login)
         answer = findViewById(R.id.Answer)
         changePasswordBtn = findViewById(R.id.buttonConnect)
-        questionSpinner = findViewById(R.id.spinnerQuestion)
+        questionDropdown = findViewById(R.id.dropdownQuestion)
         alert = LoadingAlert(this)
     }
 
@@ -86,22 +87,20 @@ class ForgottenActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * Configure le Spinner avec l'adaptateur personnalisé pour gérer l'absence de sélection.
-     */
-    private fun setupSpinner() {
+    /** Configure le menu déroulant pour le choix de la question de sécurité. */
+    private fun setupQuestionDropdown() {
         val adapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_dropdown_item_1line,
             questionsMap.values.toList()
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        questionDropdown.setAdapter(adapter)
 
-        questionSpinner.adapter = NothingSelectedSpinnerAdapter(
-            adapter,
-            R.layout.spinner_choice_question,
-            this
-        )
+        questionDropdown.setOnItemClickListener { _, _, _, _ ->
+            val selectedText = questionDropdown.text.toString()
+            selectedQuestionKey = questionsMap.entries.find { it.value == selectedText }?.key?.toString()
+            Timber.v("Question sélectionnée : ID $selectedQuestionKey")
+        }
     }
 
     private fun setupListeners() {
@@ -109,17 +108,13 @@ class ForgottenActivity : AppCompatActivity() {
             Timber.d("Clic : Bouton de réinitialisation")
 
             if (validateFields()) {
-                val selectedKey = questionsMap.entries.find {
-                    it.value == questionSpinner.selectedItem?.toString()
-                }?.key?.toString() ?: ""
-
-                Timber.d("Tentative de réinitialisation avec question ID : $selectedKey")
+                Timber.d("Tentative de réinitialisation avec question ID : $selectedQuestionKey")
 
                 val params = JSONObject().apply {
                     put("email", email.text.toString().trim())
                     put("password", password.text.toString())
                     put("answer", answer.text.toString().trim())
-                    put("id", selectedKey)
+                    put("id", selectedQuestionKey ?: "")
                 }
 
                 lifecycleScope.launch {
@@ -141,7 +136,7 @@ class ForgottenActivity : AppCompatActivity() {
 
         val error = when {
             // Vérifie que l'utilisateur a bien choisi une question (pas le placeholder)
-            questionSpinner.selectedItem == null -> "Veuillez sélectionner une question"
+            selectedQuestionKey == null -> "Veuillez sélectionner une question"
             emailStr.isEmpty() || !Utilitaires.isValidEmail(emailStr) -> "Format e-mail incorrect"
             passStr.isEmpty() -> "Veuillez saisir un mot de passe"
             passStr != confirmStr -> "Mots de passe non identiques"
