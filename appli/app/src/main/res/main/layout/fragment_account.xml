@@ -116,6 +116,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonConfidentiality" />
 
+        <!-- Debug uniquement (masqué en release) : bascule l'accès premium en local pour tester
+             l'écran verrouillé sans dépendre du serveur ni d'un compte dédié. -->
+        <Button
+            android:id="@+id/buttonDebugToggleAccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/debug_toggle_access"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonUpdateAbonnement" />
+
         <Button
             android:id="@+id/buttonLogout"
             android:layout_width="wrap_content"
@@ -128,7 +142,7 @@
             app:iconTint="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonUpdateAbonnement" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonDebugToggleAccess" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

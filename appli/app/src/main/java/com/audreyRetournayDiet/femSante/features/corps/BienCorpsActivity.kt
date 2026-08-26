@@ -15,6 +15,7 @@ import com.audreyRetournayDiet.femSante.data.media.MediaCategory
 import com.audreyRetournayDiet.femSante.data.media.MediaFilter
 import com.audreyRetournayDiet.femSante.data.media.MediaItem
 import com.audreyRetournayDiet.femSante.data.media.MediaType
+import com.audreyRetournayDiet.femSante.features.login.PremiumUpsellActivity
 import com.audreyRetournayDiet.femSante.shared.MediaCardAdapter
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
@@ -34,6 +35,7 @@ class BienCorpsActivity : AppCompatActivity() {
 
     private val catalog by lazy { MediaContentRepository(applicationContext).forModule(MediaModule.CORPS) }
     private var category: MediaCategory? = null
+    private var hasAccess = false
 
     private lateinit var adapter: MediaCardAdapter
     private lateinit var chipGroupTheme: ChipGroup
@@ -45,7 +47,7 @@ class BienCorpsActivity : AppCompatActivity() {
 
         // Le cadenas premium ne s'affiche qu'aux utilisatrices sans accès. Vérification
         // centralisée (voir UserStore.hasContentAccess) → prête pour le futur statut freemium.
-        val hasAccess = UserStore(this).hasContentAccess()
+        hasAccess = UserStore(this).hasContentAccess()
         adapter = MediaCardAdapter(hasAccess, ::onMediaClick)
 
         findViewById<RecyclerView>(R.id.recyclerMedia).apply {
@@ -92,6 +94,10 @@ class BienCorpsActivity : AppCompatActivity() {
     }
 
     private fun onMediaClick(item: MediaItem) {
+        if (item.premium && !hasAccess) {
+            startActivity(Intent(this, PremiumUpsellActivity::class.java))
+            return
+        }
         Timber.i("Lecture vidéo : ${item.title}")
         val pdfFlag = if (item.pdf) "oui" else "non"
         Utilitaires.videoLaunch(item.title, pdfFlag, Intent(this, VideoActivity::class.java), this)

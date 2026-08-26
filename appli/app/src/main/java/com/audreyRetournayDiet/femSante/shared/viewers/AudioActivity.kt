@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.shared.viewers
 
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -42,6 +43,8 @@ class AudioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio)
+        // Contenu protégé : pas de capture d'écran ni d'aperçu multitâche (cf. VideoActivity).
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         controls = findViewById(R.id.audioControls)
         titleTextView = findViewById(R.id.textTitle)
@@ -102,6 +105,7 @@ class AudioActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         player.release()
     }
 

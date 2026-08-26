@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +12,7 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.micronutrient.Micronutrient
 import com.audreyRetournayDiet.femSante.data.micronutrient.MicronutrientFilter
 import com.audreyRetournayDiet.femSante.data.micronutrient.NutrientGroup
+import com.audreyRetournayDiet.femSante.features.login.PremiumUpsellActivity
 import com.audreyRetournayDiet.femSante.repository.local.MicronutrientContentRepository
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -118,7 +118,7 @@ class MicronutrientsActivity : AppCompatActivity() {
     private fun onNutrientClick(item: Micronutrient) {
         // Contenu local : le gating premium se fait ici (au clic), avant d'ouvrir la fiche.
         if (item.premium && !hasAccess) {
-            Toast.makeText(this, R.string.micronutrient_locked, Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, PremiumUpsellActivity::class.java))
             return
         }
         Timber.i("Ouverture de la fiche micronutriment : ${item.id}")

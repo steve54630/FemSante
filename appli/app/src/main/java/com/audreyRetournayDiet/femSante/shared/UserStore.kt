@@ -51,6 +51,16 @@ class UserStore(context: Context) {
      */
     fun hasContentAccess(): Boolean = getUser()?.hasAccess ?: false
 
+    /**
+     * Debug uniquement : bascule l'accès premium du compte connecté, en local (rien n'est
+     * envoyé au serveur). Sert à tester l'écran verrouillé sans compte dédié ; se reconnecter
+     * restaure la vraie valeur renvoyée par l'API.
+     */
+    fun toggleAccessForTesting() {
+        val user = getUser() ?: return
+        saveUser(user.copy(hasAccess = !user.hasAccess))
+    }
+
     fun clearSession() {
         sharedPreferences.edit { clear() }
     }

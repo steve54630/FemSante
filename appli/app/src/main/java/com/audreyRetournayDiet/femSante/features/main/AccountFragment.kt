@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.audreyRetournayDiet.femSante.BuildConfig
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewmodels.AccountViewModel
 import com.audreyRetournayDiet.femSante.features.login.ForgottenActivity
 import com.audreyRetournayDiet.femSante.features.login.PaymentActivity
@@ -43,6 +47,7 @@ class AccountFragment : Fragment() {
     private lateinit var preferences: Button
     private lateinit var login: TextView
     private lateinit var update: Button
+    private lateinit var debugToggleAccess: Button
     private lateinit var logout: Button
 
     override fun onCreateView(
@@ -70,6 +75,7 @@ class AccountFragment : Fragment() {
         passwordChange = view.findViewById(R.id.buttonPasswordChanged)
         preferences = view.findViewById(R.id.buttonPreferences)
         update = view.findViewById(R.id.buttonUpdateAbonnement)
+        debugToggleAccess = view.findViewById(R.id.buttonDebugToggleAccess)
         logout = view.findViewById(R.id.buttonLogout)
     }
 
@@ -144,6 +150,16 @@ class AccountFragment : Fragment() {
         preferences.setOnClickListener {
             Timber.d("Navigation : Écran des préférences utilisateur")
             startActivity(Intent(activity, PreferencesActivity::class.java))
+        }
+
+        // Visible seulement en debug : reconnexion normale restaure la vraie valeur serveur.
+        debugToggleAccess.isVisible = BuildConfig.DEBUG
+        debugToggleAccess.setOnClickListener {
+            val store = UserStore(requireContext())
+            store.toggleAccessForTesting()
+            val message = if (store.hasContentAccess()) "Accès premium (test)" else "Accès verrouillé (test)"
+            Timber.d("Debug : $message")
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +24,7 @@ import com.audreyRetournayDiet.femSante.data.recommendation.Recommendation
 import com.audreyRetournayDiet.femSante.features.alim.MicronutrientDetailActivity
 import com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity
 import com.audreyRetournayDiet.femSante.features.calendar.add.EntryAddActivity
+import com.audreyRetournayDiet.femSante.features.login.PremiumUpsellActivity
 import com.audreyRetournayDiet.femSante.shared.RecommendationLauncher
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeDetailViewModel
@@ -218,7 +218,7 @@ class PourToiFragment : Fragment() {
         chip.isCheckable = false
         chip.setOnClickListener {
             if (nutrient.premium && !hasAccess) {
-                Toast.makeText(requireContext(), R.string.micronutrient_locked, Toast.LENGTH_SHORT).show()
+                startActivity(Intent(requireContext(), PremiumUpsellActivity::class.java))
                 return@setOnClickListener
             }
             Timber.i("Micronutriment (Pour toi) ouvert : ${nutrient.id}")

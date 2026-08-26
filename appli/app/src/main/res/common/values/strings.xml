@@ -289,7 +289,14 @@
     <string name="micronutrient_sources_title">Sources (pour 100 g)</string>
     <string name="micronutrient_cofactors_title">Cofacteurs d\'assimilation</string>
     <string name="micronutrient_notes_title">À savoir</string>
-    <string name="micronutrient_locked">Contenu réservé aux abonnées.</string>
+    <string name="premium_upsell_title">Débloque tout FemSanté</string>
+    <string name="premium_upsell_subtitle">Profite de l\'accompagnement complet, conçu avec Audrey Retournay.</string>
+    <string name="premium_upsell_benefit_media">Vidéos et séances audio bien-être en illimité</string>
+    <string name="premium_upsell_benefit_nutrients">Toutes les fiches micronutriments et leurs interactions avec tes médicaments</string>
+    <string name="premium_upsell_benefit_support">Un contenu conçu et validé par une diététicienne diplômée</string>
+    <string name="premium_upsell_cta">Voir les abonnements</string>
+    <string name="premium_upsell_later">Plus tard</string>
+    <string name="debug_toggle_access" translatable="false">Basculer accès premium (debug)</string>
 
     <!-- Navigation recettes (écran unifié) -->
     <string name="recipe_browse_all">Tout</string>
