@@ -38,6 +38,6 @@
         android:gravity="center"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="15sp"
-        tools:text="FemSanté t'accompagne au quotidien pour l'endométriose, le SOPK et les troubles digestifs." />
+        tools:text="Conçue par une diététicienne diplômée avec des experts du bien-être, FemSanté accompagne chaque femme à chaque étape de sa vie. Que tu souhaites simplement mieux comprendre ton cycle, apaiser ta digestion ou soulager des déséquilibres comme le SMOP (ex-SOPK), l'endométriose et le SPM, trouve des réponses concrètes et 100 % naturelles." />
 
 </LinearLayout>

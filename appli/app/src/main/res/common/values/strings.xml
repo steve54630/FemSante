@@ -5,7 +5,7 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_title">Bienvenue</string>
-    <string name="onboarding_welcome_description">FemSanté t\'accompagne au quotidien pour l\'endométriose, le SOPK et les troubles digestifs — à ton rythme.</string>
+    <string name="onboarding_welcome_description">Conçue par une diététicienne diplômée avec des experts du bien-être, FemSanté accompagne chaque femme à chaque étape de sa vie. Que tu souhaites simplement mieux comprendre ton cycle, apaiser ta digestion ou soulager des déséquilibres comme le SMOP (ex-SOPK), l\'endométriose et le SPM, trouve des réponses concrètes et 100 % naturelles.</string>
     <string name="onboarding_content_title">Un contenu qui te ressemble</string>
     <string name="onboarding_content_description">Recettes, boîte à outils et guide FODMAP : tout est pensé et validé par une diététicienne spécialisée.</string>
     <string name="onboarding_privacy_title">Tes données restent chez toi</string>
