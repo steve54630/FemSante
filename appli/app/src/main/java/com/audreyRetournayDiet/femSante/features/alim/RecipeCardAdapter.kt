@@ -1,9 +1,11 @@
 package com.audreyRetournayDiet.femSante.features.alim
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -38,9 +40,21 @@ class RecipeCardAdapter(
             meta.text = metaLine(recipe)
 
             // L'image est un drawable nommé comme l'id de la recette (ex. veloute_epinards_amandes).
+            // NB : ce lookup dynamique échappe à l'analyse statique du resource shrinker (release) —
+            // protégé par res/alim/raw/keep.xml (tools:keep) pour éviter qu'il ne les supprime.
             val context = itemView.context
             val resId = context.resources.getIdentifier(recipe.id, "drawable", context.packageName)
-            if (resId != 0) image.setImageResource(resId) else image.setImageDrawable(null)
+            if (resId != 0) {
+                image.scaleType = ImageView.ScaleType.CENTER_CROP
+                image.imageTintList = null
+                image.setImageResource(resId)
+            } else {
+                image.scaleType = ImageView.ScaleType.CENTER
+                image.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(context, R.color.orange_app)
+                )
+                image.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
 
             itemView.setOnClickListener { onClick(recipe) }
         }

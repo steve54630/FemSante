@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,9 +40,11 @@ class AlimFragment : Fragment() {
     private val viewModel: RecipeBrowseViewModel by viewModels()
     private val adapter = RecipeCardAdapter(::openRecipe)
 
+    private lateinit var chipGroupCategory: ChipGroup
     private lateinit var chipMaPhase: Chip
     private lateinit var buttonFilters: MaterialButton
-    private lateinit var textEmpty: TextView
+    private lateinit var buttonResetFilters: MaterialButton
+    private lateinit var layoutEmpty: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,13 +57,16 @@ class AlimFragment : Fragment() {
         recycler.layoutManager = GridLayoutManager(requireContext(), 2)
         recycler.adapter = adapter
 
+        chipGroupCategory = view.findViewById(R.id.chipGroupCategory)
         chipMaPhase = view.findViewById(R.id.chipMaPhase)
         buttonFilters = view.findViewById(R.id.buttonFilters)
-        textEmpty = view.findViewById(R.id.textEmpty)
+        buttonResetFilters = view.findViewById(R.id.buttonResetFilters)
+        layoutEmpty = view.findViewById(R.id.layoutEmpty)
 
-        setupCategoryChips(view.findViewById(R.id.chipGroupCategory))
+        setupCategoryChips(chipGroupCategory)
         chipMaPhase.setOnCheckedChangeListener { _, checked -> viewModel.setPhaseOnly(checked) }
         buttonFilters.setOnClickListener { showFiltersSheet() }
+        buttonResetFilters.setOnClickListener { resetFilters() }
 
         observeState()
     }
@@ -90,16 +94,29 @@ class AlimFragment : Fragment() {
 
     private fun render(state: RecipeBrowseUiState) {
         adapter.submitList(state.recipes)
-        textEmpty.isVisible = state.recipes.isEmpty()
+        layoutEmpty.isVisible = state.recipes.isEmpty()
 
         chipMaPhase.isVisible = state.phaseAvailable
         if (chipMaPhase.isChecked != state.phaseOnly) chipMaPhase.isChecked = state.phaseOnly
 
-        buttonFilters.text = if (state.selectedTags.isEmpty()) {
+        // Le compteur reflète tous les filtres actifs (catégorie + Ma phase + tags), pas
+        // seulement les tags : sinon le libellé ne reflète pas pourquoi la liste est restreinte.
+        val activeFilterCount = state.selectedTags.size +
+            (if (state.category != null) 1 else 0) +
+            (if (state.phaseOnly) 1 else 0)
+        buttonFilters.text = if (activeFilterCount == 0) {
             getString(R.string.recipe_browse_filters)
         } else {
-            getString(R.string.recipe_browse_filters_count, state.selectedTags.size)
+            getString(R.string.recipe_browse_filters_count, activeFilterCount)
         }
+    }
+
+    /** Réinitialise catégorie, « Ma phase » et tags — sortie de secours depuis l'état vide. */
+    private fun resetFilters() {
+        Timber.d("Réinitialisation de tous les filtres recettes")
+        chipGroupCategory.check(R.id.chipCatAll)
+        chipMaPhase.isChecked = false
+        viewModel.setSelectedTags(emptySet())
     }
 
     /** Ouvre la fiche recette native. */

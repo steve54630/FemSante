@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Empêche le resource shrinker (shrinkResources true en release) de supprimer les drawables
+  de recettes : ils sont référencés dynamiquement par nom via getIdentifier()
+  (RecipeCardAdapter.bind), donc invisibles à son analyse statique des références @drawable/xxx.
+  Sans ce fichier, une image de recette pourrait disparaître silencieusement en release.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/*" />

@@ -299,6 +299,7 @@
     <string name="recipe_browse_reset">Réinitialiser</string>
     <string name="recipe_browse_apply">Voir les résultats (%1$d)</string>
     <string name="recipe_browse_empty">Aucune recette ne correspond à ta sélection.</string>
+    <string name="recipe_not_found">Cette recette n\'est plus disponible.</string>
 
     <!-- Recette du jour (Pour toi) -->
     <string name="recipe_of_day_label">🍽️ Ta recette du jour</string>

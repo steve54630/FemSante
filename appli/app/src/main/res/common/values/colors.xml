@@ -17,4 +17,8 @@
     <!-- Anneaux (contours) : sélection et jour courant -->
     <color name="calendar_selected">#C2185B</color>
     <color name="calendar_today">#00897B</color>
+
+    <!-- Fiche recette : texte des ingrédients/étapes (construits en code, pas en XML) -->
+    <color name="recipe_text_body">#FF333333</color>
+    <color name="recipe_text_note">#FF8A8A8A</color>
 </resources>

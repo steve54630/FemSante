@@ -42,12 +42,15 @@ class RecetteDetailActivity : AppCompatActivity() {
 
     private val dinPro: Typeface? by lazy { ResourcesCompat.getFont(this, R.font.dinpro) }
     private val accentColor: Int by lazy { ContextCompat.getColor(this, R.color.orange_app) }
+    private val bodyColor: Int by lazy { ContextCompat.getColor(this, R.color.recipe_text_body) }
+    private val noteColor: Int by lazy { ContextCompat.getColor(this, R.color.recipe_text_note) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val recipe = viewModel.recipe
         if (recipe == null) {
+            Toast.makeText(this, R.string.recipe_not_found, Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -145,7 +148,7 @@ class RecetteDetailActivity : AppCompatActivity() {
         ingredient.note?.takeIf { it.isNotBlank() }?.let { note ->
             val noteStart = builder.length
             builder.append("  ").append(note)
-            builder.setSpan(ForegroundColorSpan(0xFF8A8A8A.toInt()), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(ForegroundColorSpan(noteColor), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
             builder.setSpan(StyleSpan(Typeface.ITALIC), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
             builder.setSpan(RelativeSizeSpan(0.9f), noteStart, builder.length, SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -154,7 +157,7 @@ class RecetteDetailActivity : AppCompatActivity() {
             text = builder
             typeface = dinPro
             textSize = 15f
-            setTextColor(0xFF333333.toInt())
+            setTextColor(bodyColor)
             setLineSpacing(dp(2).toFloat(), 1f)
             setPadding(0, dp(3), 0, dp(3))
         }
@@ -170,7 +173,7 @@ class RecetteDetailActivity : AppCompatActivity() {
             text = builder
             typeface = dinPro
             textSize = 15f
-            setTextColor(0xFF333333.toInt())
+            setTextColor(bodyColor)
             setLineSpacing(dp(3).toFloat(), 1f)
             setPadding(0, dp(5), 0, dp(5))
         }

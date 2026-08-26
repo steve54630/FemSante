@@ -20,7 +20,7 @@ import javax.inject.Inject
  *
  * L'identifiant de la recette ([EXTRA_RECIPE_ID]) provient de l'Intent via le
  * [SavedStateHandle]. Le contenu étant statique, la recette est résolue une fois ; `null`
- * signifie « recette absente du catalogue » (l'écran bascule alors sur le PDF de repli).
+ * signifie « recette absente du catalogue » (l'écran affiche un message puis se ferme).
  *
  * Gère aussi l'appartenance de la recette à la liste de courses (bouton « Ajouter à ma liste »).
  */
