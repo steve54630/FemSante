@@ -233,6 +233,7 @@ class EntryViewModel @Inject constructor(
             } else {
                 Timber.w("Aucune donnée trouvée pour l'ID $id, remise à zéro des états")
                 resetStates()
+                eventChannel.emit(EntryEvent.Error("Entrée introuvable"))
             }
             _isLoading.value = false
         }

@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.shared.LoadingAlert
 import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewmodels.calendar.EntryViewModel
 import com.audreyRetournayDiet.femSante.viewmodels.calendar.event.EntryEvent
@@ -38,6 +41,7 @@ class EntryAddActivity : AppCompatActivity() {
     private lateinit var navBar: BottomNavigationView
     private lateinit var container: FrameLayout
     private lateinit var btnSaveEntry: Button
+    private lateinit var alert: LoadingAlert
 
     private lateinit var fragments: Map<Int, Fragment>
     private lateinit var activeFragment: Fragment
@@ -58,13 +62,16 @@ class EntryAddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_add)
+        alert = LoadingAlert(this)
 
         setupViews()
         initializeFragments(savedInstanceState)
         handleIntentData()
         setupNavigation()
         observeEvents()
+        observeLoading()
         setupSaveListener()
+        setupBackConfirmation()
     }
 
     private fun setupViews() {
@@ -172,13 +179,36 @@ class EntryAddActivity : AppCompatActivity() {
                             finish()
                         }
                         is EntryEvent.Error -> {
-                            Timber.e("Erreur de sauvegarde : ${event.message}")
-                            Toast.makeText(this@EntryAddActivity, event.message, Toast.LENGTH_LONG).show()
+                            Timber.e("Erreur : ${event.message}")
+                            Toast.makeText(this@EntryAddActivity, getString(R.string.msg_save_error), Toast.LENGTH_LONG).show()
                         }
                     }
                 }
             }
         }
+    }
+
+    /** Bloque l'interaction (bouton, navigation) pendant le chargement ou la sauvegarde. */
+    private fun observeLoading() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoading.collect { loading -> if (loading) alert.start() else alert.close() }
+            }
+        }
+    }
+
+    /** Demande confirmation avant de quitter, pour ne pas perdre une saisie en cours. */
+    private fun setupBackConfirmation() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(this@EntryAddActivity)
+                    .setTitle(R.string.discard_entry_title)
+                    .setMessage(R.string.discard_entry_message)
+                    .setPositiveButton(R.string.discard_entry_confirm) { _, _ -> finish() }
+                    .setNegativeButton(R.string.discard_entry_cancel, null)
+                    .show()
+            }
+        })
     }
 
     /**
