@@ -6,11 +6,18 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Region
+import android.os.Bundle
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.customview.widget.ExploreByTouchHelper
 import com.audreyRetournayDiet.femSante.room.type.PainZone
 
 /**
@@ -21,6 +28,10 @@ import com.audreyRetournayDiet.femSante.room.type.PainZone
  * La vue dessine dans un **espace de conception fixe** (280 × 430) mis à l'échelle vers la
  * taille réelle : les silhouettes et les zones restent identiques quelle que soit la densité.
  * La détection du toucher se fait en re-projetant le point dans cet espace.
+ *
+ * Accessibilité : chaque zone est exposée comme un nœud virtuel via [ExploreByTouchHelper]
+ * (TalkBack peut explorer la silhouette au doigt et sélectionner une zone), en réutilisant la
+ * même logique de sélection que le toucher direct.
  */
 class BodyPainMapView @JvmOverloads constructor(
     context: Context,
@@ -28,14 +39,31 @@ class BodyPainMapView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
-    /** Zone dessinée : à quelle [PainZone] et quel côté elle correspond, + sa (ses) forme(s). */
-    private class ZoneShape(val zone: PainZone, val back: Boolean, val paths: List<Path>) {
-        val region: Region = Region().apply {
-            val clip = Region(0, 0, DESIGN_W, DESIGN_H)
-            paths.forEach { p ->
-                val r = Region()
-                r.setPath(p, clip)
-                op(r, Region.Op.UNION)
+    /**
+     * Zone dessinée : à quelle [PainZone] et quel côté elle correspond, + sa (ses) forme(s).
+     * [touchPaths] sert uniquement à la détection (toucher + accessibilité) : pour les zones
+     * étroites (bras, cuisses), elle est élargie par rapport au dessin visuel ([paths]) afin de
+     * respecter une taille de cible tactile raisonnable, sans changer le rendu.
+     */
+    private class ZoneShape(
+        val zone: PainZone,
+        val back: Boolean,
+        val paths: List<Path>,
+        touchPaths: List<Path> = paths
+    ) {
+        val region: Region = regionFor(paths)
+        val touchRegion: Region = regionFor(touchPaths)
+
+        private companion object {
+            fun regionFor(paths: List<Path>): Region {
+                val clip = Region(0, 0, DESIGN_W, DESIGN_H)
+                val region = Region()
+                paths.forEach { p ->
+                    val r = Region()
+                    r.setPath(p, clip)
+                    region.op(r, Region.Op.UNION)
+                }
+                return region
             }
         }
     }
@@ -51,6 +79,7 @@ class BodyPainMapView @JvmOverloads constructor(
                 field = value
                 selectedZone = null
                 invalidate()
+                touchHelper.invalidateRoot()
             }
         }
 
@@ -86,17 +115,84 @@ class BodyPainMapView @JvmOverloads constructor(
     private var dx = 0f
     private var dy = 0f
 
+    private val touchHelper = object : ExploreByTouchHelper(this) {
+
+        override fun getVirtualViewAt(x: Float, y: Float): Int {
+            if (scale <= 0f) return HOST_ID
+            val px = ((x - dx) / scale).toInt()
+            val py = ((y - dy) / scale).toInt()
+            val index = visibleZones().indexOfFirst { it.touchRegion.contains(px, py) }
+            return if (index >= 0) index else HOST_ID
+        }
+
+        override fun getVisibleVirtualViews(virtualViewIds: MutableList<Int>) {
+            visibleZones().indices.forEach { virtualViewIds.add(it) }
+        }
+
+        override fun onPopulateNodeForVirtualView(virtualViewId: Int, node: AccessibilityNodeInfoCompat) {
+            val shape = visibleZones().getOrNull(virtualViewId)
+            if (shape == null) {
+                node.contentDescription = ""
+                node.setBoundsInParent(Rect(0, 0, 1, 1))
+                return
+            }
+            val level = painByZone[shape.zone] ?: 0
+            node.contentDescription = if (level > 0) {
+                "${zoneLabel(shape.zone)}, douleur niveau $level sur 10"
+            } else {
+                "${zoneLabel(shape.zone)}, aucune douleur"
+            }
+            node.setBoundsInParent(displayBounds(shape))
+            node.isClickable = true
+            node.isSelected = shape.zone == selectedZone
+            node.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK)
+        }
+
+        override fun onPerformActionForVirtualView(virtualViewId: Int, action: Int, arguments: Bundle?): Boolean {
+            if (action != AccessibilityNodeInfoCompat.ACTION_CLICK) return false
+            val shape = visibleZones().getOrNull(virtualViewId) ?: return false
+            selectZone(shape.zone)
+            sendEventForVirtualView(virtualViewId, AccessibilityEvent.TYPE_VIEW_CLICKED)
+            return true
+        }
+    }
+
+    init {
+        ViewCompat.setAccessibilityDelegate(this, touchHelper)
+    }
+
+    private fun visibleZones(): List<ZoneShape> = zones.filter { it.back == showBack }
+
+    /** Limites de la zone (en pixels de la vue) pour le nœud d'accessibilité virtuel. */
+    private fun displayBounds(shape: ZoneShape): Rect {
+        val b = shape.touchRegion.bounds
+        return Rect(
+            (b.left * scale + dx).toInt(),
+            (b.top * scale + dy).toInt(),
+            (b.right * scale + dx).toInt(),
+            (b.bottom * scale + dy).toInt()
+        )
+    }
+
+    private fun selectZone(zone: PainZone) {
+        selectedZone = zone
+        invalidate()
+        onZoneSelected?.invoke(zone)
+    }
+
     /** Remplace l'ensemble des intensités (préchargement depuis le ViewModel). */
     fun setPainByZone(values: Map<PainZone, Int>) {
         painByZone.clear()
         values.forEach { (z, lvl) -> if (lvl in 1..10) painByZone[z] = lvl }
         invalidate()
+        touchHelper.invalidateRoot()
     }
 
     /** Fixe (1–10) ou retire (0) l'intensité d'une zone, puis notifie l'hôte. */
     fun setIntensity(zone: PainZone, level: Int) {
         if (level in 1..10) painByZone[zone] = level else painByZone.remove(zone)
         invalidate()
+        touchHelper.invalidateRoot()
         onChanged?.invoke(HashMap(painByZone))
     }
 
@@ -124,6 +220,7 @@ class BodyPainMapView @JvmOverloads constructor(
         drawMatrix.reset()
         drawMatrix.postScale(scale, scale)
         drawMatrix.postTranslate(dx, dy)
+        touchHelper.invalidateRoot()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -153,11 +250,9 @@ class BodyPainMapView @JvmOverloads constructor(
             if (scale <= 0f) return false
             val px = ((event.x - dx) / scale).toInt()
             val py = ((event.y - dy) / scale).toInt()
-            val hit = zones.firstOrNull { it.back == showBack && it.region.contains(px, py) }
+            val hit = visibleZones().firstOrNull { it.touchRegion.contains(px, py) }
             if (hit != null) {
-                selectedZone = hit.zone
-                invalidate()
-                onZoneSelected?.invoke(hit.zone)
+                selectZone(hit.zone)
                 performClick()
                 return true
             }
@@ -165,14 +260,44 @@ class BodyPainMapView @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
+    override fun dispatchHoverEvent(event: MotionEvent): Boolean {
+        return touchHelper.dispatchHoverEvent(event) || super.dispatchHoverEvent(event)
+    }
+
+    override fun onFocusChanged(gainFocus: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
+        touchHelper.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return touchHelper.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
+    }
+
     override fun performClick(): Boolean {
         super.performClick()
         return true
     }
 
+    private fun zoneLabel(zone: PainZone): String = when (zone) {
+        PainZone.BASSIN -> "Bassin"
+        PainZone.LOMBAIRES -> "Lombaires"
+        PainZone.SEINS -> "Seins"
+        PainZone.TETE -> "Tête"
+        PainZone.ABDOMEN -> "Abdomen"
+        PainZone.BRAS -> "Bras"
+        PainZone.CUISSES -> "Cuisses"
+        PainZone.HAUT_DOS -> "Haut du dos"
+        PainZone.JAMBES -> "Jambes"
+        PainZone.AUTRE -> "Autre"
+    }
+
     private companion object {
         const val DESIGN_W = 280
         const val DESIGN_H = 430
+
+        /** Marge de la zone de détection (bras, cuisses) au-delà du dessin visuel — cible
+         * tactile/accessibilité plus confortable sans changer le rendu de la carte de chaleur. */
+        const val TOUCH_PAD = 8f
 
         /** Échelle de chaleur : pâle (1) -> rouge profond (10). */
         val HEAT = intArrayOf(
@@ -208,10 +333,24 @@ class BodyPainMapView @JvmOverloads constructor(
         fun buildZones(): List<ZoneShape> = listOf(
             ZoneShape(PainZone.TETE, back = false, listOf(oval(140f, 52f, 26f, 27f))),
             ZoneShape(PainZone.SEINS, back = false, listOf(oval(140f, 116f, 30f, 22f))),
-            ZoneShape(PainZone.BRAS, back = false, listOf(oval(90f, 150f, 13f, 42f), oval(190f, 150f, 13f, 42f))),
+            ZoneShape(
+                PainZone.BRAS, back = false,
+                paths = listOf(oval(90f, 150f, 13f, 42f), oval(190f, 150f, 13f, 42f)),
+                touchPaths = listOf(
+                    oval(90f, 150f, 13f + TOUCH_PAD, 42f),
+                    oval(190f, 150f, 13f + TOUCH_PAD, 42f)
+                )
+            ),
             ZoneShape(PainZone.ABDOMEN, back = false, listOf(oval(140f, 172f, 28f, 22f))),
             ZoneShape(PainZone.BASSIN, back = false, listOf(oval(140f, 222f, 40f, 24f))),
-            ZoneShape(PainZone.CUISSES, back = false, listOf(oval(124f, 285f, 15f, 46f), oval(156f, 285f, 15f, 46f))),
+            ZoneShape(
+                PainZone.CUISSES, back = false,
+                paths = listOf(oval(124f, 285f, 15f, 46f), oval(156f, 285f, 15f, 46f)),
+                touchPaths = listOf(
+                    oval(124f, 285f, 15f + TOUCH_PAD, 46f),
+                    oval(156f, 285f, 15f + TOUCH_PAD, 46f)
+                )
+            ),
             ZoneShape(PainZone.HAUT_DOS, back = true, listOf(oval(140f, 120f, 32f, 26f))),
             ZoneShape(PainZone.LOMBAIRES, back = true, listOf(oval(140f, 184f, 32f, 22f))),
             ZoneShape(PainZone.JAMBES, back = true, listOf(oval(124f, 330f, 14f, 52f), oval(156f, 330f, 14f, 52f)))
