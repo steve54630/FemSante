@@ -3,10 +3,23 @@
     <!-- Titre de l'application -->
     <string name="app_name">FemSanté</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Bienvenue</string>
+    <string name="onboarding_welcome_description">FemSanté t\'accompagne au quotidien pour l\'endométriose, le SOPK et les troubles digestifs — à ton rythme.</string>
+    <string name="onboarding_content_title">Un contenu qui te ressemble</string>
+    <string name="onboarding_content_description">Recettes, boîte à outils et guide FODMAP : tout est pensé et validé par une diététicienne spécialisée.</string>
+    <string name="onboarding_privacy_title">Tes données restent chez toi</string>
+    <string name="onboarding_privacy_description">Ton journal et ton cycle sont chiffrés et ne quittent jamais ton téléphone.</string>
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_start">Commencer</string>
+
     <!-- Ecran de connexion -->
     <string name="connect">Connexion</string>
     <string name="e_mail_demand">Saisissez votre e-mail</string>
     <string name="password_demand">Saissisez votre mot de passe</string>
+    <string name="login_no_account">Pas encore de compte ? <b>Créer un compte</b></string>
+    <string name="login_legal_documents">Documents légaux</string>
     <!-- Ecran d'inscription -->
     <string name="secret_answer">Réponse à la question secrète</string>
     <string name="register_price">Cliquez pour choisir un abonnement</string>
@@ -14,6 +27,7 @@
     <string name="neme_demand">Saisissez votre prénom</string>
     <string name="reduction_code">Code de réduction</string>
     <string name="reduction_code_to_valid">Validez le code de réduction</string>
+    <string name="register_has_account">Déjà un compte ? <b>Se connecter</b></string>
 
     <!-- Option du menu -->
 
@@ -96,11 +110,10 @@
     <string name="legal_mentions">Mentions légales</string>
     <string name="confidentiality">Politiques de confidentialité</string>
     <string name="password_change">Changer de mot de passe</string>
-    <string name="login">Login</string>
+    <string name="login_name" translatable="false"></string>
     <string name="documents">Documents</string>
     <string name="welcome">Bienvenue</string>
     <string name="subscribe_update">Mise à jour de l\'abonnement</string>
-    <string name="login_name">Login</string>
     <string name="password_help">Le mot de passe est composé d\'au moins 8 caractères contenant au moins 1 majuscule, 1 caractère spécial et 1 minuscule</string>
     <string name="loading">En attente de la réponse Internet…</string>
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond_appli"
+    android:orientation="vertical"
+    tools:context="com.audreyRetournayDiet.femSante.features.login.OnboardingActivity">
+
+    <TextView
+        android:id="@+id/buttonSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/space_l"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="48dp"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/onboarding_skip"
+        android:textColor="?android:attr/textColorSecondary" />
+
+    <ViewFlipper
+        android:id="@+id/viewFlipperOnboarding"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out" />
+
+    <LinearLayout
+        android:id="@+id/layoutDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/space_l"
+        android:orientation="horizontal" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_l"
+        android:layout_marginBottom="@dimen/space_l"
+        android:text="@string/onboarding_next" />
+
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +45,8 @@ class LoginFragment : Fragment() {
     private lateinit var email: EditText
     private lateinit var connect: Button
     private lateinit var forgotPassword: Button
+    private lateinit var createAccount: TextView
+    private lateinit var legalDocuments: TextView
     private lateinit var userManager: UserManager
     private lateinit var alert: LoadingAlert
     private lateinit var db: AppDatabase
@@ -69,6 +72,8 @@ class LoginFragment : Fragment() {
         email = view.findViewById(R.id.Login)
         connect = view.findViewById(R.id.buttonConnect)
         forgotPassword = view.findViewById(R.id.buttonForgotten)
+        createAccount = view.findViewById(R.id.textCreateAccount)
+        legalDocuments = view.findViewById(R.id.textLegalDocuments)
 
         userManager = UserManager(view.context)
         alert = LoadingAlert(requireActivity())
@@ -84,6 +89,16 @@ class LoginFragment : Fragment() {
         forgotPassword.setOnClickListener {
             Timber.d("Navigation : Mot de passe oublié")
             startActivity(Intent(activity, ForgottenActivity::class.java))
+        }
+
+        createAccount.setOnClickListener {
+            Timber.d("Navigation : Inscription")
+            (activity as? LoginActivity)?.showRegister()
+        }
+
+        legalDocuments.setOnClickListener {
+            Timber.d("Navigation : Documents légaux")
+            (activity as? LoginActivity)?.showDocs()
         }
     }
 

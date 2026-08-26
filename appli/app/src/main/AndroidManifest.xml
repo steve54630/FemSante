@@ -96,6 +96,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.features.login.OnboardingActivity"
+            android:exported="false" />
 
         <!-- Partage du récap médical (PDF généré localement dans le cache privé). -->
         <provider

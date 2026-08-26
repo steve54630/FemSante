@@ -6,10 +6,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.features.main.HomeActivity
 import com.audreyRetournayDiet.femSante.shared.UserStore
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
@@ -19,16 +19,14 @@ import timber.log.Timber
 /**
  * Activité d'entrée principale de l'application (Launcher).
  * * ### Responsabilités :
- * 1. **Auto-Login** : Vérifie si une session utilisateur existe via [UserStore].
- * 2. **Navigation** : Gère le basculement entre [LoginFragment], [CreateFragment] et [DocFragment].
- * 3. **In-App Updates** : Force la mise à jour immédiate si une version critique est disponible sur le Play Store.
+ * 1. **Onboarding** : redirige vers [OnboardingActivity] au tout premier lancement.
+ * 2. **Auto-Login** : Vérifie si une session utilisateur existe via [UserStore].
+ * 3. **Navigation** : Connexion par défaut, avec liens vers [CreateFragment] et [DocFragment].
+ * 4. **In-App Updates** : Force la mise à jour immédiate si une version critique est disponible sur le Play Store.
  */
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var menu: BottomNavigationView
     private val loginFragment = LoginFragment()
-    private val docFragment = DocFragment()
-    private val registerFragment = CreateFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,45 +46,45 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+        if (!userStore.hasSeenOnboarding()) {
+            Timber.i("Premier lancement : redirection vers l'onboarding")
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
         checkInAppUpdate()
 
         setContentView(R.layout.activity_login)
-        menu = findViewById(R.id.bottom_navigation_menu)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, loginFragment)
                 .commit()
         }
-
-        setupNavigation()
     }
 
-    private fun setupNavigation() {
-        menu.setOnItemSelectedListener { item ->
-            val fragment = when (item.itemId) {
-                R.id.login -> {
-                    Timber.v("Navigation : Onglet Connexion")
-                    loginFragment
-                }
-                R.id.pdf -> {
-                    Timber.v("Navigation : Onglet Documents")
-                    docFragment
-                }
-                R.id.register -> {
-                    Timber.v("Navigation : Onglet Inscription")
-                    registerFragment
-                }
-                else -> null
-            }
+    /** Affiche un écran par-dessus la connexion, avec retour possible (bouton système). */
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
-            fragment?.let {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, it)
-                    .commit()
-                true
-            } ?: false
-        }
+    fun showRegister() {
+        Timber.v("Navigation : Inscription")
+        showFragment(CreateFragment())
+    }
+
+    fun showDocs() {
+        Timber.v("Navigation : Documents légaux")
+        showFragment(DocFragment())
+    }
+
+    fun showLogin() {
+        Timber.v("Navigation : Connexion")
+        supportFragmentManager.popBackStack()
     }
 
     /**

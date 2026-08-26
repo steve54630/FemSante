@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="32dp">
+
+    <FrameLayout
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:background="@drawable/bg_onboarding_icon">
+
+        <ImageView
+            android:id="@+id/imageSlideIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            tools:src="@drawable/ic_onboarding_welcome" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textSlideTitle"
+        style="@style/AppTextAppearance.TitleFancy.Compact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        tools:text="Bienvenue" />
+
+    <TextView
+        android:id="@+id/textSlideDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="15sp"
+        tools:text="FemSanté t'accompagne au quotidien pour l'endométriose, le SOPK et les troubles digestifs." />
+
+</LinearLayout>

@@ -5,17 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
 import com.audreyRetournayDiet.femSante.shared.LoadingAlert
-import com.audreyRetournayDiet.femSante.shared.NothingSelectedSpinnerAdapter
 import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.viewmodels.login.CreateViewModel
 import kotlinx.coroutines.launch
@@ -37,7 +36,7 @@ class CreateFragment : Fragment() {
     private lateinit var password: EditText
     private lateinit var confirm: EditText
     private lateinit var answer: EditText
-    private lateinit var questionSpinner: Spinner
+    private lateinit var questionDropdown: AutoCompleteTextView
     private lateinit var alert: LoadingAlert
     private lateinit var createViewModel: CreateViewModel
 
@@ -74,7 +73,7 @@ class CreateFragment : Fragment() {
         password = view.findViewById(R.id.Password)
         confirm = view.findViewById(R.id.ChangePassword)
         answer = view.findViewById(R.id.Answer)
-        questionSpinner = view.findViewById(R.id.spinnerQuestion)
+        questionDropdown = view.findViewById(R.id.dropdownQuestion)
         alert = LoadingAlert(requireActivity())
     }
 
@@ -96,35 +95,19 @@ class CreateFragment : Fragment() {
         )
     }
 
-    /**
-     * Configure le Spinner pour le choix de la question de sécurité.
-     * Utilise [NothingSelectedSpinnerAdapter] pour afficher un texte d'invite par défaut.
-     */
+    /** Configure le menu déroulant pour le choix de la question de sécurité. */
     private fun setupSpinner() {
         val adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            android.R.layout.simple_dropdown_item_1line,
             mapQuestion.values.toList()
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        questionDropdown.setAdapter(adapter)
 
-        // Emballage de l'adapter pour gérer le "Sélectionnez une question..."
-        questionSpinner.adapter = NothingSelectedSpinnerAdapter(
-            adapter,
-            R.layout.spinner_choice_question,
-            requireContext()
-        )
-
-        questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                // p2 > 0 car l'index 0 est réservé au layout "NothingSelected"
-                if (p2 > 0) {
-                    val selectedText = questionSpinner.selectedItem.toString()
-                    chooseQuestion = mapQuestion.entries.find { it.value == selectedText }?.key?.toString() ?: ""
-                    Timber.v("Question sélectionnée : ID $chooseQuestion")
-                }
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        questionDropdown.setOnItemClickListener { _, _, _, _ ->
+            val selectedText = questionDropdown.text.toString()
+            chooseQuestion = mapQuestion.entries.find { it.value == selectedText }?.key?.toString() ?: ""
+            Timber.v("Question sélectionnée : ID $chooseQuestion")
         }
     }
 
@@ -144,6 +127,11 @@ class CreateFragment : Fragment() {
                 val map = buildUserMap()
                 lifecycleScope.launch { createViewModel.test(JSONObject(map as Map<*, *>)) }
             }
+        }
+
+        view.findViewById<TextView>(R.id.textBackToLogin).setOnClickListener {
+            Timber.d("Navigation : Retour à la connexion")
+            (activity as? LoginActivity)?.showLogin()
         }
     }
 

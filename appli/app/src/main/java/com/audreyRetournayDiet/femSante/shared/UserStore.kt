@@ -55,6 +55,15 @@ class UserStore(context: Context) {
         sharedPreferences.edit { clear() }
     }
 
+    // --- Onboarding ---
+
+    /** Écrans de bienvenue affichés une seule fois, avant la première connexion. */
+    fun hasSeenOnboarding(): Boolean = sharedPreferences.getBoolean("onboarding_seen", false)
+
+    fun setOnboardingSeen() {
+        sharedPreferences.edit { putBoolean("onboarding_seen", true) }
+    }
+
     // --- Token d'authentification API (Sanctum) ---
 
     /** Enregistre le token personnel reçu au login (utilisé en Bearer pour les flux vidéo/audio). */

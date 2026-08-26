@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/space_l"
         tools:context=".features.login.LoginFragment">
 
         <TextView
@@ -17,7 +18,7 @@
             style="@style/AppTextAppearance.TitleFancy.Hero"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="24dp"
             android:text="@string/connect"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,49 +26,84 @@
 
         <EditText
             android:id="@+id/Login"
-            android:layout_width="284dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="40dp"
             android:autofillHints="emailAddress"
-            android:ems="10"
+            android:background="@drawable/bg_reco_card"
             android:hint="@string/e_mail_demand"
             android:inputType="textEmailAddress"
+            android:paddingHorizontal="@dimen/space_m"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewTitleLogin" />
 
         <EditText
             android:id="@+id/Password"
-            android:layout_width="284dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="@dimen/space_m"
             android:autofillHints="password"
-            android:ems="10"
+            android:background="@drawable/bg_reco_card"
             android:hint="@string/password_demand"
             android:inputType="textPassword"
+            android:paddingHorizontal="@dimen/space_m"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Login" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonConnect"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="68dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:text="@string/connect"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Password" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonForgotten"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="20dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l"
             android:text="@string/password_forgotten"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonConnect" />
+
+        <TextView
+            android:id="@+id/textCreateAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_m"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/login_no_account"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonForgotten" />
+
+        <TextView
+            android:id="@+id/textLegalDocuments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/login_legal_documents"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCreateAccount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
