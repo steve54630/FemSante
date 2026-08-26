@@ -64,6 +64,10 @@ class UserStore(context: Context) {
         sharedPreferences.edit { putBoolean("onboarding_seen", true) }
     }
 
+    fun setOnboardingUnseen() {
+        sharedPreferences.edit { putBoolean("onboarding_seen", false) }
+    }
+
     // --- Token d'authentification API (Sanctum) ---
 
     /** Enregistre le token personnel reçu au login (utilisé en Bearer pour les flux vidéo/audio). */
