@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -74,7 +75,15 @@ class PourToiViewModel @Inject constructor(
             val today = LocalDate.now()
 
             // 3. Recommandations de contenu, basées sur la saisie du jour (si elle existe)
-            val entry = (repository.getDailyEntryByDate(currentUserId, today) as? ApiResult.Success)?.data
+            val entry = when (val entryResult = repository.getDailyEntryByDate(currentUserId, today)) {
+                is ApiResult.Success -> entryResult.data
+                is ApiResult.Failure -> {
+                    // Repli silencieux volontaire (zéro anxiété, cf. PourToiViewModelTest) :
+                    // on ne montre aucun bandeau d'erreur, mais on garde une trace pour le débogage.
+                    Timber.w("Pour toi : lecture de la saisie du jour impossible (${entryResult.message}) — repli sur \"aucune saisie\"")
+                    null
+                }
+            }
             val recos = entry?.let {
                 RecommendationEngine.recommend(it, contentTagRepository.tagsByContent())
             } ?: emptyList()

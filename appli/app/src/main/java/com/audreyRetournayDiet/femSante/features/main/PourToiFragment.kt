@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -69,6 +70,9 @@ class PourToiFragment : Fragment() {
     private lateinit var textRecoMoreTitle: TextView
     private lateinit var containerRecommendations: ViewGroup
     private lateinit var layoutEmpty: View
+    private lateinit var progressPourToi: ProgressBar
+
+    private var hasRenderedOnce = false
 
     private val pourToiViewModel: PourToiViewModel by viewModels()
 
@@ -112,6 +116,7 @@ class PourToiFragment : Fragment() {
         textRecoMoreTitle = view.findViewById(R.id.textRecoMoreTitle)
         containerRecommendations = view.findViewById(R.id.containerRecommendations)
         layoutEmpty = view.findViewById(R.id.layoutPourToiEmpty)
+        progressPourToi = view.findViewById(R.id.progressPourToi)
 
         btnFillJournal.setOnClickListener {
             Timber.i("Navigation: Vers le journal (EntryAddActivity) depuis le bandeau incitatif")
@@ -123,7 +128,14 @@ class PourToiFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 pourToiViewModel.uiState.collect { state ->
-                    if (state.isLoading) return@collect
+                    if (state.isLoading) {
+                        // Spinner uniquement avant le tout premier rendu : les rafraîchissements
+                        // suivants (onResume, retour d'onglet) gardent silencieusement le dernier état.
+                        progressPourToi.isVisible = !hasRenderedOnce
+                        return@collect
+                    }
+                    progressPourToi.isVisible = false
+                    hasRenderedOnce = true
 
                     bannerPourToi.isVisible = !state.hasEntryToday
                     bindRecipeOfDay(state.recipeOfDay)
