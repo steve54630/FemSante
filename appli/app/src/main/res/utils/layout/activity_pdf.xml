@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fond_appli"
     tools:context=".shared.viewers.PdfActivity">
 
-   <com.github.barteksc.pdfviewer.PDFView
-       android:id="@+id/pdfView"
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/pdfRecyclerView"
        android:layout_width="0dp"
        android:layout_height="0dp"
+       android:clipToPadding="false"
+       android:padding="@dimen/space_m"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent" />
+       app:layout_constraintTop_toTopOf="parent"
+       tools:listitem="@layout/item_pdf_page" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

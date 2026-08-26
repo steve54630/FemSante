@@ -152,7 +152,6 @@ dependencies {
 
     implementation 'com.paypal.android:card-payments:1.1.0'
     implementation 'com.paypal.android:payment-buttons:1.1.0'
-    implementation 'com.github.mhiew:android-pdf-viewer:3.2.0-beta.3'
 
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
