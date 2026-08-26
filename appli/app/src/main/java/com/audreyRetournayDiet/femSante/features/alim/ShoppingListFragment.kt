@@ -174,6 +174,10 @@ class ShoppingListFragment : Fragment() {
         }
         row.addView(checkBox)
         row.addView(quantities)
+        // Toute la ligne bascule la case (pas seulement la case elle-même) : zone tactile
+        // plus généreuse, notamment sur le texte des quantités.
+        row.isClickable = true
+        row.setOnClickListener { checkBox.isChecked = !checkBox.isChecked }
         return row
     }
 
@@ -185,7 +189,8 @@ class ShoppingListFragment : Fragment() {
 
     private fun confirmClear() {
         AlertDialog.Builder(requireContext())
-            .setMessage(R.string.shopping_list_clear)
+            .setTitle(R.string.shopping_list_clear_title)
+            .setMessage(R.string.shopping_list_clear_message)
             .setPositiveButton(R.string.shopping_list_clear) { _, _ -> viewModel.clear() }
             .setNegativeButton(R.string.report_cancel, null)
             .show()

@@ -318,6 +318,8 @@
     <string name="shopping_list_empty">Ta liste est vide.\nAjoute des recettes depuis leur fiche 🛒</string>
     <string name="shopping_list_browse_recipes">Parcourir les recettes</string>
     <string name="shopping_list_clear">Vider la liste</string>
+    <string name="shopping_list_clear_title">Vider la liste ?</string>
+    <string name="shopping_list_clear_message">Les recettes et les ingrédients cochés seront supprimés. Cette action est irréversible.</string>
 
     <!-- Fiche recette native -->
     <string name="recipe_ingredients">Ingrédients</string>

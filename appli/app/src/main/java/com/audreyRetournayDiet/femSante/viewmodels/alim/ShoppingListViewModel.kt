@@ -42,13 +42,28 @@ class ShoppingListViewModel @Inject constructor(
             val recipes = selections.mapNotNull { (id, count) ->
                 recipeRepository.getById(id)?.let { ShoppingRecipe(it, count) }
             }
+            val sections = ShoppingListBuilder.build(recipes.map { RecipeSelection(it.recipe, it.count) })
+            // On ne garde que les ingrédients réellement présents aujourd'hui : un nom coché pour
+            // une recette depuis retirée ne doit pas apparaître "déjà pris" si une autre recette
+            // réutilise le même nom d'ingrédient plus tard.
+            val currentNames = sections.flatMap { it.items }.map { it.name }.toSet()
             ShoppingListUiState(
                 recipes = recipes,
-                sections = ShoppingListBuilder.build(recipes.map { RecipeSelection(it.recipe, it.count) }),
-                checked = checked,
+                sections = sections,
+                checked = checked intersect currentNames,
                 isEmpty = recipes.isEmpty()
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShoppingListUiState())
+
+    init {
+        // Nettoie les sélections "fantômes" : une recette retirée du catalogue depuis son ajout
+        // resterait sinon indéfiniment dans le store sans jamais s'afficher.
+        viewModelScope.launch {
+            store.selections.collect { selections ->
+                selections.keys.filter { recipeRepository.getById(it) == null }.forEach { store.remove(it) }
+            }
+        }
+    }
 
     fun increment(id: String, current: Int) = viewModelScope.launch { store.setCount(id, current + 1) }
     fun decrement(id: String, current: Int) = viewModelScope.launch { store.setCount(id, current - 1) }
