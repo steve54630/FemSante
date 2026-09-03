@@ -54,9 +54,22 @@ object SubscriptionOffers {
         )
     )
 
+    /**
+     * Essai gratuit de 7 jours — proposé uniquement dans le tunnel de paiement
+     * ([com.audreyRetournayDiet.femSante.features.login.PaymentActivity], via [asMapPrice]),
+     * volontairement absent des cartes tarifs de l'écran d'accroche premium ([all]).
+     */
+    val FREE_TRIAL = SubscriptionOffer(
+        key = "free;0.00",
+        label = "Essai gratuit : 7 jours offerts",
+        periodLabel = "ESSAI GRATUIT",
+        price = "0 €",
+        description = "7 jours d'accès complet, offerts une seule fois par compte."
+    )
+
     /** Compatibilité avec le menu déroulant et le calcul de prix de `PaymentActivity`. */
     val asMapPrice: LinkedHashMap<String, String>
-        get() = LinkedHashMap(all.associate { it.key to it.label })
+        get() = LinkedHashMap((all + FREE_TRIAL).associate { it.key to it.label })
 
-    fun byKey(key: String?): SubscriptionOffer? = all.find { it.key == key }
+    fun byKey(key: String?): SubscriptionOffer? = (all + FREE_TRIAL).find { it.key == key }
 }

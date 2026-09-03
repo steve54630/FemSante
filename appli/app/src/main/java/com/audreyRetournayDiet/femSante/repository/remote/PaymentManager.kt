@@ -65,7 +65,8 @@ class PaymentManager(private val context: AppCompatActivity) {
     /**
      * Crée une commande PayPal sur le serveur.
      * Cette étape est nécessaire avant d'afficher l'interface de paiement à l'utilisatrice.
-     * * @param params Détails de l'abonnement (prix, durée).
+     * * @param params Palier demandé (email, days, code promo éventuel) — le serveur calcule
+     * et fait foi sur le prix, plus aucun montant n'est transmis par l'app.
      */
     fun payPalCall(
         params: JSONObject,

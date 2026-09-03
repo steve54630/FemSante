@@ -136,12 +136,12 @@
             app:layout_constraintTop_toBottomOf="@+id/Answer" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonTestSubscribe"
+            android:id="@+id/buttonContinueWithoutSubscription"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_s"
-            android:text="@string/test_period"
+            android:text="@string/continue_without_subscription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonConnect" />
@@ -159,7 +159,7 @@
             android:text="@string/register_has_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonTestSubscribe" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonContinueWithoutSubscription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

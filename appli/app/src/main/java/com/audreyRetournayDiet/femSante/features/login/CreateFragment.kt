@@ -121,11 +121,11 @@ class CreateFragment : Fragment() {
             }
         }
 
-        view.findViewById<Button>(R.id.buttonTestSubscribe).setOnClickListener {
-            Timber.d("Clic : Bouton Test Validation")
+        view.findViewById<Button>(R.id.buttonContinueWithoutSubscription).setOnClickListener {
+            Timber.d("Clic : Bouton Continuer sans abonnement")
             if (validateFields()) {
                 val map = buildUserMap()
-                lifecycleScope.launch { createViewModel.test(JSONObject(map as Map<*, *>)) }
+                lifecycleScope.launch { createViewModel.registerFree(JSONObject(map as Map<*, *>)) }
             }
         }
 

@@ -89,4 +89,7 @@ class UserManager @Inject constructor(
 
     suspend fun updateUser(parameters: JSONObject): ApiResult<JSONObject> =
         postRequest("/user/update", parameters, "Mise à jour de l'abonnement effectuée")
+
+    suspend fun activateFreeTrial(parameters: JSONObject): ApiResult<JSONObject> =
+        postRequest("/user/free-trial", parameters, "Essai gratuit activé")
 }

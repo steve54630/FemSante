@@ -37,12 +37,13 @@ class PaymentViewModel(
     private val mapPrice: LinkedHashMap<String, String>,
     private val onLoading: (Boolean) -> Unit,
     private val onError: (String) -> Unit,
-    private val onPriceCalculated: (String) -> Unit,
+    private val onPriceCalculated: (originalPrice: String, finalPrice: String) -> Unit,
     private val onNavigationRequired: (Boolean, JSONObject?) -> Unit
 ) {
     private lateinit var accessToken: String
 
     private var currentReduction: Int = 0
+    private var currentReductionCode: String? = null
     private var currentSelectedKey: String? = null
 
     // Configuration du SDK Core (Environnement LIVE pour la mise en production)
@@ -65,15 +66,27 @@ class PaymentViewModel(
 
     /**
      * Applique un code promo ou une réduction automatique.
+     * Le code lui-même est conservé (et pas seulement le pourcentage) : c'est lui qui
+     * sera revalidé par le serveur à la création de la commande — jamais le pourcentage
+     * calculé ici, qui n'est qu'une prévisualisation.
      */
-    fun applyReduction(reductionPercent: Int) {
+    fun applyReduction(reductionPercent: Int, code: String) {
         currentReduction = reductionPercent
+        currentReductionCode = code
         calculateFinalPrice()
     }
 
+    /** true si un code promo valide s'applique réellement au palier actuellement choisi. */
+    fun isReductionEligibleForCurrentOffer(): Boolean {
+        val days = currentSelectedKey?.split(";")?.get(0) ?: return false
+        return days == "365" || days == "A vie"
+    }
+
     /**
-     * Calcule le prix final.
-     * Règle métier : la réduction ne s'applique que sur les forfaits 1 an (365) ou A vie.
+     * Calcule le prix affiché (indicatif — le serveur recalcule et fait foi à la création
+     * de la commande). Règle métier : la réduction ne s'applique que sur les forfaits
+     * 1 an (365) ou A vie. Transmet le prix d'origine ET le prix final, pour que l'UI
+     * puisse montrer l'écart quand une réduction s'applique.
      */
     private fun calculateFinalPrice() {
         val key = currentSelectedKey ?: return
@@ -88,9 +101,10 @@ class PaymentViewModel(
         }
 
         // Formatage monétaire strict (2 décimales, arrondi bancaire)
-        val formattedPrice = BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_EVEN).toString()
-        Timber.d("Prix calculé : $formattedPrice € (Réduc: $currentReduction%)")
-        onPriceCalculated(formattedPrice)
+        val formattedOriginal = BigDecimal(basePrice).setScale(2, RoundingMode.HALF_EVEN).toString()
+        val formattedFinal = BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_EVEN).toString()
+        Timber.d("Prix calculé : $formattedFinal € (Réduc: $currentReduction%)")
+        onPriceCalculated(formattedOriginal, formattedFinal)
     }
 
     private fun setupPayPalListeners() {
@@ -126,23 +140,32 @@ class PaymentViewModel(
         }
     }
 
-    fun startPayPalPayment(price: String) {
-        initiatePayment(price) { orderId ->
+    fun startPayPalPayment() {
+        initiatePayment { orderId ->
             payPalNativeClient.startCheckout(PayPalNativeCheckoutRequest(orderId))
         }
     }
 
-    fun startCardPayment(card: Card, price: String) {
-        initiatePayment(price) { orderId ->
+    fun startCardPayment(card: Card) {
+        initiatePayment { orderId ->
             val request = CardRequest(orderId, card, RETURN_URL_CARD, SCA.SCA_ALWAYS)
             cardClient.approveOrder(context, request)
         }
     }
 
-    /** Étape 1 : Création de l'ordre côté serveur */
-    private fun initiatePayment(price: String, onOrderIdReady: (String) -> Unit) {
+    /**
+     * Étape 1 : Création de l'ordre côté serveur.
+     * On ne transmet plus de prix : uniquement le palier choisi (et le code promo brut,
+     * jamais un pourcentage) — c'est le serveur qui calcule et fait foi sur le montant.
+     */
+    private fun initiatePayment(onOrderIdReady: (String) -> Unit) {
         onLoading(true)
-        val params = JSONObject().put("clientId", PAYPAL_CLIENT_ID).put("price", price)
+        val days = currentSelectedKey?.split(";")?.get(0)
+        val params = JSONObject().apply {
+            put("email", parametersMap["email"])
+            put("days", days)
+            currentReductionCode?.let { put("reductionCode", it) }
+        }
 
         PaymentManager(context).payPalCall(params) { result ->
             when (result) {
@@ -198,6 +221,47 @@ class PaymentViewModel(
             when (result) {
                 is ApiResult.Success -> onNavigationRequired(repay, result.data)
                 is ApiResult.Failure -> onError("Erreur profil : ${result.message}")
+            }
+        }
+    }
+
+    /**
+     * Active l'essai gratuit de 7 jours — aucun paiement, ne passe ni par PayPal ni par la carte.
+     * Pour une inscription (pas encore de compte), crée d'abord le compte en gratuit, puis
+     * active l'essai ; pour un compte existant (repay), active directement.
+     */
+    fun activateFreeTrial() {
+        context.lifecycleScope.launch {
+            onLoading(true)
+
+            if (!repay) {
+                val registerParams = JSONObject().apply {
+                    put("email", parametersMap["email"])
+                    put("password", parametersMap["password"])
+                    put("answer", parametersMap["answer"])
+                    put("name", parametersMap["name"])
+                    put("id", parametersMap["id"])
+                }
+
+                val registerResult = userManager.createUser(registerParams)
+                if (registerResult is ApiResult.Failure) {
+                    onLoading(false)
+                    onError("Erreur inscription : ${registerResult.message}")
+                    return@launch
+                }
+            }
+
+            val trialParams = JSONObject().apply {
+                put("email", parametersMap["email"])
+                put("password", parametersMap["password"])
+            }
+
+            val result = userManager.activateFreeTrial(trialParams)
+            onLoading(false)
+
+            when (result) {
+                is ApiResult.Success -> onNavigationRequired(repay, result.data)
+                is ApiResult.Failure -> onError("Erreur activation essai : ${result.message}")
             }
         }
     }

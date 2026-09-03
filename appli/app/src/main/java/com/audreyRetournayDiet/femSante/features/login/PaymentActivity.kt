@@ -1,6 +1,7 @@
 package com.audreyRetournayDiet.femSante.features.login
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -33,8 +34,10 @@ import timber.log.Timber
 /**
  * Activité gérant le tunnel de paiement de l'application.
  *
- * Cette interface permet à l'utilisatrice de souscrire à un abonnement (1, 6, 12 mois ou accès à vie).
- * Elle supporte deux modes de paiement principaux :
+ * Cette interface permet à l'utilisatrice de souscrire à un abonnement (1, 3, 12 mois ou accès à
+ * vie), ou d'activer l'essai gratuit de 7 jours (offre séparée, sans paiement — voir
+ * [com.audreyRetournayDiet.femSante.data.subscription.SubscriptionOffers.FREE_TRIAL]).
+ * Pour les offres payantes, deux modes de paiement :
  * 1. **PayPal** : Via le bouton SDK natif.
  * 2. **Carte Bancaire** : Saisie sécurisée des informations de carte.
  *
@@ -59,8 +62,12 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var check: CheckBox
     private lateinit var switchPay: SwitchCompat
     private lateinit var buyout: TextView
+    private lateinit var originalPrice: TextView
     private lateinit var reductionValue: EditText
     private lateinit var reductionButton: Button
+    private lateinit var textViewPaypalLabel: TextView
+    private lateinit var textViewCardLabel: TextView
+    private lateinit var buttonFreeTrial: Button
 
     private lateinit var paymentViewModel: PaymentViewModel
     private lateinit var parametersMap: HashMap<*, *>
@@ -109,8 +116,14 @@ class PaymentActivity : AppCompatActivity() {
         cardLayout = findViewById(R.id.cardLayout)
         paypalLayout = findViewById(R.id.paypalLayout)
         buyout = findViewById(R.id.textViewBuyout)
+        originalPrice = findViewById<TextView>(R.id.textViewOriginalPrice).apply {
+            paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        }
         reductionValue = findViewById(R.id.editTextReduc)
         reductionButton = findViewById(R.id.buttonReduc)
+        textViewPaypalLabel = findViewById(R.id.textViewPaypalLabel)
+        textViewCardLabel = findViewById(R.id.textViewCardLabel)
+        buttonFreeTrial = findViewById(R.id.buttonFreeTrial)
 
         repay = intent.getBooleanExtra("repay", false)
         update = intent.getStringExtra("update") == "Oui"
@@ -141,10 +154,18 @@ class PaymentActivity : AppCompatActivity() {
                 Timber.e("Erreur de paiement détectée: $msg")
                 Utilitaires.showToast(msg, this)
             },
-            onPriceCalculated = { price ->
-                valueSubscription = price
-                buyout.text = "$price €"
-                Timber.d("UI: Prix mis à jour = $price €")
+            onPriceCalculated = { originalPriceValue, finalPrice ->
+                valueSubscription = finalPrice
+                buyout.text = "$finalPrice €"
+
+                if (originalPriceValue != finalPrice) {
+                    originalPrice.text = "$originalPriceValue €"
+                    originalPrice.visibility = View.VISIBLE
+                } else {
+                    originalPrice.visibility = View.GONE
+                }
+
+                Timber.d("UI: Prix mis à jour = $finalPrice € (original: $originalPriceValue €)")
             },
             onNavigationRequired = { isRepay, data ->
                 Timber.i("Succès transaction: Redirection utilisateur")
@@ -166,7 +187,35 @@ class PaymentActivity : AppCompatActivity() {
     private fun selectOffer(label: String) {
         selectedOfferKey = mapPrice.entries.find { it.value == label }?.key
         Timber.v("Offre choisie : $label")
-        paymentViewModel.updateSelection(label)
+
+        if (selectedOfferKey == SubscriptionOffers.FREE_TRIAL.key) {
+            showFreeTrialMode()
+        } else {
+            showPaymentMode()
+            paymentViewModel.updateSelection(label)
+        }
+    }
+
+    /** Essai gratuit sélectionné : aucun mode de paiement à proposer, un seul bouton d'activation. */
+    private fun showFreeTrialMode() {
+        paypalLayout.visibility = View.GONE
+        cardLayout.visibility = View.GONE
+        switchPay.visibility = View.GONE
+        textViewPaypalLabel.visibility = View.GONE
+        textViewCardLabel.visibility = View.GONE
+        buttonFreeTrial.visibility = View.VISIBLE
+        buyout.text = "0 €"
+        originalPrice.visibility = View.GONE
+    }
+
+    /** Offre payante sélectionnée : restaure le choix PayPal/Carte habituel. */
+    private fun showPaymentMode() {
+        buttonFreeTrial.visibility = View.GONE
+        switchPay.visibility = View.VISIBLE
+        textViewPaypalLabel.visibility = View.VISIBLE
+        textViewCardLabel.visibility = View.VISIBLE
+        cardLayout.visibility = if (switchPay.isChecked) View.VISIBLE else View.GONE
+        paypalLayout.visibility = if (switchPay.isChecked) View.GONE else View.VISIBLE
     }
 
     /** Pré-sélectionne l'offre choisie sur l'écran d'accroche premium, si transmise. */
@@ -190,19 +239,26 @@ class PaymentActivity : AppCompatActivity() {
                 Utilitaires.showToast("Veuillez d'abord sélectionner un abonnement", this)
                 return@setOnClickListener
             }
+            if (!paymentViewModel.isReductionEligibleForCurrentOffer()) {
+                Utilitaires.showToast(
+                    "Ce code n'est valable que pour les abonnements 12 mois ou à vie",
+                    this
+                )
+                return@setOnClickListener
+            }
             applyReductionFromApi(code)
         }
 
         payPal.setOnClickListener {
             if (validateForm()) {
-                Timber.i("Lancement PayPal : $valueSubscription €")
-                paymentViewModel.startPayPalPayment(valueSubscription)
+                Timber.i("Lancement PayPal : $valueSubscription € (indicatif, le serveur recalcule)")
+                paymentViewModel.startPayPalPayment()
             }
         }
 
         payPalCard.setOnClickListener {
             if (validateForm()) {
-                Timber.i("Lancement Paiement Carte : $valueSubscription €")
+                Timber.i("Lancement Paiement Carte : $valueSubscription € (indicatif, le serveur recalcule)")
                 // Création sécurisée de l'objet Card (PCI-DSS compliant : pas de log des données)
                 val card = Card(
                     number.text.toString(),
@@ -210,7 +266,14 @@ class PaymentActivity : AppCompatActivity() {
                     year.text.toString(),
                     codeSecurity.text.toString()
                 )
-                lifecycleScope.launch { paymentViewModel.startCardPayment(card, valueSubscription) }
+                lifecycleScope.launch { paymentViewModel.startCardPayment(card) }
+            }
+        }
+
+        buttonFreeTrial.setOnClickListener {
+            if (validateForm()) {
+                Timber.i("Activation de l'essai gratuit")
+                paymentViewModel.activateFreeTrial()
             }
         }
 
@@ -232,7 +295,7 @@ class PaymentActivity : AppCompatActivity() {
                 is ApiResult.Success -> {
                     val percent = result.data?.optInt("reduction") ?: 0
                     Timber.i("Code promo valide: -$percent%")
-                    paymentViewModel.applyReduction(percent)
+                    paymentViewModel.applyReduction(percent, code)
                     Utilitaires.showToast(result.data?.optString("message") ?: "Réduction appliquée", this)
                 }
                 is ApiResult.Failure -> {

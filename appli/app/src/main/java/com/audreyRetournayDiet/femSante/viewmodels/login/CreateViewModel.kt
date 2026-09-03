@@ -21,10 +21,10 @@ class CreateViewModel(
 ) {
 
     /**
-     * Processus d'inscription standard (Gratuit).
+     * Processus d'inscription standard (Gratuit, sans abonnement).
      * Effectue une double vérification : disponibilité de l'email PUIS création.
      */
-    suspend fun test(params: JSONObject) {
+    suspend fun registerFree(params: JSONObject) {
         Timber.d("Début du processus d'inscription gratuite")
         onLoading(true)
 

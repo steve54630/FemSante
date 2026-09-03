@@ -91,7 +91,7 @@
     <string name="CGV_help">Veuillez accepter les conditions générales de vente</string>
     <string name="cgv_button">Conditions générales de vente</string>
     <string name="cgu">Conditions générales d\'utilisation</string>
-    <string name="test_period">Essai gratuit de 7 jours</string>
+    <string name="continue_without_subscription">Continuer sans abonnement</string>
 
     <!-- Recettes -->
     <string name="recipe">Recettes</string>
@@ -303,6 +303,7 @@
     <string name="premium_upsell_trust_privacy">🌿 Zéro revente de données intimes : tes informations de santé restent strictement confidentielles et protégées.</string>
     <string name="premium_upsell_cta">Continuer vers le paiement</string>
     <string name="premium_upsell_later">Plus tard</string>
+    <string name="free_trial_activate_button">Activer l\'essai gratuit</string>
     <string name="debug_toggle_access" translatable="false">Basculer accès premium (debug)</string>
 
     <!-- Navigation recettes (écran unifié) -->
