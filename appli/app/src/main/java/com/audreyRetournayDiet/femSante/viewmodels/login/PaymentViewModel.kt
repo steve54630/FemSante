@@ -3,6 +3,7 @@ package com.audreyRetournayDiet.femSante.viewmodels.login
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.PAYPAL_CLIENT_ID
+import com.audreyRetournayDiet.femSante.PAYPAL_ENVIRONMENT
 import com.audreyRetournayDiet.femSante.RETURN_URL_CARD
 import com.audreyRetournayDiet.femSante.RETURN_URL_PAYPAL
 import com.audreyRetournayDiet.femSante.repository.ApiResult
@@ -46,8 +47,12 @@ class PaymentViewModel(
     private var currentReductionCode: String? = null
     private var currentSelectedKey: String? = null
 
-    // Configuration du SDK Core (Environnement LIVE pour la mise en production)
-    private val config = CoreConfig(PAYPAL_CLIENT_ID, Environment.LIVE)
+    // Configuration du SDK Core — environnement piloté par PAYPAL_ENVIRONMENT
+    // (local.properties, non versionné). Défaut LIVE si absent.
+    private val config = CoreConfig(
+        PAYPAL_CLIENT_ID,
+        if (PAYPAL_ENVIRONMENT == "SANDBOX") Environment.SANDBOX else Environment.LIVE
+    )
 
     private val cardClient = CardClient(context, config)
     private val payPalNativeClient = PayPalNativeCheckoutClient(context.application, config, RETURN_URL_PAYPAL)

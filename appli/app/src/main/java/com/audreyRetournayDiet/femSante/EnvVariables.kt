@@ -13,6 +13,9 @@ package com.audreyRetournayDiet.femSante
 
 val PAYPAL_CLIENT_ID: String = BuildConfig.PAYPAL_CLIENT_ID
 
+/** "LIVE" (defaut) ou "SANDBOX" — pilote par PAYPAL_ENVIRONMENT dans local.properties. */
+val PAYPAL_ENVIRONMENT: String = BuildConfig.PAYPAL_ENVIRONMENT
+
 val API_URL: String = BuildConfig.API_URL
 
 val RETURN_URL_CARD: String = BuildConfig.RETURN_URL_CARD

@@ -15,3 +15,8 @@ API_URL=
 PAYPAL_CLIENT_ID=
 RETURN_URL_CARD=
 RETURN_URL_PAYPAL=
+
+# LIVE (défaut si omis) ou SANDBOX — pour tester le tunnel de paiement sans argent réel.
+# Doit correspondre à l'environnement du PAYPAL_CLIENT_ID ci-dessus (client id sandbox
+# avec SANDBOX, client id live avec LIVE) et au PAYPAL_BASE_URL du serveur.
+PAYPAL_ENVIRONMENT=

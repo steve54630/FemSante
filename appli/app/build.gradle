@@ -34,6 +34,10 @@ def jfrogPassword = secretProps.getProperty("JFROG_PASSWORD") ?: System.getenv("
 // local.properties / variables d'environnement, jamais codees en dur dans le source.
 def readSecret = { String key -> secretProps.getProperty(key) ?: System.getenv(key) ?: "" }
 
+// Environnement PayPal (LIVE / SANDBOX). Defaut LIVE si absent de local.properties :
+// la bascule sandbox se fait uniquement en local, jamais en dur dans le code versionne.
+def paypalEnvironment = secretProps.getProperty("PAYPAL_ENVIRONMENT") ?: System.getenv("PAYPAL_ENVIRONMENT") ?: "LIVE"
+
 android {
     namespace 'com.audreyRetournayDiet.femSante'
     compileSdkVersion 36
@@ -50,6 +54,7 @@ android {
         buildConfigField "String", "PAYPAL_CLIENT_ID", "\"${readSecret('PAYPAL_CLIENT_ID')}\""
         buildConfigField "String", "RETURN_URL_CARD", "\"${readSecret('RETURN_URL_CARD')}\""
         buildConfigField "String", "RETURN_URL_PAYPAL", "\"${readSecret('RETURN_URL_PAYPAL')}\""
+        buildConfigField "String", "PAYPAL_ENVIRONMENT", "\"${paypalEnvironment}\""
     }
     sourceSets {
         main {
