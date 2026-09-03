@@ -44,9 +44,8 @@ génération automatique).
 **À valider avec Audrey** : sujets prioritaires (5-10 pour démarrer), rythme de publication
 soutenable pour elle.
 
-### 4. Mode partenaire (léger)
-Pas un vrai compte partagé (complexité backend, RGPD sur données partagées) — une variante allégée
-de l'export PDF médical existant, pour expliquer la situation à un·e partenaire.
+### 4. Mode partenaire
+Export PDF léger pour expliquer la situation à un·e partenaire — pas de compte partagé.
 
 ## Écarté volontairement
 
