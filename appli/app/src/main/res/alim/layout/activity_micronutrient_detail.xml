@@ -58,6 +58,14 @@
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     tools:text="Folates" />
+
+                <!-- Phase(s) clé(s) du cycle (masqué si aucune) -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupPhase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:chipSpacingVertical="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
