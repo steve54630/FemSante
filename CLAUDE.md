@@ -96,6 +96,9 @@ viewers), `di/`.
   description).
 - **Naming**: packages lowercase (e.g. `viewmodels`), files PascalCase.
 - **Commits**: do **not** add a `Co-Authored-By` trailer. Thematic, conventional messages in French.
+- **Versioning**: bump `versionCode`/`versionName` in `appli/app/build.gradle` whenever a major update
+  is shipped (new feature set, not a trivial fix), so the release version stays a clear signal of
+  what's actually in a given build — do this as part of the change, not as an afterthought.
 
 ## Build, run, test
 

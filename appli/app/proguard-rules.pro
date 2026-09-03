@@ -41,3 +41,23 @@
 -keep class net.zetetic.database.** { *; }
 -keep class net.sqlcipher.** { *; }
 -dontwarn net.zetetic.database.**
+
+# Gson (parsing des assets JSON du catalogue + persistance locale) - sans ces règles, la
+# minification renomme les champs des classes modèles et Gson ne retrouve plus les clés JSON
+# correspondantes en release (contenu vide, liste de courses perdue), alors que tout fonctionne
+# normalement en debug (non minifié).
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keep class com.audreyRetournayDiet.femSante.data.recipe.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.media.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.micronutrient.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.fodmap.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.recommendation.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.resource.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.toolbox.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.repository.local.ShoppingListStore$StoredSelection { <fields>; }
