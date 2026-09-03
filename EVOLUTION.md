@@ -44,15 +44,21 @@ génération automatique).
 **À valider avec Audrey** : sujets prioritaires (5-10 pour démarrer), rythme de publication
 soutenable pour elle.
 
-### 4. Mode partenaire
-Export PDF léger pour expliquer la situation à un·e partenaire — pas de compte partagé.
-
 ## Écarté volontairement
+
+**Principe** : FemSanté est une boîte à outils pour l'utilisatrice elle-même — pas un outil de mise
+en relation avec d'autres personnes. Les fonctionnalités qui font entrer un tiers dans la logique du
+produit (même sans risque de fuite de données) sortent de ce cadre.
 
 **Communauté** — en tension directe avec le positionnement local-first/confidentialité. Les apps
 concurrentes qui misent sur la communauté (Flo, MyEndometriosisTeam) sont aussi celles qui ont eu
 des soucis de confidentialité (Flo Health : 59,5M$ de règlement en 2026 pour partage de données de
 cycle avec Google/Meta/Flurry).
+
+**Mode partenaire** — pas juste un problème d'architecture (aucune donnée ne sort jamais du
+téléphone, l'export PDF existant est déjà générique et à sa discrétion) : c'est elle qui décide quoi
+partager et avec qui, l'app n'a pas à présupposer une relation en particulier. Éventuellement une
+évolution lointaine, mais pas dans le but premier de FemSanté.
 
 ## Repère marché (instantané, à rafraîchir si daté)
 
