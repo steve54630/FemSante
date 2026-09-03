@@ -289,12 +289,19 @@
     <string name="micronutrient_sources_title">Sources (pour 100 g)</string>
     <string name="micronutrient_cofactors_title">Cofacteurs d\'assimilation</string>
     <string name="micronutrient_notes_title">À savoir</string>
-    <string name="premium_upsell_title">Débloque tout FemSanté</string>
-    <string name="premium_upsell_subtitle">Profite de l\'accompagnement complet, conçu avec Audrey Retournay.</string>
-    <string name="premium_upsell_benefit_media">Vidéos et séances audio bien-être en illimité</string>
-    <string name="premium_upsell_benefit_nutrients">Toutes les fiches micronutriments et leurs interactions avec tes médicaments</string>
-    <string name="premium_upsell_benefit_support">Un contenu conçu et validé par une diététicienne diplômée</string>
-    <string name="premium_upsell_cta">Voir les abonnements</string>
+    <string name="premium_upsell_title">Passe à la vitesse supérieure pour apaiser ton corps et ton esprit</string>
+    <string name="premium_upsell_subtitle">Débloque l\'intégralité des protocoles experts pour soulager durablement tes douleurs, calmer l\'inflammation et retrouver un équilibre hormonal profond.</string>
+    <string name="premium_upsell_benefit_movement_title">🧘‍♀️ Mouvement &amp; Renforcement</string>
+    <string name="premium_upsell_benefit_movement_desc">Accès complet à toutes les vidéos de Pilates, Fitness et aux séances de Yoga « Calme intérieur ».</string>
+    <string name="premium_upsell_benefit_therapy_title">🧠 Thérapies psycho-corporelles avancées</string>
+    <string name="premium_upsell_benefit_therapy_desc">Tous les modules de Sophrologie dynamique (Épaules, Miroir, Éventails) et Sophrologie profonde (Déplacement du négatif). Les séances d\'Auto-hypnose pour l\'apaisement et d\'Art-thérapie ciblée (Tristesse, Peur, Gestion des émotions).</string>
+    <string name="premium_upsell_benefit_meditation_title">🌿 Méditations guidées spécifiques</string>
+    <string name="premium_upsell_benefit_meditation_desc">Séances audio exclusives pour calmer la douleur, apaiser la colère et restaurer la confiance en soi.</string>
+    <string name="premium_upsell_offers_title">Tarifs</string>
+    <string name="premium_upsell_recommended_badge">⭐ LE CHOIX RECOMMANDÉ</string>
+    <string name="premium_upsell_trust_secure">🔒 Paiement 100 % sécurisé et sans engagement pour l\'abonnement d\'un mois</string>
+    <string name="premium_upsell_trust_privacy">🌿 Zéro revente de données intimes : tes informations de santé restent strictement confidentielles et protégées.</string>
+    <string name="premium_upsell_cta">Continuer vers le paiement</string>
     <string name="premium_upsell_later">Plus tard</string>
     <string name="debug_toggle_access" translatable="false">Basculer accès premium (debug)</string>
 

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
+import com.audreyRetournayDiet.femSante.data.subscription.SubscriptionOffers
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.PaymentManager
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
@@ -66,19 +67,15 @@ class PaymentActivity : AppCompatActivity() {
 
     private var valueSubscription: String = ""
     private var selectedOfferKey: String? = null
+    private var preselectedOfferKey: String? = null
     private var update: Boolean = false
     private var repay: Boolean = false
 
     /**
      * Map de correspondance entre les IDs techniques d'abonnement et les libellés UI.
-     * Format clé : "durée_jours;prix_facial"
+     * Source unique : [SubscriptionOffers] (partagée avec l'écran d'accroche premium).
      */
-    private val mapPrice = linkedMapOf(
-        "30;7.00" to "1 mois : 7€",
-        "180;35.00" to "6 mois : 35€",
-        "365;63.00" to "1 an : 63€",
-        "A vie;250.00" to "Accès à vie : 250€"
-    )
+    private val mapPrice = SubscriptionOffers.asMapPrice
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +86,7 @@ class PaymentActivity : AppCompatActivity() {
         setupOfferDropdown()
         setupViewModel()
         setupListeners()
+        applyPreselectedOffer()
     }
 
     /**
@@ -116,6 +114,7 @@ class PaymentActivity : AppCompatActivity() {
 
         repay = intent.getBooleanExtra("repay", false)
         update = intent.getStringExtra("update") == "Oui"
+        preselectedOfferKey = intent.getStringExtra("preselectedOfferKey")
 
         Timber.i("Contexte de paiement: Repay=$repay, Update=$update")
 
@@ -160,11 +159,21 @@ class PaymentActivity : AppCompatActivity() {
         offerDropdown.setAdapter(adapter)
 
         offerDropdown.setOnItemClickListener { _, _, _, _ ->
-            val label = offerDropdown.text.toString()
-            selectedOfferKey = mapPrice.entries.find { it.value == label }?.key
-            Timber.v("Offre choisie : $label")
-            paymentViewModel.updateSelection(label)
+            selectOffer(offerDropdown.text.toString())
         }
+    }
+
+    private fun selectOffer(label: String) {
+        selectedOfferKey = mapPrice.entries.find { it.value == label }?.key
+        Timber.v("Offre choisie : $label")
+        paymentViewModel.updateSelection(label)
+    }
+
+    /** Pré-sélectionne l'offre choisie sur l'écran d'accroche premium, si transmise. */
+    private fun applyPreselectedOffer() {
+        val label = mapPrice[preselectedOfferKey] ?: return
+        offerDropdown.setText(label, false)
+        selectOffer(label)
     }
 
     private fun setupListeners() {
