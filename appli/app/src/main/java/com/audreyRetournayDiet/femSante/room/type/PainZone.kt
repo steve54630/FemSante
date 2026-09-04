@@ -1,7 +1,5 @@
 package com.audreyRetournayDiet.femSante.room.type
 
-import com.audreyRetournayDiet.femSante.room.converter.PainZoneConverter
-
 /**
  * Catalogue des zones anatomiques sujettes aux douleurs ou à l'inconfort.
  *

@@ -43,7 +43,7 @@ class ToolboxCardAdapter(
         }
     }
 
-    inner class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val icon: ImageView = view.findViewById(R.id.imageThemeIcon)
         private val label: TextView = view.findViewById(R.id.textThemeLabel)
 

@@ -27,6 +27,8 @@ class MediaJsonParsingTest {
 
     @Test
     fun `types categories et modules resolus par nom`() {
+        // Gson mettrait le champ à null si le libellé ne correspondait à aucune valeur d'enum
+        // (même si le type Kotlin est déclaré non-nullable) — d'où ce garde-fou explicite.
         assertTrue(media.all { it.type != null && it.category != null && it.module != null })
         assertEquals(4, media.count { it.module == MediaModule.TETE })
         assertEquals(2, media.count { it.module == MediaModule.CORPS })

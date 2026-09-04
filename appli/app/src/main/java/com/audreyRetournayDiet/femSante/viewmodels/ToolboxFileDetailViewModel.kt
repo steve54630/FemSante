@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ToolboxFileDetailViewModel @Inject constructor(
-    private val repository: ToolboxFileRepository,
+    repository: ToolboxFileRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

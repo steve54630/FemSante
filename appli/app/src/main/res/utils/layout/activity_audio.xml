@@ -35,7 +35,7 @@
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/ic_headphones"
-            android:tint="@color/orange_app" />
+            app:tint="@color/orange_app" />
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.media3.ui.PlayerControlView
