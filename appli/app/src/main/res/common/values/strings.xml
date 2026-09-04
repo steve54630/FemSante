@@ -290,11 +290,11 @@
     <string name="micronutrient_cofactors_title">Cofacteurs d\'assimilation</string>
     <string name="micronutrient_notes_title">À savoir</string>
     <string name="premium_upsell_title">Passe à la vitesse supérieure pour apaiser ton corps et ton esprit</string>
-    <string name="premium_upsell_subtitle">Débloque l\'intégralité des protocoles experts pour soulager durablement tes douleurs, calmer l\'inflammation et retrouver un équilibre hormonal profond.</string>
+    <string name="premium_upsell_subtitle">Débloque l\'intégralité des protocoles pour soulager durablement tes douleurs, calmer l\'inflammation et retrouver un équilibre hormonal.</string>
     <string name="premium_upsell_benefit_movement_title">🧘‍♀️ Mouvement &amp; Renforcement</string>
     <string name="premium_upsell_benefit_movement_desc">Accès complet à toutes les vidéos de Pilates, Fitness et aux séances de Yoga « Calme intérieur ».</string>
     <string name="premium_upsell_benefit_therapy_title">🧠 Thérapies psycho-corporelles avancées</string>
-    <string name="premium_upsell_benefit_therapy_desc">Tous les modules de Sophrologie dynamique (Épaules, Miroir, Éventails) et Sophrologie profonde (Déplacement du négatif). Les séances d\'Auto-hypnose pour l\'apaisement et d\'Art-thérapie ciblée (Tristesse, Peur, Gestion des émotions).</string>
+    <string name="premium_upsell_benefit_therapy_desc">Tous les modules de sophrologie dynamique (épaules, miroir, éventails) et sophrologie profonde (déplacement du négatif), les séances d\'auto-hypnose pour l\'apaisement et d\'art-thérapie ciblée (tristesse, peur, gestion des émotions).</string>
     <string name="premium_upsell_benefit_meditation_title">🌿 Méditations guidées spécifiques</string>
     <string name="premium_upsell_benefit_meditation_desc">Séances audio exclusives pour calmer la douleur, apaiser la colère et restaurer la confiance en soi.</string>
     <string name="premium_upsell_offers_title">Tarifs</string>

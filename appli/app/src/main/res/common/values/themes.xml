@@ -43,11 +43,16 @@
       Titre d'écran. Échelle unifiée à 3 niveaux qui ne diffèrent QUE par la taille
       (police, couleur, centrage inchangés) : base 40sp, .Compact 32sp, .Hero 52sp.
       Les layouts ne surchargent plus `android:textSize` : ils choisissent le style.
+      `lineHeight` est fixé à chaque niveau (~1.15x) : le parent Material3.DisplayMedium
+      hérite d'un interligne pensé pour du 45sp, beaucoup trop grand une fois la taille
+      réduite (visible sur les titres qui passent sur plusieurs lignes, ex. écran premium).
     -->
     <style name="AppTextAppearance.TitleFancy" parent="TextAppearance.Material3.DisplayMedium">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textSize">40sp</item>
+        <item name="android:lineHeight">46sp</item>
+        <item name="lineHeight">46sp</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textAlignment">center</item>
         <item name="android:minHeight">48dp</item>
@@ -56,11 +61,15 @@
     <!-- Titre + contenu immédiat (grille/liste/chips). -->
     <style name="AppTextAppearance.TitleFancy.Compact">
         <item name="android:textSize">32sp</item>
+        <item name="android:lineHeight">37sp</item>
+        <item name="lineHeight">37sp</item>
     </style>
 
     <!-- Écrans accueil / formulaire, avec de l'espace. -->
     <style name="AppTextAppearance.TitleFancy.Hero">
         <item name="android:textSize">52sp</item>
+        <item name="android:lineHeight">60sp</item>
+        <item name="lineHeight">60sp</item>
     </style>
 
     <style name="AppTextAppearance.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">

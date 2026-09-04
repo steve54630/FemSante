@@ -49,7 +49,7 @@ class PremiumUpsellActivity : AppCompatActivity() {
 
     private fun buildOfferCards() {
         val container = findViewById<LinearLayout>(R.id.offersContainer)
-        SubscriptionOffers.all.forEach { offer ->
+        (listOf(SubscriptionOffers.FREE_TRIAL) + SubscriptionOffers.all).forEach { offer ->
             val card = layoutInflater.inflate(R.layout.item_subscription_offer, container, false) as MaterialCardView
             card.findViewById<TextView>(R.id.textPeriod).text = offer.periodLabel
             card.findViewById<TextView>(R.id.textPrice).text = offer.price
@@ -78,5 +78,10 @@ class PremiumUpsellActivity : AppCompatActivity() {
                 if (offer.key == selectedOffer.key) R.color.orange_app else android.R.color.transparent
             )
         }
+
+        val isFreeTrial = selectedOffer.key == SubscriptionOffers.FREE_TRIAL.key
+        findViewById<MaterialButton>(R.id.buttonSubscribe).text = getString(
+            if (isFreeTrial) R.string.free_trial_activate_button else R.string.premium_upsell_cta
+        )
     }
 }

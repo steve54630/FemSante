@@ -26,7 +26,7 @@ object SubscriptionOffers {
             label = "1 mois : 9,90€",
             periodLabel = "1 MOIS",
             price = "9,90 €",
-            description = "Sans engagement, résiliable à tout moment."
+            description = "Sans engagement, résiliable à tout moment"
         ),
         SubscriptionOffer(
             key = "90;19.90",
@@ -34,7 +34,7 @@ object SubscriptionOffers {
             periodLabel = "3 MOIS",
             price = "19,90 €",
             monthlyEquivalent = "6,63 € / mois",
-            description = "Pour installer durablement tes routines à chaque cycle."
+            description = "Pour installer durablement tes routines à chaque cycle"
         ),
         SubscriptionOffer(
             key = "365;69.90",
@@ -42,7 +42,7 @@ object SubscriptionOffers {
             periodLabel = "12 MOIS",
             price = "69,90 €",
             monthlyEquivalent = "5,82 € / mois",
-            description = "La transformation complète sur une année entière.",
+            description = "La transformation complète sur une année entière",
             recommended = true
         ),
         SubscriptionOffer(
@@ -55,16 +55,17 @@ object SubscriptionOffers {
     )
 
     /**
-     * Essai gratuit de 7 jours — proposé uniquement dans le tunnel de paiement
-     * ([com.audreyRetournayDiet.femSante.features.login.PaymentActivity], via [asMapPrice]),
-     * volontairement absent des cartes tarifs de l'écran d'accroche premium ([all]).
+     * Essai gratuit de 7 jours — sa propre carte sur l'écran d'accroche premium
+     * ([com.audreyRetournayDiet.femSante.features.login.PremiumUpsellActivity], ajoutée à [all] en
+     * tête de liste) et une entrée du menu déroulant du tunnel de paiement
+     * ([com.audreyRetournayDiet.femSante.features.login.PaymentActivity], via [asMapPrice]).
      */
     val FREE_TRIAL = SubscriptionOffer(
         key = "free;0.00",
         label = "Essai gratuit : 7 jours offerts",
         periodLabel = "ESSAI GRATUIT",
         price = "0 €",
-        description = "7 jours d'accès complet, offerts une seule fois par compte."
+        description = "7 jours d'accès complet"
     )
 
     /** Compatibilité avec le menu déroulant et le calcul de prix de `PaymentActivity`. */
