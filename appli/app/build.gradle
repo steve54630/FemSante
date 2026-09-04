@@ -153,10 +153,11 @@ dependencies {
 
     implementation 'com.google.android.play:app-update-ktx:2.1.0'
     implementation 'com.github.therealbush:translator:1.0.2'
-    implementation 'com.paypal.android:paypal-native-payments:1.1.0'
 
+    // Bouton PayPal natif retiré temporairement : com.paypal.android:paypal-native-payments et
+    // payment-buttons dépendaient du module PayPalNativeCheckoutClient, abandonné par PayPal.
+    // À réintroduire avec paypal-payments (PayPalClient) quand cette migration sera planifiée.
     implementation 'com.paypal.android:card-payments:1.1.0'
-    implementation 'com.paypal.android:payment-buttons:1.1.0'
 
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

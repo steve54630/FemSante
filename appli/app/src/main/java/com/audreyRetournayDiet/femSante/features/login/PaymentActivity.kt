@@ -10,11 +10,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.subscription.SubscriptionOffers
@@ -26,7 +24,6 @@ import com.audreyRetournayDiet.femSante.shared.Utilitaires
 import com.audreyRetournayDiet.femSante.shared.viewers.PdfActivity
 import com.audreyRetournayDiet.femSante.viewmodels.login.PaymentViewModel
 import com.paypal.android.cardpayments.Card
-import com.paypal.android.paymentbuttons.PayPalButton
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber
@@ -37,9 +34,9 @@ import timber.log.Timber
  * Cette interface permet à l'utilisatrice de souscrire à un abonnement (1, 3, 12 mois ou accès à
  * vie), ou d'activer l'essai gratuit de 7 jours (offre séparée, sans paiement — voir
  * [com.audreyRetournayDiet.femSante.data.subscription.SubscriptionOffers.FREE_TRIAL]).
- * Pour les offres payantes, deux modes de paiement :
- * 1. **PayPal** : Via le bouton SDK natif.
- * 2. **Carte Bancaire** : Saisie sécurisée des informations de carte.
+ * Pour les offres payantes, paiement par **Carte Bancaire** (saisie sécurisée, SCA/3D Secure).
+ * Le bouton PayPal natif est temporairement retiré (module SDK abandonné par PayPal — voir
+ * [com.audreyRetournayDiet.femSante.viewmodels.login.PaymentViewModel]).
  *
  * ### Fonctionnalités clés :
  * - Calcul dynamique des prix selon l'abonnement choisi.
@@ -51,21 +48,17 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var alert: LoadingAlert
     private lateinit var offerDropdown: AutoCompleteTextView
     private lateinit var userManager: UserManager
-    private lateinit var payPal: PayPalButton
     private lateinit var payPalCard: Button
     private lateinit var number: EditText
     private lateinit var month: EditText
     private lateinit var year: EditText
     private lateinit var codeSecurity: EditText
     private lateinit var cardLayout: LinearLayout
-    private lateinit var paypalLayout: FrameLayout
     private lateinit var check: CheckBox
-    private lateinit var switchPay: SwitchCompat
     private lateinit var buyout: TextView
     private lateinit var originalPrice: TextView
     private lateinit var reductionValue: EditText
     private lateinit var reductionButton: Button
-    private lateinit var textViewPaypalLabel: TextView
     private lateinit var textViewCardLabel: TextView
     private lateinit var buttonFreeTrial: Button
 
@@ -97,6 +90,17 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     /**
+     * Requis par le SDK PayPal pour le challenge SCA/3D Secure (paiement carte) : le retour du
+     * navigateur après authentification arrive comme un nouvel Intent sur cette Activity
+     * (`launchMode="singleTop"`), mais `getIntent()` ne se met pas à jour automatiquement — sans
+     * cette surcharge, le CardClient ne voit jamais le retour et considère le paiement annulé.
+     */
+    override fun onNewIntent(newIntent: Intent) {
+        super.onNewIntent(newIntent)
+        setIntent(newIntent)
+    }
+
+    /**
      * Lie les composants XML et récupère les données transmises par l'Intent.
      * Gère la compatibilité pour la récupération de la HashMap selon la version d'Android.
      */
@@ -109,19 +113,15 @@ class PaymentActivity : AppCompatActivity() {
         year = findViewById(R.id.editTextYear)
         codeSecurity = findViewById(R.id.securityCode)
         check = findViewById(R.id.checkBoxPayment)
-        payPal = findViewById(R.id.buttonPayPal)
         payPalCard = findViewById(R.id.buttonCreditCard)
         offerDropdown = findViewById(R.id.dropdownOffer)
-        switchPay = findViewById(R.id.switch1)
         cardLayout = findViewById(R.id.cardLayout)
-        paypalLayout = findViewById(R.id.paypalLayout)
         buyout = findViewById(R.id.textViewBuyout)
         originalPrice = findViewById<TextView>(R.id.textViewOriginalPrice).apply {
             paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         }
         reductionValue = findViewById(R.id.editTextReduc)
         reductionButton = findViewById(R.id.buttonReduc)
-        textViewPaypalLabel = findViewById(R.id.textViewPaypalLabel)
         textViewCardLabel = findViewById(R.id.textViewCardLabel)
         buttonFreeTrial = findViewById(R.id.buttonFreeTrial)
 
@@ -198,24 +198,18 @@ class PaymentActivity : AppCompatActivity() {
 
     /** Essai gratuit sélectionné : aucun mode de paiement à proposer, un seul bouton d'activation. */
     private fun showFreeTrialMode() {
-        paypalLayout.visibility = View.GONE
         cardLayout.visibility = View.GONE
-        switchPay.visibility = View.GONE
-        textViewPaypalLabel.visibility = View.GONE
         textViewCardLabel.visibility = View.GONE
         buttonFreeTrial.visibility = View.VISIBLE
         buyout.text = "0 €"
         originalPrice.visibility = View.GONE
     }
 
-    /** Offre payante sélectionnée : restaure le choix PayPal/Carte habituel. */
+    /** Offre payante sélectionnée : seul le paiement par carte est proposé pour l'instant. */
     private fun showPaymentMode() {
         buttonFreeTrial.visibility = View.GONE
-        switchPay.visibility = View.VISIBLE
-        textViewPaypalLabel.visibility = View.VISIBLE
         textViewCardLabel.visibility = View.VISIBLE
-        cardLayout.visibility = if (switchPay.isChecked) View.VISIBLE else View.GONE
-        paypalLayout.visibility = if (switchPay.isChecked) View.GONE else View.VISIBLE
+        cardLayout.visibility = View.VISIBLE
     }
 
     /** Pré-sélectionne l'offre choisie sur l'écran d'accroche premium, si transmise. */
@@ -226,13 +220,6 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        switchPay.setOnCheckedChangeListener { _, isChecked ->
-            val mode = if (isChecked) "CARTE" else "PAYPAL"
-            Timber.d("Changement de mode : $mode")
-            cardLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
-            paypalLayout.visibility = if (isChecked) View.GONE else View.VISIBLE
-        }
-
         reductionButton.setOnClickListener {
             val code = reductionValue.text.toString().trim()
             if (selectedOfferKey == null) {
@@ -247,13 +234,6 @@ class PaymentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             applyReductionFromApi(code)
-        }
-
-        payPal.setOnClickListener {
-            if (validateForm()) {
-                Timber.i("Lancement PayPal : $valueSubscription € (indicatif, le serveur recalcule)")
-                paymentViewModel.startPayPalPayment()
-            }
         }
 
         payPalCard.setOnClickListener {

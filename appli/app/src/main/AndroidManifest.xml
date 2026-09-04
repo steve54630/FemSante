@@ -52,6 +52,27 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="com.audreyRetournayDiet.femSante"
+                    android:host="paypalpay" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter>
+                <!-- Le SDK natif PayPal (flux "native_xo") redirige toujours vers
+                     <scheme>://paypalxo, indépendamment de l'host configuré dans
+                     RETURN_URL_PAYPAL — voir paypal/paypal-android#161. -->
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="com.audreyRetournayDiet.femSante"
+                    android:host="paypalxo" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.audreyRetournayDiet.femSante.features.alim.RecetteDetailActivity"

@@ -5,7 +5,6 @@ import androidx.lifecycle.lifecycleScope
 import com.audreyRetournayDiet.femSante.PAYPAL_CLIENT_ID
 import com.audreyRetournayDiet.femSante.PAYPAL_ENVIRONMENT
 import com.audreyRetournayDiet.femSante.RETURN_URL_CARD
-import com.audreyRetournayDiet.femSante.RETURN_URL_PAYPAL
 import com.audreyRetournayDiet.femSante.repository.ApiResult
 import com.audreyRetournayDiet.femSante.repository.remote.PaymentManager
 import com.audreyRetournayDiet.femSante.repository.remote.UserManager
@@ -15,7 +14,6 @@ import com.paypal.android.cardpayments.threedsecure.SCA
 import com.paypal.android.corepayments.CoreConfig
 import com.paypal.android.corepayments.Environment
 import com.paypal.android.corepayments.PayPalSDKError
-import com.paypal.android.paypalnativepayments.*
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber
@@ -26,7 +24,10 @@ import java.math.RoundingMode
  * ViewModel orchestrant le tunnel d'achat sécurisé.
  * * ### Architecture :
  * - **Calcul Métier** : Gère les règles de prix et promotions.
- * - **SDK Intégration** : Pilote les flux Native PayPal et Cartes Bancaires.
+ * - **SDK Intégration** : Pilote le flux Carte Bancaire (SCA/3D Secure). Le bouton PayPal natif
+ *   est temporairement retiré — le module SDK PayPal (`paypal-native-payments`) sur lequel il
+ *   reposait est abandonné par PayPal ; à réintroduire via son remplaçant maintenu
+ *   (`paypal-payments`/`PayPalClient`) quand cette migration sera planifiée.
  * - **Callback System** : Communique l'état (Loading, Error, Navigation) à l'UI sans couplage fort.
  */
 class PaymentViewModel(
@@ -47,6 +48,10 @@ class PaymentViewModel(
     private var currentReductionCode: String? = null
     private var currentSelectedKey: String? = null
 
+    /** Commande créée côté serveur pour la tentative en cours, pour pouvoir la marquer
+     *  "cancelled" si l'utilisatrice annule avant d'avoir approuvé le paiement. */
+    private var currentOrderId: String? = null
+
     // Configuration du SDK Core — environnement piloté par PAYPAL_ENVIRONMENT
     // (local.properties, non versionné). Défaut LIVE si absent.
     private val config = CoreConfig(
@@ -55,10 +60,9 @@ class PaymentViewModel(
     )
 
     private val cardClient = CardClient(context, config)
-    private val payPalNativeClient = PayPalNativeCheckoutClient(context.application, config, RETURN_URL_PAYPAL)
 
     init {
-        setupPayPalListeners()
+        setupCardListener()
     }
 
     /**
@@ -112,28 +116,13 @@ class PaymentViewModel(
         onPriceCalculated(formattedOriginal, formattedFinal)
     }
 
-    private fun setupPayPalListeners() {
-        payPalNativeClient.listener = object : PayPalNativeCheckoutListener {
-            override fun onPayPalCheckoutStart() {
-                onLoading(false)
-                Timber.d("PayPal Native: Démarrage du flux")
-            }
-            override fun onPayPalCheckoutSuccess(result: PayPalNativeCheckoutResult) {
-                validateOrder(result.orderId)
-            }
-            override fun onPayPalCheckoutCanceled() {
-                onError("Opération annulée par l'utilisatrice")
-            }
-            override fun onPayPalCheckoutFailure(error: PayPalSDKError) {
-                handleError(error)
-            }
-        }
-
+    private fun setupCardListener() {
         cardClient.approveOrderListener = object : ApproveOrderListener {
             override fun onApproveOrderSuccess(result: CardResult) {
                 validateOrder(result.orderId)
             }
             override fun onApproveOrderCanceled() {
+                cancelCurrentOrder()
                 onLoading(false)
                 onError("Paiement par carte annulé")
             }
@@ -142,12 +131,6 @@ class PaymentViewModel(
             }
             override fun onApproveOrderThreeDSecureDidFinish() {}
             override fun onApproveOrderThreeDSecureWillLaunch() { onLoading(false) }
-        }
-    }
-
-    fun startPayPalPayment() {
-        initiatePayment { orderId ->
-            payPalNativeClient.startCheckout(PayPalNativeCheckoutRequest(orderId))
         }
     }
 
@@ -177,6 +160,7 @@ class PaymentViewModel(
                 is ApiResult.Success -> {
                     val orderId = Utilitaires.onPayPalApiResponse(context, result.data)
                     accessToken = result.data?.optString("access_token") ?: ""
+                    currentOrderId = orderId
                     onOrderIdReady(orderId)
                 }
                 is ApiResult.Failure -> {
@@ -275,5 +259,24 @@ class PaymentViewModel(
         onLoading(false)
         Timber.e("Erreur SDK PayPal : ${error.errorDescription}")
         onError("Erreur technique PayPal : ${error.errorDescription}")
+    }
+
+    /**
+     * Signale au serveur qu'une commande créée mais jamais approuvée est abandonnée,
+     * pour qu'elle passe "cancelled" plutôt que de rester "created" indéfiniment.
+     * Best-effort : un échec de cet appel n'est pas bloquant, la commande sera de toute
+     * façon nettoyée côté serveur par le job d'expiration des commandes trop anciennes.
+     */
+    private fun cancelCurrentOrder() {
+        val orderId = currentOrderId ?: return
+        currentOrderId = null
+
+        val params = JSONObject().put("orderId", orderId)
+        PaymentManager(context).cancelOrder(params) { result ->
+            when (result) {
+                is ApiResult.Success -> Timber.d("Commande $orderId marquée annulée côté serveur")
+                is ApiResult.Failure -> Timber.w("Échec de l'annulation serveur pour $orderId : ${result.message}")
+            }
+        }
     }
 }

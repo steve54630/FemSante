@@ -81,7 +81,7 @@
     <string name="register_pay">Payer l\'inscription</string>
     <string name="password_demand_2">Confirmez le mot de passe</string>
     <string name="paiement">Paiement</string>
-    <string name="card_payment">Par carte</string>
+    <string name="card_payment">Carte bancaire</string>
     <string name="PayPal_payment">Par Paypal</string>
     <string name="card_expiration_month">Mois</string>
     <string name="card_expiration_year">Année</string>

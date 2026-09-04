@@ -61,9 +61,21 @@ class UserManager @Inject constructor(
                 }
             },
             { error ->
-                val errorMessage = error.localizedMessage ?: "Problème réseau ou Timeout"
+                // Volley route tout code HTTP non-2xx ici sans exposer le corps de la réponse
+                // par défaut — nos endpoints renvoient pourtant un JSON exploitable même en
+                // erreur (`{"error": "..."}`). On le relit pour ne pas perdre ce message métier
+                // derrière un générique "Erreur de connexion au serveur".
+                val body = error.networkResponse?.data
+                val serverError = body?.let {
+                    try {
+                        JSONObject(String(it, Charsets.UTF_8)).optString("error", null)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                val errorMessage = serverError ?: error.localizedMessage ?: "Problème réseau ou Timeout"
                 Timber.e("Erreur connexion sur $endpoint : $errorMessage")
-                cont.resume(ApiResult.Failure("Erreur de connexion au serveur"))
+                cont.resume(ApiResult.Failure(serverError ?: "Erreur de connexion au serveur"))
             }
         )
 
