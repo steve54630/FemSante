@@ -30,3 +30,10 @@ generated/
 Suivi cycle menstruel - questions dieteticienne.md
 Tagging contenus - a valider avec dieteticienne.md
 tagging_contenus.csv
+
+# Matériel payant (contenus intervenants) : ne doit jamais être commité
+/intervenants/
+
+# Artefacts de crash JVM
+hs_err_pid*.log
+replay_pid*.log
