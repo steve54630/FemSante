@@ -44,6 +44,19 @@ génération automatique).
 **À valider avec Audrey** : sujets prioritaires (5-10 pour démarrer), rythme de publication
 soutenable pour elle.
 
+## Mesure d'usage (à date, pas encore en place)
+
+Aucun outil pour savoir si l'app est réellement utilisée. Deux étapes envisagées, pas d'urgence :
+
+1. **Statistiques Google Play Console** — installations, utilisatrices actives, désinstallations,
+   avis. Déjà disponible gratuitement sans aucun ajout de code, zéro risque RGPD (Google les
+   collecte de toute façon pour la distribution). Premier réflexe, pas de développement nécessaire.
+2. **Analytics plus fin (usage par fonctionnalité, rétention par écran)**, si le besoin se confirme
+   — via un outil respectueux de la vie privée (Matomo auto-hébergé sur le serveur `femsante-api`,
+   ou un simple compteur anonyme maison) plutôt que Firebase/Google Analytics : ce dernier enverrait
+   des données à Google et fragiliserait l'argument marketing « 100% local », en plus d'obliger à
+   mettre à jour le formulaire Data Safety du Play Store.
+
 ## Écarté volontairement
 
 **Principe** : FemSanté est une boîte à outils pour l'utilisatrice elle-même — pas un outil de mise
