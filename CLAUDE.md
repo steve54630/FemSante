@@ -85,9 +85,10 @@ viewers), `di/`.
   lifetime access, false = free). Gate premium content via `UserStore.hasContentAccess()`. Do not
   use `lifetimeAccess` for gating (it is display-only "à vie").
 - **UI charte ("zéro anxiété")**: French copy; warm yellow/orange primary; **pink `#C2185B` is
-  reserved for period markers only**. Handwriting font (`nothing_you_could_do`) is used **only for
-  big screen titles** via `AppTextAppearance.TitleFancy` (3-size scale: base 40sp / `.Compact` 32sp
-  / `.Hero` 52sp); `dinpro` for everything else.
+  reserved for period markers only**. `lato_bold` is used **only for big screen titles** via
+  `AppTextAppearance.TitleFancy` (3-size scale: base 40sp / `.Compact` 32sp / `.Hero` 52sp) —
+  chosen over the earlier handwriting font (`nothing_you_could_do`, removed) as easier on the eyes;
+  `dinpro` for everything else.
 - **Design tokens** live in `res/common/values/`: `colors.xml` (charte), `dimens.xml`
   (`space_xs/s/m/l`, `card_*`), `themes.xml` (Material 3 roles mapped to the charte). The app is
   **single-look (light)** — there is intentionally no dark mode (`values-night` removed).

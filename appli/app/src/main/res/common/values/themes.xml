@@ -40,13 +40,13 @@
     </style>
 
     <!--
-      Titre manuscrit. Échelle unifiée à 3 niveaux qui ne diffèrent QUE par la taille
+      Titre d'écran. Échelle unifiée à 3 niveaux qui ne diffèrent QUE par la taille
       (police, couleur, centrage inchangés) : base 40sp, .Compact 32sp, .Hero 52sp.
       Les layouts ne surchargent plus `android:textSize` : ils choisissent le style.
     -->
     <style name="AppTextAppearance.TitleFancy" parent="TextAppearance.Material3.DisplayMedium">
-        <item name="android:fontFamily">@font/nothing_you_could_do</item>
-        <item name="fontFamily">@font/nothing_you_could_do</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="fontFamily">@font/lato_bold</item>
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textAlignment">center</item>
