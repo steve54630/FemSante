@@ -50,4 +50,12 @@ class RecipeJsonParsingTest {
         val ids = recipes.map { it.id }
         assertEquals("des identifiants sont dupliqués", ids.size, ids.toSet().size)
     }
+
+    @Test
+    fun `premium absent du json vaut premium par defaut, false explicite reste gratuit`() {
+        // Gson mettrait `premium` à false (pas au défaut Kotlin) si la clé est absente du JSON —
+        // d'où le champ nullable et la résolution via `isPremium` plutôt que `premium` brut.
+        assertTrue(recipes.first { it.id == "sample_dessert" }.isPremium)
+        assertTrue(recipes.first { it.id == "sample_breakfast" }.isPremium.not())
+    }
 }

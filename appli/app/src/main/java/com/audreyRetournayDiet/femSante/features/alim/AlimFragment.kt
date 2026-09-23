@@ -19,6 +19,8 @@ import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.recipe.Recipe
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 import com.audreyRetournayDiet.femSante.data.recipe.RecipeTags
+import com.audreyRetournayDiet.femSante.features.login.PremiumUpsellActivity
+import com.audreyRetournayDiet.femSante.shared.UserStore
 import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeBrowseViewModel
 import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeBrowseUiState
 import com.audreyRetournayDiet.femSante.viewmodels.alim.RecipeDetailViewModel
@@ -38,7 +40,8 @@ import timber.log.Timber
 class AlimFragment : Fragment() {
 
     private val viewModel: RecipeBrowseViewModel by viewModels()
-    private val adapter = RecipeCardAdapter(::openRecipe)
+    private lateinit var adapter: RecipeCardAdapter
+    private var hasAccess = false
 
     private lateinit var chipGroupCategory: ChipGroup
     private lateinit var chipMaPhase: Chip
@@ -52,6 +55,9 @@ class AlimFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        hasAccess = UserStore(requireContext()).hasContentAccess()
+        adapter = RecipeCardAdapter(hasAccess, ::openRecipe)
 
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerRecipes)
         recycler.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -119,8 +125,12 @@ class AlimFragment : Fragment() {
         viewModel.setSelectedTags(emptySet())
     }
 
-    /** Ouvre la fiche recette native. */
+    /** Ouvre la fiche recette native — redirige vers l'écran premium si la recette est verrouillée. */
     private fun openRecipe(recipe: Recipe) {
+        if (recipe.isPremium && !hasAccess) {
+            startActivity(Intent(requireContext(), PremiumUpsellActivity::class.java))
+            return
+        }
         Timber.i("Ouverture de la recette : ${recipe.id}")
         val intent = Intent(requireContext(), RecetteDetailActivity::class.java)
             .putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)

@@ -169,6 +169,10 @@ class PourToiFragment : Fragment() {
         }
 
         buttonRecipeAction.setOnClickListener {
+            if (recipe.isPremium && !UserStore(requireContext()).hasContentAccess()) {
+                startActivity(Intent(requireContext(), PremiumUpsellActivity::class.java))
+                return@setOnClickListener
+            }
             Timber.i("Recette du jour ouverte : ${recipe.id}")
             val intent = Intent(requireContext(), RecetteDetailActivity::class.java)
                 .putExtra(RecipeDetailViewModel.EXTRA_RECIPE_ID, recipe.id)

@@ -10,6 +10,11 @@ package com.audreyRetournayDiet.femSante.data.recipe
  *
  * [phase] et [tags] sont vides pour l'instant : ils seront renseignés par le tagging métier
  * de la diététicienne (filtrage par phase du cycle, recommandations).
+ *
+ * [premium] est nullable à dessein : Gson ignore les valeurs par défaut Kotlin quand une clé JSON
+ * est absente (il assigne `false`, pas le défaut déclaré) — une recette sans le champ dans
+ * `recipes.json` serait donc silencieusement traitée comme gratuite. Ne pas lire ce champ
+ * directement, utiliser [isPremium] (défaut : premium si absent du JSON).
  */
 data class Recipe(
     val id: String,
@@ -22,8 +27,12 @@ data class Recipe(
     val steps: List<String> = emptyList(),
     val nutritionTip: String? = null,
     val phase: List<String> = emptyList(),
-    val tags: List<String> = emptyList()
-)
+    val tags: List<String> = emptyList(),
+    val premium: Boolean? = null
+) {
+    /** Statut premium résolu — [premium] avec `null` (absent du JSON) traité comme premium. */
+    val isPremium: Boolean get() = premium ?: true
+}
 
 /**
  * Un ingrédient d'une recette.

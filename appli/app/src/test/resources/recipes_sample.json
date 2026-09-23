@@ -13,7 +13,8 @@
     "steps": [ "Mélanger.", "Laisser reposer." ],
     "nutritionTip": "Riche en fibres.",
     "phase": ["Folliculaire"],
-    "tags": ["Express", "Sans gluten"]
+    "tags": ["Express", "Sans gluten"],
+    "premium": false
   },
   {
     "id": "sample_dessert",

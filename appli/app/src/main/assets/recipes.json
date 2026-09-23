@@ -1,6 +1,7 @@
 [
   {
     "id": "pain_lentilles_corail_oeufs",
+    "premium": true,
     "category": "BREAKFAST",
     "title": "Tartine de pain de lentilles corail & œufs brouillés",
     "servings": "2 personnes",
@@ -37,6 +38,7 @@
   },
   {
     "id": "porridge_sale_amandes",
+    "premium": true,
     "category": "BREAKFAST",
     "title": "Porridge salé aux amandes",
     "servings": "2 personnes",
@@ -64,6 +66,7 @@
   },
   {
     "id": "blinis_avocat_saumon",
+    "premium": true,
     "category": "ENTREE",
     "title": "Blinis avocat - saumon",
     "servings": "2 personnes",
@@ -99,6 +102,7 @@
   },
   {
     "id": "houmous_betteraves",
+    "premium": false,
     "category": "ENTREE",
     "title": "Houmous de betteraves",
     "servings": "4 personnes",
@@ -126,6 +130,7 @@
   },
   {
     "id": "salade_ete",
+    "premium": false,
     "category": "ENTREE",
     "title": "Salade d'été",
     "servings": "1 personne",
@@ -151,6 +156,7 @@
   },
   {
     "id": "tartines_gourmandes_thon",
+    "premium": false,
     "category": "ENTREE",
     "title": "Tartines gourmandes au thon",
     "servings": "2 tartines",
@@ -177,6 +183,7 @@
   },
   {
     "id": "veloute_epinards_amandes",
+    "premium": false,
     "category": "ENTREE",
     "title": "Velouté d'épinards, amandes et noisettes",
     "servings": "2 personnes",
@@ -212,6 +219,7 @@
   },
   {
     "id": "cake_sale",
+    "premium": true,
     "category": "PLAT",
     "title": "Cake salé",
     "servings": "6 personnes",
@@ -240,6 +248,7 @@
   },
   {
     "id": "crepes_salees_houmous_rose",
+    "premium": true,
     "category": "PLAT",
     "title": "Crêpes salées au houmous rose",
     "servings": "2 personnes",
@@ -276,6 +285,7 @@
   },
   {
     "id": "polenta_champignons",
+    "premium": true,
     "category": "PLAT",
     "title": "Polenta aux champignons",
     "servings": "1 personne",
@@ -303,6 +313,7 @@
   },
   {
     "id": "tarte_epinards",
+    "premium": true,
     "category": "PLAT",
     "title": "Tarte aux épinards",
     "servings": "2 à 3 personnes",
@@ -328,6 +339,7 @@
   },
   {
     "id": "tartelettes_saumon_champignons",
+    "premium": true,
     "category": "PLAT",
     "title": "Tartelettes saumon et champignons",
     "servings": "5 tartelettes",
@@ -358,6 +370,7 @@
   },
   {
     "id": "tofu_fume_puree_carottes",
+    "premium": true,
     "category": "PLAT",
     "title": "Tofu fumé, purée de carottes et panais",
     "servings": "2 personnes",
@@ -385,6 +398,7 @@
   },
   {
     "id": "cake_chocolat_leger",
+    "premium": true,
     "category": "DESSERT",
     "title": "Cake au chocolat léger et sans farines",
     "servings": "6 personnes",
@@ -412,6 +426,7 @@
   },
   {
     "id": "cakes_vapeur_pommes_myrtilles",
+    "premium": true,
     "category": "DESSERT",
     "title": "Petits cakes vapeur pommes-myrtilles",
     "servings": "5 petits cakes",
@@ -444,6 +459,7 @@
   },
   {
     "id": "carres_gourmands",
+    "premium": true,
     "category": "DESSERT",
     "title": "Carrés gourmands",
     "servings": "4 personnes",
@@ -469,6 +485,7 @@
   },
   {
     "id": "creme_chocolat",
+    "premium": false,
     "category": "DESSERT",
     "title": "Crème au chocolat",
     "servings": "2 personnes",
@@ -494,6 +511,7 @@
   },
   {
     "id": "fondant_chocolat",
+    "premium": false,
     "category": "DESSERT",
     "title": "Fondant au chocolat",
     "servings": "2 personnes",
@@ -523,6 +541,7 @@
   },
   {
     "id": "mini_cake_banane_chocolat",
+    "premium": false,
     "category": "DESSERT",
     "title": "Mini cake moelleux express banane et chocolat",
     "servings": "2 personnes",
@@ -552,6 +571,7 @@
   },
   {
     "id": "tartelettes_pomme_express",
+    "premium": false,
     "category": "DESSERT",
     "title": "Tartelettes à la pomme express",
     "servings": "2 personnes",
@@ -574,6 +594,7 @@
   },
   {
     "id": "pudding_chia",
+    "premium": true,
     "category": "BREAKFAST",
     "title": "Pudding de chia",
     "servings": "1 personne",

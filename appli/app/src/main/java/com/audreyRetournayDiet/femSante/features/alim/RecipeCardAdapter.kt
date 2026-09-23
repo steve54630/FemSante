@@ -2,6 +2,7 @@ package com.audreyRetournayDiet.femSante.features.alim
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,8 +17,13 @@ import com.audreyRetournayDiet.femSante.data.recipe.RecipeCategory
 /**
  * Adapter de la grille de recettes (cartes photo). Utilise [ListAdapter] + DiffUtil pour animer
  * proprement les changements de filtre sans reconstruire toute la liste.
+ *
+ * **Cadenas si la recette est premium ET que l'utilisatrice n'a pas l'accès** ([userHasAccess]) —
+ * même pattern que [com.audreyRetournayDiet.femSante.shared.MediaCardAdapter] et
+ * [com.audreyRetournayDiet.femSante.features.alim.MicronutrientCardAdapter].
  */
 class RecipeCardAdapter(
+    private val userHasAccess: Boolean,
     private val onClick: (Recipe) -> Unit
 ) : ListAdapter<Recipe, RecipeCardAdapter.RecipeViewHolder>(DIFF) {
 
@@ -30,14 +36,16 @@ class RecipeCardAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class RecipeViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
+    inner class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val image: ImageView = itemView.findViewById(R.id.imageRecipe)
+        private val lock: ImageView = itemView.findViewById(R.id.imageLock)
         private val title: TextView = itemView.findViewById(R.id.textRecipeTitle)
         private val meta: TextView = itemView.findViewById(R.id.textRecipeMeta)
 
         fun bind(recipe: Recipe) {
             title.text = recipe.title
             meta.text = metaLine(recipe)
+            lock.visibility = if (recipe.isPremium && !userHasAccess) View.VISIBLE else View.GONE
 
             // L'image est un drawable nommé comme l'id de la recette (ex. veloute_epinards_amandes).
             // NB : ce lookup dynamique échappe à l'analyse statique du resource shrinker (release) —
