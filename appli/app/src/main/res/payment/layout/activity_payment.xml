@@ -149,6 +149,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
+        <TextView
+            android:id="@+id/textViewPaypalComingSoon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/payment_paypal_coming_soon"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCardLabel" />
+
         <LinearLayout
             android:id="@+id/cardLayout"
             android:layout_width="match_parent"
@@ -156,7 +170,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCardLabel">
+            app:layout_constraintTop_toBottomOf="@+id/textViewPaypalComingSoon">
 
             <EditText
                 android:id="@+id/numberCard"

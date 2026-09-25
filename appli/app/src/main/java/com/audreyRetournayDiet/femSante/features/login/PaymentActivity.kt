@@ -60,6 +60,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var reductionValue: EditText
     private lateinit var reductionButton: Button
     private lateinit var textViewCardLabel: TextView
+    private lateinit var textViewPaypalComingSoon: TextView
     private lateinit var buttonFreeTrial: Button
 
     private lateinit var paymentViewModel: PaymentViewModel
@@ -123,6 +124,7 @@ class PaymentActivity : AppCompatActivity() {
         reductionValue = findViewById(R.id.editTextReduc)
         reductionButton = findViewById(R.id.buttonReduc)
         textViewCardLabel = findViewById(R.id.textViewCardLabel)
+        textViewPaypalComingSoon = findViewById(R.id.textViewPaypalComingSoon)
         buttonFreeTrial = findViewById(R.id.buttonFreeTrial)
 
         repay = intent.getBooleanExtra("repay", false)
@@ -200,6 +202,7 @@ class PaymentActivity : AppCompatActivity() {
     private fun showFreeTrialMode() {
         cardLayout.visibility = View.GONE
         textViewCardLabel.visibility = View.GONE
+        textViewPaypalComingSoon.visibility = View.GONE
         buttonFreeTrial.visibility = View.VISIBLE
         buyout.text = "0 €"
         originalPrice.visibility = View.GONE
@@ -209,6 +212,7 @@ class PaymentActivity : AppCompatActivity() {
     private fun showPaymentMode() {
         buttonFreeTrial.visibility = View.GONE
         textViewCardLabel.visibility = View.VISIBLE
+        textViewPaypalComingSoon.visibility = View.VISIBLE
         cardLayout.visibility = View.VISIBLE
     }
 
