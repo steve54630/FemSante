@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.plant.Plant
 
-/** Liste du lexique des plantes : nom, nom latin, symptôme principal. */
 class PlantCardAdapter(
     private val onClick: (Plant) -> Unit
 ) : ListAdapter<Plant, PlantCardAdapter.PlantViewHolder>(DIFF) {

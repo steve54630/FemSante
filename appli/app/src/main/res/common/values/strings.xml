@@ -316,6 +316,7 @@
     <string name="premium_upsell_recommended_badge">⭐ LE CHOIX RECOMMANDÉ</string>
     <string name="premium_upsell_trust_secure">🔒 Paiement 100 % sécurisé et sans engagement pour l\'abonnement d\'un mois</string>
     <string name="premium_upsell_trust_privacy">🌿 Zéro revente de données intimes : tes informations de santé restent strictement confidentielles et protégées.</string>
+    <string name="premium_upsell_trust_donation">💜 Un pourcentage des bénéfices est reversé à Asso\'SOPK et Justice Endométriose.</string>
     <string name="premium_upsell_cta">Continuer vers le paiement</string>
     <string name="premium_upsell_later">Plus tard</string>
     <string name="free_trial_activate_button">Activer l\'essai gratuit</string>

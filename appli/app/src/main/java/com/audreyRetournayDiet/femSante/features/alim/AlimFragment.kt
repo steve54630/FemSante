@@ -125,7 +125,6 @@ class AlimFragment : Fragment() {
         viewModel.setSelectedTags(emptySet())
     }
 
-    /** Ouvre la fiche recette native — redirige vers l'écran premium si la recette est verrouillée. */
     private fun openRecipe(recipe: Recipe) {
         if (recipe.isPremium && !hasAccess) {
             startActivity(Intent(requireContext(), PremiumUpsellActivity::class.java))

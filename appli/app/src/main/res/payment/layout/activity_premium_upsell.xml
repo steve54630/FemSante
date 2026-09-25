@@ -144,6 +144,14 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="13sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:text="@string/premium_upsell_trust_donation"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="13sp" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSubscribe"
             android:layout_width="match_parent"

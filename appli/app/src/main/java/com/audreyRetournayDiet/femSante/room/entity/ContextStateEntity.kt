@@ -52,15 +52,12 @@ data class ContextStateEntity(
     @ColumnInfo(name = "medication_list")
     val medicationList: String? = "",
 
-    /** Alimentation du matin. */
     @ColumnInfo(name = "diet_morning")
     val dietMorning: String? = null,
 
-    /** Alimentation du midi. */
     @ColumnInfo(name = "diet_noon")
     val dietNoon: String? = null,
 
-    /** Alimentation du soir. */
     @ColumnInfo(name = "diet_evening")
     val dietEvening: String? = null
 )
