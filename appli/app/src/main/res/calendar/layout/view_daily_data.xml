@@ -170,9 +170,19 @@
                 tools:text="Traitement : Oui (Paracétamol)" />
 
             <TextView
-                android:id="@+id/tvDiet"
+                android:id="@+id/tvDietMorning"
                 style="@style/SummaryDetailStyle"
-                tools:text="Alimentation : ..." />
+                tools:text="Matin : ..." />
+
+            <TextView
+                android:id="@+id/tvDietNoon"
+                style="@style/SummaryDetailStyle"
+                tools:text="Midi : ..." />
+
+            <TextView
+                android:id="@+id/tvDietEvening"
+                style="@style/SummaryDetailStyle"
+                tools:text="Soir : ..." />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

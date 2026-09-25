@@ -41,17 +41,28 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
         super.onViewCreated(view, savedInstanceState)
 
         val chipGroupActivity = view.findViewById<ChipGroup>(R.id.chipGroupActivity)
+        val layoutActivityDetail = view.findViewById<TextInputLayout>(R.id.layoutActivityDetail)
+        val etActivityDetail = view.findViewById<TextInputEditText>(R.id.etActivityDetail)
         val switchMedication = view.findViewById<MaterialSwitch>(R.id.switchMedication)
         val layoutMedicationList = view.findViewById<TextInputLayout>(R.id.layoutMedicationList)
         val etMedicationList = view.findViewById<TextInputEditText>(R.id.etMedicationList)
-        val etDietNotes = view.findViewById<TextInputEditText>(R.id.etDietNotes)
+        val etDietMorning = view.findViewById<TextInputEditText>(R.id.etDietMorning)
+        val etDietNoon = view.findViewById<TextInputEditText>(R.id.etDietNoon)
+        val etDietEvening = view.findViewById<TextInputEditText>(R.id.etDietEvening)
 
         if (chipGroupActivity.isEmpty()) {
             chipGroupActivity.addTagChips(PhysicalActivity.entries)
         }
 
-        observeState(chipGroupActivity, switchMedication, layoutMedicationList, etMedicationList, etDietNotes)
-        setupInputListeners(chipGroupActivity, switchMedication, etMedicationList, etDietNotes)
+        observeState(
+            chipGroupActivity, layoutActivityDetail, etActivityDetail,
+            switchMedication, layoutMedicationList, etMedicationList,
+            etDietMorning, etDietNoon, etDietEvening
+        )
+        setupInputListeners(
+            chipGroupActivity, etActivityDetail, switchMedication, etMedicationList,
+            etDietMorning, etDietNoon, etDietEvening
+        )
     }
 
     /**
@@ -60,15 +71,26 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
      */
     private fun observeState(
         group: ChipGroup,
+        layoutActivityDetail: TextInputLayout,
+        etActivityDetail: TextInputEditText,
         switch: MaterialSwitch,
         layout: TextInputLayout,
         etMed: TextInputEditText,
-        etDiet: TextInputEditText
+        etDietMorning: TextInputEditText,
+        etDietNoon: TextInputEditText,
+        etDietEvening: TextInputEditText
     ) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contextState.collect { state ->
-                    group.checkChipByTag(state.physicalActivity ?: PhysicalActivity.REPOS)
+                    val activity = state.physicalActivity ?: PhysicalActivity.REPOS
+                    group.checkChipByTag(activity)
+
+                    // Précision d'activité : pas pertinente au repos.
+                    layoutActivityDetail.isVisible = activity != PhysicalActivity.REPOS
+                    if (etActivityDetail.text?.toString() != state.activityDetail) {
+                        etActivityDetail.setText(state.activityDetail)
+                    }
 
                     if (switch.isChecked != state.medecineTaken) {
                         switch.isChecked = state.medecineTaken
@@ -79,8 +101,14 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
                     if (etMed.text?.toString() != state.medicationList) {
                         etMed.setText(state.medicationList)
                     }
-                    if (etDiet.text?.toString() != state.diet) {
-                        etDiet.setText(state.diet)
+                    if (etDietMorning.text?.toString() != state.dietMorning) {
+                        etDietMorning.setText(state.dietMorning)
+                    }
+                    if (etDietNoon.text?.toString() != state.dietNoon) {
+                        etDietNoon.setText(state.dietNoon)
+                    }
+                    if (etDietEvening.text?.toString() != state.dietEvening) {
+                        etDietEvening.setText(state.dietEvening)
                     }
                 }
             }
@@ -93,18 +121,24 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
      */
     private fun setupInputListeners(
         group: ChipGroup,
+        etActivityDetail: TextInputEditText,
         switch: MaterialSwitch,
         etMed: TextInputEditText,
-        etDiet: TextInputEditText
+        etDietMorning: TextInputEditText,
+        etDietNoon: TextInputEditText,
+        etDietEvening: TextInputEditText
     ) {
         fun pushUpdate() {
             val activity = group.selectedTag<PhysicalActivity>() ?: PhysicalActivity.REPOS
 
             viewModel.updateContextState(
                 activity = activity,
+                activityDetail = etActivityDetail.text?.toString(),
                 medicine = switch.isChecked,
                 medications = etMed.text?.toString() ?: "",
-                diet = etDiet.text?.toString()
+                dietMorning = etDietMorning.text?.toString(),
+                dietNoon = etDietNoon.text?.toString(),
+                dietEvening = etDietEvening.text?.toString()
             )
         }
 
@@ -116,12 +150,24 @@ class ContextFragment : Fragment(R.layout.fragment_context) {
             }
         }
 
+        etActivityDetail.addTextChangedListener {
+            if (etActivityDetail.hasFocus()) pushUpdate()
+        }
+
         etMed.addTextChangedListener {
             if (etMed.hasFocus()) pushUpdate()
         }
 
-        etDiet.addTextChangedListener {
-            if (etDiet.hasFocus()) pushUpdate()
+        etDietMorning.addTextChangedListener {
+            if (etDietMorning.hasFocus()) pushUpdate()
+        }
+
+        etDietNoon.addTextChangedListener {
+            if (etDietNoon.hasFocus()) pushUpdate()
+        }
+
+        etDietEvening.addTextChangedListener {
+            if (etDietEvening.hasFocus()) pushUpdate()
         }
     }
 

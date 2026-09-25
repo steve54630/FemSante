@@ -51,8 +51,7 @@ class EntryViewModel @Inject constructor(
         ContextStateEntity(
             entryId = 0L,
             physicalActivity = PhysicalActivity.REPOS,
-            medicationList = "",
-            diet = ""
+            medicationList = ""
         )
     )
     val contextState = _contextState.asStateFlow()
@@ -90,12 +89,23 @@ class EntryViewModel @Inject constructor(
         )
     }
 
-    fun updateContextState(activity: PhysicalActivity, medicine: Boolean, medications: String, diet: String?) {
+    fun updateContextState(
+        activity: PhysicalActivity,
+        activityDetail: String?,
+        medicine: Boolean,
+        medications: String,
+        dietMorning: String?,
+        dietNoon: String?,
+        dietEvening: String?
+    ) {
         _contextState.value = _contextState.value.copy(
             physicalActivity = activity,
+            activityDetail = activityDetail,
             medecineTaken = medicine,
             medicationList = medications,
-            diet = diet ?: ""
+            dietMorning = dietMorning,
+            dietNoon = dietNoon,
+            dietEvening = dietEvening
         )
     }
 
@@ -247,8 +257,7 @@ class EntryViewModel @Inject constructor(
         _contextState.value = ContextStateEntity(
             entryId = 0L,
             physicalActivity = PhysicalActivity.REPOS,
-            medicationList = "",
-            diet = ""
+            medicationList = ""
         )
         _measurementState.value = BodyMeasurementEntity(entryId = 0L)
     }

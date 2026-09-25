@@ -31,15 +31,23 @@ object CalendarUtils {
                 setLine(v, R.id.tvOtherSymptoms, symptomsState?.others?.takeIf { it.isNotBlank() }?.let { "Notes : $it" })
 
                 setLine(v, R.id.tvDayQuality, "Moral : ${psychologicalState?.dayQuality?.format() ?: "—"}")
-                setLine(v, R.id.tvDifficultyCauses, psychologicalState?.causesOrNull()?.let { "Causes : $it" })
+                // Journée BONNE : les causes de difficulté n'ont pas lieu d'être, même si elles
+                // ont été saisies avant un changement de note (peu pertinent).
+                val causesLine = if (psychologicalState?.dayQuality == DayQuality.BONNE) null
+                else psychologicalState?.causesOrNull()?.let { "Causes : $it" }
+                setLine(v, R.id.tvDifficultyCauses, causesLine)
                 setLine(v, R.id.tvIsTired, if (generalState?.isTired == true) "Fatigue : oui" else null)
                 setLine(v, R.id.tvSleep, sleepSummary(generalState))
                 setLine(v, R.id.tvGratitude, psychologicalState?.gratitude?.takeIf { it.isNotBlank() }?.let { "Gratitude : $it" })
 
                 val activity = contextState?.physicalActivity?.name?.lowercase()?.capitalize() ?: "Repos"
-                setLine(v, R.id.tvPhysicalActivity, "Activité : $activity")
+                val activityDetail = contextState?.activityDetail?.takeIf { it.isNotBlank() }
+                val activityLine = if (activityDetail != null) "Activité : $activity ($activityDetail)" else "Activité : $activity"
+                setLine(v, R.id.tvPhysicalActivity, activityLine)
                 setLine(v, R.id.tvTookMedication, contextState?.medicationOrNull()?.let { "Traitement : $it" })
-                setLine(v, R.id.tvDiet, contextState?.diet?.takeIf { it.isNotBlank() }?.let { "Alimentation : $it" })
+                setLine(v, R.id.tvDietMorning, contextState?.dietMorning?.takeIf { it.isNotBlank() }?.let { "Matin : $it" })
+                setLine(v, R.id.tvDietNoon, contextState?.dietNoon?.takeIf { it.isNotBlank() }?.let { "Midi : $it" })
+                setLine(v, R.id.tvDietEvening, contextState?.dietEvening?.takeIf { it.isNotBlank() }?.let { "Soir : $it" })
 
                 val measures = measuresSummary(measurement)
                 setLine(v, R.id.tvMeasures, measures)

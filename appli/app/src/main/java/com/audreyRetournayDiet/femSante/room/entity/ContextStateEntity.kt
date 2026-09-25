@@ -37,6 +37,13 @@ data class ContextStateEntity(
     @ColumnInfo(name = "physical_activity")
     val physicalActivity: PhysicalActivity? = PhysicalActivity.REPOS,
 
+    /**
+     * Précision libre sur l'activité (ex. « 8000 pas », « Yoga 45 min ») — texte libre plutôt
+     * qu'un compteur strict, pour couvrir aussi bien la marche que le sport pratiqué.
+     */
+    @ColumnInfo(name = "activity_detail")
+    val activityDetail: String? = null,
+
     /** Indicateur de prise de traitement médicamenteux */
     @ColumnInfo(name = "medecine_taken")
     val medecineTaken: Boolean = false,
@@ -45,7 +52,15 @@ data class ContextStateEntity(
     @ColumnInfo(name = "medication_list")
     val medicationList: String? = "",
 
-    /** Notes sur le régime alimentaire ou les repas spécifiques */
-    @ColumnInfo(name = "diet")
-    val diet: String? = ""
+    /** Alimentation du matin. */
+    @ColumnInfo(name = "diet_morning")
+    val dietMorning: String? = null,
+
+    /** Alimentation du midi. */
+    @ColumnInfo(name = "diet_noon")
+    val dietNoon: String? = null,
+
+    /** Alimentation du soir. */
+    @ColumnInfo(name = "diet_evening")
+    val dietEvening: String? = null
 )

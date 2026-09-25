@@ -52,6 +52,7 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
         Timber.d("onViewCreated : Initialisation de l'état psychologique")
 
         val chipGroupQuality = view.findViewById<ChipGroup>(R.id.chipGroupDayQuality)
+        val tvCausesTitle = view.findViewById<TextView>(R.id.tvCausesTitle)
         val chipGroupCauses = view.findViewById<ChipGroup>(R.id.chipGroupDifficultyCauses)
         val layoutAutres = view.findViewById<View>(R.id.layoutAutres)
         val etAutres = view.findViewById<TextInputEditText>(R.id.etAutresPsychological)
@@ -72,7 +73,7 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
             chipGroupCauses.addTagChips(DifficultyCause.entries)
         }
 
-        observePsychologicalState(chipGroupQuality, chipGroupCauses, layoutAutres, etAutres)
+        observePsychologicalState(chipGroupQuality, tvCausesTitle, chipGroupCauses, layoutAutres, etAutres)
         setupInteractionListeners(chipGroupQuality, chipGroupCauses, etAutres)
     }
 
@@ -82,6 +83,7 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
      */
     private fun observePsychologicalState(
         groupQuality: ChipGroup,
+        tvCausesTitle: TextView,
         groupCauses: ChipGroup,
         layoutAutres: View,
         etAutres: TextInputEditText
@@ -94,7 +96,12 @@ class PsychologicalFragment : Fragment(R.layout.fragment_psychological_state) {
                     groupQuality.checkChipByTag(state.dayQuality)
                     groupCauses.checkChipsByTags(state.difficultyCauses)
 
-                    val hasOther = state.difficultyCauses.contains(DifficultyCause.AUTRE)
+                    // Journée BONNE : les causes de difficulté n'ont pas lieu d'être (peu pertinent).
+                    val showCauses = state.dayQuality != DayQuality.BONNE
+                    tvCausesTitle.isVisible = showCauses
+                    groupCauses.isVisible = showCauses
+
+                    val hasOther = showCauses && state.difficultyCauses.contains(DifficultyCause.AUTRE)
                     if (layoutAutres.isVisible != hasOther) {
                         layoutAutres.isVisible = hasOther
                     }

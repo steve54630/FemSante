@@ -34,7 +34,7 @@ import com.audreyRetournayDiet.femSante.room.entity.UserEntity
  * 3. **DAOs** : Expose les méthodes d'accès aux données pour les Repositories.
  */
 @Database(
-    version = 6,
+    version = 7,
     exportSchema = false, // Désactivé pour simplifier le développement initial
     entities = [
         UserEntity::class,
