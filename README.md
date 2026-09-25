@@ -121,6 +121,7 @@ appli/app/src/main/java/com/audreyRetournayDiet/femSante/
 │   ├── fodmap/              # Module régime FODMAP
 │   ├── media/               # Catalogue vidéos/audios bien-être
 │   ├── micronutrient/       # Fiches micronutriments + interactions médicamenteuses
+│   ├── plant/               # Lexique des plantes (phytothérapie, Boîte à outils)
 │   ├── recipe/              # Recettes natives
 │   ├── recommendation/      # Moteur de recommandation + tags (RecommendationEngine)
 │   ├── report/              # Export du rapport médical (PDF)

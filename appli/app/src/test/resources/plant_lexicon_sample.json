@@ -1,0 +1,35 @@
+[
+  {
+    "id": "plante_complete",
+    "name": "Plante complète",
+    "latin_name": "Plantus completus",
+    "main_symptom": "Symptôme principal test",
+    "target_symptoms": ["Symptôme A", "Symptôme B"],
+    "parts_used": ["Feuilles"],
+    "properties": ["Antispasmodique"],
+    "galenic_forms": ["Infusion", "TM"],
+    "max_daily_dose": "3g",
+    "contraindications": ["Grossesse"],
+    "symptom_categories": ["DIGESTION_TRANSIT", "REGLES_CYCLE", "CATEGORIE_INCONNUE"]
+  },
+  {
+    "id": "plante_minimale",
+    "name": "Plante minimale",
+    "main_symptom": "Symptôme minimal"
+  },
+  {
+    "id": "plante_stress",
+    "name": "Plante stress",
+    "main_symptom": "Symptôme stress",
+    "symptom_categories": ["STRESS_SOMMEIL"]
+  },
+  {
+    "id": "plante_sans_nom",
+    "name": "",
+    "main_symptom": "Ignorée : nom vide"
+  },
+  {
+    "name": "Plante sans id",
+    "main_symptom": "Ignorée : id absent"
+  }
+]

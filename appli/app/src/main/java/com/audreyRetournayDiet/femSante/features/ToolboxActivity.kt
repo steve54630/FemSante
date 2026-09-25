@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.audreyRetournayDiet.femSante.R
 import com.audreyRetournayDiet.femSante.data.toolbox.ToolboxAdvice
 import com.audreyRetournayDiet.femSante.data.toolbox.ToolboxCategory
+import com.audreyRetournayDiet.femSante.features.toolbox.PlantLexiconActivity
 import com.audreyRetournayDiet.femSante.features.toolbox.ToolboxFileDetailActivity
 import com.audreyRetournayDiet.femSante.repository.local.ToolboxFileRepository
 import timber.log.Timber
@@ -26,7 +27,7 @@ import timber.log.Timber
 class ToolboxActivity : AppCompatActivity() {
 
     private val repository by lazy { ToolboxFileRepository(applicationContext) }
-    private val adapter = ToolboxCardAdapter(::openAdvice)
+    private val adapter = ToolboxCardAdapter(::openAdvice, ::openPlantLexicon)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +41,17 @@ class ToolboxActivity : AppCompatActivity() {
         adapter.submitList(buildRows(repository.getAll()))
     }
 
-    /** Regroupe les fiches par catégorie (ordre de déclaration de l'enum) en en-têtes + cartes. */
+    /**
+     * Regroupe les fiches par catégorie (ordre de déclaration de l'enum) en en-têtes + cartes.
+     * Le lexique des plantes rejoint la section Phytothérapie, en dernière position.
+     */
     private fun buildRows(advices: List<ToolboxAdvice>): List<ToolboxRow> = buildList {
         ToolboxCategory.entries.forEach { category ->
             val items = advices.filter { it.category == category }
             if (items.isNotEmpty()) {
                 add(ToolboxRow.Header(category))
                 items.forEach { add(ToolboxRow.Item(it)) }
+                if (category == ToolboxCategory.PHYTOTHERAPY) add(ToolboxRow.PlantLexiconLink)
             }
         }
     }
@@ -57,5 +62,10 @@ class ToolboxActivity : AppCompatActivity() {
             Intent(this, ToolboxFileDetailActivity::class.java)
                 .putExtra(ToolboxFileDetailActivity.EXTRA_FILE_ID, advice.id)
         )
+    }
+
+    private fun openPlantLexicon() {
+        Timber.i("Boîte à outils : ouverture du lexique des plantes")
+        startActivity(Intent(this, PlantLexiconActivity::class.java))
     }
 }

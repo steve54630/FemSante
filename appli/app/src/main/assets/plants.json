@@ -1,0 +1,1738 @@
+[
+  {
+    "id": "achillee_millefeuille",
+    "name": "Achillée millefeuille",
+    "latin_name": "Achillea millefolium",
+    "main_symptom": "Règles douloureuses et flux abondant",
+    "target_symptoms": [
+      "Règles douloureuses",
+      "règles hémorragiques",
+      "crampes pelviennes",
+      "spasmes intestinaux",
+      "troubles du cycle"
+    ],
+    "parts_used": [
+      "Sommités fleuries"
+    ],
+    "properties": [
+      "Antispasmodique pelvien",
+      "hémostatique",
+      "anti-inflammatoire",
+      "cicatrisante"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "poudre",
+      "HE"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "Grossesse",
+      "allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "alchemille",
+    "name": "Alchémille",
+    "latin_name": "Alchemilla glabra",
+    "main_symptom": "Règles hémorragiques et cycles irréguliers",
+    "target_symptoms": [
+      "Règles abondantes",
+      "cycles irréguliers",
+      "douleurs prémenstruelles",
+      "diarrhée chronique",
+      "congestion pelvienne"
+    ],
+    "parts_used": [
+      "Sommités fleuries",
+      "feuilles"
+    ],
+    "properties": [
+      "Astringente",
+      "régulatrice du cycle",
+      "hémostatique",
+      "anti-inflammatoire"
+    ],
+    "galenic_forms": [
+      "Décoction",
+      "tisane",
+      "gélules",
+      "TM"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Grossesse",
+      "allaitement",
+      "jeunes enfants"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "DIGESTION_TRANSIT",
+      "DOULEURS_PELVIENNES"
+    ]
+  },
+  {
+    "id": "sauge_sclaree",
+    "name": "Sauge sclarée",
+    "latin_name": "Salvia sclarea",
+    "main_symptom": "Déséquilibre hormonal et spams du cycle",
+    "target_symptoms": [
+      "Dysménorrhées",
+      "aménorrhées",
+      "spasmes pelviens",
+      "anxiété liée au cycle",
+      "SPM"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "fleurs"
+    ],
+    "properties": [
+      "Régulatrice hormonale",
+      "antispasmodique",
+      "relaxante nerveuse"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "HE"
+    ],
+    "max_daily_dose": "1g",
+    "contraindications": [
+      "Antécédents de cancers hormono-dépendants",
+      "grossesse",
+      "allaitement",
+      "enfants < 10 ans"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "sauge_officinale",
+    "name": "Sauge officinale",
+    "latin_name": "Salvia officinalis",
+    "main_symptom": "Troubles du cycle et bouffées vasomotrices",
+    "target_symptoms": [
+      "Irrégularités du cycle",
+      "crampes menstruelles",
+      "sueurs",
+      "digestion lente",
+      "flatulences"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Œstrogène-like",
+      "antispasmodique",
+      "anti-sudorifique",
+      "antibactérienne"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "poudre",
+      "gélules",
+      "HE"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Grossesse",
+      "allaitement",
+      "cancers hormono-dépendants",
+      "épilepsie"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "anis_vert",
+    "name": "Anis vert",
+    "latin_name": "Pimpinella anisum",
+    "main_symptom": "Spasmes abdominaux et crampes utérines",
+    "target_symptoms": [
+      "Douleurs de règles",
+      "contractions utérines",
+      "spasmes digestifs",
+      "ballonnements",
+      "aérophagie"
+    ],
+    "parts_used": [
+      "Graines"
+    ],
+    "properties": [
+      "Carminatif",
+      "antispasmodique puissant",
+      "digestif"
+    ],
+    "galenic_forms": [
+      "Infusion de graines",
+      "décoction",
+      "poudre",
+      "gélules"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "HE neurotoxique (surveillance médicale)",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "fenouil",
+    "name": "Fenouil",
+    "latin_name": "Foeniculum vulgare",
+    "main_symptom": "Ballonnements et gaz intestinaux",
+    "target_symptoms": [
+      "Ballonnements",
+      "flatulences",
+      "aérophagie",
+      "cycles irréguliers",
+      "spasmes abdominaux"
+    ],
+    "parts_used": [
+      "Semences",
+      "racines"
+    ],
+    "properties": [
+      "Carminatif",
+      "antispasmodique",
+      "régulateur du flux",
+      "diurétique"
+    ],
+    "galenic_forms": [
+      "Infusion de semences/racines",
+      "décoction",
+      "TM",
+      "gélules",
+      "HE"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Grossesse",
+      "enfants",
+      "cancers hormono-dépendants"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "REGLES_CYCLE"
+    ]
+  },
+  {
+    "id": "menthe_poivree",
+    "name": "Menthe poivrée",
+    "latin_name": "Mentha x piperita",
+    "main_symptom": "Spasmes intestinaux et nausées",
+    "target_symptoms": [
+      "Douleurs abdominales",
+      "gaz digestifs",
+      "digestion difficile",
+      "migraines liées au cycle",
+      "nausées"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Antispasmodique intestinal",
+      "antalgique",
+      "carminative",
+      "décongestionnante"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "TM",
+      "HE (diluée massage)"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "Enfants < 2 ans",
+      "RGO sévère",
+      "homéopathie simultanée"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "REGLES_CYCLE"
+    ]
+  },
+  {
+    "id": "melisse_officinale",
+    "name": "Mélisse officinale",
+    "latin_name": "Melissa officinalis",
+    "main_symptom": "Spasmes digestifs d'origine nerveuse",
+    "target_symptoms": [
+      "Spasmes digestifs",
+      "anxiété",
+      "nervosité du SPM",
+      "palpitations",
+      "insomnie",
+      "gastralgies"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Antispasmodique digestive",
+      "anxiolytique",
+      "calmante nerveuse"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM"
+    ],
+    "max_daily_dose": "1.2g",
+    "contraindications": [
+      "Hypothyroïdie (ralentit la thyroïde à long terme)"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "camomille_matricaire_bleue",
+    "name": "Camomille matricaire (bleue)",
+    "latin_name": "Matricaria recutita",
+    "main_symptom": "Inflammation digestive et crampes du cycle",
+    "target_symptoms": [
+      "Crampes de règles",
+      "hypersensibilité intestinale",
+      "inflammation des muqueuses",
+      "anxiété",
+      "insomnie"
+    ],
+    "parts_used": [
+      "Fleurs"
+    ],
+    "properties": [
+      "Anti-inflammatoire",
+      "spasmolytique",
+      "antiallergique",
+      "sédative douce"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "HE",
+      "hydrolat"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "REGLES_CYCLE",
+      "DIGESTION_TRANSIT",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "camomille_romaine_noble",
+    "name": "Camomille romaine (noble)",
+    "latin_name": "Chamaemelum nobile",
+    "main_symptom": "Douleurs digestives et angoisses",
+    "target_symptoms": [
+      "Spasmes d'estomac",
+      "coliques",
+      "crampes abdominales",
+      "troubles du sommeil",
+      "nervosité"
+    ],
+    "parts_used": [
+      "Capitules floraux"
+    ],
+    "properties": [
+      "Antispasmodique puissante",
+      "sédative nerveuse",
+      "digestive"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "poudre"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "gingembre",
+    "name": "Gingembre",
+    "latin_name": "Zingiber officinale",
+    "main_symptom": "Inflammation pelvienne et nausées",
+    "target_symptoms": [
+      "Douleurs pelviennes à froid",
+      "digestion lente",
+      "spasmes intestinaux",
+      "nausées",
+      "migraines"
+    ],
+    "parts_used": [
+      "Rhizome"
+    ],
+    "properties": [
+      "Anti-inflammatoire",
+      "antiémétique",
+      "tonique digestif",
+      "réchauffant"
+    ],
+    "galenic_forms": [
+      "Rhizome frais (infusion/décoction)",
+      "poudre",
+      "TM",
+      "HE"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Calculs biliaires",
+      "ulcère actif",
+      "éviter le soir"
+    ],
+    "symptom_categories": [
+      "DOULEURS_PELVIENNES",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "curcuma",
+    "name": "Curcuma",
+    "latin_name": "Curcuma longa",
+    "main_symptom": "Inflammation chronique pelvienne et intestinale",
+    "target_symptoms": [
+      "Douleurs inflammatoires chroniques",
+      "congestion pelvienne",
+      "digestion difficile",
+      "paresse biliaire"
+    ],
+    "parts_used": [
+      "Rhizome"
+    ],
+    "properties": [
+      "Anti-inflammatoire majeur",
+      "antioxydant",
+      "protecteur digestif"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "poudre",
+      "TM",
+      "HE"
+    ],
+    "max_daily_dose": "3 à 5g (poudre)",
+    "contraindications": [
+      "Ulcère actif",
+      "obstruction biliaire",
+      "femmes en parcours fertilité"
+    ],
+    "symptom_categories": [
+      "DOULEURS_PELVIENNES",
+      "FOIE_DETOX",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "reglisse",
+    "name": "Réglisse",
+    "latin_name": "Glycyrrhiza glabra",
+    "main_symptom": "Irritations et brûlures de la muqueuse",
+    "target_symptoms": [
+      "Inflammations intestinales",
+      "gastrite",
+      "acidité gastrique",
+      "spasmes digestifs",
+      "constipation"
+    ],
+    "parts_used": [
+      "Racines"
+    ],
+    "properties": [
+      "Adoucissante des muqueuses",
+      "anti-inflammatoire gastrique",
+      "antispasmodique"
+    ],
+    "galenic_forms": [
+      "Décoction",
+      "infusion",
+      "poudre",
+      "extrait"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Hypertension artérielle",
+      "insuffisance rénale",
+      "grossesse",
+      "max 6 semaines"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "guimauve",
+    "name": "Guimauve",
+    "latin_name": "Althaea officinalis",
+    "main_symptom": "Sensibilité et sécheresse de la muqueuse digestive",
+    "target_symptoms": [
+      "Irritations des muqueuses intestinales",
+      "brûlures digestives",
+      "transit irrégulier",
+      "hypersensibilité viscérale"
+    ],
+    "parts_used": [
+      "Racines",
+      "feuilles",
+      "fleurs"
+    ],
+    "properties": [
+      "Émolliente (mucilages)",
+      "adoucissante",
+      "anti-inflammatoire"
+    ],
+    "galenic_forms": [
+      "Décoction",
+      "macération",
+      "poudre"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "Diabète (présence de sucres)"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "lin",
+    "name": "Lin",
+    "latin_name": "Linum usitatissimum",
+    "main_symptom": "Troubles du transit (constipation / selles irrégulières)",
+    "target_symptoms": [
+      "Constipation",
+      "alternance diarrhée/constipation",
+      "irritation du côlon",
+      "déséquilibres hormonaux"
+    ],
+    "parts_used": [
+      "Graines",
+      "huile"
+    ],
+    "properties": [
+      "Laxatif de lest mécanique",
+      "émolliente",
+      "anti-inflammatoire (oméga-3)"
+    ],
+    "galenic_forms": [
+      "Graines broyées/entières",
+      "huile",
+      "gélules"
+    ],
+    "max_daily_dose": "10g",
+    "contraindications": [
+      "Enfants < 6 ans",
+      "occlusion intestinale",
+      "graines immatures toxiques"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "REGLES_CYCLE"
+    ]
+  },
+  {
+    "id": "aloes_aloe_vera",
+    "name": "Aloès / Aloe vera",
+    "latin_name": "Aloe vera",
+    "main_symptom": "Inflammation et perméabilité intestinale",
+    "target_symptoms": [
+      "Irritations de la paroi intestinale",
+      "constipation chronique",
+      "brûlures digestives"
+    ],
+    "parts_used": [
+      "Gel et suc des feuilles"
+    ],
+    "properties": [
+      "Cicatrisant digestif",
+      "anti-inflammatoire muqueux",
+      "régulateur du transit"
+    ],
+    "galenic_forms": [
+      "Gel interne buvable",
+      "jus",
+      "poudre",
+      "gélules"
+    ],
+    "max_daily_dose": "1g (voie interne)",
+    "contraindications": [
+      "Grossesse/allaitement",
+      "maladies intestinales obstructives",
+      "crises hémorroïdaires"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "cardamome",
+    "name": "Cardamome",
+    "latin_name": "Elettaria cardamomum",
+    "main_symptom": "Aérophagie et lenteur digestive",
+    "target_symptoms": [
+      "Ballonnements",
+      "gaz douloureux",
+      "coliques",
+      "nausées",
+      "anxiété abdominale"
+    ],
+    "parts_used": [
+      "Graines",
+      "fruits"
+    ],
+    "properties": [
+      "Carminative",
+      "stimulante gastrique",
+      "antispasmodique"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "mastication",
+      "HE"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Calculs biliaires"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "cassis",
+    "name": "Cassis",
+    "latin_name": "Ribes nigrum",
+    "main_symptom": "Rétention d'eau et inflammation pelvienne",
+    "target_symptoms": [
+      "Rétention d'eau",
+      "œdèmes prémenstruels",
+      "douleurs articulaires et pelviennes",
+      "fatigue chronique"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "baies",
+      "bourgeons"
+    ],
+    "properties": [
+      "Anti-inflammatoire (cortison-like)",
+      "diurétique",
+      "adaptogène"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "poudre",
+      "TM",
+      "macérât de bourgeons"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Insuffisance rénale ou cardiaque sévère",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "DOULEURS_MUSCULAIRES",
+      "REGLES_CYCLE",
+      "FATIGUE_VITALITE"
+    ]
+  },
+  {
+    "id": "reine_des_pres",
+    "name": "Reine des prés",
+    "latin_name": "Spiraea ulmaria / Filipendula ulmaria",
+    "main_symptom": "Douleurs inflammatoires et rétention d'eau",
+    "target_symptoms": [
+      "Douleurs pelviennes aiguës",
+      "rétention d'eau",
+      "œdèmes",
+      "douleurs musculaires et articulaires"
+    ],
+    "parts_used": [
+      "Sommités fleuries"
+    ],
+    "properties": [
+      "Anti-inflammatoire salicylé",
+      "antalgique",
+      "diurétique"
+    ],
+    "galenic_forms": [
+      "Infusion de sommités récentes (< 1 an)",
+      "TM"
+    ],
+    "max_daily_dose": "2.5g",
+    "contraindications": [
+      "Allergie à l'aspirine/salicylés",
+      "asthme",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "DOULEURS_PELVIENNES",
+      "CIRCULATION_RETENTION",
+      "DOULEURS_MUSCULAIRES"
+    ]
+  },
+  {
+    "id": "pissenlit",
+    "name": "Pissenlit",
+    "latin_name": "Taraxacum officinale",
+    "main_symptom": "Rétention d'eau et surcharge hépatique",
+    "target_symptoms": [
+      "Rétention d'eau prémenstruelle",
+      "congestion hépatique",
+      "ballonnements",
+      "colite"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "racines"
+    ],
+    "properties": [
+      "Diurétique",
+      "détoxifiant hépato-biliaire",
+      "dépuratif"
+    ],
+    "galenic_forms": [
+      "Infusion de feuilles",
+      "décoction de racines",
+      "TM"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Obstruction biliaire",
+      "allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "FOIE_DETOX",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "chardon_marie",
+    "name": "Chardon Marie",
+    "latin_name": "Silybum marianum",
+    "main_symptom": "Congestion hépatique et élimination des toxines",
+    "target_symptoms": [
+      "Digestion difficile des graisses",
+      "surcharge hépatique",
+      "hémorroïdes pelviennes"
+    ],
+    "parts_used": [
+      "Graines",
+      "fruits"
+    ],
+    "properties": [
+      "Hépatoprotecteur majeur",
+      "détoxifiant",
+      "antioxydant"
+    ],
+    "galenic_forms": [
+      "TM",
+      "extrait fluide",
+      "poudre",
+      "huile"
+    ],
+    "max_daily_dose": "900mg (poudre)",
+    "contraindications": [
+      "Hypertension artérielle",
+      "allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "FOIE_DETOX",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "romarin",
+    "name": "Romarin",
+    "latin_name": "Rosmarinus officinalis",
+    "main_symptom": "Paresse digestive et fatigue hépatique",
+    "target_symptoms": [
+      "Digestion lente",
+      "fatigue post-prandiale",
+      "spasmes de la vésicule",
+      "rétention"
+    ],
+    "parts_used": [
+      "Rameaux",
+      "sommités fleuries"
+    ],
+    "properties": [
+      "Stimulant hépato-biliaire",
+      "tonique général",
+      "antispasmodique"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "TM",
+      "HE",
+      "hydrolat"
+    ],
+    "max_daily_dose": "1.5g (poudre)",
+    "contraindications": [
+      "Grossesse",
+      "épilepsie (selon HE)",
+      "éviter le soir"
+    ],
+    "symptom_categories": [
+      "FOIE_DETOX",
+      "DIGESTION_TRANSIT",
+      "FATIGUE_VITALITE"
+    ]
+  },
+  {
+    "id": "cypres_toujours_vert",
+    "name": "Cyprès toujours vert",
+    "latin_name": "Cupressus sempervirens",
+    "main_symptom": "Congestion pelvienne et lourdeurs veineuses",
+    "target_symptoms": [
+      "Congestion pelvienne (varices pelviennes)",
+      "hémorroïdes",
+      "jambes lourdes"
+    ],
+    "parts_used": [
+      "Rameaux",
+      "cônes"
+    ],
+    "properties": [
+      "Tonique veineux",
+      "décongestionnant pelvien et prostatique"
+    ],
+    "galenic_forms": [
+      "Décoction (externe)",
+      "TM",
+      "HE (cutané dilué)"
+    ],
+    "max_daily_dose": "900mg",
+    "contraindications": [
+      "Cancers hormono-dépendants",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "DOULEURS_PELVIENNES"
+    ]
+  },
+  {
+    "id": "vigne_rouge",
+    "name": "Vigne rouge",
+    "latin_name": "Vitis vinifera",
+    "main_symptom": "Stase veineuse et congestion du bas-ventre",
+    "target_symptoms": [
+      "Jambes lourdes",
+      "varices pelviennes",
+      "hémorroïdes",
+      "rétention d'eau circulatoire"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Tonique veineux",
+      "protectrice capillaire",
+      "anti-stase"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "extrait sec",
+      "TM",
+      "gélules"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "Grossesse",
+      "allaitement"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION"
+    ]
+  },
+  {
+    "id": "valeriane",
+    "name": "Valériane",
+    "latin_name": "Valeriana officinalis",
+    "main_symptom": "Crispations nerveuses et insomnie",
+    "target_symptoms": [
+      "Insomnie",
+      "spasmes musculaires et viscéraux",
+      "anxiété",
+      "angoisses prémenstruelles"
+    ],
+    "parts_used": [
+      "Rhizomes",
+      "racines"
+    ],
+    "properties": [
+      "Sédatif nerveux",
+      "myorelaxant",
+      "hypnotique",
+      "anxiolytique"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "poudre",
+      "TM"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Grossesse",
+      "ne pas dépasser 3 semaines consécutives"
+    ],
+    "symptom_categories": [
+      "STRESS_SOMMEIL",
+      "REGLES_CYCLE"
+    ]
+  },
+  {
+    "id": "encens",
+    "name": "Encens",
+    "latin_name": "Boswellia carterii",
+    "main_symptom": "Douleurs inflammatoires viscérales et articulaires",
+    "target_symptoms": [
+      "Inflammation intestinale chronique",
+      "douleurs articulaires",
+      "anxiété et stress"
+    ],
+    "parts_used": [
+      "Résine"
+    ],
+    "properties": [
+      "Anti-inflammatoire viscéral",
+      "apaisant nerveux"
+    ],
+    "galenic_forms": [
+      "Poudre en gélules",
+      "fumigation",
+      "HE"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Usage prolongé sans interruption"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "DOULEURS_MUSCULAIRES",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "ortie",
+    "name": "Ortie",
+    "latin_name": "Urtica dioica",
+    "main_symptom": "Carences minérales et fatigue liée aux pertes de sang",
+    "target_symptoms": [
+      "Fatigue post-menstruelle",
+      "anémie",
+      "carences en minéraux",
+      "rétention d'eau",
+      "peau terne"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "racines"
+    ],
+    "properties": [
+      "Reminéralisante (fer",
+      "silice)",
+      "dépurative",
+      "diurétique"
+    ],
+    "galenic_forms": [
+      "Infusion de feuilles",
+      "décoction de racines"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Œdème",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "REGLES_CYCLE",
+      "CIRCULATION_RETENTION",
+      "PEAU_MUQUEUSES"
+    ]
+  },
+  {
+    "id": "prele_des_champs",
+    "name": "Prêle des champs",
+    "latin_name": "Equisetum arvense",
+    "main_symptom": "Fragilité tissulaire et déminéralisation",
+    "target_symptoms": [
+      "Perte de tonus des tissus",
+      "douleurs articulaires",
+      "déminéralisation",
+      "inflammation pelvienne"
+    ],
+    "parts_used": [
+      "Tiges stériles"
+    ],
+    "properties": [
+      "Reminéralisante majeure (silice)",
+      "protectrice tissulaire"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "poudre",
+      "TM"
+    ],
+    "max_daily_dose": "1.2g",
+    "contraindications": [
+      "Insuffisance rénale aiguë",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "DOULEURS_MUSCULAIRES",
+      "DOULEURS_PELVIENNES"
+    ]
+  },
+  {
+    "id": "bouleau",
+    "name": "Bouleau",
+    "latin_name": "Betula pendula / pubescens",
+    "main_symptom": "Rétention d'eau et surcharge d'acide urique",
+    "target_symptoms": [
+      "Rétention d'eau",
+      "œdèmes",
+      "élimination des toxines",
+      "douleurs articulaires"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "sève",
+      "bourgeons"
+    ],
+    "properties": [
+      "Diurétique",
+      "dépuratif rénal",
+      "anti-inflammatoire"
+    ],
+    "galenic_forms": [
+      "Infusion de feuilles",
+      "sève fraîche",
+      "macérât de bourgeons"
+    ],
+    "max_daily_dose": "2g (feuilles)",
+    "contraindications": [
+      "Insuffisance cardiaque/rénale sévère",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "FOIE_DETOX",
+      "DOULEURS_MUSCULAIRES"
+    ]
+  },
+  {
+    "id": "ginseng",
+    "name": "Ginseng",
+    "latin_name": "Panax ginseng",
+    "main_symptom": "Épuisement physique et fatigue chronique",
+    "target_symptoms": [
+      "Fatigue chronique",
+      "baisse de vitalité",
+      "épuisement surrénalien",
+      "brouillard mental"
+    ],
+    "parts_used": [
+      "Racines"
+    ],
+    "properties": [
+      "Adaptogène",
+      "tonique physique et mental",
+      "stimulant surrénalien"
+    ],
+    "galenic_forms": [
+      "Poudre",
+      "extrait sec",
+      "TM"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Hypertension artérielle",
+      "insomnie",
+      "max 3 mois consécutifs"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE"
+    ]
+  },
+  {
+    "id": "echinacee_pourpre",
+    "name": "Échinacée pourpre",
+    "latin_name": "Echinacea purpurea",
+    "main_symptom": "Vulnérabilité immunitaire et inflammations aiguës",
+    "target_symptoms": [
+      "Infections récidivantes",
+      "baisse d'immunité",
+      "état inflammatoire aigu"
+    ],
+    "parts_used": [
+      "Racines",
+      "plante fraîche"
+    ],
+    "properties": [
+      "Immunostimulante",
+      "antivirale",
+      "cicatrisante"
+    ],
+    "galenic_forms": [
+      "Jus frais",
+      "décoction de racines",
+      "poudre",
+      "TM"
+    ],
+    "max_daily_dose": "900mg",
+    "contraindications": [
+      "Maladies auto-immunes",
+      "asthme",
+      "max 8 semaines"
+    ],
+    "symptom_categories": [
+      "IMMUNITE_INFECTIONS"
+    ]
+  },
+  {
+    "id": "reishi",
+    "name": "Reishi",
+    "latin_name": "Ganoderma lucidum",
+    "main_symptom": "Stress chronique, fatigue et inflammation de bas grade",
+    "target_symptoms": [
+      "Fatigue générale",
+      "anxiété",
+      "insomnie",
+      "surcharge hépatique",
+      "déséquilibres immunitaires"
+    ],
+    "parts_used": [
+      "Sporophore (champignon)"
+    ],
+    "properties": [
+      "Adaptogène",
+      "régulateur immunitaire",
+      "antioxydant",
+      "hypotenseur"
+    ],
+    "galenic_forms": [
+      "Poudre (décoction)",
+      "extrait sec"
+    ],
+    "max_daily_dose": "1.5g",
+    "contraindications": [
+      "Hypotension",
+      "troubles de coagulation",
+      "avant chirurgie"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "STRESS_SOMMEIL",
+      "IMMUNITE_INFECTIONS",
+      "FOIE_DETOX"
+    ]
+  },
+  {
+    "id": "chaga",
+    "name": "Chaga",
+    "latin_name": "Inonotus obliquus",
+    "main_symptom": "Stress oxydatif et inflammation systémique",
+    "target_symptoms": [
+      "Inflammation chronique",
+      "détoxification globale",
+      "baisse d'énergie",
+      "terrain immunitaire"
+    ],
+    "parts_used": [
+      "Masse stérile (champignon)"
+    ],
+    "properties": [
+      "Antioxydant majeur",
+      "anti-inflammatoire",
+      "soutien immunitaire"
+    ],
+    "galenic_forms": [
+      "Poudre en décoction/infusion"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Troubles de coagulation",
+      "chirurgie",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "IMMUNITE_INFECTIONS",
+      "FOIE_DETOX"
+    ]
+  },
+  {
+    "id": "schisandra",
+    "name": "Schisandra",
+    "latin_name": "Schisandra chinensis",
+    "main_symptom": "Fatigue nerveuse et vulnérabilité au stress",
+    "target_symptoms": [
+      "Épuisement nerveux",
+      "paresse hépatique",
+      "stress chronique",
+      "manque d'endurance"
+    ],
+    "parts_used": [
+      "Fruits (baies)"
+    ],
+    "properties": [
+      "Adaptogène",
+      "protecteur hépatique",
+      "tonique nerveux"
+    ],
+    "galenic_forms": [
+      "Poudre en décoction/infusion"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Hypertension artérielle",
+      "ulcère actif",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "FOIE_DETOX",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "he_shou_wu_renouee_a_fleurs",
+    "name": "He Shou Wu / Renouée à fleurs",
+    "latin_name": "Fallopia multiflora",
+    "main_symptom": "Fatigue profonde et baisse de vitalité globale",
+    "target_symptoms": [
+      "Fatigue générale",
+      "vieillissement prématuré",
+      "vertiges",
+      "constipation chez les personnes affaiblies"
+    ],
+    "parts_used": [
+      "Racines"
+    ],
+    "properties": [
+      "Tonique profond du foie et des reins",
+      "régénérant"
+    ],
+    "galenic_forms": [
+      "Poudre de racines",
+      "décoction"
+    ],
+    "max_daily_dose": "9g",
+    "contraindications": [
+      "Usage prolongé sans avis médical",
+      "diarrhée aiguë"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "olivier",
+    "name": "Olivier",
+    "latin_name": "Olea europea",
+    "main_symptom": "Tension artérielle élevée et stress oxydatif",
+    "target_symptoms": [
+      "Hypertension légère",
+      "troubles circulatoires",
+      "fatigue générale"
+    ],
+    "parts_used": [
+      "Feuilles",
+      "fruits"
+    ],
+    "properties": [
+      "Hypotenseur",
+      "protecteur vasculaire",
+      "antioxydant"
+    ],
+    "galenic_forms": [
+      "Infusion de feuilles",
+      "huile de 1re pression"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Aucune toxicité majeure"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "FATIGUE_VITALITE"
+    ]
+  },
+  {
+    "id": "ail",
+    "name": "Ail",
+    "latin_name": "Allium sativum",
+    "main_symptom": "Déséquilibre de la flore et troubles circulatoires",
+    "target_symptoms": [
+      "Dysbiose intestinale",
+      "mauvaise circulation sanguine",
+      "immunité basse"
+    ],
+    "parts_used": [
+      "Gousse"
+    ],
+    "properties": [
+      "Assainissant intestinal",
+      "protecteur vasculaire",
+      "antibactérien"
+    ],
+    "galenic_forms": [
+      "Gousse fraîche",
+      "TM",
+      "élixir floral"
+    ],
+    "max_daily_dose": "0.9g",
+    "contraindications": [
+      "Ulcère actif",
+      "traitements anticoagulants",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "CIRCULATION_RETENTION",
+      "IMMUNITE_INFECTIONS"
+    ]
+  },
+  {
+    "id": "lichen_d_islande",
+    "name": "Lichen d'Islande",
+    "latin_name": "Cetraria islandica",
+    "main_symptom": "Toux d'irritation et nausées",
+    "target_symptoms": [
+      "Nausées",
+      "irritations muqueuses",
+      "digestion sensible",
+      "toux"
+    ],
+    "parts_used": [
+      "Thalle"
+    ],
+    "properties": [
+      "Adoucissant",
+      "antitussif",
+      "protecteur des muqueuses"
+    ],
+    "galenic_forms": [
+      "Décoction",
+      "infusion",
+      "TM",
+      "gélules"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Ulcère gastrique actif"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "RESPIRATOIRE"
+    ]
+  },
+  {
+    "id": "chene_pedoncule",
+    "name": "Chêne pédonculé",
+    "latin_name": "Quercus pedunculata",
+    "main_symptom": "Diarrhée et relâchement tissulaire",
+    "target_symptoms": [
+      "Diarrhées aiguës",
+      "suintements muqueux",
+      "congestion pelvienne"
+    ],
+    "parts_used": [
+      "Écorce",
+      "bourgeons"
+    ],
+    "properties": [
+      "Astringent puissant (tanins)",
+      "hémostatique",
+      "tonique"
+    ],
+    "galenic_forms": [
+      "Décoction (usage externe)",
+      "TM",
+      "macérât de bourgeons"
+    ],
+    "max_daily_dose": "5g/L (bain)",
+    "contraindications": [
+      "Prise interne prolongée (> 4 semaines)"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "DOULEURS_PELVIENNES"
+    ]
+  },
+  {
+    "id": "arnica_des_montagnes",
+    "name": "Arnica des montagnes",
+    "latin_name": "Arnica montana",
+    "main_symptom": "Traumatismes musculaires et hématomes",
+    "target_symptoms": [
+      "Douleurs musculaires",
+      "courbatures",
+      "hématomes",
+      "chocs pelviens externes"
+    ],
+    "parts_used": [
+      "Capitules floraux"
+    ],
+    "properties": [
+      "Anti-inflammatoire",
+      "antalgique",
+      "anti-ecchymotique"
+    ],
+    "galenic_forms": [
+      "Macérât huileux externe",
+      "TM diluée"
+    ],
+    "max_daily_dose": "2g (fleurs)",
+    "contraindications": [
+      "Usage interne non contrôlé",
+      "plaies ouvertes",
+      "grossesse"
+    ],
+    "symptom_categories": [
+      "DOULEURS_MUSCULAIRES"
+    ]
+  },
+  {
+    "id": "rose_de_damas",
+    "name": "Rose de Damas",
+    "latin_name": "Rosa damascena",
+    "main_symptom": "Angoisse émotionnelle et palpitations réflexes",
+    "target_symptoms": [
+      "Palpitations nerveuses",
+      "anxiété",
+      "détresse émotionnelle",
+      "spasmes cardiaques"
+    ],
+    "parts_used": [
+      "Fleurs",
+      "boutons"
+    ],
+    "properties": [
+      "Apaisante cardiaque et émotionnelle",
+      "astringente douce"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "eau florale",
+      "HE"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Aucune toxicité connue"
+    ],
+    "symptom_categories": [
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "astragale",
+    "name": "Astragale",
+    "latin_name": "Astragalus penduliflorus / membranaceus",
+    "main_symptom": "Fatigue chronique et faiblesse immunitaire",
+    "target_symptoms": [
+      "Épuisement",
+      "convalescence lente",
+      "transpiration spontanée",
+      "diarrhées chroniques par faiblesse"
+    ],
+    "parts_used": [
+      "Racines"
+    ],
+    "properties": [
+      "Tonique de l'énergie (Qi)",
+      "immunostimulant",
+      "adaptogène"
+    ],
+    "galenic_forms": [
+      "Décoction",
+      "poudre",
+      "gélules"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Infections aiguës déclarées"
+    ],
+    "symptom_categories": [
+      "FATIGUE_VITALITE",
+      "IMMUNITE_INFECTIONS",
+      "DIGESTION_TRANSIT"
+    ]
+  },
+  {
+    "id": "gotu_kola_centella_asiatica",
+    "name": "Gotu Kola / Centella asiatica",
+    "latin_name": "Centella asiatica",
+    "main_symptom": "Altération des tissus et fragilité veineuse",
+    "target_symptoms": [
+      "Perte d'élasticité tissulaire",
+      "vergetures",
+      "mauvaise circulation",
+      "anxiété"
+    ],
+    "parts_used": [
+      "Plante entière"
+    ],
+    "properties": [
+      "Cicatrisante",
+      "tonique conjonctif",
+      "régulatrice veineuse"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "extrait liquide",
+      "macérât huileux"
+    ],
+    "max_daily_dose": "3g",
+    "contraindications": [
+      "Troubles gastriques en excès"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION",
+      "PEAU_MUQUEUSES",
+      "STRESS_SOMMEIL"
+    ]
+  },
+  {
+    "id": "souci_calendula",
+    "name": "Souci / Calendula",
+    "latin_name": "Calendula officinalis",
+    "main_symptom": "Lésions et inflammations cutanéo-muqueuses",
+    "target_symptoms": [
+      "Inflammations des muqueuses",
+      "irritations cutanées",
+      "plaies",
+      "rougeurs"
+    ],
+    "parts_used": [
+      "Fleurs"
+    ],
+    "properties": [
+      "Cicatrisant",
+      "anti-inflammatoire",
+      "dépuratif"
+    ],
+    "galenic_forms": [
+      "Macérât huileux",
+      "TM",
+      "infusion"
+    ],
+    "max_daily_dose": "1g",
+    "contraindications": [
+      "Allergie aux Astéracées"
+    ],
+    "symptom_categories": [
+      "PEAU_MUQUEUSES"
+    ]
+  },
+  {
+    "id": "ginkgo_biloba",
+    "name": "Ginkgo biloba",
+    "latin_name": "Ginkgo biloba",
+    "main_symptom": "Troubles micro-circulatoires et brouillard mental",
+    "target_symptoms": [
+      "Brouillard mental",
+      "mauvaise micro-circulation",
+      "œdèmes des extrémités"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Vasodilatateur",
+      "oxygénateur cellulaire",
+      "neuroprotecteur"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "extrait standardisé",
+      "TM"
+    ],
+    "max_daily_dose": "0.9mg",
+    "contraindications": [
+      "Enfants < 2 ans",
+      "traitements anticoagulants"
+    ],
+    "symptom_categories": [
+      "CIRCULATION_RETENTION"
+    ]
+  },
+  {
+    "id": "hysope",
+    "name": "Hysope",
+    "latin_name": "Hyssopus officinalis",
+    "main_symptom": "Encombrement des voies respiratoires",
+    "target_symptoms": [
+      "Oppression respiratoire",
+      "toux grasse",
+      "mucosités"
+    ],
+    "parts_used": [
+      "Sommités fleuries"
+    ],
+    "properties": [
+      "Expectorante",
+      "mucolytique",
+      "stimulante"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "HE (extrême prudence)"
+    ],
+    "max_daily_dose": "8g/L",
+    "contraindications": [
+      "Grossesse",
+      "épilepsie",
+      "enfants < 10 ans"
+    ],
+    "symptom_categories": [
+      "RESPIRATOIRE"
+    ]
+  },
+  {
+    "id": "eucalyptus_globulus",
+    "name": "Eucalyptus globulus",
+    "latin_name": "Eucalyptus globulus",
+    "main_symptom": "Refroidissements et encombrement bronchique",
+    "target_symptoms": [
+      "Encombrement des bronches",
+      "sinusite",
+      "frissons",
+      "fatigue liée au froid"
+    ],
+    "parts_used": [
+      "Feuilles"
+    ],
+    "properties": [
+      "Décongestionnant",
+      "expectorant",
+      "antibactérien"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "inhalation",
+      "HE diluée"
+    ],
+    "max_daily_dose": "1 à 2g",
+    "contraindications": [
+      "Grossesse",
+      "enfants",
+      "diabète",
+      "affections hépato-rénales"
+    ],
+    "symptom_categories": [
+      "RESPIRATOIRE"
+    ]
+  },
+  {
+    "id": "cannelle_de_ceylan",
+    "name": "Cannelle de Ceylan",
+    "latin_name": "Cinnamomum zeylanicum",
+    "main_symptom": "Refroidissement interne et atonie digestive",
+    "target_symptoms": [
+      "Frissons",
+      "digestion très lente",
+      "nausées",
+      "infections digestives"
+    ],
+    "parts_used": [
+      "Écorces"
+    ],
+    "properties": [
+      "Réchauffante",
+      "tonique digestive",
+      "antibactérienne"
+    ],
+    "galenic_forms": [
+      "Infusion",
+      "décoction",
+      "HE (très diluée)"
+    ],
+    "max_daily_dose": "2g",
+    "contraindications": [
+      "Grossesse",
+      "ulcère gastrique",
+      "risque dermocaustique"
+    ],
+    "symptom_categories": [
+      "DIGESTION_TRANSIT",
+      "RESPIRATOIRE"
+    ]
+  },
+  {
+    "id": "propolis",
+    "name": "Propolis",
+    "latin_name": "Propolis",
+    "main_symptom": "Infections aiguës des muqueuses",
+    "target_symptoms": [
+      "Infections de la sphère buccale et ORL",
+      "fragilité immunitaire",
+      "lésions cutanées"
+    ],
+    "parts_used": [
+      "Résine transformée"
+    ],
+    "properties": [
+      "Antibactérienne",
+      "antivirale",
+      "cicatrisante"
+    ],
+    "galenic_forms": [
+      "Gélules",
+      "pâte à mâcher",
+      "extrait alcoolique"
+    ],
+    "max_daily_dose": "5g",
+    "contraindications": [
+      "Allergie aux produits de la ruche"
+    ],
+    "symptom_categories": [
+      "IMMUNITE_INFECTIONS",
+      "PEAU_MUQUEUSES",
+      "RESPIRATOIRE"
+    ]
+  }
+]

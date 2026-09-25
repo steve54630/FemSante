@@ -111,7 +111,7 @@
     <string name="legal_mentions">Mentions légales</string>
     <string name="confidentiality">Politiques de confidentialité</string>
     <string name="password_change">Changer de mot de passe</string>
-    <string name="login_name" translatable="false"></string>
+    <string name="login_name" translatable="false" />
     <string name="documents">Documents</string>
     <string name="welcome">Bienvenue</string>
     <string name="subscribe_update">Mise à jour de l\'abonnement</string>
@@ -289,6 +289,21 @@
     <string name="micronutrient_sources_title">Sources (pour 100 g)</string>
     <string name="micronutrient_cofactors_title">Cofacteurs d\'assimilation</string>
     <string name="micronutrient_notes_title">À savoir</string>
+
+    <!-- Lexique des plantes (Boîte à outils / Phytothérapie) -->
+    <string name="plant_lexicon_link_title">LEXIQUE DES PLANTES</string>
+    <string name="plant_lexicon_link_description">49 plantes classées : symptômes, dosage et contre-indications.</string>
+    <string name="plant_lexicon_title">Lexique des plantes</string>
+    <string name="plant_lexicon_search_hint">Rechercher une plante</string>
+    <string name="plant_lexicon_filters_title">Catégories de symptôme</string>
+    <string name="plant_lexicon_author">Par Audrey Retournay — Diététicienne</string>
+    <string name="plant_detail_target_symptoms_title">Symptômes ciblés</string>
+    <string name="plant_detail_parts_used_title">Partie utilisée</string>
+    <string name="plant_detail_properties_title">Propriétés</string>
+    <string name="plant_detail_galenic_forms_title">Formes galéniques</string>
+    <string name="plant_detail_max_dose_title">Dose maximale par jour</string>
+    <string name="plant_detail_contraindications_title">Contre-indications</string>
+
     <string name="premium_upsell_title">Passe à la vitesse supérieure</string>
     <string name="premium_upsell_subtitle">Débloque l\'intégralité des protocoles pour soulager durablement tes douleurs, calmer l\'inflammation et retrouver un équilibre hormonal.</string>
     <string name="premium_upsell_benefit_movement_title">🧘‍♀️ Mouvement &amp; Renforcement</string>

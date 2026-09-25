@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.audreyRetournayDiet.femSante.features.toolbox.PlantDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- En-tête coloré : nom + nom latin + symptôme principal + auteur -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/orange_app"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
+            app:contentPadding="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    style="@style/AppTextAppearance.HeadlineSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:text="Achillée millefeuille" />
+
+                <TextView
+                    android:id="@+id/tvLatinName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.9"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    tools:text="Achillea millefolium" />
+
+                <TextView
+                    android:id="@+id/tvMainSymptom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.9"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    tools:text="Règles douloureuses et flux abondant" />
+
+                <TextView
+                    android:id="@+id/tvAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.85"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="@string/plant_lexicon_author" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Symptômes ciblés -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTargetSymptoms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_target_symptoms_title" />
+
+                <View style="@style/SummaryDivider" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupTargetSymptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingVertical="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Partie utilisée -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPartsUsed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_parts_used_title" />
+
+                <View style="@style/SummaryDivider" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupPartsUsed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingVertical="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Propriétés -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardProperties"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_properties_title" />
+
+                <View style="@style/SummaryDivider" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupProperties"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingVertical="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Formes galéniques -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardGalenicForms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_galenic_forms_title" />
+
+                <View style="@style/SummaryDivider" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupGalenicForms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacingVertical="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Dose maximale par jour (affiché seulement si présente) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMaxDose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:visibility="gone"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_max_dose_title" />
+
+                <View style="@style/SummaryDivider" />
+
+                <TextView
+                    android:id="@+id/tvMaxDose"
+                    style="@style/SummaryDetailStyle"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    tools:text="3g" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Contre-indications (fond neutre, liste à puces - sécurité) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardContraindications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/day_medium"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:contentPadding="16dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SummarySectionTitle"
+                    android:text="@string/plant_detail_contraindications_title"
+                    android:textColor="@color/black" />
+
+                <View style="@style/SummaryDivider" />
+
+                <LinearLayout
+                    android:id="@+id/llContraindications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

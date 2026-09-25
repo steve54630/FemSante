@@ -14,25 +14,28 @@ import com.audreyRetournayDiet.femSante.data.toolbox.ToolboxAdvice
 import com.audreyRetournayDiet.femSante.data.toolbox.ToolboxCategory
 
 /**
- * Liste de la Boîte à outils : des **en-têtes de section** (par catégorie) et des **cartes de
- * fiche** (titre + résumé) au sein d'un même RecyclerView (deux types de vue). Le clic sur une
- * carte remonte la [ToolboxAdvice] au parent pour ouvrir la fiche native.
+ * Liste de la Boîte à outils : des **en-têtes de section** (par catégorie), des **cartes de
+ * fiche** (titre + résumé) et un **lien vers le lexique des plantes** (section Phytothérapie), au
+ * sein d'un même RecyclerView. Le clic sur une carte remonte la [ToolboxAdvice] au parent pour
+ * ouvrir la fiche native ; le lien lexique remonte [onLexiconClick].
  */
 class ToolboxCardAdapter(
-    private val onClick: (ToolboxAdvice) -> Unit
+    private val onClick: (ToolboxAdvice) -> Unit,
+    private val onLexiconClick: () -> Unit
 ) : ListAdapter<ToolboxRow, RecyclerView.ViewHolder>(DIFF) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is ToolboxRow.Header -> TYPE_HEADER
         is ToolboxRow.Item -> TYPE_ITEM
+        is ToolboxRow.PlantLexiconLink -> TYPE_LEXICON_LINK
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == TYPE_HEADER) {
-            HeaderViewHolder(inflater.inflate(R.layout.item_toolbox_header, parent, false))
-        } else {
-            ToolViewHolder(inflater.inflate(R.layout.item_toolbox_tool, parent, false))
+        return when (viewType) {
+            TYPE_HEADER -> HeaderViewHolder(inflater.inflate(R.layout.item_toolbox_header, parent, false))
+            TYPE_LEXICON_LINK -> LexiconLinkViewHolder(inflater.inflate(R.layout.item_toolbox_tool, parent, false))
+            else -> ToolViewHolder(inflater.inflate(R.layout.item_toolbox_tool, parent, false))
         }
     }
 
@@ -40,6 +43,7 @@ class ToolboxCardAdapter(
         when (val row = getItem(position)) {
             is ToolboxRow.Header -> (holder as HeaderViewHolder).bind(row.category)
             is ToolboxRow.Item -> (holder as ToolViewHolder).bind(row.advice)
+            is ToolboxRow.PlantLexiconLink -> (holder as LexiconLinkViewHolder).bind()
         }
     }
 
@@ -69,14 +73,29 @@ class ToolboxCardAdapter(
         }
     }
 
+    /** Carte fixe menant au lexique des plantes — réutilise le layout de carte fiche. */
+    inner class LexiconLinkViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val title: TextView = view.findViewById(R.id.textToolTitle)
+        private val description: TextView = view.findViewById(R.id.textToolDescription)
+
+        fun bind() {
+            title.setText(R.string.plant_lexicon_link_title)
+            description.setText(R.string.plant_lexicon_link_description)
+            description.isVisible = true
+            itemView.setOnClickListener { onLexiconClick() }
+        }
+    }
+
     private companion object {
         const val TYPE_HEADER = 0
         const val TYPE_ITEM = 1
+        const val TYPE_LEXICON_LINK = 2
 
         val DIFF = object : DiffUtil.ItemCallback<ToolboxRow>() {
             override fun areItemsTheSame(oldItem: ToolboxRow, newItem: ToolboxRow): Boolean = when {
                 oldItem is ToolboxRow.Header && newItem is ToolboxRow.Header -> oldItem.category == newItem.category
                 oldItem is ToolboxRow.Item && newItem is ToolboxRow.Item -> oldItem.advice.id == newItem.advice.id
+                oldItem is ToolboxRow.PlantLexiconLink && newItem is ToolboxRow.PlantLexiconLink -> true
                 else -> false
             }
 

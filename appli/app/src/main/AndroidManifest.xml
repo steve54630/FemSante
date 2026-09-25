@@ -91,6 +91,12 @@
             android:name="com.audreyRetournayDiet.femSante.features.toolbox.ToolboxFileDetailActivity"
             android:exported="false" />
         <activity
+            android:name="com.audreyRetournayDiet.femSante.features.toolbox.PlantLexiconActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.audreyRetournayDiet.femSante.features.toolbox.PlantDetailActivity"
+            android:exported="false" />
+        <activity
             android:name="com.audreyRetournayDiet.femSante.shared.viewers.AudioActivity"
             android:exported="false" />
         <activity

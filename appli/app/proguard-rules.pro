@@ -60,4 +60,5 @@
 -keep class com.audreyRetournayDiet.femSante.data.recommendation.** { <fields>; }
 -keep class com.audreyRetournayDiet.femSante.data.resource.** { <fields>; }
 -keep class com.audreyRetournayDiet.femSante.data.toolbox.** { <fields>; }
+-keep class com.audreyRetournayDiet.femSante.data.plant.** { <fields>; }
 -keep class com.audreyRetournayDiet.femSante.repository.local.ShoppingListStore$StoredSelection { <fields>; }
